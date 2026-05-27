@@ -13,13 +13,18 @@ function LockIcon() {
   )
 }
 
+const ELEMENTARY_GRADES = new Set(['K','1st','2nd','3rd','4th','5th'])
+
 export default function Home() {
   const router = useRouter()
 
   // Track how many lessons are done per world
   const [doneCounts, setDoneCounts] = useState<Record<number, number>>({})
+  const [isElementary, setIsElementary] = useState(false)
 
   useEffect(() => {
+    const grade = localStorage.getItem('pai_grade') ?? ''
+    setIsElementary(ELEMENTARY_GRADES.has(grade))
     const counts: Record<number, number> = {}
     for (const world of Object.values(WORLDS)) {
       counts[world.id] = world.modules.filter(
@@ -33,6 +38,11 @@ export default function Home() {
     (doneCounts[id] ?? 0) >= WORLDS[id].modules.length
 
   const isWorldUnlocked = (id: number) => id === 1 || id === 6 || worldDone(id - 1)
+
+  const visibleWorldIds = WORLD_IDS.filter(id => isElementary
+    ? WORLDS[id].level === 'Elementary'
+    : WORLDS[id].level !== 'Elementary'
+  )
 
   const totalXP    = Object.values(doneCounts).reduce((s, n) => s + n, 0) * 100
   const level      = Math.floor(totalXP / 300) + 1
@@ -74,7 +84,7 @@ export default function Home() {
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-[#9A5A10]">Worlds unlocked</span>
                 <span className="text-xs font-black text-[#3D1A00]">
-                  {WORLD_IDS.filter(id => isWorldUnlocked(id)).length} / {WORLD_IDS.length}
+                  {visibleWorldIds.filter(id => isWorldUnlocked(id)).length} / {visibleWorldIds.length}
                 </span>
               </div>
             </div>
@@ -90,7 +100,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col gap-3">
-              {WORLD_IDS.map(worldId => {
+              {visibleWorldIds.map(worldId => {
                 const world    = WORLDS[worldId]
                 const done     = doneCounts[worldId] ?? 0
                 const progress = Math.round((done / world.modules.length) * 100)
@@ -111,7 +121,7 @@ export default function Home() {
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-base flex-shrink-0 ${
                       unlocked ? 'bg-[#BA7517] text-white' : 'bg-[#E5D4BA] text-[#A89070]'
                     }`}>
-                      {worldId}
+                      {world.displayId ?? worldId}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className={`text-[11px] font-black uppercase tracking-[0.12em] mb-0.5 ${unlocked ? 'text-[#BA7517]' : 'text-[#C4AE94]'}`}>
