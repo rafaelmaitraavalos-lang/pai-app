@@ -32,7 +32,7 @@ export default function Home() {
   const worldDone = (id: number) =>
     (doneCounts[id] ?? 0) >= WORLDS[id].modules.length
 
-  const isWorldUnlocked = (id: number) => id === 1 || worldDone(id - 1)
+  const isWorldUnlocked = (id: number) => id === 1 || id === 6 || worldDone(id - 1)
 
   const totalXP    = Object.values(doneCounts).reduce((s, n) => s + n, 0) * 100
   const level      = Math.floor(totalXP / 300) + 1

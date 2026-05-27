@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-const GRADES = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
+const GRADES = ['K','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
+const ELEMENTARY_GRADES = new Set(['K','1st','2nd','3rd','4th','5th'])
 
 const GOALS = [
   'Make games',
@@ -233,7 +234,7 @@ export default function Onboarding() {
   }, [stage, revealPhase, usage])
 
   const advanceReveal = () => {
-    if (revealPhase === 2) { router.push('/home'); return }
+    if (revealPhase === 2) { router.push(grade && ELEMENTARY_GRADES.has(grade) ? '/world/6' : '/home'); return }
 
     if (revealPhase === 1) {
       setKickerFlip('squishing')
