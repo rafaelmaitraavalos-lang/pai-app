@@ -4,17 +4,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: "It Wasn't Programmed",
-    body: "Traditional software is programmed. A human writes rules: if this then that. AI is different. Nobody programmed it to recognize your face or recommend your next song. It learned those things by being shown millions of examples. The difference sounds subtle. It isn't. It means nobody fully knows why an AI makes the decisions it makes — including the people who built it.",
+    body: "Traditional software is programmed. A human writes rules: if this then that. AI is different. Nobody programmed it to recognize your face or recommend your next song. It learned those things by being shown millions of examples. The difference sounds subtle. It isn't. It means nobody fully knows why an AI makes the decisions it makes, including the people who built it.",
   },
   {
     tag: 'Example',
     title: 'Supervised Learning',
-    body: "Show an AI 10 million photos. Half are labeled 'cat.' Half are labeled 'not cat.' It adjusts itself millions of times until it gets the labels right. Then show it a photo it's never seen. It applies what it learned. This is supervised learning — learning from labeled examples. It's how most AI you've encountered works. Someone had to label all those photos first.",
+    body: "Show an AI 10 million photos. Half are labeled 'cat.' Half are labeled 'not cat.' It adjusts itself millions of times until it gets the labels right. Then show it a photo it's never seen. It applies what it learned. This is supervised learning: learning from labeled examples. It's how most AI you've encountered works. Someone had to label all those photos first.",
   },
   {
     tag: 'Example',
     title: 'Unsupervised Learning',
-    body: "Sometimes AI learns without labels. Show it a million photos with no labels at all. It finds its own patterns — clusters things that look similar, separates things that look different. It doesn't know what a cat is. It just notices that some images share features. This is how Spotify groups musical styles together without anyone telling it what genres exist.",
+    body: "Sometimes AI learns without labels. Show it a million photos with no labels at all. It finds its own patterns: clusters things that look similar, separates things that look different. It doesn't know what a cat is. It just notices that some images share features. This is how Spotify groups musical styles together without anyone telling it what genres exist.",
   },
   {
     tag: 'Hot take',
@@ -29,7 +29,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'It Never Stops Being Wrong',
-    body: "AI doesn't learn until it's perfect then stop. It learns until it's good enough then gets deployed. Every AI system in use right now is making mistakes constantly. Face ID misidentifies. Autocomplete suggests the wrong word. Medical AI misses diagnoses. The goal is never perfection — it's being right often enough to be useful. That gap between often enough and always is where real harm happens.",
+    body: "AI doesn't learn until it's perfect then stop. It learns until it's good enough then gets deployed. Every AI system in use right now is making mistakes constantly. Face ID misidentifies. Autocomplete suggests the wrong word. Medical AI misses diagnoses. The goal is never perfection. It's being right often enough to be useful. That gap between often enough and always is where real harm happens.",
   },
   {
     tag: 'Hot take',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Learning Without Understanding',
-    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters — whether understanding is even necessary — is one of the genuinely open questions of our time.",
+    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters, whether understanding is even necessary, is one of the genuinely open questions of our time.",
   },
 ]
 
@@ -51,7 +51,7 @@ const QUESTIONS: Question[] = [
     question: `"AI is programmed with specific rules for every decision it makes."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Traditional software is programmed with rules. AI learns from examples. Nobody programmed Face ID with rules about what faces look like — it was shown millions of faces and learned on its own. That means nobody fully knows why an AI makes any specific decision, including the people who built it.",
+    explanation: "Traditional software is programmed with rules. AI learns from examples. Nobody programmed Face ID with rules about what faces look like. It was shown millions of faces and learned on its own. That means nobody fully knows why an AI makes any specific decision, including the people who built it.",
   },
   {
     difficulty: 'Easy',
@@ -60,7 +60,7 @@ const QUESTIONS: Question[] = [
     question: `"Supervised learning requires someone to label the training data first."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "Every example needs a label — this is a cat, this is spam, this loan defaulted. Someone has to do that labeling. Millions of examples means millions of labels. Much of that work is done by low-paid contractors around the world whose labor makes the AI products you use possible.",
+    explanation: "Every example needs a label. This is a cat, this is spam, this loan defaulted. Someone has to do that labeling. Millions of examples means millions of labels. Much of that work is done by low-paid contractors around the world whose labor makes the AI products you use possible.",
   },
   {
     difficulty: 'Easy',
@@ -69,7 +69,7 @@ const QUESTIONS: Question[] = [
     question: `"AlphaGo was programmed with Go strategies by expert players."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "AlphaGo used reinforcement learning — it played itself millions of times and figured out its own strategies through trial and error. It discovered moves that human players had never considered in centuries of playing the game. Nobody programmed those moves. AlphaGo invented them.",
+    explanation: "AlphaGo used reinforcement learning. It played itself millions of times and figured out its own strategies through trial and error. It discovered moves that human players had never considered in centuries of playing the game. Nobody programmed those moves. AlphaGo invented them.",
   },
   {
     difficulty: 'Medium',
@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"Because AI learns from human-produced data it will naturally reflect human values accurately."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "It reflects the values present in the data — which means the values of whoever produced that data, which is not all humans equally. Data from the internet overrepresents wealthy English-speaking Western perspectives. Historical data overrepresents whoever had power in the past. The AI doesn't know this. It just learned from what it was given.",
+    explanation: "It reflects the values present in the data: which means the values of whoever produced that data, which is not all humans equally. Data from the internet overrepresents wealthy English-speaking Western perspectives. Historical data overrepresents whoever had power in the past. The AI doesn't know this. It just learned from what it was given.",
   },
 ]
 

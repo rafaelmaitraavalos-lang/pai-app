@@ -9,17 +9,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'The Forward Pass',
-    body: "Training starts with a forward pass. You feed the network an input — say, a photo of a cat. The data travels through every layer, each neuron applying its weights. At the end the network produces an output — in this case, its guess about what's in the photo. On the first attempt with random weights, that guess is basically random. Maybe it says \"truck.\" That's fine. That's where training begins.",
+    body: "Training starts with a forward pass. You feed the network an input: say, a photo of a cat. The data travels through every layer, each neuron applying its weights. At the end the network produces an output. In this case, its guess about what's in the photo. On the first attempt with random weights, that guess is basically random. Maybe it says \"truck.\" That's fine. That's where training begins.",
   },
   {
     tag: 'Example',
     title: 'The Error Signal',
-    body: "After the forward pass the network compares its output to the correct answer. It said \"truck.\" The correct answer was \"cat.\" The difference between those two things is the error. The bigger the error, the more the network needs to adjust. This error signal is the entire engine of learning. Without knowing how wrong it is, the network has no direction to improve. The error is not a failure — it's information.",
+    body: "After the forward pass the network compares its output to the correct answer. It said \"truck.\" The correct answer was \"cat.\" The difference between those two things is the error. The bigger the error, the more the network needs to adjust. This error signal is the entire engine of learning. Without knowing how wrong it is, the network has no direction to improve. The error is not a failure. It's information.",
   },
   {
     tag: 'Example',
     title: 'Backpropagation',
-    body: "Once the error is calculated, the network works backwards — layer by layer — adjusting each weight slightly in the direction that would have produced a smaller error. This is called backpropagation. It's the algorithm that makes neural networks trainable. It was described mathematically in the 1970s but nobody thought it would work at scale. In 2012 it turned out to work spectacularly at scale. Most of modern AI runs on it.",
+    body: "Once the error is calculated, the network works backwards, layer by layer, adjusting each weight slightly in the direction that would have produced a smaller error. This is called backpropagation. It's the algorithm that makes neural networks trainable. It was described mathematically in the 1970s but nobody thought it would work at scale. In 2012 it turned out to work spectacularly at scale. Most of modern AI runs on it.",
   },
   {
     tag: 'Hot take',
@@ -29,7 +29,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Fact',
     title: 'Overfitting',
-    body: "A network that trains too long on the same data memorizes it instead of learning from it. It gets perfect scores on training data and falls apart on anything new. This is called overfitting. It's one of the most common problems in AI development. The fix is testing the network on data it has never seen during training — if performance drops dramatically, it overfit. Avoiding overfitting requires careful judgment about when to stop training.",
+    body: "A network that trains too long on the same data memorizes it instead of learning from it. It gets perfect scores on training data and falls apart on anything new. This is called overfitting. It's one of the most common problems in AI development. The fix is testing the network on data it has never seen during training: if performance drops dramatically, it overfit. Avoiding overfitting requires careful judgment about when to stop training.",
   },
   {
     tag: 'Scenario',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Learning Without A Teacher',
-    body: "Backpropagation requires labeled data — someone has to say this is a cat, this is spam, this loan defaulted. For every large AI system someone had to label enormous amounts of data first. That labor is invisible in the final product. But researchers have also developed ways for networks to learn from unlabeled data — finding patterns without being told what they mean. The boundary between supervised and unsupervised learning is where some of the most interesting AI research is happening right now.",
+    body: "Backpropagation requires labeled data: someone has to say this is a cat, this is spam, this loan defaulted. For every large AI system someone had to label enormous amounts of data first. That labor is invisible in the final product. But researchers have also developed ways for networks to learn from unlabeled data: finding patterns without being told what they mean. The boundary between supervised and unsupervised learning is where some of the most interesting AI research is happening right now.",
   },
 ]
 
@@ -51,7 +51,7 @@ const QUESTIONS: Question[] = [
     question: `"Neural networks are programmed with rules for every decision they make."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Traditional software is programmed with rules. Neural networks learn from examples. Nobody programmed Face ID with rules about faces — it was shown millions of labeled faces and adjusted itself until it got them right. That distinction changes everything about how they work and why they fail.",
+    explanation: "Traditional software is programmed with rules. Neural networks learn from examples. Nobody programmed Face ID with rules about faces. It was shown millions of labeled faces and adjusted itself until it got them right. That distinction changes everything about how they work and why they fail.",
   },
   {
     difficulty: 'Easy',
@@ -60,7 +60,7 @@ const QUESTIONS: Question[] = [
     question: `"The error signal in training tells the network how wrong its output was."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "After every forward pass the network compares its output to the correct answer. The difference is the error. The bigger the error the more the network needs to adjust. Without knowing how wrong it is the network has no direction to improve. The error is not a failure — it's information.",
+    explanation: "After every forward pass the network compares its output to the correct answer. The difference is the error. The bigger the error the more the network needs to adjust. Without knowing how wrong it is the network has no direction to improve. The error is not a failure. It's information.",
   },
   {
     difficulty: 'Easy',
@@ -69,7 +69,7 @@ const QUESTIONS: Question[] = [
     question: `"AlphaGo was programmed with chess strategies by expert players."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Two things wrong: AlphaGo plays Go not chess, and it wasn't programmed with strategies at all. It used reinforcement learning — playing itself millions of times, receiving feedback, discovering its own strategies. It invented moves that human players had never considered in centuries of playing the game.",
+    explanation: "Two things wrong: AlphaGo plays Go not chess, and it wasn't programmed with strategies at all. It used reinforcement learning: playing itself millions of times, receiving feedback, discovering its own strategies. It invented moves that human players had never considered in centuries of playing the game.",
   },
   {
     difficulty: 'Medium',
@@ -111,7 +111,7 @@ const QUESTIONS: Question[] = [
     difficulty: 'Hard',
     tag: 'Big idea',
     stopTitle: 'Learning Without A Teacher',
-    question: `"Labeled training data requires human labor — someone has to label every example before the network can learn from it."`,
+    question: `"Labeled training data requires human labor: someone has to label every example before the network can learn from it."`,
     answer: true,
     verdict: 'Correct.',
     explanation: "In supervised learning every example needs a label. Millions of examples means millions of labels. Much of that work is done by low-paid contractors in developing countries whose labor makes the AI products you use possible. This invisible workforce is one of the least discussed parts of AI development.",

@@ -9,17 +9,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'Narrow AI',
-    body: "Every AI you have ever used is narrow. It does one thing. Face ID recognizes faces — it cannot drive a car. Spotify recommends music — it cannot diagnose a disease. AlphaGo plays Go better than any human — it cannot play chess. Each one is extraordinarily powerful within its specific task and completely useless outside of it.",
+    body: "Every AI you have ever used is narrow. It does one thing. Face ID recognizes faces, it cannot drive a car. Spotify recommends music, it cannot diagnose a disease. AlphaGo plays Go better than any human. It cannot play chess. Each one is extraordinarily powerful within its specific task and completely useless outside of it.",
   },
   {
     tag: 'Hot take',
     title: 'ChatGPT Is Still Narrow',
-    body: "ChatGPT feels different. It can write, code, translate, explain, and debate. But it is still narrow — its task is generating text that matches patterns in its training data. It cannot walk into a room, pick up a glass of water, or understand what thirst feels like. The breadth of what it does with text is impressive. It is still one thing.",
+    body: "ChatGPT feels different. It can write, code, translate, explain, and debate. But it is still narrow: its task is generating text that matches patterns in its training data. It cannot walk into a room, pick up a glass of water, or understand what thirst feels like. The breadth of what it does with text is impressive. It is still one thing.",
   },
   {
     tag: 'Myth bust',
     title: "General AI Doesn't Exist",
-    body: "General AI — a system that can do anything a human can do, learn anything, reason about anything — does not exist. It has never existed outside of science fiction. Every AI system ever built has been narrow. Some researchers think general AI is decades away. Some think it's impossible. Nobody thinks it exists right now.",
+    body: "General AI, a system that can do anything a human can do, learn anything, reason about anything: does not exist. It has never existed outside of science fiction. Every AI system ever built has been narrow. Some researchers think general AI is decades away. Some think it's impossible. Nobody thinks it exists right now.",
   },
   {
     tag: 'Scenario',
@@ -34,7 +34,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'Getting Closer',
-    body: "Recent AI systems are getting broader. GPT-4 can see images and write code and reason about math. DeepMind's Gemini was trained across text, images, audio, and video simultaneously. These are still narrow in the technical sense — they don't have goals, desires, or self-awareness. But the gap between narrow and general is getting harder to define clearly.",
+    body: "Recent AI systems are getting broader. GPT-4 can see images and write code and reason about math. DeepMind's Gemini was trained across text, images, audio, and video simultaneously. These are still narrow in the technical sense. They don't have goals, desires, or self-awareness. But the gap between narrow and general is getting harder to define clearly.",
   },
   {
     tag: 'Big idea',
@@ -57,10 +57,10 @@ const QUESTIONS: Question[] = [
     difficulty: 'Easy',
     tag: 'Fact',
     stopTitle: 'Narrow AI',
-    question: `"Every AI currently in existence is narrow — designed for specific tasks."`,
+    question: `"Every AI currently in existence is narrow: designed for specific tasks."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "Every AI currently in existence is narrow. Face ID recognizes faces. Spotify recommends music. ChatGPT generates text. None of them can do each other's jobs. General AI — a system that can do anything a human can do — does not exist.",
+    explanation: "Every AI currently in existence is narrow. Face ID recognizes faces. Spotify recommends music. ChatGPT generates text. None of them can do each other's jobs. General AI, a system that can do anything a human can do, does not exist.",
   },
   {
     difficulty: 'Easy',
@@ -78,7 +78,7 @@ const QUESTIONS: Question[] = [
     question: `"ChatGPT is general AI because it can do so many different things."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "ChatGPT is narrow. Its task is generating text that fits patterns in its training data. It does that task across many domains — writing, coding, explaining, debating. But it cannot walk, feel, learn a new skill from scratch, or understand what any of the words it produces actually mean.",
+    explanation: "ChatGPT is narrow. Its task is generating text that fits patterns in its training data. It does that task across many domains: writing, coding, explaining, debating. But it cannot walk, feel, learn a new skill from scratch, or understand what any of the words it produces actually mean.",
   },
   {
     difficulty: 'Medium',
@@ -87,7 +87,7 @@ const QUESTIONS: Question[] = [
     question: `"Narrow AI can still cause enormous harm even without general intelligence."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "Discriminatory hiring algorithms, biased lending systems, radicalizing content algorithms — all narrow, all damaging at scale. You don't need general intelligence to cause large-scale harm. You need a narrow system optimizing the wrong objective deployed to millions of people.",
+    explanation: "Discriminatory hiring algorithms, biased lending systems, radicalizing content algorithms: all narrow, all damaging at scale. You don't need general intelligence to cause large-scale harm. You need a narrow system optimizing the wrong objective deployed to millions of people.",
   },
   {
     difficulty: 'Medium',
@@ -105,7 +105,7 @@ const QUESTIONS: Question[] = [
     question: `"The boundary between narrow and general AI is becoming harder to define as systems become more capable."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "Systems like GPT-4 handle text, images, code, and reasoning across domains. They're still technically narrow but the boundary is harder to draw. This is one reason AI researchers disagree so much about timelines — they can't fully agree on what general AI would even mean.",
+    explanation: "Systems like GPT-4 handle text, images, code, and reasoning across domains. They're still technically narrow but the boundary is harder to draw. This is one reason AI researchers disagree so much about timelines. They can't fully agree on what general AI would even mean.",
   },
   {
     difficulty: 'Hard',

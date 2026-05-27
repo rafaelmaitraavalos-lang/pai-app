@@ -9,17 +9,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Scenario',
     title: 'How You Learned',
-    body: "When you were a baby you learned what a dog is by seeing dogs. Nobody gave you a definition. You just saw enough of them — big ones, small ones, fluffy ones — and your brain built a pattern. AI does the exact same thing. The difference is it can process millions of examples in hours instead of years, and it never gets tired or distracted.",
+    body: "When you were a baby you learned what a dog is by seeing dogs. Nobody gave you a definition. You just saw enough of them, big ones, small ones, fluffy ones, and your brain built a pattern. AI does the exact same thing. The difference is it can process millions of examples in hours instead of years, and it never gets tired or distracted.",
   },
   {
     tag: 'Example',
     title: 'Show It Enough Cats',
-    body: "Show an AI 10 million photos labeled 'cat.' It finds what they all have in common — pointy ears, whiskers, a certain eye shape. Now show it a photo it has never seen. It checks the pixels against the pattern and decides: cat or not cat. That is image recognition. It is also exactly how Face ID works when your phone unlocks with your face.",
+    body: "Show an AI 10 million photos labeled 'cat.' It finds what they all have in common: pointy ears, whiskers, a certain eye shape. Now show it a photo it has never seen. It checks the pixels against the pattern and decides: cat or not cat. That is image recognition. It is also exactly how Face ID works when your phone unlocks with your face.",
   },
   {
     tag: 'Hot take',
     title: 'Garbage In',
-    body: "The pattern is only as good as the examples. Bad examples produce a bad pattern. Biased examples produce a biased pattern. In the 1990s a hiring algorithm trained on historical resumes started rejecting women — not because someone programmed it to, but because most past hires were men. It learned exactly what it was shown. The data was the problem. The AI worked perfectly.",
+    body: "The pattern is only as good as the examples. Bad examples produce a bad pattern. Biased examples produce a biased pattern. In the 1990s a hiring algorithm trained on historical resumes started rejecting women, not because someone programmed it to, but because most past hires were men. It learned exactly what it was shown. The data was the problem. The AI worked perfectly.",
   },
   {
     tag: 'Myth bust',
@@ -34,12 +34,12 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'Where It Breaks',
-    body: "Ask it something slightly outside its training and it falls apart — confidently. It has no way to know it doesn't know something. It can't reason its way to a new answer. It can only match against what it has seen before. When there is no good match it either fails silently or invents an answer that sounds completely correct and is completely wrong.",
+    body: "Ask it something slightly outside its training and it falls apart: confidently. It has no way to know it doesn't know something. It can't reason its way to a new answer. It can only match against what it has seen before. When there is no good match it either fails silently or invents an answer that sounds completely correct and is completely wrong.",
   },
   {
     tag: 'Big idea',
     title: 'The Mirror',
-    body: "AI is a mirror. It reflects back the patterns in whatever data it was trained on. It is only as smart, fair, creative, or accurate as the examples it learned from. That means every AI system carries the values, biases, and blind spots of whoever collected its training data. That is not a bug. That is the whole design. And it means the most important question about any AI is not how smart it is — it is who built it and what they fed it.",
+    body: "AI is a mirror. It reflects back the patterns in whatever data it was trained on. It is only as smart, fair, creative, or accurate as the examples it learned from. That means every AI system carries the values, biases, and blind spots of whoever collected its training data. That is not a bug. That is the whole design. And it means the most important question about any AI is not how smart it is. It is who built it and what they fed it.",
   },
 ]
 
@@ -69,7 +69,7 @@ const QUESTIONS: Question[] = [
     question: `"An AI trained on millions of cat photos will recognize every cat it's ever shown perfectly."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "It will still fail on unusual cases — a hairless cat, a cartoon, a cat in costume. The pattern is powerful but it has edges. Every AI has a boundary where its training ends and its confidence continues. The dangerous moment is when it crosses that boundary without anyone noticing.",
+    explanation: "It will still fail on unusual cases: a hairless cat, a cartoon, a cat in costume. The pattern is powerful but it has edges. Every AI has a boundary where its training ends and its confidence continues. The dangerous moment is when it crosses that boundary without anyone noticing.",
   },
   {
     difficulty: 'Medium',
@@ -78,7 +78,7 @@ const QUESTIONS: Question[] = [
     question: `"If an AI produces biased results, someone must have programmed the bias in deliberately."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Nobody has to program bias in. It comes from the data. In the 1990s a hiring algorithm started rejecting women's resumes — not because anyone told it to, but because most historical hires were men. It learned exactly what it was shown. The bias was in the data. The AI worked perfectly.",
+    explanation: "Nobody has to program bias in. It comes from the data. In the 1990s a hiring algorithm started rejecting women's resumes, not because anyone told it to, but because most historical hires were men. It learned exactly what it was shown. The bias was in the data. The AI worked perfectly.",
   },
   {
     difficulty: 'Medium',
@@ -87,7 +87,7 @@ const QUESTIONS: Question[] = [
     question: `"When AI translates a language it understands what the words mean."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "It has no idea what any word means. It learned that certain patterns in one language correspond to certain patterns in another. Meaning never enters the picture. That's why AI translation falls apart on idioms, jokes, and cultural references — there's no understanding to fall back on.",
+    explanation: "It has no idea what any word means. It learned that certain patterns in one language correspond to certain patterns in another. Meaning never enters the picture. That's why AI translation falls apart on idioms, jokes, and cultural references: there's no understanding to fall back on.",
   },
   {
     difficulty: 'Medium',
@@ -105,13 +105,13 @@ const QUESTIONS: Question[] = [
     question: `"Because AI is so good at pattern matching at scale, it's basically the same as thinking."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "It looks like thinking. It produces results that feel like thinking. But there is no reasoning happening. No understanding. No awareness. A calculator doing a million additions per second isn't thinking either — it's just fast. Scale changes the output. It doesn't change what's actually happening underneath.",
+    explanation: "It looks like thinking. It produces results that feel like thinking. But there is no reasoning happening. No understanding. No awareness. A calculator doing a million additions per second isn't thinking either. It's just fast. Scale changes the output. It doesn't change what's actually happening underneath.",
   },
   {
     difficulty: 'Hard',
     tag: 'Big idea',
     stopTitle: 'The Mirror',
-    question: `"AI is a neutral tool — it doesn't carry anyone's values or perspective."`,
+    question: `"AI is a neutral tool. It doesn't carry anyone's values or perspective."`,
     answer: false,
     verdict: 'Wrong.',
     explanation: "AI is a mirror. It reflects back the patterns in whatever data it was trained on. Whoever decides what goes into that data shapes everything the AI learns, gets right, gets wrong, and leaves out entirely. There is no neutral. There is only whose data got included and whose didn't.",

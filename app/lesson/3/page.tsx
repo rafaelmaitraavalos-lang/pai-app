@@ -4,17 +4,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'You Already Use It',
-    body: "You don't need to go looking for AI. It found you years ago. Every app you opened today, every song that played next, every search result you clicked — AI was involved. You're not a future user of this technology. You're a current one. You have been for years.",
+    body: "You don't need to go looking for AI. It found you years ago. Every app you opened today, every song that played next, every search result you clicked, AI was involved. You're not a future user of this technology. You're a current one. You have been for years.",
   },
   {
     tag: 'Example',
     title: 'The Feed',
-    body: "TikTok's algorithm watches everything. How long you pause. Whether you replay. What you skip. It builds a model of you — not your name, not your face, just your patterns. Then it finds content that matches those patterns. Within 30 minutes of a new account it knows more about what you'll watch than your closest friends do.",
+    body: "TikTok's algorithm watches everything. How long you pause. Whether you replay. What you skip. It builds a model of you, not your name, not your face, just your patterns. Then it finds content that matches those patterns. Within 30 minutes of a new account it knows more about what you'll watch than your closest friends do.",
   },
   {
     tag: 'Example',
     title: 'The Recommendation',
-    body: "Netflix doesn't show everyone the same homepage. It shows you a homepage built for your pattern. The thumbnails it picks, the order shows appear, even which shows get promoted — all of it is personalized to what its model predicts you'll click. You've never seen Netflix the way anyone else sees it.",
+    body: "Netflix doesn't show everyone the same homepage. It shows you a homepage built for your pattern. The thumbnails it picks, the order shows appear, even which shows get promoted: all of it is personalized to what its model predicts you'll click. You've never seen Netflix the way anyone else sees it.",
   },
   {
     tag: 'Hot take',
@@ -24,17 +24,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: "It's Not Trying To Help You",
-    body: "Recommendation algorithms are not designed to make you happy. They're designed to maximize engagement — time spent, clicks, shares. Sometimes that means showing you things that make you angry or anxious because those emotions keep you scrolling. The algorithm doesn't know the difference. It just knows what gets clicks.",
+    body: "Recommendation algorithms are not designed to make you happy. They're designed to maximize engagement: time spent, clicks, shares. Sometimes that means showing you things that make you angry or anxious because those emotions keep you scrolling. The algorithm doesn't know the difference. It just knows what gets clicks.",
   },
   {
     tag: 'Hot take',
     title: 'The Echo Chamber',
-    body: "When AI only shows you things that match your existing patterns it gets harder to encounter ideas you disagree with. Your feed becomes a mirror of what you already believe. This isn't a conspiracy — it's just pattern matching doing its job. The algorithm gives you more of what you engage with. If you only engage with one viewpoint, that's all it shows you.",
+    body: "When AI only shows you things that match your existing patterns it gets harder to encounter ideas you disagree with. Your feed becomes a mirror of what you already believe. This isn't a conspiracy. It's just pattern matching doing its job. The algorithm gives you more of what you engage with. If you only engage with one viewpoint, that's all it shows you.",
   },
   {
     tag: 'Example',
     title: 'Spotify Knows First',
-    body: "Spotify has predicted breakups before the people involved announced them. Listening patterns shift — more sad songs, less shared playlists, different genres at night. The algorithm notices the pattern change before most friends would. It's not magic. It's just that your music choices are data, and data tells a story.",
+    body: "Spotify has predicted breakups before the people involved announced them. Listening patterns shift: more sad songs, less shared playlists, different genres at night. The algorithm notices the pattern change before most friends would. It's not magic. It's just that your music choices are data, and data tells a story.",
   },
   {
     tag: 'Big idea',
@@ -48,10 +48,10 @@ const QUESTIONS: Question[] = [
     difficulty: 'Easy',
     tag: 'Example',
     stopTitle: 'The Feed',
-    question: `"TikTok's algorithm watches your behavior — not just what you like but how long you pause and what you replay."`,
+    question: `"TikTok's algorithm watches your behavior, not just what you like but how long you pause and what you replay."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "It doesn't need your name. It watches behavior — pause time, replays, skips. It builds a behavioral pattern that is often more accurate than anything you'd tell it voluntarily. Within 30 minutes of a new account it knows more about what you'll watch than your closest friends do.",
+    explanation: "It doesn't need your name. It watches behavior: pause time, replays, skips. It builds a behavioral pattern that is often more accurate than anything you'd tell it voluntarily. Within 30 minutes of a new account it knows more about what you'll watch than your closest friends do.",
   },
   {
     difficulty: 'Easy',
@@ -60,7 +60,7 @@ const QUESTIONS: Question[] = [
     question: `"Every Netflix user sees the same homepage."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Netflix builds a different homepage for every user based on watch history and patterns. The thumbnails, the order, which shows get promoted — all personalized. You have never seen Netflix the way anyone else sees it.",
+    explanation: "Netflix builds a different homepage for every user based on watch history and patterns. The thumbnails, the order, which shows get promoted: all personalized. You have never seen Netflix the way anyone else sees it.",
   },
   {
     difficulty: 'Easy',
@@ -78,7 +78,7 @@ const QUESTIONS: Question[] = [
     question: `"Recommendation algorithms are designed to make you happy."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "They're designed to maximize engagement — time spent, clicks, shares. Happiness and engagement often overlap but not always. Content that makes you angry or anxious keeps you scrolling just as well as content that makes you happy. The algorithm doesn't know the difference and doesn't care.",
+    explanation: "They're designed to maximize engagement: time spent, clicks, shares. Happiness and engagement often overlap but not always. Content that makes you angry or anxious keeps you scrolling just as well as content that makes you happy. The algorithm doesn't know the difference and doesn't care.",
   },
   {
     difficulty: 'Medium',
@@ -87,7 +87,7 @@ const QUESTIONS: Question[] = [
     question: `"Echo chambers on social media happen because algorithms show you more of what you engage with."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "It's not just that people seek out opinions they agree with. Recommendation algorithms amplify it automatically. If you engage with one viewpoint that's what fills your feed — not because you chose it but because the algorithm optimized for your clicks. The design of the system does most of the work.",
+    explanation: "It's not just that people seek out opinions they agree with. Recommendation algorithms amplify it automatically. If you engage with one viewpoint that's what fills your feed, not because you chose it but because the algorithm optimized for your clicks. The design of the system does most of the work.",
   },
   {
     difficulty: 'Medium',
@@ -105,7 +105,7 @@ const QUESTIONS: Question[] = [
     question: `"The fact that apps like TikTok and Spotify are free means AI personalization costs users nothing."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "The price is your attention and your data. The more accurately the algorithm models your behavior the more valuable that model is to advertisers. You are not the customer of these platforms. You are the product being sold. Free means someone else is paying — and that someone is paying for access to you.",
+    explanation: "The price is your attention and your data. The more accurately the algorithm models your behavior the more valuable that model is to advertisers. You are not the customer of these platforms. You are the product being sold. Free means someone else is paying, and that someone is paying for access to you.",
   },
   {
     difficulty: 'Hard',
@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"Understanding how recommendation algorithms work can change your relationship to them."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "Knowing the algorithm optimizes for engagement rather than your wellbeing doesn't make it powerless but it changes how you interact with it. You can ask why you're being shown something instead of just reacting to it. That gap — between stimulus and response — is where critical thinking lives. It's also exactly what the algorithm is designed to eliminate.",
+    explanation: "Knowing the algorithm optimizes for engagement rather than your wellbeing doesn't make it powerless but it changes how you interact with it. You can ask why you're being shown something instead of just reacting to it. That gap, between stimulus and response, is where critical thinking lives. It's also exactly what the algorithm is designed to eliminate.",
   },
 ]
 

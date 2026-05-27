@@ -4,12 +4,12 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'Confidence Is Not Accuracy',
-    body: "AI systems are often most confident when they are most wrong. They have no internal sense of uncertainty. They produce answers the same way whether they are completely right or completely fabricating. This is one of the most dangerous things about deploying AI in high-stakes situations — the output looks the same regardless of whether it should be trusted.",
+    body: "AI systems are often most confident when they are most wrong. They have no internal sense of uncertainty. They produce answers the same way whether they are completely right or completely fabricating. This is one of the most dangerous things about deploying AI in high-stakes situations: the output looks the same regardless of whether it should be trusted.",
   },
   {
     tag: 'Example',
     title: 'Hallucinations',
-    body: "Ask an AI to cite its sources and it will often invent citations that don't exist — real-sounding journal names, real-sounding authors, plausible-looking dates. It isn't lying. It doesn't know what lying is. It's pattern-matching what a citation looks like and producing one. The result is indistinguishable from a real citation unless you check. Lawyers have submitted fake AI-generated citations in court. Judges were not amused.",
+    body: "Ask an AI to cite its sources and it will often invent citations that don't exist: real-sounding journal names, real-sounding authors, plausible-looking dates. It isn't lying. It doesn't know what lying is. It's pattern-matching what a citation looks like and producing one. The result is indistinguishable from a real citation unless you check. Lawyers have submitted fake AI-generated citations in court. Judges were not amused.",
   },
   {
     tag: 'Hot take',
@@ -19,7 +19,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'The Edge Case Problem',
-    body: "AI fails at edge cases — situations just outside its training. A self-driving car trained on American roads struggles in Vietnam. A medical AI trained on adult X-rays misreads pediatric ones. A translation AI handles formal English well and falls apart on slang. Every AI has a boundary where its training ends and its confidence continues. The dangerous moment is when it crosses that boundary without anyone noticing.",
+    body: "AI fails at edge cases: situations just outside its training. A self-driving car trained on American roads struggles in Vietnam. A medical AI trained on adult X-rays misreads pediatric ones. A translation AI handles formal English well and falls apart on slang. Every AI has a boundary where its training ends and its confidence continues. The dangerous moment is when it crosses that boundary without anyone noticing.",
   },
   {
     tag: 'Myth bust',
@@ -29,7 +29,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'The Automation Bias',
-    body: "When a human makes a decision people question it. When an AI makes the same decision people often accept it without question — because it feels objective, scientific, unchallengeable. This is called automation bias and it is extremely well documented. Judges give harsher sentences when an algorithm recommends it. Doctors defer to diagnostic AI even when their own instinct says otherwise. The appearance of objectivity is its own kind of manipulation.",
+    body: "When a human makes a decision people question it. When an AI makes the same decision people often accept it without question, because it feels objective, scientific, unchallengeable. This is called automation bias and it is extremely well documented. Judges give harsher sentences when an algorithm recommends it. Doctors defer to diagnostic AI even when their own instinct says otherwise. The appearance of objectivity is its own kind of manipulation.",
   },
   {
     tag: 'Example',
@@ -51,7 +51,7 @@ const QUESTIONS: Question[] = [
     question: `"When an AI gives a confident answer it's more likely to be correct."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "AI systems produce answers with the same apparent confidence regardless of whether they are right or completely fabricating. They have no internal sense of uncertainty. This is one of the most dangerous properties of deployed AI — the output looks identical whether it should be trusted or not.",
+    explanation: "AI systems produce answers with the same apparent confidence regardless of whether they are right or completely fabricating. They have no internal sense of uncertainty. This is one of the most dangerous properties of deployed AI, the output looks identical whether it should be trusted or not.",
   },
   {
     difficulty: 'Easy',
@@ -60,7 +60,7 @@ const QUESTIONS: Question[] = [
     question: `"AI hallucinations happen because AI has no way to check whether what it produces is real."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "AI has no concept of truth or lying. When it invents citations or fabricates statistics it's doing exactly what it was trained to do — produce text that matches patterns. It doesn't know the difference between real and invented. That's not a moral failure. It's a structural one.",
+    explanation: "AI has no concept of truth or lying. When it invents citations or fabricates statistics it's doing exactly what it was trained to do, produce text that matches patterns. It doesn't know the difference between real and invented. That's not a moral failure. It's a structural one.",
   },
   {
     difficulty: 'Easy',
@@ -87,7 +87,7 @@ const QUESTIONS: Question[] = [
     question: `"Training AI on more diverse data completely eliminates bias."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "More diverse data reduces some biases. It doesn't eliminate bias — it just changes which biases remain. Deciding what counts as diverse, who gets to decide, and how to source it are unsolved problems. More diverse training is better. It is not a complete solution.",
+    explanation: "More diverse data reduces some biases. It doesn't eliminate bias. It just changes which biases remain. Deciding what counts as diverse, who gets to decide, and how to source it are unsolved problems. More diverse training is better. It is not a complete solution.",
   },
   {
     difficulty: 'Medium',
@@ -96,7 +96,7 @@ const QUESTIONS: Question[] = [
     question: `"AI systems fail most dangerously when they are obviously wrong."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "They fail most dangerously when they are subtly wrong in ways that are hard to detect at scale. An AI that is slightly wrong in a consistent direction, deployed to millions of people making consequential decisions — that is where serious harm accumulates. The Dutch welfare scandal, discriminatory lending, biased healthcare — none were obvious failures. They were systematic ones.",
+    explanation: "They fail most dangerously when they are subtly wrong in ways that are hard to detect at scale. An AI that is slightly wrong in a consistent direction, deployed to millions of people making consequential decisions. That is where serious harm accumulates. The Dutch welfare scandal, discriminatory lending, biased healthcare: none were obvious failures. They were systematic ones.",
   },
   {
     difficulty: 'Hard',
@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"The solution to AI getting things wrong is to slow down deployment until the technology is more reliable."`,
     answer: false,
     verdict: 'Genuinely complicated.',
-    explanation: "Slower deployment would reduce certain harms. It would also delay benefits — earlier cancer detection, more accessible education, better translation. The question of how to balance speed against reliability is one of the central unresolved debates in AI policy. There is no clean answer. Anyone who gives you one isn't taking the tradeoffs seriously.",
+    explanation: "Slower deployment would reduce certain harms. It would also delay benefits: earlier cancer detection, more accessible education, better translation. The question of how to balance speed against reliability is one of the central unresolved debates in AI policy. There is no clean answer. Anyone who gives you one isn't taking the tradeoffs seriously.",
   },
 ]
 
