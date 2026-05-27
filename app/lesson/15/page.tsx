@@ -9,7 +9,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'The Dutch Welfare Scandal',
-    body: "Between 2013 and 2019 the Dutch government used an AI system to detect fraud in welfare payments. The algorithm flagged 26,000 families for investigation based on factors including nationality, postal code, and income level. The system disproportionately targeted families with dual nationalities. Many were wrongly accused. Some lost their benefits. Some lost their homes. The government eventually fell over the scandal. The algorithm wasn't broken. It optimized the metric it was given. The metric was wrong. Nobody caught it for years.",
+    body: "Between 2013 and 2019 the Dutch government used an AI system to detect fraud in welfare payments. The algorithm flagged 26,000 families for investigation based on factors including nationality, postal code, and income level. The system disproportionately targeted families with dual nationalities. Many were wrongly accused. Some lost their benefits. Some lost their homes. The government eventually fell over the scandal. The algorithm wasn't broken. It optimized the metric it was given. The metric was the wrong one. Nobody caught it for years.",
   },
   {
     tag: 'Example',

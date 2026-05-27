@@ -24,7 +24,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'Transfer Learning',
-    body: "Training a deep network from scratch takes enormous data and compute. Transfer learning is a shortcut: take a network already trained on a large general dataset, then fine-tune it on your specific smaller dataset. The network already knows edges, shapes, and objects. You just teach it your particular task on top of that foundation. Most practical AI applications today use transfer learning. Training from scratch is rare outside of large research labs.",
+    body: "Training a deep network from scratch takes enormous data and compute. Transfer learning is a shortcut: take a network already trained on a large general dataset, then fine-tune it on your specific smaller dataset. The network already knows edges, shapes, and objects. You just teach it your particular task on top of that foundation. Most practical AI applications today use transfer learning. Training from scratch is something mostly large research labs bother with.",
   },
   {
     tag: 'Myth bust',

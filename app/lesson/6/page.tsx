@@ -34,7 +34,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'When It Really Goes Wrong',
-    body: "In 2020 the Dutch government used an AI fraud detection system to flag welfare recipients for investigation. The algorithm disproportionately targeted people with dual nationalities and low incomes. 26,000 families were wrongly accused. Some lost their homes. The government eventually fell over the scandal. The AI didn't intend any of this. It just optimized the metric it was given. The metric was wrong. Nobody caught it for years.",
+    body: "In 2020 the Dutch government used an AI fraud detection system to flag welfare recipients for investigation. The algorithm disproportionately targeted people with dual nationalities and low incomes. 26,000 families were wrongly accused. Some lost their homes. The government eventually fell over the scandal. The AI didn't intend any of this. It just optimized the metric it was given. The metric was the wrong one. Nobody caught it for years.",
   },
   {
     tag: 'Big idea',

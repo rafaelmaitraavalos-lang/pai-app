@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Learning Without Understanding',
-    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters, whether understanding is even necessary, is one of the genuinely open questions of our time.",
+    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters, whether understanding is even necessary, is one of the open questions of our time.",
   },
 ]
 
@@ -105,7 +105,7 @@ const QUESTIONS: Question[] = [
     question: `"AI can become extraordinarily good at a task without developing any understanding of what that task means."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is the most unsettling thing about how AI learns. It can write convincingly about grief without any concept of loss. It can diagnose cancer without understanding what illness feels like. It gets better and better at the surface of things while the depth remains completely empty. Whether understanding is even necessary is one of the genuinely open questions of our time.",
+    explanation: "This is the most unsettling thing about how AI learns. It can write convincingly about grief without any concept of loss. It can diagnose cancer without understanding what illness feels like. It gets better and better at the surface of things while the depth remains completely empty. Whether understanding is even necessary is one of the open questions of our time.",
   },
   {
     difficulty: 'Hard',

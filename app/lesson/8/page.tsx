@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Simple Units, Emergent Complexity',
-    body: "The most important thing about neural networks: none of the individual pieces are intelligent. Each neuron does trivial math. Each layer does slightly more complex math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding, creativity, and reasoning. Whether that appearance is the real thing is the question nobody can answer yet. That gap, between what neural networks do and what they seem to do, is where most of the important debates about AI live.",
+    body: "The most important thing about neural networks: none of the individual pieces are intelligent. Each neuron does trivial math. Each layer does slightly more complex math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding, creativity, and reasoning. Whether that appearance reflects anything real is a question nobody has answered. That gap, between what neural networks do and what they seem to do, is where most of the important debates about AI live.",
   },
 ]
 
@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"The intelligence in a neural network emerges from the combination of millions of simple operations rather than from any single component."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is the most important thing about neural networks. None of the individual pieces are intelligent. Each neuron does trivial math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding and reasoning. Whether that appearance is the real thing is the question nobody can answer yet.",
+    explanation: "This is the most important thing about neural networks. None of the individual pieces are intelligent. Each neuron does trivial math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding and reasoning. Whether that appearance reflects anything real is a question nobody has answered.",
   },
 ]
 

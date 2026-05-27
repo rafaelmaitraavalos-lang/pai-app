@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"Because ChatGPT produces human-like text, it must have developed human-like understanding."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "This is Turing's question at scale. ChatGPT was trained to produce text that looks like human text. It does this so well the output is often indistinguishable from human writing. Whether producing human-like output requires or produces anything like human cognition is genuinely unresolved. The imitation is real. What lies behind it is not agreed upon.",
+    explanation: "This is Turing's question at scale. ChatGPT was trained to produce text that looks like human text. It does this so well the output is often indistinguishable from human writing. Whether producing human-like output requires or produces anything like human cognition is unresolved. The imitation is real. What lies behind it is not agreed upon.",
   },
 ]
 

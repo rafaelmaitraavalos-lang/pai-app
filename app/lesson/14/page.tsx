@@ -9,7 +9,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'What Interpretability Means',
-    body: "Interpretability research tries to open the black box, to understand what's happening inside a neural network. Some progress has been made. Researchers can identify neurons that activate for specific concepts. They can find circuits: groups of neurons that together perform identifiable operations. But these are partial explanations of small pieces of large systems. Nobody has a complete, faithful explanation of what a large model is doing when it produces any given output. The field is active. The problem is hard.",
+    body: "Interpretability research tries to open the black box, to understand what's happening inside a neural network. Some progress has been made. Researchers can identify neurons that activate for specific concepts. They can find circuits: groups of neurons that together perform identifiable operations. But these are partial explanations of small pieces of large systems. Nobody has a complete, faithful explanation of what a large model is doing when it produces any given output. The field is active. The problem is genuinely hard.",
   },
   {
     tag: 'Hot take',
@@ -34,7 +34,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'Explainable AI Solves The Problem',
-    body: "There's a field called Explainable AI (XAI) devoted to making neural networks more interpretable. It has produced useful tools. It has not solved the problem. Most XAI methods produce approximations: simplified explanations that roughly capture what the network does without being fully faithful to the actual computation. Using an approximate explanation to make a high-stakes decision is better than nothing. It's not the same as actually understanding the system. The gap matters.",
+    body: "There's a field called Explainable AI (XAI) devoted to making neural networks more interpretable. It has produced useful tools. It has not solved the problem. Most XAI methods produce approximations: simplified explanations that roughly capture what the network does without being fully faithful to the actual computation. Using an approximate explanation to make a high-stakes decision is better than nothing. It's not the same as actually understanding the system. That gap is real.",
   },
   {
     tag: 'Big idea',

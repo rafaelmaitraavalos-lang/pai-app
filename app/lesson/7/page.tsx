@@ -24,7 +24,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'The Mind Argument',
-    body: "Some people say AI is something genuinely new, not a tool but a kind of mind. Not human, not the robots of science fiction, but a third thing we don't have good language for yet. On this view treating AI as just a tool is a category error that will lead us to make serious mistakes. This argument also has truth in it. It also risks anthropomorphizing systems that may warrant no such consideration.",
+    body: "Some people say AI is something new, not a tool but a kind of mind. Not human, not the robots of science fiction, but a third thing we don't have good language for yet. On this view treating AI as just a tool is a category error that will lead us to make serious mistakes. This argument also has truth in it. It also risks anthropomorphizing systems that may warrant no such consideration.",
   },
   {
     tag: 'Scenario',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'The End Of The Beginning',
-    body: "You started this world not knowing what AI was. You end it knowing what it does, how it learns, where it lives, what it gets wrong, and why none of the easy answers about what it is hold up under pressure. That is not a small thing. Most people who use AI every day have never thought this carefully about it. You have. That makes you something the world genuinely needs right now, someone who can think clearly about the most consequential technology of your lifetime.",
+    body: "You started this world not knowing what AI was. You end it knowing what it does, how it learns, where it lives, what it gets wrong, and why none of the easy answers about what it is hold up under pressure. That is not a small thing. Most people who use AI every day have never thought this carefully about it. You have. That makes you something the world actually needs right now, someone who can think clearly about the most consequential technology of your lifetime.",
   },
 ]
 
@@ -48,10 +48,10 @@ const QUESTIONS: Question[] = [
     difficulty: 'Easy',
     tag: 'Big idea',
     stopTitle: 'The Question We Started With',
-    question: `"After completing this world, the question of what AI fundamentally is remains genuinely open."`,
+    question: `"After completing this world, the question of what AI fundamentally is remains open."`,
     answer: true,
     verdict: "Correct, and that's the point.",
-    explanation: "You know what AI does, how it learns, where it lives, and what it gets wrong. You know the easy answers don't hold up. The question of what AI fundamentally is, tool, mind, or something new, remains genuinely unresolved. Knowing that the question is hard is more valuable than having a false answer.",
+    explanation: "You know what AI does, how it learns, where it lives, and what it gets wrong. You know the easy answers don't hold up. The question of what AI fundamentally is, tool, mind, or something new, remains unresolved. Knowing that the question is hard is more valuable than having a false answer.",
   },
   {
     difficulty: 'Easy',

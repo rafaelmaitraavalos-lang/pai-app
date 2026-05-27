@@ -34,7 +34,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Scenario',
     title: 'What The Network Actually Learns',
-    body: "After millions of training cycles on labeled images, a network has adjusted billions of weights into a configuration that reliably distinguishes cats from trucks. Nobody knows exactly why those specific weights work. Nobody can look at a weight and say \"this one is responsible for detecting ears.\" The knowledge is distributed across billions of numbers in a way that works but cannot be read. The network learned something. We can verify it learned. We cannot see what.",
+    body: "After millions of training cycles on labeled images, a network has adjusted billions of weights into a configuration that reliably distinguishes cats from trucks. Nobody knows exactly why those specific weights work. Nobody can look at a weight and say \"this one is responsible for detecting ears.\" The knowledge is distributed across billions of numbers in a way that works but cannot be read. The network learned something. We can confirm it learned something. We just can't see what.",
   },
   {
     tag: 'Big idea',
@@ -105,7 +105,7 @@ const QUESTIONS: Question[] = [
     question: `"After training, experts can read a network's weights and understand exactly what it learned."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "The knowledge is distributed across billions of numbers in a way that works but cannot be read. Nobody can look at a weight and say this is responsible for understanding sarcasm or detecting a cat's ear. The network learned something. We can verify it learned. We cannot see what.",
+    explanation: "The knowledge is distributed across billions of numbers in a way that works but cannot be read. Nobody can look at a weight and say this is responsible for understanding sarcasm or detecting a cat's ear. The network learned something. We can confirm it learned something. We just can't see what.",
   },
   {
     difficulty: 'Hard',

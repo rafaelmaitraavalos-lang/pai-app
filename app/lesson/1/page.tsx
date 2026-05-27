@@ -27,7 +27,7 @@ const STOPS: Stop[] = [
     year: '1956',
     title: 'The Birth of AI',
     image: '/images/w1m1/dartmouth-1956.png',
-    body: "It's 1956. A group of researchers gather at Dartmouth College for a summer workshop. John McCarthy proposes a name for the field they're building: Artificial Intelligence. They genuinely believe they'll make serious progress in one summer. Some think they'll basically solve it. They don't. But the name sticks, the field is born, and the most ambitious research project in human history officially begins.",
+    body: "It's 1956. A group of researchers gather at Dartmouth College for a summer workshop. John McCarthy proposes a name for the field they're building: Artificial Intelligence. They actually believe they'll make serious progress in one summer. Some think they'll basically solve it. They don't. But the name sticks, the field is born, and the most ambitious research project in human history officially begins.",
   },
   {
     tag: 'Myth bust',
@@ -47,13 +47,13 @@ const STOPS: Stop[] = [
     year: '2012',
     title: 'Everything Changes',
     image: '/images/w1m1/alexnet-cifar10.png',
-    body: "2012. A neural network called AlexNet enters an image recognition competition and wins by a margin that shocks the entire field. The technique it uses, deep learning, takes over everything. Before 2012 AI is mostly clever rule-based tricks. After 2012 AI starts genuinely learning from data at scale. Every tool you use today: image generators, voice assistants, ChatGPT, recommendation systems: traces directly back to what happened that year. Most people missed it entirely.",
+    body: "2012. A neural network called AlexNet enters an image recognition competition and wins by a margin that shocks the entire field. The technique it uses, deep learning, takes over everything. Before 2012 AI is mostly clever rule-based tricks. After 2012 AI starts actually learning from data at scale. Every tool you use today: image generators, voice assistants, ChatGPT, recommendation systems: traces directly back to what happened that year. Most people missed it entirely.",
   },
   {
     tag: 'Big idea',
     year: '2022–now',
     title: "You're In It",
-    body: "2022. ChatGPT launches and reaches 100 million users in two months: faster than any product in history. AI-generated images, music, code, and video go from experimental to everywhere almost overnight. For the first time AI is something anyone can use, not just researchers. Nobody fully agrees on what it means yet. That's not a cop-out. It's genuinely where we are. You're not learning about something that happened. You're learning about something that's still happening.",
+    body: "2022. ChatGPT launches and reaches 100 million users in two months: faster than any product in history. AI-generated images, music, code, and video go from experimental to everywhere almost overnight. For the first time AI is something anyone can use, not just researchers. Nobody fully agrees on what it means yet. That's not a cop-out. It's actually where we are. You're not learning about something that happened. You're learning about something that's still happening.",
   },
 ]
 
@@ -125,7 +125,7 @@ const QUESTIONS: Question[] = [
     difficulty: 'Hard',
     tag: 'Big idea',
     stopTitle: "You're In It",
-    question: `"The question of what AI fundamentally is remains genuinely unresolved."`,
+    question: `"The question of what AI fundamentally is remains unresolved."`,
     answer: true,
     verdict: 'Correct.',
     explanation: "Nobody fully agrees on what AI is, whether it can think, what rights it might deserve, or what it will do to the economy and human identity. You just finished a lesson on 2,500 years of people trying to answer these questions. They're still open. That's not a failure: that's what makes this the most interesting field in the world right now.",
