@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PAI — AI Literacy App
 
-## Getting Started
+A full-stack AI literacy course app built with Next.js 16, React 19, and Tailwind CSS 4. Designed for high school students learning about AI through structured worlds, lessons, and quizzes.
 
-First, run the development server:
+## What's inside
+
+- **5 worlds** of AI literacy content (35+ modules, 280+ slides, 280+ quiz questions)
+- **Onboarding flow** that profiles the learner
+- **World map** with a Mario-style module path
+- **Lesson template** with slide-by-slide reading and True/False quiz
+- **XP + level system** tracking progress across all worlds
+- **Dev panel** at `/dev` for jumping to any lesson without prerequisites
+
+## Worlds
+
+| World | Topic | Level |
+|---|---|---|
+| 1 | What is AI? | Beginner |
+| 2 | How AI Thinks | Intermediate |
+| 3 | AI and Society | Intermediate |
+| 4 | AI Ethics | Advanced |
+| 5 | The Future of AI | Advanced |
+
+## Getting started
 
 ```bash
+git clone https://github.com/rafaelmaitraavalos-lang/pai-app.git
+cd pai-app
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Adding content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All lesson content lives in `app/data/`. To add a new world:
 
-## Learn More
+1. Add world metadata to `WORLDS` in `app/data/index.ts`
+2. Create `app/data/lessons/wN.ts` with lesson data
+3. Import and spread it into `LESSONS` in `app/data/index.ts`
 
-To learn more about Next.js, take a look at the following resources:
+No new page files needed — dynamic routes handle everything automatically.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 16 (App Router, Turbopack)
+- React 19
+- Tailwind CSS 4
+- TypeScript
 
-## Deploy on Vercel
+## Dev tools
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/dev` — jump to any lesson, mark all complete, reset progress
+- `/reset` — wipe localStorage and restart from onboarding
