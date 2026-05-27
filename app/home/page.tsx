@@ -115,7 +115,7 @@ export default function Home() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className={`text-[11px] font-black uppercase tracking-[0.12em] mb-0.5 ${unlocked ? 'text-[#BA7517]' : 'text-[#C4AE94]'}`}>
-                        World {worldId} · {world.level}
+                        World {world.displayId ?? worldId} · {world.level}
                       </div>
                       <div className={`font-black text-lg leading-tight ${unlocked ? 'text-[#3D1A00]' : 'text-[#A89070]'}`}>
                         {world.title}

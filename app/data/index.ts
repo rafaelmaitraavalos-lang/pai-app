@@ -15,6 +15,7 @@ export interface WorldModule {
 
 export interface WorldData {
   id: number
+  displayId?: number
   title: string
   level: 'Elementary' | 'Beginner' | 'Intermediate' | 'Advanced'
   modules: WorldModule[]
@@ -110,6 +111,7 @@ export const WORLDS: Record<number, WorldData> = {
   },
   6: {
     id: 6,
+    displayId: 1,
     title: 'Meet AI',
     level: 'Elementary',
     modules: [

@@ -29,7 +29,7 @@ export default async function WorldPage({
             Home
           </a>
           <div className="w-px h-4 bg-[#DDD0BC]" />
-          <span className="font-black text-[#3D1A00] text-sm">World {worldId} — {world.title}</span>
+          <span className="font-black text-[#3D1A00] text-sm">World {world.displayId ?? worldId} — {world.title}</span>
         </div>
       </div>
       <WorldMapView world={world} />

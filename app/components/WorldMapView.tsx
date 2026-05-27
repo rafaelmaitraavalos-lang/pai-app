@@ -62,7 +62,7 @@ export default function WorldMapView({ world }: Props) {
       <aside className="w-60 flex-shrink-0 border-r border-[#E5D4BA] flex flex-col overflow-y-auto">
         <div className="px-6 pt-7 pb-5 border-b border-[#E5D4BA]">
           <div className="text-[10px] font-black uppercase tracking-[0.16em] text-[#BA7517] mb-1">
-            World {world.id}
+            World {world.displayId ?? world.id}
           </div>
           <div className="font-black text-[#3D1A00] text-[15px] leading-snug mb-4">{world.title}</div>
           <div className="flex items-center justify-between mb-1.5">
