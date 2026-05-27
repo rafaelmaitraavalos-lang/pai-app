@@ -2,6 +2,7 @@ import { Stop, Question } from '../components/LessonTemplate'
 import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
+import we1 from './lessons/we1'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -15,7 +16,7 @@ export interface WorldModule {
 export interface WorldData {
   id: number
   title: string
-  level: 'Beginner' | 'Intermediate' | 'Advanced'
+  level: 'Elementary' | 'Beginner' | 'Intermediate' | 'Advanced'
   modules: WorldModule[]
 }
 
@@ -107,10 +108,18 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 39, title: 'What You Do Next' },
     ],
   },
+  6: {
+    id: 6,
+    title: 'Meet AI',
+    level: 'Elementary',
+    modules: [
+      { id: 40, title: 'Hi! I Am PAI' },
+    ],
+  },
 }
 
 // Ordered list for the home screen
-export const WORLD_IDS = [1, 2, 3, 4, 5]
+export const WORLD_IDS = [1, 2, 3, 4, 5, 6]
 
 // Helper: which world does a lesson belong to?
 export function getLessonWorldId(lessonId: number): number {
@@ -135,6 +144,7 @@ export const LESSONS: Record<number, LessonData> = {
   ...w3,
   ...w4,
   ...w5,
+  ...we1,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {
