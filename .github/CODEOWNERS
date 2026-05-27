@@ -1,0 +1,17 @@
+# CODEOWNERS — controls who must approve changes before they can merge
+#
+# Everything in this repo requires @rafaelmaitraavalos-lang's approval EXCEPT
+# the elementary school file, which your sister owns.
+#
+# How it works:
+#   - When your sister opens a pull request that only touches app/data/elementary.ts,
+#     she can merge it herself without waiting for your approval.
+#   - If she (or anyone else) changes any other file, you must approve before it merges.
+#   - You can always change anything without needing someone else's approval.
+
+# Default: rafa owns everything
+*  @rafaelmaitraavalos-lang
+
+# Elementary school content: sister owns this file
+# Replace SISTER_GITHUB_USERNAME with her actual GitHub username
+app/data/elementary.ts  SISTER_GITHUB_USERNAME

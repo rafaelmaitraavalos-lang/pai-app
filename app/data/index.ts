@@ -2,6 +2,7 @@ import { Stop, Question } from '../components/LessonTemplate'
 import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
+export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
