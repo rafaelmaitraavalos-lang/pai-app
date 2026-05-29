@@ -116,6 +116,7 @@ export const WORLDS: Record<number, WorldData> = {
     level: 'Elementary',
     modules: [
       { id: 40, title: 'Hi! I Am PAI' },
+      { id: 41, title: 'PAI and the World' },
     ],
   },
 }

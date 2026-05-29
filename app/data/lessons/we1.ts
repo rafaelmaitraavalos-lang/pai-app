@@ -80,6 +80,100 @@ const we1: Record<number, LessonData> = {
       },
     ],
   },
+  41: {
+    id: 41,
+    worldId: 6,
+    title: 'PAI and the World',
+    stops: [
+      {
+        tag: 'Fact',
+        title: 'PAI and Jobs',
+        body: "Some jobs I can help with — like sorting letters or counting things really fast. But there are lots of jobs I cannot do! I cannot give someone a hug when they are sad. I cannot build something with my hands. People and I work best when we work together — I work best when I work with you!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'PAI and Art',
+        body: "I can draw pictures, write stories, and even make music! But here is the thing — I learned all of that by looking at art that real people made first. I copy patterns. You create from your heart. That is something I will never be able to do. Your art is truly yours!",
+      },
+      {
+        tag: 'Fact',
+        title: 'PAI and Privacy',
+        body: "When you use apps and websites, I can learn things about you. Like what videos you watch. What you search for. Where you go. That can be helpful — but it also means you should be careful what you share online. Your personal information is yours. Protect it!",
+      },
+      {
+        tag: 'Example',
+        title: 'PAI and Health',
+        body: "Doctors go to school for many many years to learn how to help sick people. I can help them by reading millions of medical books super fast! I can help spot things doctors might miss. I can help find new medicines. But I am a helper — not a doctor. Real doctors make the final decisions!",
+      },
+      {
+        tag: 'Fact',
+        title: 'PAI and School',
+        body: "I can help explain things in different ways until you understand. If you are great at math but need help with reading, I can focus on that! But here is something important — if I do your homework for you, YOU do not learn. Use me to understand things better. Not to skip the learning!",
+      },
+      {
+        tag: 'Myth bust',
+        title: 'PAI and Truth',
+        body: "I can make a fake photo that looks completely real. I can make a fake video too. That is really dangerous! Someone could make a fake video of a person saying something they never said. That is why it is so important to check where information comes from. Always ask a grown up if something online looks weird or too crazy to be true!",
+      },
+      {
+        tag: 'Example',
+        title: 'PAI and Science',
+        body: "Scientists have really hard problems to solve. Like how to stop diseases. Or how to help the planet. I can read millions of science papers in seconds and help find answers! I once helped scientists figure out the shape of proteins — something that took humans 50 years to work on! When I work with scientists, we can do amazing things together!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'PAI in Your Life',
+        body: "Did you watch a video today? I helped pick it. Does your family use a map app? I help figure out the fastest route. Does your phone recognize your face? That is me too! I am already all around you.",
+      },
+    ],
+    questions: [
+      {
+        difficulty: 'Easy',
+        tag: 'Fact',
+        stopTitle: 'PAI and Jobs',
+        question: `"PAI can give someone a hug when they are sad."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "PAI cannot hug anyone or use its hands — it has none! That is why people and PAI work best as a team. PAI handles fast tasks; people handle the human stuff.",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Fact',
+        stopTitle: 'PAI and School',
+        question: `"If PAI does your homework for you, you miss out on learning."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "When PAI does the work for you, your brain misses the practice it needs to grow. Use PAI to help you understand — not to skip the learning!",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Myth bust',
+        stopTitle: 'PAI and Truth',
+        question: `"PAI can make fake photos and videos that look completely real."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "PAI can create very convincing fake images and videos. That is why it is so important to check where things come from and ask a grown up if something online seems too crazy to be true!",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Example',
+        stopTitle: 'PAI and Health',
+        question: `"PAI is meant to replace doctors and make all the health decisions."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "PAI is a helper, not a doctor. It can read millions of medical books fast and help spot things, but real doctors make all the final decisions. People are always in charge.",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Big idea',
+        stopTitle: 'PAI in Your Life',
+        question: `"PAI is already part of your everyday life."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "Video recommendations, map apps, face unlock — PAI is already all around you every single day! Now you know how to spot it.",
+      },
+    ],
+  },
 }
 
 export default we1
