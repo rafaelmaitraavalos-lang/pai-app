@@ -2,6 +2,7 @@ import { Stop, Question } from '../components/LessonTemplate'
 import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
+import w6 from './lessons/w6'
 export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -108,10 +109,25 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 39, title: 'What You Do Next' },
     ],
   },
+  6: {
+    id: 6,
+    title: 'How Neural Networks Work',
+    level: 'Advanced',
+    modules: [
+      { id: 40, title: 'The Math Behind A Neuron' },
+      { id: 41, title: 'Forward Propagation' },
+      { id: 42, title: 'Loss Functions' },
+      { id: 43, title: 'Backpropagation In Detail' },
+      { id: 44, title: 'Activation Functions' },
+      { id: 45, title: 'Attention Mechanisms' },
+      { id: 46, title: 'The Transformer Architecture' },
+      { id: 47, title: 'Training At Scale' },
+    ],
+  },
 }
 
 // Ordered list for the home screen
-export const WORLD_IDS = [1, 2, 3, 4, 5]
+export const WORLD_IDS = [1, 2, 3, 4, 5, 6]
 
 // Helper: which world does a lesson belong to?
 export function getLessonWorldId(lessonId: number): number {
@@ -136,6 +152,7 @@ export const LESSONS: Record<number, LessonData> = {
   ...w3,
   ...w4,
   ...w5,
+  ...w6,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {
