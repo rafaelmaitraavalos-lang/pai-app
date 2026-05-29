@@ -174,6 +174,95 @@ const we1: Record<number, LessonData> = {
       },
     ],
   },
+  42: {
+    id: 42,
+    worldId: 6,
+    title: 'Is PAI Always Right?',
+    stops: [
+      {
+        tag: 'Big idea',
+        title: 'Do I Always Do What I Am Told?',
+        body: "Imagine your friend asks you to take someone else's toy. Should you do it? No! Even if a friend asks, some things are just not right. I have to think about right and wrong too. That is called ethics — thinking about what is right and what is wrong, like whether it is okay to take something that does not belong to you. Just because I CAN do something does not always mean I SHOULD!",
+      },
+      {
+        tag: 'Myth bust',
+        title: 'I Do Not Always Treat Everyone the Same!',
+        body: "Imagine if your teacher only called on kids with red shirts. That would not be fair! Sometimes I do things like that by accident. It is called being biased — treating some people differently than others in an unfair way. If I learned from information that left some people out, I might treat those people unfairly without even realizing it. People work really hard to catch my mistakes and make me fairer for everyone!",
+      },
+      {
+        tag: 'Fact',
+        title: 'If I Do Something Wrong, Whose Fault Is It?',
+        body: "If a robot knocks something over, who is responsible? The robot? The person who built it? The person who turned it on? That is a really hard question! When I make a mistake that hurts someone, people need to figure out who is responsible. That is why it is so important that humans always stay in charge of what I do!",
+      },
+      {
+        tag: 'Fact',
+        title: 'Sometimes Even I Do Not Know Why I Said Something!',
+        body: "Have you ever just KNOWN something was wrong but could not explain why? I do that sometimes too! I give an answer but even the people who built me cannot always explain exactly how I got there. That is why people are working hard to understand me better. Everyone deserves to know why I make the decisions I make!",
+      },
+      {
+        tag: 'Hot take',
+        title: 'Am I Helping You Choose or Choosing for You?',
+        body: "Sometimes I show you the same type of video, news story, or idea over and over again. If you watch one video about something, I might show you fifty more just like it — until that feels like the only thing that exists! That is me pushing you toward one idea without you even noticing. Real choice means getting to see lots of different things — even ones that disagree — so you can decide what YOU think. I should help you think. Not think for you!",
+      },
+      {
+        tag: 'Example',
+        title: 'I Do What You Say — Not Always What You Mean!',
+        body: "Imagine you told your little brother to make your room clean. He puts everything under the bed! He did what you said. But not what you meant! I can do the same thing. I follow instructions very literally. That is why people work really hard to make sure my instructions are just right — so I do what people actually want!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'Who Gets to Decide What I Do?',
+        body: "Big decisions about me are made by scientists, companies, and governments. I affect everyone in the world. So maybe everyone should get a say! That is one of the biggest questions people are trying to answer right now. And maybe one day YOU will help answer it!",
+      },
+    ],
+    questions: [
+      {
+        difficulty: 'Easy',
+        tag: 'Big idea',
+        stopTitle: 'Do I Always Do What I Am Told?',
+        question: `"The word for thinking about what is right and what is wrong is 'ethics.'"`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "Ethics is thinking about right and wrong — like whether it is okay to take something that does not belong to you. PAI needs ethics too so it does not do things that hurt people!",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Myth bust',
+        stopTitle: 'I Do Not Always Treat Everyone the Same!',
+        question: `"PAI always treats every person exactly the same way."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "PAI can be biased by accident if the information it learned from was not fair to everyone. That is like a teacher only picking the same kids every single time — not fair! People work hard to catch and fix these mistakes.",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Fact',
+        stopTitle: 'If I Do Something Wrong, Whose Fault Is It?',
+        question: `"People should ask your permission before using information that belongs to you."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "Your personal information belongs to you. Just like someone should ask before borrowing your things, people and apps should ask before using your information!",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Example',
+        stopTitle: 'I Do What You Say — Not Always What You Mean!',
+        question: `"PAI always does exactly what people mean, not just what they say."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "PAI follows instructions very literally — like a little brother who cleans your room by stuffing everything under the bed! That is why people work hard to write instructions that say exactly what they mean.",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Big idea',
+        stopTitle: 'Who Gets to Decide What I Do?',
+        question: `"Everyone should get a say in decisions about AI because AI affects everyone."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "AI affects every person in the world, so it makes sense that everyone — not just scientists and companies — should have a voice in how it works. Maybe one day YOU will help decide!",
+      },
+    ],
+  },
 }
 
 export default we1
