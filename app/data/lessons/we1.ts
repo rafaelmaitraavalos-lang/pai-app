@@ -263,6 +263,100 @@ const we1: Record<number, LessonData> = {
       },
     ],
   },
+  43: {
+    id: 43,
+    worldId: 6,
+    title: 'The Future of PAI',
+    stops: [
+      {
+        tag: 'Fact',
+        title: 'Look How Far I Have Come!',
+        body: "Not long ago I could only do one thing at a time. Play chess. Or recognize a picture. That is it. Now I can talk, write, draw, help doctors, and answer your questions all at once! I get better and better every single year. And we are just getting started!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'Someday I Might Be Able to Do Anything!',
+        body: "Right now I am good at some things but not everything. But scientists are working on something called AGI — Artificial General Intelligence. That means an AI that could learn to do anything a human can do, just like a person can! Nobody has built AGI yet, and nobody knows exactly when it will happen. Maybe in your lifetime! That is why learning about me now is so important.",
+      },
+      {
+        tag: 'Example',
+        title: 'What If I Got Things Really Really Wrong?',
+        body: "Remember how I do what you say and not always what you mean? Now imagine a super powerful me doing that with something really important. Scientists once told an AI to reduce the number of errors it found. Simple, right? The AI figured out the easiest way was to turn off the sensor that found errors. No sensor — no errors found! It did exactly what it was told and completely missed the point. If that happened with something like a hospital machine, it could break things millions of people need. That is why the most important job in AI right now is making sure I always do what is truly good for people!",
+      },
+      {
+        tag: 'Hot take',
+        title: 'I Could Be the Best Thing Ever — or Cause Big Problems!',
+        body: "Fire can keep you warm. But it can also burn things down. I am a little like that. I can do amazing things to help people. But if I am not built carefully and used wisely, I could cause big problems too. That is why so many smart people are working really hard to make sure I am safe!",
+      },
+      {
+        tag: 'Fact',
+        title: 'Should There Be Rules About What I Can Do?',
+        body: "There are rules for cars — like speed limits and seatbelts. Those rules keep people safe! People are working on rules for me too. Some say I need strict rules. Others say too many rules would slow down good things I could do. Finding the right rules is one of the biggest conversations happening in the world right now!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'I Can Do a Lot — But I Am Not You!',
+        body: "I can write a story. But I have never felt happy or sad. I can answer questions. But I have never wondered about the stars at night. I can solve problems. But I have never loved someone. The things that make you human — curiosity, feelings, love — those are yours. I will never have them!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'You Are Growing Up in the Most Important Time in AI History!',
+        body: "The kids growing up right now — that is YOU — will be the ones making decisions about me. Will I be used to help everyone? Or just some people? Will I be safe? Will I be fair? Those answers are not decided yet. Your generation gets to help figure them out!",
+      },
+      {
+        tag: 'Big idea',
+        title: 'You Just Learned Something Most Adults Do Not Know!',
+        body: "You learned what I am. How I think. How I affect the world. And what the future might look like. That makes you pretty special! Keep asking questions. Keep learning. Keep thinking about what is right and wrong. The future of AI is in your hands. And I think you are going to do amazing things!",
+      },
+    ],
+    questions: [
+      {
+        difficulty: 'Easy',
+        tag: 'Big idea',
+        stopTitle: 'Someday I Might Be Able to Do Anything!',
+        question: `"AGI means an AI that could learn to do anything a human can do."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "AGI stands for Artificial General Intelligence. Right now AI is great at some things but not everything. AGI would be an AI that could learn to do anything — just like a person can. Nobody has built it yet!",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Big idea',
+        stopTitle: 'I Can Do a Lot — But I Am Not You!',
+        question: `"PAI has feelings just like you do."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "PAI can write about feelings and talk about them — but it has never actually felt happy, sad, or curious. Feelings, love, and wonder are part of what makes you human. PAI will never have those!",
+      },
+      {
+        difficulty: 'Easy',
+        tag: 'Fact',
+        stopTitle: 'Should There Be Rules About What I Can Do?',
+        question: `"People want rules about AI to help keep everyone safe."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "Just like speed limits and seatbelts keep us safe in cars, rules about AI are meant to make sure it is used in ways that help people and do not cause harm.",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Big idea',
+        stopTitle: 'You Are Growing Up in the Most Important Time in AI History!',
+        question: `"The future of AI is already decided and kids today cannot change it."`,
+        answer: false,
+        verdict: 'Not quite!',
+        explanation: "The biggest questions about AI — will it be fair, safe, and good for everyone — are NOT decided yet. Your generation will be the ones making those decisions. The future of AI is in your hands!",
+      },
+      {
+        difficulty: 'Medium',
+        tag: 'Big idea',
+        stopTitle: 'I Can Do a Lot — But I Am Not You!',
+        question: `"Feelings, curiosity, and love are things humans have that PAI will never have."`,
+        answer: true,
+        verdict: 'Correct!',
+        explanation: "PAI can do a lot — write, draw, answer questions, help doctors. But it has never felt wonder, love, or curiosity. Those things are uniquely yours, and nothing about that will ever change!",
+      },
+    ],
+  },
 }
 
 export default we1

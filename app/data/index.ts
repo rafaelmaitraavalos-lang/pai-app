@@ -118,6 +118,7 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 40, title: 'Hi! I Am PAI' },
       { id: 41, title: 'PAI and the World' },
       { id: 42, title: 'Is PAI Always Right?' },
+      { id: 43, title: 'The Future of PAI' },
     ],
   },
 }
