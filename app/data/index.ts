@@ -4,6 +4,7 @@ import w4 from './lessons/w4'
 import w5 from './lessons/w5'
 import w6 from './lessons/w6'
 import w7 from './lessons/w7'
+import w8 from './lessons/w8'
 export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -145,7 +146,16 @@ export const WORLDS: Record<number, WorldData> = {
     id: 8,
     title: 'The Frontier',
     level: 'Advanced',
-    modules: [],
+    modules: [
+      { id: 56, title: 'Multimodal AI' },
+      { id: 57, title: 'AI Agents At Scale' },
+      { id: 58, title: 'Frontier Models' },
+      { id: 59, title: 'AI and Science' },
+      { id: 60, title: 'Robotics and Embodied AI' },
+      { id: 61, title: 'AI Safety Research' },
+      { id: 62, title: 'The Geopolitics Of AI' },
+      { id: 63, title: 'What Comes Next' },
+    ],
   },
 }
 
@@ -177,6 +187,7 @@ export const LESSONS: Record<number, LessonData> = {
   ...w5,
   ...w6,
   ...w7,
+  ...w8,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {
