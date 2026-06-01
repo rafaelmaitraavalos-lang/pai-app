@@ -171,6 +171,7 @@ const w5: Record<number, LessonData> = {
 
   39: {
     id: 39, worldId: 5, title: 'What You Do Next',
+    completionPage: '/complete/world5',
     stops: [
       { tag: 'Fact', title: 'Understanding Is Not Enough', body: "Everything in this course has built toward understanding AI, what it is, how it works, what it's doing to society, what the ethical questions are, and where it's going. Understanding is necessary. It's not sufficient. What you do with it is a different problem. This module is not about more information. It's about action: what the understanding you've built enables you to do differently." },
       { tag: 'Example', title: 'The Career Dimension', body: "AI is creating new roles and transforming existing ones across every industry. People who understand AI, not just how to use it but how it works, what its limitations are, and how to think critically about it, will be valuable in almost every field. Not because they'll all be AI engineers. Because every field needs people who can ask the right questions about AI systems, evaluate their outputs critically, and make judgment calls that require human understanding. That's you." },

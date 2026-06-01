@@ -26,6 +26,7 @@ interface Props {
   title: string
   stops: Stop[]
   questions: Question[]
+  completionPage?: string
 }
 
 // ── Small helpers ─────────────────────────────────────────────────────────────
@@ -122,7 +123,7 @@ function Sidebar({ title, stops, stopIndex, phase, qIndex, questions }: {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function LessonTemplate({ id, title, stops, questions }: Props) {
+export default function LessonTemplate({ id, title, stops, questions, completionPage }: Props) {
   const router = useRouter()
 
   const [phase, setPhase] = useState<Phase>('timeline')
@@ -148,7 +149,11 @@ export default function LessonTemplate({ id, title, stops, questions }: Props) {
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) {
       localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-      setPhase('complete')
+      if (completionPage) {
+        router.push(completionPage)
+      } else {
+        setPhase('complete')
+      }
       return
     }
     setQDir('right')

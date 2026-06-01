@@ -53,6 +53,13 @@
   100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
 }
 
+@keyframes floatParticle {
+  0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-120px) translateX(var(--drift, 20px)); opacity: 0; }
+}
+
 @keyframes xpPop {
   0%   { transform: scale(0.55); opacity: 0; }
   65%  { transform: scale(1.1);  opacity: 1; }

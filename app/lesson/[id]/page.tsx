@@ -21,6 +21,7 @@ export default async function LessonPage({
       title={lesson.title}
       stops={lesson.stops}
       questions={lesson.questions}
+      completionPage={lesson.completionPage}
     />
   )
 }

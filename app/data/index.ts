@@ -27,6 +27,7 @@ export interface LessonData {
   title: string
   stops: Stop[]
   questions: Question[]
+  completionPage?: string  // custom route shown instead of the default completion screen
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -123,6 +124,18 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 46, title: 'The Transformer Architecture' },
       { id: 47, title: 'Training At Scale' },
     ],
+  },
+  7: {
+    id: 7,
+    title: 'Build With AI',
+    level: 'Advanced',
+    modules: [],
+  },
+  8: {
+    id: 8,
+    title: 'The Frontier',
+    level: 'Advanced',
+    modules: [],
   },
 }
 
