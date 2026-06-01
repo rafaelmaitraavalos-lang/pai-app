@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-// ── Particles ─────────────────────────────────────────────────────────────────
+// ── Ambient particles ─────────────────────────────────────────────────────────
 
 const PARTICLES = [
   { left: '8%',  top: '70%', size: 6,  delay: 0,    duration: 4.2, drift: 15  },
@@ -28,11 +28,9 @@ function Particles() {
           key={i}
           className="absolute rounded-full"
           style={{
-            left: p.left,
-            top: p.top,
-            width: p.size,
-            height: p.size,
-            background: `rgba(186, 117, 23, ${0.25 + (i % 3) * 0.1})`,
+            left: p.left, top: p.top,
+            width: p.size, height: p.size,
+            background: `rgba(186, 117, 23, ${0.2 + (i % 3) * 0.1})`,
             ['--drift' as string]: `${p.drift}px`,
             animation: `floatParticle ${p.duration}s ease-in ${p.delay}s infinite`,
           }}
@@ -42,20 +40,43 @@ function Particles() {
   )
 }
 
-// ── Mascot ────────────────────────────────────────────────────────────────────
+// ── PAI mascot — bigger, graduation-mode ─────────────────────────────────────
 
-function Mascot() {
+function Mascot({ burst }: { burst: boolean }) {
   return (
-    <div style={{ animation: 'paiFloat 3s ease-in-out infinite' }}>
+    <div className="relative flex items-center justify-center" style={{ animation: 'paiFloat 3s ease-in-out infinite' }}>
+      {/* Ring burst on XP pop */}
+      {burst && (
+        <div
+          className="absolute rounded-full border-2 border-[#BA7517]"
+          style={{
+            width: '96px', height: '96px',
+            top: '50%', left: '50%',
+            animation: 'ringBurst 0.8s ease-out forwards',
+          }}
+        />
+      )}
+
+      {/* Outer glow ring — always pulsing */}
       <div
-        className="w-20 h-20 rounded-full relative"
+        className="absolute rounded-full"
+        style={{
+          width: '110px', height: '110px',
+          background: 'rgba(186,117,23,0.12)',
+          animation: 'graduationPulse 2.5s ease-in-out infinite',
+        }}
+      />
+
+      {/* Mascot disc */}
+      <div
+        className="relative w-24 h-24 rounded-full"
         style={{
           background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)',
-          boxShadow: '0 12px 32px rgba(186,117,23,0.32), 0 0 0 8px rgba(186,117,23,0.08)',
+          boxShadow: '0 16px 48px rgba(186,117,23,0.40), 0 0 0 6px rgba(186,117,23,0.10)',
         }}
       >
-        <div className="absolute inset-3 rounded-full" style={{ border: '1.5px solid rgba(255,255,255,0.22)', background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.18), transparent 65%)' }} />
-        <div className="absolute rounded-full" style={{ top: '18%', left: '18%', width: '28%', height: '20%', background: 'rgba(255,255,255,0.38)', filter: 'blur(3px)' }} />
+        <div className="absolute inset-4 rounded-full" style={{ border: '1.5px solid rgba(255,255,255,0.22)', background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.18), transparent 65%)' }} />
+        <div className="absolute rounded-full" style={{ top: '18%', left: '18%', width: '28%', height: '20%', background: 'rgba(255,255,255,0.38)', filter: 'blur(4px)' }} />
       </div>
     </div>
   )
@@ -69,21 +90,18 @@ const TRACKS = [
     title: 'The Math Behind AI',
     desc: 'Weights, gradients, backpropagation, transformers. The actual mechanics underneath everything you just learned.',
     route: '/world/6',
-    available: true,
   },
   {
     world: 7,
     title: 'Build With AI',
     desc: 'Prompts, APIs, agents, fine-tuning. Turn your understanding into something real.',
     route: '/world/7',
-    available: false,
   },
   {
     world: 8,
     title: 'The Frontier',
     desc: "What's happening in research labs right now. The cutting edge of a field you now understand deeply.",
     route: '/world/8',
-    available: false,
   },
 ]
 
@@ -95,8 +113,15 @@ export default function World5Complete() {
   const router = useRouter()
 
   const [stage, setStage] = useState<Stage>('xp')
+  const [burst, setBurst] = useState(false)
   const [line, setLine] = useState(0)
   const [cardVisible, setCardVisible] = useState([false, false, false])
+
+  // Trigger burst on mount
+  useEffect(() => {
+    const t = setTimeout(() => setBurst(true), 300)
+    return () => clearTimeout(t)
+  }, [])
 
   // XP → talking
   useEffect(() => {
@@ -104,7 +129,7 @@ export default function World5Complete() {
     return () => clearTimeout(t)
   }, [])
 
-  // Animate lines one at a time
+  // Animate lines
   useEffect(() => {
     if (stage !== 'talking') return
     const timers = [
@@ -115,7 +140,7 @@ export default function World5Complete() {
     return () => timers.forEach(clearTimeout)
   }, [stage])
 
-  // Stagger cards in
+  // Stagger cards
   useEffect(() => {
     if (stage !== 'cards') return
     const timers = [0, 280, 560].map((delay, i) =>
@@ -129,9 +154,20 @@ export default function World5Complete() {
       className="min-h-screen bg-[#F2EBE0] font-sans flex flex-col items-center justify-center px-6 py-12 relative overflow-hidden"
       style={{ animation: 'pageIn 0.4s ease-out' }}
     >
+      {/* Ambient center glow behind PAI */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -60%)',
+          width: '600px', height: '400px',
+          background: 'radial-gradient(ellipse at center, rgba(186,117,23,0.10) 0%, transparent 70%)',
+        }}
+      />
+
       <Particles />
 
-      <div className="relative z-10 flex flex-col items-center w-full max-w-xl gap-8">
+      <div className="relative z-10 flex flex-col items-center w-full max-w-4xl gap-8">
 
         {/* XP burst */}
         <div style={{ animation: 'xpPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both' }}>
@@ -142,8 +178,8 @@ export default function World5Complete() {
         </div>
 
         {/* PAI + speech */}
-        <div className="flex flex-col items-center gap-5 text-center">
-          <Mascot />
+        <div className="flex flex-col items-center gap-6 text-center">
+          <Mascot burst={burst} />
 
           <div className="space-y-3 min-h-[80px]">
             <p
@@ -172,51 +208,54 @@ export default function World5Complete() {
           </div>
         </div>
 
-        {/* Track cards */}
+        {/* Cards */}
         {(stage === 'cards' || cardVisible.some(Boolean)) && (
           <div className="w-full flex flex-col gap-3">
-            {TRACKS.map((track, i) => (
-              <div
-                key={track.world}
-                className="transition-all duration-400"
-                style={{
-                  opacity: cardVisible[i] ? 1 : 0,
-                  transform: cardVisible[i] ? 'translateY(0)' : 'translateY(16px)',
-                }}
-              >
-                <div className={`bg-white rounded-2xl border-2 px-6 py-5 flex items-center justify-between gap-4 ${
-                  track.available
-                    ? 'border-[#DDD0BC] shadow-sm'
-                    : 'border-[#E5D4BA] opacity-60'
-                }`}>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-black text-[#3D1A00] text-base leading-tight mb-1">
-                      {track.title}
-                    </p>
-                    <p className="text-sm font-medium text-[#9A5A10] leading-snug">
-                      {track.desc}
-                    </p>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+              {TRACKS.map((track, i) => (
+                <div
+                  key={track.world}
+                  className="h-full transition-all duration-400 flex flex-col"
+                  style={{
+                    opacity: cardVisible[i] ? 1 : 0,
+                    transform: cardVisible[i] ? 'translateY(0)' : 'translateY(16px)',
+                  }}
+                >
+                  <div
+                    className="relative bg-white rounded-2xl border-2 border-[#DDD0BC] shadow-sm px-5 py-5 flex flex-col gap-4 flex-1 overflow-hidden group transition-all duration-200 hover:-translate-y-1"
+                    style={{ ['--hover-shadow' as string]: '0 12px 32px rgba(186,117,23,0.18)' }}
+                    onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 32px rgba(186,117,23,0.18)')}
+                    onMouseLeave={e => (e.currentTarget.style.boxShadow = '')}
+                  >
+                    {/* Ghost world number */}
+                    <span
+                      className="absolute right-3 bottom-2 font-black text-[#BA7517] select-none pointer-events-none leading-none"
+                      style={{ fontSize: '120px', opacity: 0.045 }}
+                    >
+                      {track.world}
+                    </span>
 
-                  {track.available ? (
+                    <div className="flex-1 relative z-10">
+                      <p className="font-black text-[#3D1A00] text-base leading-tight mb-1.5">
+                        {track.title}
+                      </p>
+                      <p className="text-sm font-medium text-[#9A5A10] leading-snug">
+                        {track.desc}
+                      </p>
+                    </div>
                     <button
                       onClick={() => router.push(track.route)}
-                      className="flex-shrink-0 px-5 py-2.5 rounded-xl bg-[#BA7517] text-white font-black text-sm shadow-[0_4px_0_#7A4A0A] active:shadow-none active:translate-y-1 cursor-pointer hover:bg-[#C8851F] transition-all duration-100 select-none"
+                      className="relative z-10 w-full py-2.5 rounded-xl bg-[#BA7517] text-white font-black text-sm shadow-[0_4px_0_#7A4A0A] active:shadow-none active:translate-y-1 cursor-pointer hover:bg-[#C8851F] transition-all duration-100 select-none"
                     >
                       Let's go
                     </button>
-                  ) : (
-                    <span className="flex-shrink-0 px-4 py-2.5 rounded-xl border-2 border-[#DDD0BC] text-[#BBA98C] font-black text-xs select-none">
-                      Coming soon
-                    </span>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
-            {/* Footer note */}
             <p
-              className="text-center text-[#9A5A10] font-semibold text-sm mt-2 transition-all duration-500"
+              className="w-full text-center text-[#9A5A10] font-semibold text-sm mt-1 transition-all duration-500"
               style={{
                 opacity: cardVisible[2] ? 1 : 0,
                 transitionDelay: '200ms',

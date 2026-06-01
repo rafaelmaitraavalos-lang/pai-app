@@ -3,6 +3,7 @@ import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
 import w6 from './lessons/w6'
+import w7 from './lessons/w7'
 export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -129,7 +130,16 @@ export const WORLDS: Record<number, WorldData> = {
     id: 7,
     title: 'Build With AI',
     level: 'Advanced',
-    modules: [],
+    modules: [
+      { id: 48, title: 'How To Think About Prompts' },
+      { id: 49, title: 'Prompt Engineering' },
+      { id: 50, title: 'Working With APIs' },
+      { id: 51, title: 'Retrieval Augmented Generation' },
+      { id: 52, title: 'Fine-Tuning' },
+      { id: 53, title: 'AI Agents' },
+      { id: 54, title: 'Evaluating AI Systems' },
+      { id: 55, title: 'Responsible Building' },
+    ],
   },
   8: {
     id: 8,
@@ -166,6 +176,7 @@ export const LESSONS: Record<number, LessonData> = {
   ...w4,
   ...w5,
   ...w6,
+  ...w7,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {
