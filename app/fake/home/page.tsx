@@ -126,33 +126,8 @@ export default function FakeHome() {
   return (
     <main style={{ maxWidth: 880, margin: '0 auto', padding: '0 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
 
-      {/* ── Masthead ──────────────────────────────────────────────────── */}
-      <div style={{ paddingTop: 48, paddingBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontFamily: DISP, fontSize: 'clamp(3rem, 8vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: BLACK }}>PAI</div>
-            <div style={{ fontFamily: BODY, fontSize: 15, color: DIM, marginTop: 8, lineHeight: 1.5 }}>An AI literacy publication for the next generation</div>
-          </div>
-          <div style={{ textAlign: 'right', paddingBottom: 6 }}>
-            <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', color: DIM, textTransform: 'uppercase', marginBottom: 3 }}>Issue No. 001</div>
-            <div style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>Jun 2026</div>
-          </div>
-        </div>
-        <div style={{ borderTop: `6px solid ${BLACK}`, marginTop: 20, maxWidth: 220 }} />
-        <div style={{ borderTop: `1px solid ${BLACK}`, marginTop: 4 }} />
-        <div style={{ fontFamily: DISP, fontSize: 10, color: DIM, marginTop: 12, letterSpacing: '0.06em', textTransform: 'uppercase', display: 'flex', gap: 14, alignItems: 'center' }}>
-          <span style={{ color: ACC }}>Tech &amp; Society</span>
-          <span style={{ color: FAINT }}>·</span>
-          <span>Ongoing series</span>
-          <span style={{ color: FAINT }}>·</span>
-          <span>Beginner track</span>
-          <span style={{ color: FAINT }}>·</span>
-          <span>8 worlds · 63 lessons</span>
-        </div>
-      </div>
-
       {/* ── Contents label ────────────────────────────────────────────── */}
-      <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 20 }}>
+      <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 20 }}>
         <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Contents</span>
         <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
       </div>

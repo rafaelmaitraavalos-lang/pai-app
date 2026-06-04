@@ -78,25 +78,15 @@ export default function FakeLayout({ children }: { children: React.ReactNode }) 
         }
       `}</style>
 
-      {/* PAI header with nav */}
-      <div style={{
-        padding: '14px 7vw',
-        borderBottom: '3px solid #0a0a0a',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        background: '#ffffff',
-      }}>
-        <div style={{ fontFamily: 'var(--fk-display)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: '#0a0a0a' }}>
-          PAI
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 28, paddingBottom: 4 }}>
-          <Link href="/fake/home" className="fk-proto-link" style={{ color: '#0a0a0a', opacity: 1 }}>Home</Link>
-          <Link href="/fake/module" className="fk-proto-link" style={{ color: '#0a0a0a', opacity: 1 }}>Module</Link>
-          <span style={{ fontFamily: 'var(--fk-display)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#3DF542' }}>◆ Prototype</span>
+      {/* PAI header — same black bar as real app */}
+      <div style={{ background: '#0a0a0a', padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: 'var(--fk-display)', fontSize: 22, letterSpacing: '-0.02em', color: '#3DF542', lineHeight: 1 }}>PAI</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <Link href="/fake/home" className="fk-proto-link" style={{ opacity: 0.6, fontSize: 9, letterSpacing: '0.14em' }}>Home</Link>
+          <Link href="/fake/module" className="fk-proto-link" style={{ opacity: 0.6, fontSize: 9, letterSpacing: '0.14em' }}>Module</Link>
+          <span style={{ fontFamily: 'var(--fk-display)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#3DF542', opacity: 0.5 }}>◆ Prototype</span>
         </div>
       </div>
-      <div style={{ borderBottom: '1px solid #0a0a0a' }} />
 
       {children}
     </div>

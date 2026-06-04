@@ -74,7 +74,7 @@ export default function LessonTemplate({ id, title, stops, questions, completion
   }
   const skip = () => {
     localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-    router.push('/lessons')
+    router.push('/home')
   }
 
   // ── Complete ────────────────────────────────────────────────────────────────
@@ -89,7 +89,7 @@ export default function LessonTemplate({ id, title, stops, questions, completion
           </div>
           <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 20px', fontWeight: 400 }}>{title}</h1>
           <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 20 }} />
-          <button onClick={() => router.push('/lessons')} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
+          <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
             Back to lessons →
           </button>
         </div>
@@ -185,10 +185,10 @@ export default function LessonTemplate({ id, title, stops, questions, completion
   return (
     <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#fff' }}>
 
-      {/* Black PAI header */}
+      {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
-        <button onClick={() => router.push('/lessons')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
+        <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
           ← Home
         </button>
       </div>
@@ -205,7 +205,7 @@ export default function LessonTemplate({ id, title, stops, questions, completion
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ color: BLACK }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push('/lessons')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+              <button onClick={() => router.push('/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
                 Lesson {id}
               </button>
               <span style={{ color: FAINT }}>·</span>

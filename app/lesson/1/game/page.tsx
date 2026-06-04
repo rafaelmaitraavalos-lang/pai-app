@@ -23,7 +23,7 @@ export default function Lesson1Game() {
       <div className="flex-shrink-0 px-8 py-4 border-b border-[#E5D4BA] flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => router.push('/lessons')}
+            onClick={() => router.push('/home')}
             className="flex items-center gap-1.5 text-[#BA7517] font-black text-sm active:opacity-70 hover:opacity-80 transition-opacity"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -58,7 +58,7 @@ export default function Lesson1Game() {
               style={{ animation: 'popIn 0.35s ease-out' }}
             >
               <button
-                onClick={() => router.push('/lessons')}
+                onClick={() => router.push('/home')}
                 className="px-8 py-3.5 rounded-2xl bg-[#BA7517] text-white font-black text-base shadow-[0_5px_0_#7A4A0A] active:shadow-none active:translate-y-1 cursor-pointer hover:bg-[#C8851F] select-none transition-all duration-100"
               >
                 Continue to World 1 →
