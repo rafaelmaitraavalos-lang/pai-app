@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('/fonts/archivo-black-latin-ext.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('/fonts/archivo-black-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --font-display: 'Archivo Black', 'Arial Black', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
 @keyframes paiFloat {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-14px); }
@@ -29,12 +48,12 @@
 }
 
 @keyframes slideInFromRight {
-  from { opacity: 0; transform: translateX(30px); }
+  from { opacity: 0; transform: translateX(40px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideInFromLeft {
-  from { opacity: 0; transform: translateX(-30px); }
+  from { opacity: 0; transform: translateX(-40px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
@@ -51,6 +70,105 @@
 @keyframes mapPulse {
   0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.55; }
   100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+}
+
+/* ── TheAnalyst — PAI orb states ───────────────────────── */
+@keyframes paiAnalystIdle {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.04); opacity: 0.92; }
+}
+
+@keyframes paiAnalystTalking {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-3px); }
+  70%      { transform: translateY(2px); }
+}
+
+@keyframes paiAnalystCelebrate {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  25%  { transform: scale(1.16); filter: brightness(1.35); }
+  55%  { transform: scale(0.94); filter: brightness(1); }
+  75%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes paiAnalystDoubt {
+  0%,100% { transform: translateX(0); filter: brightness(0.78); }
+  20%     { transform: translateX(-5px); }
+  40%     { transform: translateX(5px); }
+  60%     { transform: translateX(-3px); }
+  80%     { transform: translateX(3px); }
+}
+
+@keyframes paiAnalystThinking {
+  0%   { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 0 0 rgba(186,117,23,0); }
+  50%  { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 0 8px rgba(186,117,23,0.18); }
+  100% { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 0 0 rgba(186,117,23,0); }
+}
+
+@keyframes caseFileIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes outcomeSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes credBar {
+  from { width: var(--from); }
+  to   { width: var(--to); }
+}
+
+@keyframes swapBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+@keyframes yearStamp {
+  0%   { transform: scale(2.2); opacity: 0; }
+  60%  { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes wrongFlash {
+  0%,100% { background: white; }
+  30%,70%  { background: #FFE5E5; }
+}
+
+@keyframes cardSettle {
+  0%   { transform: scale(1.04) rotate(1.5deg); }
+  60%  { transform: scale(0.98) rotate(-0.3deg); }
+  100% { transform: scale(1)    rotate(0deg); }
+}
+
+@keyframes lifeOut {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(0.6); opacity: 0.3; }
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  15%      { transform: translateX(-7px); }
+  30%      { transform: translateX(7px); }
+  45%      { transform: translateX(-5px); }
+  60%      { transform: translateX(5px); }
+  75%      { transform: translateX(-3px); }
+  90%      { transform: translateX(3px); }
+}
+
+@keyframes solveIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.92); opacity: 0; }
+  60%  { transform: scale(1.03); }
+  100% { transform: scale(1);    opacity: 1; }
 }
 
 @keyframes ringBurst {
@@ -75,3 +193,11 @@
   65%  { transform: scale(1.1);  opacity: 1; }
   100% { transform: scale(1);    opacity: 1; }
 }
+
+@keyframes popoverIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes defGrow   { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
+@keyframes defShrink { from { opacity:1; transform:scale(1); } to { opacity:0; transform:scale(0.7); } }

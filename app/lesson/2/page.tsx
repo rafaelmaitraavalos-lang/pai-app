@@ -19,7 +19,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'Garbage In',
-    body: "The pattern is only as good as the examples. Bad examples produce a bad pattern. Biased examples produce a biased pattern. In the 1990s a hiring algorithm trained on historical resumes started rejecting women, not because someone programmed it to, but because most past hires were men. It learned exactly what it was shown. The data was the problem. The AI worked perfectly.",
+    body: "The pattern is only as good as the examples. Bad examples produce a bad pattern. {{bias}}ed examples produce a {{bias}}ed pattern. In the 1990s a hiring algorithm trained on historical resumes started rejecting women, not because someone programmed it to, but because most past hires were men. It learned exactly what it was shown. The data was the problem. The AI worked perfectly.",
   },
   {
     tag: 'Myth bust',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'The Mirror',
-    body: "AI is a mirror. It reflects back the patterns in whatever data it was trained on. It is only as smart, fair, creative, or accurate as the examples it learned from. That means every AI system carries the values, biases, and blind spots of whoever collected its training data. That is not a bug. That is the whole design. And it means the most important question about any AI is not how smart it is. It is who built it and what they fed it.",
+    body: "AI is a mirror. It reflects back the patterns in whatever data it was trained on. It is only as smart, fair, creative, or accurate as the examples it learned from. That means every AI system carries the values, {{bias}}es, and blind spots of whoever collected its training data. That is not a bug. That is the whole design. And it means the most important question about any AI is not how smart it is. It is who built it and what they fed it.",
   },
 ]
 

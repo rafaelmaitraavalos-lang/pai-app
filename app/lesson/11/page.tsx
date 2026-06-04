@@ -4,17 +4,17 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: "It's Not Thinking",
-    body: "When ChatGPT writes an essay, answers a question, or holds a conversation, it is not thinking. It is predicting. At every step it looks at everything written so far and predicts what word should come next, based on patterns learned from hundreds of billions of words of text. It does this one word at a time, each prediction feeding the next. The result can look like thought. It is very fast, very sophisticated pattern completion.",
+    body: "When {{chatgpt}} writes an essay, answers a question, or holds a conversation, it is not thinking. It is predicting. At every step it looks at everything written so far and predicts what word should come next, based on patterns learned from hundreds of billions of words of text. It does this one word at a time, each prediction feeding the next. The result can look like thought. It is very fast, very sophisticated pattern completion.",
   },
   {
     tag: 'Fact',
     title: 'The Training Data',
-    body: "ChatGPT was trained on an enormous amount of text: books, websites, code, articles, conversations. The exact composition is not fully disclosed but it's estimated at hundreds of billions of words. The network read all of it, in the sense that it adjusted its weights based on all of it, and learned to predict what comes next in any kind of text. That training is what gives it the appearance of knowing things. It learned the patterns. The patterns contain the knowledge.",
+    body: "{{chatgpt}} was trained on an enormous amount of text: books, websites, code, articles, conversations. The exact composition is not fully disclosed but it's estimated at hundreds of billions of words. The network read all of it, in the sense that it adjusted its weights based on all of it, and learned to predict what comes next in any kind of text. That training is what gives it the appearance of knowing things. It learned the patterns. The patterns contain the knowledge.",
   },
   {
     tag: 'Example',
     title: 'The Transformer',
-    body: "ChatGPT is built on an architecture called the transformer, introduced by Google researchers in 2017. The key innovation is attention: the ability for every word in a sequence to directly influence every other word, regardless of distance. Before transformers, networks processed text sequentially and struggled with long-range dependencies. Transformers process everything at once. That's what allows ChatGPT to maintain coherence across a long conversation. Attention is the mechanism that makes it work.",
+    body: "{{chatgpt}} is built on an architecture called the {{transformer}}, introduced by Google researchers in 2017. The key innovation is attention: the ability for every word in a sequence to directly influence every other word, regardless of distance. Before transformers, networks processed text sequentially and struggled with long-range dependencies. Transformers process everything at once. That's what allows ChatGPT to maintain coherence across a long conversation. Attention is the mechanism that makes it work.",
   },
   {
     tag: 'Example',
@@ -24,22 +24,22 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'It Has No Memory',
-    body: "Every time you start a new conversation with ChatGPT, it starts from zero. It has no memory of previous conversations. Within a single conversation it can refer back to what was said: that's in its context window. But close the window and it's gone. The model has no persistent memory of you, your preferences, or your history. What feels like a relationship is reconstructed fresh each time from the patterns in its weights. You remember the conversation. It doesn't.",
+    body: "Every time you start a new conversation with {{chatgpt}}, it starts from zero. It has no memory of previous conversations. Within a single conversation it can refer back to what was said: that's in its context window. But close the window and it's gone. The model has no persistent memory of you, your preferences, or your history. What feels like a relationship is reconstructed fresh each time from the patterns in its weights. You remember the conversation. It doesn't.",
   },
   {
     tag: 'Fact',
     title: 'The Context Window',
-    body: "ChatGPT can only consider a limited amount of text at once: its context window. Everything outside that window is invisible to it. Early versions had small context windows and would lose track of the beginning of long conversations. Recent versions have much larger windows: some can hold entire books. The context window is one of the fundamental constraints of transformer models. Everything the model knows about your conversation has to fit inside it.",
+    body: "{{chatgpt}} can only consider a limited amount of text at once: its context window. Everything outside that window is invisible to it. Early versions had small context windows and would lose track of the beginning of long conversations. Recent versions have much larger windows: some can hold entire books. The context window is one of the fundamental constraints of transformer models. Everything the model knows about your conversation has to fit inside it.",
   },
   {
     tag: 'Scenario',
     title: 'Why It Hallucinates',
-    body: "ChatGPT hallucinates, confidently producing false information, because it has no mechanism to check whether what it's predicting is true. It predicts the most plausible next token given everything before it. A plausible-sounding citation is a plausible next token. A confident but wrong fact is a plausible next token. Truth and plausibility are not the same thing. The model optimizes for plausibility. It has no access to truth. That gap is where hallucinations live.",
+    body: "{{chatgpt}} hallucinates, confidently producing false information, because it has no mechanism to check whether what it's predicting is true. It predicts the most plausible next token given everything before it. A plausible-sounding citation is a plausible next token. A confident but wrong fact is a plausible next token. Truth and plausibility are not the same thing. The model optimizes for plausibility. It has no access to truth. That gap is where hallucinations live.",
   },
   {
     tag: 'Big idea',
     title: 'The Imitation Game At Scale',
-    body: "What ChatGPT does is, at some level, an extreme version of Turing's imitation game. It was trained to produce text that looks like human text. It does this so well that the output is often indistinguishable from what a human would write. Whether that means it understands anything: whether producing human-like output requires or produces anything like human-like cognition: is the question that makes AI researchers, philosophers, and neuroscientists argue. The imitation is real. What lies behind it is not agreed upon.",
+    body: "What {{chatgpt}} does is, at some level, an extreme version of {{turing}}'s imitation game. It was trained to produce text that looks like human text. It does this so well that the output is often indistinguishable from what a human would write. Whether that means it understands anything: whether producing human-like output requires or produces anything like human-like cognition: is the question that makes AI researchers, philosophers, and neuroscientists argue. The imitation is real. What lies behind it is not agreed upon.",
   },
 ]
 
