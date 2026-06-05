@@ -118,13 +118,13 @@ export default function Dev() {
           </div>
           <div className="grid grid-cols-2 gap-2.5">
             {[
-              { label: 'Onboarding', path: '/' },
-              { label: 'Home', path: '/home' },
-              { label: 'World 1 Map', path: '/lessons' },
-              { label: 'World 2 Map', path: '/world/2' },
-              { label: 'World 3 Map', path: '/world/3' },
-              { label: 'World 4 Map', path: '/world/4' },
-              { label: 'Reset progress', path: '/reset' },
+              { label: 'Onboarding',       path: '/' },
+              { label: 'Home (worlds)',     path: '/home' },
+              { label: 'World 1 modules',  path: '/lessons' },
+              { label: 'World 2 modules',  path: '/world/2' },
+              { label: 'World 3 modules',  path: '/world/3' },
+              { label: 'World 4 modules',  path: '/world/4' },
+              { label: 'Reset progress',   path: '/reset' },
             ].map(item => (
               <button
                 key={item.path}
