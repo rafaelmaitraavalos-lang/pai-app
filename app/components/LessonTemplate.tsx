@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import GlossaryText from './GlossaryText'
+import { LESSON_IMAGES } from '../data/lessonImages'
 
 export interface Stop {
   tag:    string
@@ -51,7 +52,9 @@ export default function LessonTemplate({ id, title, stops, questions, completion
   const stop     = stops[stopIndex]
   const question = questions[qIndex]
   const isCorrect = selected !== null && selected === question?.answer
-  const hasImage  = !!stop?.image
+  // Use stop's own image, or fall back to the lesson hero image for slide 1
+  const slideImage = stop?.image ?? (stopIndex === 0 ? LESSON_IMAGES[id] : undefined)
+  const hasImage   = !!slideImage
 
   const timelineNext = () => {
     if (stopIndex === stops.length - 1) { setPhase('quiz'); return }
@@ -264,7 +267,7 @@ export default function LessonTemplate({ id, title, stops, questions, completion
           {hasImage && (
             <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${BLACK}` }}>
-                <img src={stop.image} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </div>
           )}
