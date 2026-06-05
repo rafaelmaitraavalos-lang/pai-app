@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import GlossaryText from './GlossaryText'
 import { LESSON_IMAGES } from '../data/lessonImages'
+import { SLIDE_IMAGES } from '../data/slideImages'
 
 export interface Stop {
   tag:    string
@@ -52,8 +53,8 @@ export default function LessonTemplate({ id, title, stops, questions, completion
   const stop     = stops[stopIndex]
   const question = questions[qIndex]
   const isCorrect = selected !== null && selected === question?.answer
-  // Use stop's own image, or fall back to the lesson hero image for slide 1
-  const slideImage = stop?.image ?? (stopIndex === 0 ? LESSON_IMAGES[id] : undefined)
+  // Priority: stop's own image → slide-specific Wikipedia image → lesson-level Unsplash fallback
+  const slideImage = stop?.image ?? SLIDE_IMAGES[id]?.[stopIndex] ?? LESSON_IMAGES[id]
   const hasImage   = !!slideImage
 
   const timelineNext = () => {
