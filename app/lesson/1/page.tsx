@@ -6,28 +6,28 @@ const STOPS: Stop[] = [
     year: '400 BC',
     title: 'Before Computers',
     image: '/images/w1m1/aristotle.png',
-    body: "Aristotle spent his life trying to formalize logic: a set of rules where if you follow them correctly you always reach the right answer. He wasn't building a machine. He was asking whether reasoning itself could be mechanical. That question is 2,500 years old. AI didn't start with computers. It started with that question.",
+    body: "{{aristotle}} spent his life trying to formalize {{logic}}: a set of rules where if you follow them correctly you always reach the right answer. He wasn't building a machine. He was asking whether reasoning itself could be mechanical. That question is 2,500 years old. AI didn't start with computers. It started with that question.",
   },
   {
     tag: 'Myth bust',
     year: '1843',
     title: 'Ada Lovelace',
     image: '/images/w1m1/ada-lovelace.png',
-    body: "Ada Lovelace was writing notes on a machine that hadn't been built yet. Charles Babbage designed the Analytical Engine: a mechanical calculator. Everyone else saw a calculator. Ada saw something else entirely. She wrote that the machine could potentially compose music, produce graphics, and solve problems of any complexity: if you gave it the right instructions. She wrote those instructions. The first algorithm ever published was hers. In 1843.",
+    body: "{{adaLovelace}} was writing notes on a machine that hadn't been built yet. Charles Babbage designed the {{analyticalEngine}}: a mechanical calculator. Everyone else saw a calculator. Ada saw something else entirely. She wrote that the machine could potentially compose music, produce graphics, and solve problems of any complexity: if you gave it the right instructions. She wrote those instructions. The first {{algorithm}} ever published was hers. In 1843.",
   },
   {
     tag: 'Hot take',
     year: '1950',
     title: 'The Turing Test',
     image: '/images/w1m1/alan-turing.png',
-    body: "Alan Turing publishes a paper asking: can machines think? He doesn't answer it, he sidesteps it entirely. He invents a test instead. If a machine can hold a conversation well enough that a human can't tell it's a machine, does it even matter whether it's really thinking? That question was radical in 1950. ChatGPT passes versions of the Turing Test today. Which means the question still isn't answered.",
+    body: "{{turing}} publishes a paper asking: can machines think? He doesn't answer it, he sidesteps it entirely. He invents a test instead. If a machine can hold a conversation well enough that a human can't tell it's a machine, does it even matter whether it's really thinking? That question was radical in 1950. {{chatgpt}} passes versions of the {{turingTest}} today. Which means the question still isn't answered.",
   },
   {
     tag: 'Scenario',
     year: '1956',
     title: 'The Birth of AI',
     image: '/images/w1m1/dartmouth-1956.png',
-    body: "It's 1956. A group of researchers gather at Dartmouth College for a summer workshop. John McCarthy proposes a name for the field they're building: Artificial Intelligence. They genuinely believe they'll make serious progress in one summer. Some think they'll basically solve it. They don't. But the name sticks, the field is born, and the most ambitious research project in human history officially begins.",
+    body: "It's 1956. A group of researchers gather at Dartmouth College for a summer workshop. {{mccarthy}} proposes a name for the field they're building: Artificial Intelligence. They actually believe they'll make serious progress in one summer. Some think they'll basically solve it. They don't. But the name sticks, the field is born, and the most ambitious research project in human history officially begins.",
   },
   {
     tag: 'Myth bust',
@@ -40,20 +40,20 @@ const STOPS: Stop[] = [
     year: '1997',
     title: 'Deep Blue',
     image: '/images/w1m1/deep-blue-1997.png',
-    body: "1997. Deep Blue defeats Garry Kasparov: the reigning world chess champion. The headlines declare that machines are now smarter than humans. But Deep Blue couldn't play checkers. It couldn't recognize a cat, hold a conversation, or understand what chess even was. It calculated millions of possible moves per second and picked the best one. That's not intelligence. That's a very fast calculator with a very specific purpose. The world missed that distinction completely.",
+    body: "1997. {{deepBlue}} defeats {{kasparov}}: the reigning world chess champion. The headlines declare that machines are now smarter than humans. But {{deepBlue}} couldn't play checkers. It couldn't recognize a cat, hold a conversation, or understand what chess even was. It calculated millions of possible moves per second and picked the best one. That's not intelligence. That's a very fast calculator with a very specific purpose. The world missed that distinction completely.",
   },
   {
     tag: 'Turning point',
     year: '2012',
     title: 'Everything Changes',
     image: '/images/w1m1/alexnet-cifar10.png',
-    body: "2012. A neural network called AlexNet enters an image recognition competition and wins by a margin that shocks the entire field. The technique it uses, deep learning, takes over everything. Before 2012 AI is mostly clever rule-based tricks. After 2012 AI starts genuinely learning from data at scale. Every tool you use today: image generators, voice assistants, ChatGPT, recommendation systems: traces directly back to what happened that year. Most people missed it entirely.",
+    body: "2012. A neural network called {{alexnet}} enters an image recognition competition and wins by a margin that shocks the entire field. The technique it uses, {{deepLearning}}, takes over everything. Before 2012 AI is mostly clever rule-based tricks. After 2012 AI starts actually learning from data at scale. Every tool you use today: image generators, voice assistants, {{chatgpt}}, recommendation systems: traces directly back to what happened that year. Most people missed it entirely.",
   },
   {
     tag: 'Big idea',
     year: '2022–now',
     title: "You're In It",
-    body: "2022. ChatGPT launches and reaches 100 million users in two months: faster than any product in history. AI-generated images, music, code, and video go from experimental to everywhere almost overnight. For the first time AI is something anyone can use, not just researchers. Nobody fully agrees on what it means yet. That's not a cop-out. It's genuinely where we are. You're not learning about something that happened. You're learning about something that's still happening.",
+    body: "2022. {{chatgpt}} launches and reaches 100 million users in two months: faster than any product in history. AI-generated images, music, code, and video go from experimental to everywhere almost overnight. For the first time AI is something anyone can use, not just researchers. Nobody fully agrees on what it means yet. That's not a cop-out. It's actually where we are. You're not learning about something that happened. You're learning about something that's still happening.",
   },
 ]
 
@@ -125,7 +125,7 @@ const QUESTIONS: Question[] = [
     difficulty: 'Hard',
     tag: 'Big idea',
     stopTitle: "You're In It",
-    question: `"The question of what AI fundamentally is remains genuinely unresolved."`,
+    question: `"The question of what AI fundamentally is remains unresolved."`,
     answer: true,
     verdict: 'Correct.',
     explanation: "Nobody fully agrees on what AI is, whether it can think, what rights it might deserve, or what it will do to the economy and human identity. You just finished a lesson on 2,500 years of people trying to answer these questions. They're still open. That's not a failure: that's what makes this the most interesting field in the world right now.",
@@ -133,5 +133,5 @@ const QUESTIONS: Question[] = [
 ]
 
 export default function Lesson1() {
-  return <LessonTemplate id={1} title="History of AI" stops={STOPS} questions={QUESTIONS} />
+  return <LessonTemplate id={1} title="History of AI" stops={STOPS} questions={QUESTIONS} completionPage="/games/analyst" />
 }

@@ -1,38 +1,21 @@
 import { notFound } from 'next/navigation'
 import { WORLDS } from '../../data'
-import WorldMapView from '../../components/WorldMapView'
+import WorldModuleView from '../../components/WorldModuleView'
 
-export default async function WorldPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function WorldPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const worldId = parseInt(id)
   const world = WORLDS[worldId]
   if (!world) notFound()
 
   return (
-    <div
-      className="h-screen bg-[#F2EBE0] font-sans flex flex-col overflow-hidden"
-      style={{ animation: 'pageIn 0.3s ease-out' }}
-    >
-      <div className="flex-shrink-0 px-8 py-4 border-b border-[#E5D4BA] flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <a
-            href="/home"
-            className="flex items-center gap-1.5 text-[#BA7517] font-black text-sm hover:opacity-80 transition-opacity"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 3L5 8l5 5" stroke="#BA7517" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Home
-          </a>
-          <div className="w-px h-4 bg-[#DDD0BC]" />
-          <span className="font-black text-[#3D1A00] text-sm">World {world.displayId ?? worldId} — {world.title}</span>
-        </div>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+      {/* Black PAI header */}
+      <div style={{ background: '#0a0a0a', padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+        <span style={{ fontFamily: "var(--font-display,'Arial Black',sans-serif)", fontSize: 22, letterSpacing: '-0.02em', color: '#3DF542', lineHeight: 1 }}>PAI</span>
+        <a href="/home" style={{ fontFamily: "var(--font-display,'Arial Black',sans-serif)", fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.6, textDecoration: 'none' }}>← Home</a>
       </div>
-      <WorldMapView world={world} />
+      <WorldModuleView world={world} />
     </div>
   )
 }

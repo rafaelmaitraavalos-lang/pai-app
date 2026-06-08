@@ -4,7 +4,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     title: 'Not Magic, Just Math',
-    body: "A neural network sounds like science fiction. It isn't. It's a mathematical system loosely inspired by how your brain works: billions of simple calculations happening simultaneously, organized in layers, producing an output. The word \"neural\" makes it sound alive. It isn't. It's a very large, very organized system of math that learned something. Every AI product you use today runs on some version of this.",
+    body: "A {{neuralNetwork}} sounds like science fiction. It isn't. It's a mathematical system loosely inspired by how your brain works: billions of simple calculations happening simultaneously, organized in layers, producing an output. The word \"neural\" makes it sound alive. It isn't. It's a very large, very organized system of math that learned something. Every AI product you use today runs on some version of this.",
   },
   {
     tag: 'Fact',
@@ -24,7 +24,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'Inspired By But Not Like Your Brain',
-    body: "Neural networks are often described as working like the human brain. This is misleading. Your brain has 86 billion neurons with 100 trillion connections, runs on 20 watts of power, learns from a handful of examples, and generalizes across completely different domains instantly. Current neural networks need millions of examples, thousands of watts, and fall apart outside their training. The inspiration was real. The similarity ends there.",
+    body: "{{neuralNetwork}}s are often described as working like the human brain. This is misleading. Your brain has 86 billion neurons with 100 trillion connections, runs on 20 watts of power, learns from a handful of examples, and generalizes across completely different domains instantly. Current neural networks need millions of examples, thousands of watts, and fall apart outside their training. The inspiration was real. The similarity ends there.",
   },
   {
     tag: 'Fact',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Simple Units, Emergent Complexity',
-    body: "The most important thing about neural networks: none of the individual pieces are intelligent. Each neuron does trivial math. Each layer does slightly more complex math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding, creativity, and reasoning. Whether that appearance is the real thing is the question nobody can answer yet. That gap, between what neural networks do and what they seem to do, is where most of the important debates about AI live.",
+    body: "The most important thing about {{neuralNetwork}}s: none of the individual pieces are intelligent. Each neuron does trivial math. Each layer does slightly more complex math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding, creativity, and reasoning. Whether that appearance reflects anything real is a question nobody has answered. That gap, between what neural networks do and what they seem to do, is where most of the important debates about AI live.",
   },
 ]
 
@@ -114,7 +114,7 @@ const QUESTIONS: Question[] = [
     question: `"The intelligence in a neural network emerges from the combination of millions of simple operations rather than from any single component."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is the most important thing about neural networks. None of the individual pieces are intelligent. Each neuron does trivial math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding and reasoning. Whether that appearance is the real thing is the question nobody can answer yet.",
+    explanation: "This is the most important thing about neural networks. None of the individual pieces are intelligent. Each neuron does trivial math. But somewhere in the combination of millions of trivial operations, behavior emerges that looks like understanding and reasoning. Whether that appearance reflects anything real is a question nobody has answered.",
   },
 ]
 

@@ -9,7 +9,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'Supervised Learning',
-    body: "Show an AI 10 million photos. Half are labeled 'cat.' Half are labeled 'not cat.' It adjusts itself millions of times until it gets the labels right. Then show it a photo it's never seen. It applies what it learned. This is supervised learning: learning from labeled examples. It's how most AI you've encountered works. Someone had to label all those photos first.",
+    body: "Show an AI 10 million photos. Half are labeled 'cat.' Half are labeled 'not cat.' It adjusts itself millions of times until it gets the labels right. Then show it a photo it's never seen. It applies what it learned. This is {{supervisedLearning}}: learning from labeled examples. It's how most AI you've encountered works. Someone had to label all those photos first.",
   },
   {
     tag: 'Example',
@@ -19,12 +19,12 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'The Training Data Problem',
-    body: "The quality of what an AI learns is entirely determined by what it was trained on. An AI trained on 1950s medical textbooks will give 1950s medical advice. An AI trained mostly on text written by men will reflect male perspectives as default. An AI trained on internet data will absorb every bias, conspiracy, and falsehood on the internet. Training data is the single most important and least discussed part of AI development.",
+    body: "The quality of what an AI learns is entirely determined by what it was trained on. An AI trained on 1950s medical textbooks will give 1950s medical advice. An AI trained mostly on text written by men will reflect male perspectives as default. An AI trained on internet data will absorb every {{bias}}, conspiracy, and falsehood on the internet. Training data is the single most important and least discussed part of AI development.",
   },
   {
     tag: 'Example',
     title: 'Reinforcement Learning',
-    body: "A third way AI learns: trial and error with feedback. Give it a goal and let it try things. Reward it when it gets closer. Punish it when it doesn't. Over millions of attempts it figures out strategies no human programmed. This is how AlphaGo learned to play Go. It played itself millions of times and discovered moves that human players had never considered in centuries of playing the game.",
+    body: "A third way AI learns: trial and error with feedback. Give it a goal and let it try things. Reward it when it gets closer. Punish it when it doesn't. Over millions of attempts it figures out strategies no human programmed. This is {{reinforcementLearning}}. AlphaGo learned to play Go this way. It played itself millions of times and discovered moves that human players had never considered in centuries of playing the game.",
   },
   {
     tag: 'Myth bust',
@@ -39,7 +39,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Big idea',
     title: 'Learning Without Understanding',
-    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters, whether understanding is even necessary, is one of the genuinely open questions of our time.",
+    body: "Here is the most unsettling thing about how AI learns. It can become extraordinarily good at a task without developing any understanding of what that task means. An AI can learn to write convincing essays about grief without having any concept of loss. It can learn to diagnose cancer without understanding what it feels like to be sick. It gets better and better at the surface of things while the depth remains completely empty. Whether that matters, whether understanding is even necessary, is one of the open questions of our time.",
   },
 ]
 
@@ -105,7 +105,7 @@ const QUESTIONS: Question[] = [
     question: `"AI can become extraordinarily good at a task without developing any understanding of what that task means."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is the most unsettling thing about how AI learns. It can write convincingly about grief without any concept of loss. It can diagnose cancer without understanding what illness feels like. It gets better and better at the surface of things while the depth remains completely empty. Whether understanding is even necessary is one of the genuinely open questions of our time.",
+    explanation: "This is the most unsettling thing about how AI learns. It can write convincingly about grief without any concept of loss. It can diagnose cancer without understanding what illness feels like. It gets better and better at the surface of things while the depth remains completely empty. Whether understanding is even necessary is one of the open questions of our time.",
   },
   {
     difficulty: 'Hard',

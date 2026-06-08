@@ -2,7 +2,10 @@ import { Stop, Question } from '../components/LessonTemplate'
 import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
-import we1 from './lessons/we1'
+import w6 from './lessons/w6'
+import w7 from './lessons/w7'
+import w8 from './lessons/w8'
+export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -15,9 +18,8 @@ export interface WorldModule {
 
 export interface WorldData {
   id: number
-  displayId?: number
   title: string
-  level: 'Elementary' | 'Beginner' | 'Intermediate' | 'Advanced'
+  level: 'Beginner' | 'Intermediate' | 'Advanced'
   modules: WorldModule[]
 }
 
@@ -27,6 +29,7 @@ export interface LessonData {
   title: string
   stops: Stop[]
   questions: Question[]
+  completionPage?: string  // custom route shown instead of the default completion screen
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -111,14 +114,47 @@ export const WORLDS: Record<number, WorldData> = {
   },
   6: {
     id: 6,
-    displayId: 1,
-    title: 'Meet AI',
-    level: 'Elementary',
+    title: 'How Neural Networks Work',
+    level: 'Advanced',
     modules: [
-      { id: 40, title: 'Hi! I Am PAI' },
-      { id: 41, title: 'PAI and the World' },
-      { id: 42, title: 'Is PAI Always Right?' },
-      { id: 43, title: 'The Future of PAI' },
+      { id: 40, title: 'The Math Behind A Neuron' },
+      { id: 41, title: 'Forward Propagation' },
+      { id: 42, title: 'Loss Functions' },
+      { id: 43, title: 'Backpropagation In Detail' },
+      { id: 44, title: 'Activation Functions' },
+      { id: 45, title: 'Attention Mechanisms' },
+      { id: 46, title: 'The Transformer Architecture' },
+      { id: 47, title: 'Training At Scale' },
+    ],
+  },
+  7: {
+    id: 7,
+    title: 'Build With AI',
+    level: 'Advanced',
+    modules: [
+      { id: 48, title: 'How To Think About Prompts' },
+      { id: 49, title: 'Prompt Engineering' },
+      { id: 50, title: 'Working With APIs' },
+      { id: 51, title: 'Retrieval Augmented Generation' },
+      { id: 52, title: 'Fine-Tuning' },
+      { id: 53, title: 'AI Agents' },
+      { id: 54, title: 'Evaluating AI Systems' },
+      { id: 55, title: 'Responsible Building' },
+    ],
+  },
+  8: {
+    id: 8,
+    title: 'The Frontier',
+    level: 'Advanced',
+    modules: [
+      { id: 56, title: 'Multimodal AI' },
+      { id: 57, title: 'AI Agents At Scale' },
+      { id: 58, title: 'Frontier Models' },
+      { id: 59, title: 'AI and Science' },
+      { id: 60, title: 'Robotics and Embodied AI' },
+      { id: 61, title: 'AI Safety Research' },
+      { id: 62, title: 'The Geopolitics Of AI' },
+      { id: 63, title: 'What Comes Next' },
     ],
   },
 }
@@ -149,7 +185,9 @@ export const LESSONS: Record<number, LessonData> = {
   ...w3,
   ...w4,
   ...w5,
-  ...we1,
+  ...w6,
+  ...w7,
+  ...w8,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {

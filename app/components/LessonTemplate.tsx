@@ -2,135 +2,60 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import GlossaryText from './GlossaryText'
+import { LESSON_IMAGES } from '../data/lessonImages'
+import { SLIDE_IMAGES } from '../data/slideImages'
 
 export interface Stop {
-  tag: string
-  year?: string
-  title: string
-  body: string
+  tag:    string
+  year?:  string
+  title:  string
+  body:   string
   image?: string
 }
 
 export interface Question {
-  difficulty: 'Easy' | 'Medium' | 'Hard'
-  tag: string
-  stopTitle: string
-  question: string
-  answer: boolean
-  verdict: string
+  difficulty:  'Easy' | 'Medium' | 'Hard'
+  tag:         string
+  stopTitle:   string
+  question:    string
+  answer:      boolean
+  verdict:     string
   explanation: string
 }
 
 interface Props {
-  id: number
-  title: string
-  stops: Stop[]
-  questions: Question[]
+  id:              number
+  title:           string
+  stops:           Stop[]
+  questions:       Question[]
+  completionPage?: string
 }
 
-// ── Small helpers ─────────────────────────────────────────────────────────────
-
-function Mascot() {
-  return (
-    <div style={{ animation: 'paiFloat 3s ease-in-out infinite' }}>
-      <div className="relative w-36 h-36 rounded-full" style={{ background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)', boxShadow: '0 16px 40px rgba(186,117,23,0.28), 0 0 0 10px rgba(186,117,23,0.07)' }}>
-        <div className="absolute inset-5 rounded-full" style={{ border: '1.5px solid rgba(255,255,255,0.22)', background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.18), transparent 65%)' }} />
-        <div className="absolute rounded-full" style={{ top: '18%', left: '20%', width: '30%', height: '20%', background: 'rgba(255,255,255,0.38)', filter: 'blur(5px)' }} />
-      </div>
-    </div>
-  )
-}
-
-function TagPill({ label, solid = false }: { label: string; solid?: boolean }) {
-  if (solid) {
-    return <span className="inline-block px-3 py-1 rounded-full bg-[#BA7517] text-white text-[11px] font-black uppercase tracking-[0.10em]">{label}</span>
-  }
-  return (
-    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-[0.10em] text-[#BA7517]" style={{ background: 'rgba(186,117,23,0.10)', border: '1px solid rgba(186,117,23,0.22)' }}>
-      {label}
-    </span>
-  )
-}
-
-function CheckIcon() {
-  return <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5l3.5 3.5 6.5-7" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-}
-
-function XIcon() {
-  return <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2l9 9M11 2l-9 9" stroke="white" strokeWidth="2.2" strokeLinecap="round" /></svg>
-}
+// Mirrors fake/module tokens exactly
+const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
+const BODY  = "var(--font-body, system-ui, sans-serif)"
+const GREEN = '#3DF542'
+const DIM   = '#555555'
+const FAINT = '#d8d8d8'
+const BLACK = '#0a0a0a'
 
 type Phase = 'timeline' | 'quiz' | 'complete'
 
-// ── Sidebar ───────────────────────────────────────────────────────────────────
-
-function Sidebar({ title, stops, stopIndex, phase, qIndex, questions }: {
-  title: string
-  stops: Stop[]
-  stopIndex: number
-  phase: Phase
-  qIndex: number
-  questions: Question[]
-}) {
-  return (
-    <aside className="w-60 flex-shrink-0 flex flex-col border-r border-[#E5D4BA] overflow-y-auto">
-      <div className="px-6 pt-8 pb-5 border-b border-[#E5D4BA]">
-        <div className="text-[10px] font-black uppercase tracking-[0.16em] text-[#BA7517] mb-1">World 1</div>
-        <div className="font-black text-[#3D1A00] text-[14px] leading-snug">{title}</div>
-      </div>
-
-      <div className="flex-1 px-4 py-5">
-        <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#9A5A10]/50 mb-2.5 px-2">Slides</div>
-        <div className="flex flex-col gap-0.5">
-          {stops.map((s, i) => {
-            const done = phase !== 'timeline' || i < stopIndex
-            const current = phase === 'timeline' && i === stopIndex
-            return (
-              <div key={i} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg transition-colors ${current ? 'bg-[#BA7517]/10' : ''}`}>
-                <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors ${done || current ? 'bg-[#BA7517]' : 'bg-[#DDD0BC]'}`} />
-                <span className={`text-[12px] leading-snug transition-colors ${current ? 'font-black text-[#3D1A00]' : done ? 'font-semibold text-[#BA7517]' : 'font-medium text-[#9A5A10]/60'}`}>
-                  {s.title}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-
-        {phase !== 'timeline' && (
-          <>
-            <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#9A5A10]/50 mb-2.5 px-2 mt-5">Quiz</div>
-            <div className="flex flex-col gap-0.5">
-              {questions.map((q, i) => {
-                const done = phase === 'complete' || i < qIndex
-                const current = phase === 'quiz' && i === qIndex
-                return (
-                  <div key={i} className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg ${current ? 'bg-[#BA7517]/10' : ''}`}>
-                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${done || current ? 'bg-[#BA7517]' : 'bg-[#DDD0BC]'}`} />
-                    <span className={`text-[12px] leading-snug ${current ? 'font-black text-[#3D1A00]' : done ? 'font-semibold text-[#BA7517]' : 'font-medium text-[#9A5A10]/60'}`}>
-                      Q{i + 1} · {q.difficulty}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          </>
-        )}
-      </div>
-    </aside>
-  )
-}
-
-// ── Main component ────────────────────────────────────────────────────────────
-
-export default function LessonTemplate({ id, title, stops, questions }: Props) {
+export default function LessonTemplate({ id, title, stops, questions, completionPage }: Props) {
   const router = useRouter()
-
-  const [phase, setPhase] = useState<Phase>('timeline')
+  const [phase,     setPhase]     = useState<Phase>('timeline')
   const [stopIndex, setStopIndex] = useState(0)
-  const [cardDir, setCardDir] = useState<'right' | 'left' | null>(null)
-  const [qIndex, setQIndex] = useState(0)
-  const [selected, setSelected] = useState<boolean | null>(null)
-  const [qDir, setQDir] = useState<'right' | 'left' | null>(null)
+  const [cardDir,   setCardDir]   = useState<'right' | 'left' | null>(null)
+  const [qIndex,    setQIndex]    = useState(0)
+  const [selected,  setSelected]  = useState<boolean | null>(null)
+
+  const stop     = stops[stopIndex]
+  const question = questions[qIndex]
+  const isCorrect = selected !== null && selected === question?.answer
+  // Priority: stop's own image → slide-specific Wikipedia image → lesson-level Unsplash fallback
+  const slideImage = stop?.image ?? SLIDE_IMAGES[id]?.[stopIndex] ?? LESSON_IMAGES[id]
+  const hasImage   = !!slideImage
 
   const timelineNext = () => {
     if (stopIndex === stops.length - 1) { setPhase('quiz'); return }
@@ -141,60 +66,42 @@ export default function LessonTemplate({ id, title, stops, questions }: Props) {
     setCardDir('left')
     setStopIndex(i => i - 1)
   }
-  const handleAnswer = (val: boolean) => {
-    if (selected !== null) return
-    setSelected(val)
-  }
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) {
       localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-      setPhase('complete')
+      if (completionPage) router.push(completionPage)
+      else setPhase('complete')
       return
     }
-    setQDir('right')
     setSelected(null)
     setQIndex(i => i + 1)
   }
+  const skip = () => {
+    localStorage.setItem(`pai_lesson_${id}_done`, 'true')
+    router.push('/home')
+  }
 
-  const stop = stops[stopIndex]
-  const question = questions[qIndex]
-  const isCorrect = selected !== null && selected === question?.answer
-  const timelineProgress = ((stopIndex + 1) / stops.length) * 100
-  const quizProgress = ((qIndex + 1) / questions.length) * 100
-
-  const sidebarProps = { title, stops, stopIndex, phase, qIndex, questions }
-
-  // ── Complete ──────────────────────────────────────────────────────────────
+  // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
     return (
-      <div className="min-h-screen bg-[#F2EBE0] font-sans flex flex-col" style={{ animation: 'pageIn 0.3s ease-out' }}>
-        <div className="flex flex-1">
-          <Sidebar {...sidebarProps} />
-          <main className="flex-1 flex items-center justify-center px-10 py-16">
-            <div className="flex flex-col items-center text-center gap-7 max-w-sm">
-              <Mascot />
-              <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both' }}>
-                <p className="font-black text-[#BA7517] leading-none tabular-nums" style={{ fontSize: '80px' }}>+100</p>
-                <p className="text-2xl font-black text-[#9A5A10]">XP</p>
-              </div>
-              <div className="space-y-1">
-                <h1 className="text-3xl font-black text-[#3D1A00]">Lesson complete.</h1>
-                <p className="text-[#9A5A10] font-semibold">That's the full story. You're on your way.</p>
-              </div>
-              <button
-                onClick={() => router.push('/lessons')}
-                className="w-full py-4 rounded-2xl font-black text-lg bg-[#BA7517] text-white shadow-[0_5px_0_#7A4A0A] active:shadow-none active:translate-y-1 cursor-pointer select-none transition-all duration-100"
-              >
-                Back to lessons
-              </button>
-            </div>
-          </main>
+      <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
+        <div style={{ width: '100%', padding: '0 7vw', textAlign: 'center' }}>
+          <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>Lesson complete</div>
+          <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
+            <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
+            <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>
+          </div>
+          <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 20px', fontWeight: 400 }}>{title}</h1>
+          <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 20 }} />
+          <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
+            Back to lessons →
+          </button>
         </div>
-      </div>
+      </main>
     )
   }
 
-  // ── Quiz ──────────────────────────────────────────────────────────────────
+  // ── Quiz — same structure as slide ──────────────────────────────────────────
   if (phase === 'quiz') {
     const btnState = (val: boolean) => {
       if (selected === null) return 'default'
@@ -202,244 +109,194 @@ export default function LessonTemplate({ id, title, stops, questions }: Props) {
       if (val === selected) return 'wrong'
       return 'dimmed'
     }
-    const btnCls: Record<string, string> = {
-      default: 'bg-white border-[#DDD0BC] text-[#3D1A00] cursor-pointer hover:shadow-md hover:border-[#BA7517]/40 active:scale-[0.98]',
-      correct: 'bg-green-500 border-green-500 text-white',
-      wrong:   'bg-red-500 border-red-500 text-white',
-      dimmed:  'bg-white border-[#E5D4BA] text-[#3D1A00] opacity-25',
-    }
 
     return (
-      <div className="min-h-screen bg-[#F2EBE0] font-sans flex flex-col" style={{ animation: 'pageIn 0.2s ease-out' }}>
-        {/* Quiz top bar */}
-        <div className="px-8 py-4 flex items-center justify-between bg-[#F2EBE0]">
+      <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
+        <div style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0, transform: 'scale(1.06)', transformOrigin: 'center center', transition: 'transform 0.28s ease' }}>
+
+          {/* Kicker */}
           <div>
-            <p className="text-[11px] font-black uppercase tracking-[0.16em] text-[#BA7517]">Lesson {id} · {title}</p>
-            <p className="text-sm font-bold text-[#9A5A10] mt-0.5">Quiz</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => { localStorage.setItem(`pai_lesson_${id}_done`, 'true'); router.back() }}
-              className="text-[11px] font-black uppercase tracking-widest text-[#BBA98C] hover:text-[#BA7517] transition-colors cursor-pointer"
-            >
-              Skip
-            </button>
-            <span className="text-sm font-black text-[#9A5A10]">{qIndex + 1} / {questions.length}</span>
-          </div>
-        </div>
-        <div className="h-1 bg-[#E5D4BA]">
-          <div className="h-full bg-[#BA7517] transition-[width] duration-500" style={{ width: `${quizProgress}%` }} />
-        </div>
-
-        <div className="flex flex-1 min-h-0 overflow-hidden">
-          <Sidebar {...sidebarProps} />
-
-          <main className="flex-1 flex items-start justify-center px-10 py-10 overflow-y-auto">
-            <div className="w-full max-w-2xl">
-              <div
-                key={qIndex}
-                className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.07)] p-10"
-                style={{ animation: qDir ? `${qDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 0.28s ease-out` : undefined }}
-              >
-                <div className="mb-5">
-                  <TagPill label={question.tag} solid />
-                  <h2 className="font-black text-[#3D1A00] mt-3 leading-tight" style={{ fontSize: '24px' }}>
-                    {question.stopTitle}
-                  </h2>
-                </div>
-
-                <div className="border-2 border-[#E5D4BA] rounded-xl px-6 py-5 mb-6">
-                  <p className="font-semibold text-[#3D1A00] italic leading-relaxed" style={{ fontSize: '16px' }}>
-                    {question.question}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-5">
-                  {([true, false] as const).map(val => {
-                    const state = btnState(val)
-                    return (
-                      <button
-                        key={String(val)}
-                        onClick={() => handleAnswer(val)}
-                        disabled={selected !== null}
-                        className={`flex items-center justify-center gap-2 py-6 rounded-2xl border-2 font-black text-xl transition-all duration-150 ${btnCls[state]}`}
-                      >
-                        {state === 'correct' && <CheckIcon />}
-                        {state === 'wrong' && <XIcon />}
-                        {val ? 'True' : 'False'}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {selected !== null && (
-                  <div className="border-2 border-[#E5D4BA] rounded-xl px-6 py-5" style={{ animation: 'slideUpFade 0.3s ease-out' }}>
-                    <p className={`font-black text-lg mb-2 ${isCorrect ? 'text-green-600' : 'text-red-500'}`}>{question.verdict}</p>
-                    <p className="text-[#3D1A00] font-medium leading-relaxed" style={{ fontSize: '15px' }}>{question.explanation}</p>
-                  </div>
-                )}
+            <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+              <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <span style={{ color: BLACK }}>Quiz</span>
+                <span style={{ color: FAINT }}>·</span>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>Lesson {id}</button>
+                <span style={{ color: FAINT }}>·</span>
+                <span style={{ color: DIM }}>{title}</span>
               </div>
-
-              {selected !== null && (
-                <div className="mt-4" style={{ animation: 'slideUpFade 0.25s ease-out' }}>
-                  <button
-                    onClick={nextQuestion}
-                    className="w-full py-4 rounded-2xl font-black text-lg bg-[#BA7517] text-white shadow-[0_5px_0_#7A4A0A] active:shadow-none active:translate-y-1 cursor-pointer hover:bg-[#C8851F] select-none transition-all duration-100"
-                  >
-                    {qIndex === questions.length - 1 ? 'Finish' : 'Next →'}
-                  </button>
-                </div>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+                <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+              </div>
             </div>
-          </main>
+            <div style={{ borderTop: `1px solid ${BLACK}` }} />
+          </div>
+
+          {/* Question */}
+          <div key={qIndex} style={{ paddingTop: 36, paddingBottom: 20, animation: 'slideInFromRight 0.28s ease-out' }}>
+            <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
+              {question.tag} · {question.difficulty}
+            </div>
+            <h2 style={{ fontFamily: DISP, fontSize: 'clamp(1.5rem, 3.5vw, 2.4rem)', lineHeight: 1.1, letterSpacing: '-0.02em', color: BLACK, margin: '0 0 24px', fontWeight: 400, maxWidth: '70ch' }}>
+              {question.question}
+            </h2>
+            <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, maxWidth: 560 }}>
+              {([true, false] as const).map(val => {
+                const state = btnState(val)
+                const bg  = state === 'correct' ? '#27AE60' : state === 'wrong' ? '#C0392B' : state === 'dimmed' ? FAINT : '#EBEBEB'
+                const clr = state === 'correct' || state === 'wrong' ? '#fff' : state === 'dimmed' ? DIM : BLACK
+                return (
+                  <button key={String(val)} onClick={() => selected === null && setSelected(val)} disabled={selected !== null} style={{ fontFamily: DISP, fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '22px 12px', background: bg, color: clr, border: 'none', cursor: selected === null ? 'pointer' : 'default', boxShadow: state === 'default' ? `4px 4px 0 0 ${BLACK}` : 'none', transition: 'all 0.12s' }}>
+                    {val ? 'True' : 'False'}
+                  </button>
+                )
+              })}
+            </div>
+            {selected !== null && (
+              <div style={{ marginTop: 20, maxWidth: 560, animation: 'slideUpFade 0.3s ease-out' }}>
+                <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 16 }}>
+                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>{question.verdict}</p>
+                  <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65, maxWidth: '60ch' }}>{question.explanation}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Nav */}
+          <div style={{ borderTop: `2px solid ${BLACK}` }} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20, gap: 20 }}>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              {questions.map((_, i) => <div key={i} style={{ width: i === qIndex ? 20 : 6, height: 6, borderRadius: 3, background: i < qIndex ? BLACK : i === qIndex ? GREEN : FAINT }} />)}
+            </div>
+            {selected !== null && (
+              <button onClick={nextQuestion} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
+                {qIndex === questions.length - 1 ? 'Finish →' : 'Next →'}
+              </button>
+            )}
+          </div>
+          <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>Lesson {id} · {title} · Quiz</span>
+            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Q{qIndex + 1} of {questions.length}</span>
+          </div>
+
         </div>
-      </div>
+      </main>
     )
   }
 
-  // ── Timeline ──────────────────────────────────────────────────────────────
+  // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
   return (
-    <div className="h-screen bg-[#F2EBE0] font-sans flex flex-col overflow-hidden" style={{ animation: 'pageIn 0.25s ease-out' }}>
+    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#fff' }}>
 
-      {/* Top bar */}
-      <div className="flex-shrink-0 px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => router.push('/lessons')}
-            className="flex items-center gap-1.5 text-[#BA7517] font-black text-sm active:opacity-70 hover:opacity-80 transition-opacity"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 3L5 8l5 5" stroke="#BA7517" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Lessons
-          </button>
-          <div className="w-px h-4 bg-[#DDD0BC]" />
-          <div>
-            <span className="text-[11px] font-black uppercase tracking-[0.16em] text-[#BA7517]">Lesson {id}</span>
-            <span className="text-[#DDD0BC] mx-2">·</span>
-            <span className="font-black text-[#3D1A00] text-sm">{title}</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => { localStorage.setItem(`pai_lesson_${id}_done`, 'true'); router.push('/lessons') }}
-            className="text-[11px] font-black uppercase tracking-widest text-[#BBA98C] hover:text-[#BA7517] transition-colors cursor-pointer"
-          >
-            Skip
-          </button>
-          <span className="font-black text-[#9A5A10] text-sm tabular-nums">{stopIndex + 1} / {stops.length}</span>
-        </div>
+      {/* Black PAI header — workshopped design */}
+      <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+        <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+        <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
+          ← Home
+        </button>
       </div>
 
-      {/* Progress bar */}
-      <div className="flex-shrink-0 h-1 bg-[#E5D4BA]">
-        <div className="h-full bg-[#BA7517] transition-[width] duration-500" style={{ width: `${timelineProgress}%` }} />
-      </div>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div
+        id="lesson-content-wrapper"
+        style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0, transform: 'scale(1.06)', transformOrigin: 'center center', transition: 'transform 0.28s ease' }}
+      >
 
-      {/* Body */}
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar {...sidebarProps} />
-
-        <main className="flex-1 min-h-0 relative overflow-hidden">
-          {/* Outer: centering only — never animated so transform stays intact */}
-          <div
-            className="absolute"
-            style={{
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 'calc(100% - 80px)',
-              maxWidth: '1024px',
-              height: '520px',
-              maxHeight: 'calc(100% - 80px)',
-            }}
-          >
-          {/* Inner: slide animation only — no positioning transform to conflict */}
-          <div
-            key={stopIndex}
-            className="w-full h-full bg-white rounded-2xl overflow-hidden flex"
-            style={{
-              boxShadow: '0 8px 40px rgba(0,0,0,0.08)',
-              animation: cardDir ? `${cardDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 0.3s ease-out` : undefined,
-            }}
-          >
-            {/* Left: image or accent panel */}
-            <div className="flex-shrink-0 relative" style={{ width: '45%' }}>
-              {stop.image ? (
-                <img
-                  src={stop.image}
-                  alt={stop.title}
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                />
-              ) : (
-                <div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{ background: 'linear-gradient(145deg, #FFE08A 0%, #D4780A 100%)' }}
-                >
-                  {stop.year && (
-                    <span
-                      className="font-black text-white/20 leading-none text-center px-6 select-none"
-                      style={{ fontSize: 'clamp(48px, 8vw, 96px)' }}
-                    >
-                      {stop.year}
-                    </span>
-                  )}
-                </div>
-              )}
+        {/* Kicker — same as fake */}
+        <div>
+          <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+            <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <span style={{ color: BLACK }}>{stop.tag}</span>
+              <span style={{ color: FAINT }}>·</span>
+              <button onClick={() => router.push('/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+                Lesson {id}
+              </button>
+              <span style={{ color: FAINT }}>·</span>
+              <span style={{ color: DIM }}>{title}</span>
             </div>
-
-            {/* Right: text */}
-            <div className="flex flex-col flex-1 px-14 py-12 overflow-y-auto min-h-0">
-              {/* Tag + year */}
-              <div className="flex items-center gap-3 mb-6">
-                <TagPill label={stop.tag} />
-                {stop.year && (
-                  <span className="font-black uppercase tracking-[0.14em] text-[#9A5A10]/45" style={{ fontSize: '11px' }}>
-                    {stop.year}
-                  </span>
-                )}
-              </div>
-
-              {/* Title */}
-              <h2
-                className="font-black text-[#3D1A00] mb-6 leading-tight"
-                style={{ fontSize: '32px' }}
-              >
-                {stop.title}
-              </h2>
-
-              {/* Body */}
-              <p
-                className="text-[#3D1A00] font-medium flex-1"
-                style={{ fontSize: '16px', lineHeight: '1.75', maxWidth: '52ch' }}
-              >
-                {stop.body}
-              </p>
-
-              {/* Nav */}
-              <div className="flex items-center gap-3 pt-10">
-                <button
-                  onClick={stopIndex > 0 ? timelineBack : undefined}
-                  className={`px-6 py-3 rounded-xl font-black text-sm transition-all duration-100 ${
-                    stopIndex > 0
-                      ? 'bg-white border-2 border-[#DDD0BC] text-[#3D1A00] hover:border-[#BA7517]/50 cursor-pointer active:scale-[0.97]'
-                      : 'bg-white border-2 border-[#E5D4BA] text-[#C4AE94] cursor-not-allowed'
-                  }`}
-                >
-                  ← Back
-                </button>
-                <button
-                  onClick={timelineNext}
-                  className="flex-1 py-3 rounded-xl font-black text-sm bg-[#BA7517] text-white shadow-[0_4px_0_#7A4A0A] active:shadow-none active:translate-y-0.5 cursor-pointer hover:bg-[#C8851F] select-none transition-all duration-100"
-                >
-                  {stopIndex === stops.length - 1 ? 'Take the quiz →' : 'Next →'}
-                </button>
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+              {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
+              <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
             </div>
           </div>
+          <div style={{ borderTop: `1px solid ${BLACK}` }} />
+        </div>
+
+        {/* Two-column grid — same as fake */}
+        <div
+          key={stopIndex}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: hasImage ? '1fr 300px' : '1fr',
+            gap: 0,
+            paddingTop: 44,
+            paddingBottom: 32,
+            animation: cardDir ? `${cardDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)` : undefined,
+          }}
+        >
+          {/* Left: headline + body */}
+          <div style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
+            <h1 style={{
+              fontFamily: DISP, fontWeight: 400,
+              fontSize: 'clamp(3rem, 6vw, 5rem)',
+              lineHeight: 1, letterSpacing: '-0.03em',
+              margin: '0 0 28px', color: BLACK,
+              textShadow: `5px 5px 0 ${FAINT}`,
+            }}>
+              {stop.title}
+            </h1>
+
+            <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
+
+            <div id="lesson-text-col" style={{ transition: 'transform 0.28s ease' }}>
+              <GlossaryText
+                text={stop.body}
+                style={{ fontFamily: BODY, fontSize: 18, lineHeight: 1.65, color: BLACK, margin: 0, fontWeight: 400, maxWidth: '54ch' }}
+              />
+            </div>
+
+            {!hasImage && stop.year && (
+              <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
+                {stop.year}
+              </div>
+            )}
           </div>
-        </main>
+
+          {/* Right: image — same as fake */}
+          {hasImage && (
+            <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${BLACK}` }}>
+                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation — same as fake */}
+        <div style={{ borderTop: `2px solid ${BLACK}` }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20, gap: 20 }}>
+          <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
+            ← Back
+          </button>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 20 : 6, height: 6, borderRadius: 3, background: i < stopIndex ? BLACK : i === stopIndex ? GREEN : FAINT, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
+          </div>
+          <button onClick={timelineNext} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
+            {stopIndex === stops.length - 1 ? 'Take the quiz →' : 'Next slide →'}
+          </button>
+        </div>
+
+        {/* Footer — same as fake */}
+        <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>Lesson {id} · {title} · Slide {stopIndex + 1} of {stops.length}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
+        </div>
+
       </div>
-    </div>
+      </div>
+
+    </main>
   )
 }

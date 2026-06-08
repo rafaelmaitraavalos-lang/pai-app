@@ -83,7 +83,33 @@ export default function Dev() {
           )
         })}
 
-        {/* Also link to onboarding and world maps */}
+        {/* Games */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="px-3 py-1 rounded-full bg-[#BA7517] text-white text-[11px] font-black uppercase tracking-[0.12em]">
+              Games
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              { label: 'Connections (standalone)', path: '/games/connections' },
+              { label: 'Sort the Timeline (standalone)', path: '/games/timeline' },
+              { label: 'Timeline — after Lesson 1', path: '/lesson/1/game' },
+              { label: 'The Analyst (standalone)', path: '/games/analyst' },
+            ].map(item => (
+              <button
+                key={item.path}
+                onClick={() => router.push(item.path)}
+                className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white border-2 border-[#DDD0BC] text-left hover:border-[#BA7517]/50 hover:shadow-sm active:scale-[0.98] cursor-pointer transition-all"
+              >
+                <span className="text-sm font-bold text-[#3D1A00] leading-tight">{item.label}</span>
+                <span className="text-xs text-[#9A5A10] shrink-0">{item.path}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Other screens */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="px-3 py-1 rounded-full bg-[#3D1A00] text-white text-[11px] font-black uppercase tracking-[0.12em]">
@@ -92,13 +118,13 @@ export default function Dev() {
           </div>
           <div className="grid grid-cols-2 gap-2.5">
             {[
-              { label: 'Onboarding', path: '/' },
-              { label: 'Home', path: '/home' },
-              { label: 'World 1 Map', path: '/lessons' },
-              { label: 'World 2 Map', path: '/world/2' },
-              { label: 'World 3 Map', path: '/world/3' },
-              { label: 'World 4 Map', path: '/world/4' },
-              { label: 'Reset progress', path: '/reset' },
+              { label: 'Onboarding',       path: '/' },
+              { label: 'Home (worlds)',     path: '/home' },
+              { label: 'World 1 modules',  path: '/lessons' },
+              { label: 'World 2 modules',  path: '/world/2' },
+              { label: 'World 3 modules',  path: '/world/3' },
+              { label: 'World 4 modules',  path: '/world/4' },
+              { label: 'Reset progress',   path: '/reset' },
             ].map(item => (
               <button
                 key={item.path}

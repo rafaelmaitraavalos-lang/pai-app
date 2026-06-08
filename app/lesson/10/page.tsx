@@ -4,7 +4,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Fact',
     title: 'Depth Changes Everything',
-    body: "A shallow neural network has one or two layers between input and output. A deep neural network has many: sometimes hundreds. The difference isn't just size. Each layer learns to represent the world at a different level of abstraction. Shallow networks can learn simple patterns. Deep networks can learn concepts. The word \"deep\" in deep learning refers to this depth of layers. It's the thing that changed AI from a promising research area into something that actually works.",
+    body: "A shallow {{neuralNetwork}} has one or two layers between input and output. A deep {{neuralNetwork}} has many: sometimes hundreds. The difference isn't just size. Each layer learns to represent the world at a different level of abstraction. Shallow networks can learn simple patterns. Deep networks can learn concepts. The word \"deep\" in {{deepLearning}} refers to this depth of layers. It's the thing that changed AI from a promising research area into something that actually works.",
   },
   {
     tag: 'Example',
@@ -14,7 +14,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Hot take',
     title: 'The 2012 Moment',
-    body: "Before 2012 the best image recognition systems used hand-crafted features: researchers manually designed what the system should look for. AlexNet, the deep learning system that won the 2012 ImageNet competition, used none of that. It learned its own features from scratch. And it won by such a large margin that the entire field switched approaches almost overnight. A decade of hand-crafted feature engineering was abandoned in a year.",
+    body: "Before 2012 the best image recognition systems used hand-crafted features: researchers manually designed what the system should look for. {{alexnet}}, the {{deepLearning}} system that won the 2012 {{imagenet}} competition, used none of that. It learned its own features from scratch. And it won by such a large margin that the entire field switched approaches almost overnight. A decade of hand-crafted feature engineering was abandoned in a year.",
   },
   {
     tag: 'Fact',
@@ -24,7 +24,7 @@ const STOPS: Stop[] = [
   {
     tag: 'Example',
     title: 'Transfer Learning',
-    body: "Training a deep network from scratch takes enormous data and compute. Transfer learning is a shortcut: take a network already trained on a large general dataset, then fine-tune it on your specific smaller dataset. The network already knows edges, shapes, and objects. You just teach it your particular task on top of that foundation. Most practical AI applications today use transfer learning. Training from scratch is rare outside of large research labs.",
+    body: "Training a deep network from scratch takes enormous data and compute. Transfer learning is a shortcut: take a network already trained on a large general dataset, then fine-tune it on your specific smaller dataset. The network already knows edges, shapes, and objects. You just teach it your particular task on top of that foundation. Most practical AI applications today use transfer learning. Training from scratch is something mostly large research labs bother with.",
   },
   {
     tag: 'Myth bust',
