@@ -48,6 +48,12 @@ const USAGE_TILES = [
   'Face ID', 'Autocomplete', 'Snapchat filters', 'Spam filter',
 ]
 
+const USAGE_TILES_PT = [
+  'ChatGPT', 'YouTube', 'Siri / Alexa', 'Netflix / Spotify',
+  'Google Busca', 'TikTok / Instagram', 'Midjourney / DALL-E', 'Google Maps',
+  'Face ID', 'Autocompletar', 'Filtros Snapchat', 'Filtro de spam',
+]
+
 const NON_OBVIOUS = new Set([
   'YouTube', 'Netflix / Spotify', 'TikTok / Instagram', 'Google Maps',
   'Face ID', 'Autocomplete', 'Snapchat filters', 'Spam filter',
@@ -251,6 +257,7 @@ export default function Onboarding() {
     screen === 5 ? t("Let's see", 'Vamos ver') :
     screen === 6 ? t("That's it!", 'É isso!')  : t('Continue', 'Continuar')
 
+  const usageTiles     = isPT ? USAGE_TILES_PT : USAGE_TILES
   const userNonObvious = usage.filter(u => NON_OBVIOUS.has(u))
   const exampleNames   = userNonObvious.length > 0 ? userNonObvious.slice(0, 4).map(shortName) : ['YouTube', 'Maps', 'Spotify', 'Face ID']
   const bubbleText     = isPT
@@ -296,7 +303,7 @@ export default function Onboarding() {
                   </p>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                  {USAGE_TILES.map(tile => {
+                  {USAGE_TILES.map((tile, i) => {
                     const sel    = usage.includes(tile)
                     const glowed = glowedTiles.has(tile)
                     return (
@@ -308,7 +315,7 @@ export default function Onboarding() {
                         fontFamily: BODY, fontSize: 12, fontWeight: 600,
                         transition: 'all 0.4s ease',
                       }}>
-                        {tile}
+                        {usageTiles[i]}
                       </div>
                     )
                   })}
@@ -555,7 +562,7 @@ export default function Onboarding() {
                 <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>{t('Tap everything that applies.', 'Toque em tudo que se aplica.')}</p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {USAGE_TILES.map(tile => {
+                {USAGE_TILES.map((tile, i) => {
                   const sel = usage.includes(tile)
                   return (
                     <button
@@ -572,7 +579,7 @@ export default function Onboarding() {
                         cursor: 'pointer', transition: 'all 0.12s',
                       }}
                     >
-                      {tile}
+                      {usageTiles[i]}
                     </button>
                   )
                 })}
