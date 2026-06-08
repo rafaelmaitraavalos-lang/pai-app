@@ -3,6 +3,8 @@ import _we1 from './lessons/we1'
 import _we5 from './lessons/we5'
 import _we6 from './lessons/we6'
 import _we1_pt from './lessons/we1_pt'
+import _we5_pt from './lessons/we5_pt'
+import _we6_pt from './lessons/we6_pt'
 
 // ── Remap sister's lesson IDs to 100+ to avoid clashing with high-school lessons ──
 
@@ -26,6 +28,12 @@ const W103_LESSONS = remap(_we6, 121, 103)   // 121–128
 
 // World 104 — Conheça a IA (Brazilian Portuguese, elementary)
 const W104_LESSONS = remap(_we1_pt, 131, 104) // 131–134
+
+// World 105 — Como a PAI Pensa — PT (K–2 equivalent)
+const W105_LESSONS = remap(_we5_pt, 141, 105) // 141–148
+
+// World 106 — Como a PAI Pensa (Avançado) — PT (3–5 equivalent)
+const W106_LESSONS = remap(_we6_pt, 151, 106) // 151–158
 
 // ── Elementary world definitions ──────────────────────────────────────────────
 
@@ -54,10 +62,22 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     level: 'Elementary',
     modules: Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })),
   },
+  105: {
+    id: 105,
+    title: 'Como a PAI Pensa',
+    level: 'Elementary',
+    modules: Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
+  106: {
+    id: 106,
+    title: 'Como a PAI Pensa (Avançado)',
+    level: 'Elementary',
+    modules: Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
 }
 
 export const ELEMENTARY_WORLD_IDS    = [101, 102, 103]
-export const ELEMENTARY_WORLD_IDS_PT = [104]
+export const ELEMENTARY_WORLD_IDS_PT = [104, 105, 106]
 
 // ── All elementary lessons ────────────────────────────────────────────────────
 
@@ -66,6 +86,8 @@ export const ELEMENTARY_LESSONS: Record<number, LessonData> = {
   ...W102_LESSONS,
   ...W103_LESSONS,
   ...W104_LESSONS,
+  ...W105_LESSONS,
+  ...W106_LESSONS,
 }
 
 // ── Grade routing helpers ─────────────────────────────────────────────────────
