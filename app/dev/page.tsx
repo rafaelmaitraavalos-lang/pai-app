@@ -48,6 +48,26 @@ export default function Dev() {
           >
             ← Home
           </button>
+          {[
+            { label: '🇺🇸 EN', lang: 'en' },
+            { label: '🇪🇸 ES', lang: 'es' },
+            { label: '🇧🇷 PT', lang: 'pt' },
+            { label: '🇫🇷 FR', lang: 'fr' },
+            { label: '🇩🇪 DE', lang: 'de' },
+            { label: '🇯🇵 JA', lang: 'ja' },
+            { label: '🇨🇳 ZH', lang: 'zh' },
+            { label: '🇰🇷 KO', lang: 'ko' },
+            { label: '🇮🇳 HI', lang: 'hi' },
+            { label: '🇵🇭 TL', lang: 'tl' },
+          ].map(({ label, lang }) => (
+            <button
+              key={lang}
+              onClick={() => { localStorage.setItem('pai_lang', lang); router.push('/home') }}
+              className="px-3 py-2 rounded-xl border-2 border-[#DDD0BC] bg-white text-xs font-black text-[#3D1A00] hover:border-[#BA7517]/50 transition-colors cursor-pointer"
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
