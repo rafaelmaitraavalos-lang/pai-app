@@ -92,7 +92,7 @@ function CTA({ label, onClick, disabled }: { label: string; onClick: () => void;
   )
 }
 
-export default function Onboarding() {
+export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const router = useRouter()
   const TOTAL_STEPS = 6
 
@@ -204,7 +204,7 @@ export default function Onboarding() {
   const advanceReveal = () => {
     if (revealPhase === 2) {
       const g = localStorage.getItem('pai_grade')
-      router.push(isElementaryGrade(g) ? '/elementary/home' : '/home')
+      router.push(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
       return
     }
     if (revealPhase === 1) {

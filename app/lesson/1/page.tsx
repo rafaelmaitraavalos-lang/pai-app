@@ -1,6 +1,6 @@
 import LessonTemplate, { Stop, Question } from '../../components/LessonTemplate'
 
-const STOPS: Stop[] = [
+export const STOPS: Stop[] = [
   {
     tag: 'Myth bust',
     year: '400 BC',
@@ -57,7 +57,7 @@ const STOPS: Stop[] = [
   },
 ]
 
-const QUESTIONS: Question[] = [
+export const QUESTIONS: Question[] = [
   {
     difficulty: 'Easy',
     tag: 'Myth bust',

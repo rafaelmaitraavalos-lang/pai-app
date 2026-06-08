@@ -12,7 +12,7 @@ const BLACK = '#0a0a0a'
 const DIM   = '#555555'
 const FAINT = '#d8d8d8'
 
-export default function WorldModuleView({ world }: { world: WorldData }) {
+export default function WorldModuleView({ world, basePath = '' }: { world: WorldData; basePath?: string }) {
   const router = useRouter()
   const [done,     setDone]     = useState<Record<number, boolean>>({})
   const [expanded, setExpanded] = useState<number | null>(null)
@@ -121,7 +121,7 @@ export default function WorldModuleView({ world }: { world: WorldData }) {
                       {/* CTA */}
                       <div style={{ marginTop: 14, display: 'flex', justifyContent: 'flex-end' }}>
                         <button
-                          onClick={() => router.push(`/lesson/${m.id}`)}
+                          onClick={() => router.push(`${basePath}/lesson/${m.id}`)}
                           style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}
                         >
                           {isDone ? 'Review →' : isCurrent ? 'Resume →' : 'Start →'}
