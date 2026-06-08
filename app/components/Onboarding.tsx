@@ -390,11 +390,11 @@ export default function Onboarding() {
                 <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 01 / 06</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>What language do you speak?</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
                 {COUNTRIES.map(c => (
                   <button key={c.name} onClick={() => selectCountry(c)} style={{
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    padding: '10px 4px 8px', gap: 5,
+                    padding: '32px 8px 28px', gap: 12,
                     background: country?.name === c.name ? BLACK : GREY,
                     color: country?.name === c.name ? '#fff' : BLACK,
                     border: `1.5px solid ${BLACK}`,
@@ -402,8 +402,8 @@ export default function Onboarding() {
                     transform: country?.name === c.name ? 'translate(3px,3px)' : 'none',
                     cursor: 'pointer', transition: 'all 0.12s',
                   }}>
-                    <span style={{ fontSize: 20, lineHeight: 1 }}>{c.flag}</span>
-                    <span style={{ fontFamily: BODY, fontSize: 9, fontWeight: 700, lineHeight: 1.3, textAlign: 'center' }}>{c.name}</span>
+                    <span style={{ fontSize: 48, lineHeight: 1 }}>{c.flag}</span>
+                    <span style={{ fontFamily: DISP, fontSize: 15, fontWeight: 700, lineHeight: 1.3, textAlign: 'center' }}>{c.name}</span>
                   </button>
                 ))}
               </div>
