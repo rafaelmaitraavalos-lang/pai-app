@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { isElementaryGrade } from '../data/elementary'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -228,7 +229,11 @@ export default function Onboarding() {
   }, [stage, revealPhase, usage])
 
   const advanceReveal = () => {
-    if (revealPhase === 2) { router.push('/home'); return }
+    if (revealPhase === 2) {
+      const grade = localStorage.getItem('pai_grade')
+      router.push(isElementaryGrade(grade) ? '/elementary/home' : '/home')
+      return
+    }
     if (revealPhase === 1) {
       setKickerFlip('squishing')
       setTimeout(() => { setRevealPhase(2); setKickerFlip('back') }, 300)

@@ -1,67 +1,65 @@
-// ============================================================
-// ELEMENTARY SCHOOL CONTENT
-// ============================================================
-// This file is yours to edit freely.
-// Add worlds, modules, slides, and quiz questions here.
-// The format is the same as the high school content —
-// see app/data/index.ts for the types and examples.
-//
-// To add a new world:
-//   1. Add an entry to ELEMENTARY_WORLDS below
-//   2. Add matching lesson entries to ELEMENTARY_LESSONS
-//   3. Save the file — it goes live automatically
-// ============================================================
-
 import type { WorldData, LessonData } from './index'
+import _we1 from './lessons/we1'
+import _we5 from './lessons/we5'
+import _we6 from './lessons/we6'
 
-// ── World definitions ─────────────────────────────────────────
+// ── Remap sister's lesson IDs to 100+ to avoid clashing with high-school lessons ──
 
-export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
-
-  // Example — replace with your real content:
-  // 101: {
-  //   id: 101,
-  //   title: 'What Is A Computer?',
-  //   level: 'Beginner',
-  //   modules: [
-  //     { id: 1001, title: 'Computers Are Everywhere' },
-  //     { id: 1002, title: 'How Computers Think' },
-  //     ...
-  //   ],
-  // },
-
+function remap(src: Record<number, LessonData>, idOffset: number, worldId: number): Record<number, LessonData> {
+  const out: Record<number, LessonData> = {}
+  Object.values(src).forEach((lesson, i) => {
+    const newId = idOffset + i
+    out[newId] = { ...lesson, id: newId, worldId }
+  })
+  return out
 }
 
-// ── Lesson content ────────────────────────────────────────────
+// World 101 — Meet AI (grades K–5, introductory)
+const W101_LESSONS = remap(_we1, 101, 101)   // 101–104
+
+// World 102 — How PAI Thinks K–2 (simpler questions)
+const W102_LESSONS = remap(_we5, 111, 102)   // 111–118
+
+// World 103 — How PAI Thinks 3–5 (slightly harder questions)
+const W103_LESSONS = remap(_we6, 121, 103)   // 121–128
+
+// ── Elementary world definitions ──────────────────────────────────────────────
+
+export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
+  101: {
+    id: 101,
+    title: 'Meet AI',
+    level: 'Elementary',
+    modules: Object.values(W101_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
+  102: {
+    id: 102,
+    title: 'How PAI Thinks',
+    level: 'Elementary',
+    modules: Object.values(W102_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
+  103: {
+    id: 103,
+    title: 'How PAI Thinks (Advanced)',
+    level: 'Elementary',
+    modules: Object.values(W103_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
+}
+
+export const ELEMENTARY_WORLD_IDS = [101, 102, 103]
+
+// ── All elementary lessons ────────────────────────────────────────────────────
 
 export const ELEMENTARY_LESSONS: Record<number, LessonData> = {
+  ...W101_LESSONS,
+  ...W102_LESSONS,
+  ...W103_LESSONS,
+}
 
-  // Example lesson — replace with your real content:
-  // 1001: {
-  //   id: 1001,
-  //   worldId: 101,
-  //   title: 'Computers Are Everywhere',
-  //   stops: [
-  //     {
-  //       tag: 'Fact',           // Fact | Example | Hot take | Scenario | Big idea | Myth bust
-  //       title: 'Slide title',
-  //       body: 'Slide text goes here. Keep it short and clear for younger readers.',
-  //       // image: '/images/elementary/filename.png',  // optional
-  //     },
-  //     // ... 7 more slides
-  //   ],
-  //   questions: [
-  //     {
-  //       difficulty: 'Easy',    // Easy | Medium | Hard
-  //       tag: 'Fact',
-  //       stopTitle: 'Slide title this question is about',
-  //       question: `"The statement students are judging true or false."`,
-  //       answer: true,          // true = True button is correct
-  //       verdict: 'Correct.',
-  //       explanation: 'Why the answer is right, explained simply.',
-  //     },
-  //     // ... 7 more questions
-  //   ],
-  // },
+// ── Grade routing helpers ─────────────────────────────────────────────────────
 
+export const ELEMENTARY_GRADES = new Set(['K', '1st', '2nd', '3rd', '4th', '5th'])
+
+export function isElementaryGrade(grade: string | null): boolean {
+  return ELEMENTARY_GRADES.has(grade ?? '')
 }

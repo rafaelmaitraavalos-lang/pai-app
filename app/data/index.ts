@@ -19,7 +19,7 @@ export interface WorldModule {
 export interface WorldData {
   id: number
   title: string
-  level: 'Beginner' | 'Intermediate' | 'Advanced'
+  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Elementary'
   modules: WorldModule[]
 }
 
