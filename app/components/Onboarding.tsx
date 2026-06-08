@@ -39,12 +39,12 @@ const FREQUENCIES = ['Never','A few times','Pretty often','Constantly']
 const USAGE_TILES = [
   'ChatGPT','YouTube','Siri / Alexa','Netflix / Spotify',
   'Google Search','TikTok / Instagram','Midjourney / DALL-E','Google Maps',
-  'Face ID','Autocomplete','Snapchat filters','Spam filter',
+  'Face ID','Autocomplete','Social media filters','Spam filter',
 ]
 
 const NON_OBVIOUS = new Set([
   'YouTube','Netflix / Spotify','TikTok / Instagram','Google Maps',
-  'Face ID','Autocomplete','Snapchat filters','Spam filter',
+  'Face ID','Autocomplete','Social media filters','Spam filter',
 ])
 
 function shortName(tile: string): string {
