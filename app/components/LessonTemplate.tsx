@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GlossaryText from './GlossaryText'
 import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
+import TRANSLATIONS from '../data/lessonTranslations'
 
 export interface Stop {
   tag:    string
@@ -42,12 +43,20 @@ const BLACK = '#0a0a0a'
 
 type Phase = 'timeline' | 'quiz' | 'complete'
 
-export default function LessonTemplate({ id, title, stops, questions, completionPage }: Props) {
+export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, questions: questionsEN, completionPage }: Props) {
   const router = useRouter()
   const [phase,     setPhase]     = useState<Phase>('timeline')
   const [stopIndex, setStopIndex] = useState(0)
   const [cardDir,   setCardDir]   = useState<'right' | 'left' | null>(null)
   const [qIndex,    setQIndex]    = useState(0)
+
+  // Apply translation overlay if available for the user's language
+  const [lang, setLang] = useState('en')
+  useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  const tx      = TRANSLATIONS[lang]?.[id]
+  const title     = tx?.title     ?? titleEN
+  const stops     = tx ? stopsEN.map((s, i)     => ({ ...s, title: tx.stops[i]?.title ?? s.title, body: tx.stops[i]?.body ?? s.body }))         : stopsEN
+  const questions = tx ? questionsEN.map((q, i) => ({ ...q, question: tx.questions[i]?.question ?? q.question, verdict: tx.questions[i]?.verdict ?? q.verdict, explanation: tx.questions[i]?.explanation ?? q.explanation })) : questionsEN
   const [selected,  setSelected]  = useState<boolean | null>(null)
 
   const stop     = stops[stopIndex]
