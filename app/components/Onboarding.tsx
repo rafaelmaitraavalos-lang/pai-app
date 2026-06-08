@@ -13,22 +13,8 @@ const GREEN = '#3DF542'
 const DIM   = '#555555'
 
 const COUNTRIES = [
-  { flag: '🇺🇸', name: 'United States', lang: 'en' },
-  { flag: '🇲🇽', name: 'México',        lang: 'es' },
-  { flag: '🇧🇷', name: 'Brasil',        lang: 'pt' },
-  { flag: '🇬🇧', name: 'UK',            lang: 'en' },
-  { flag: '🇨🇦', name: 'Canada',        lang: 'en' },
-  { flag: '🇦🇺', name: 'Australia',     lang: 'en' },
-  { flag: '🇪🇸', name: 'España',        lang: 'es' },
-  { flag: '🇫🇷', name: 'France',        lang: 'fr' },
-  { flag: '🇩🇪', name: 'Deutschland',   lang: 'de' },
-  { flag: '🇯🇵', name: '日本',           lang: 'ja' },
-  { flag: '🇨🇳', name: '中国',           lang: 'zh' },
-  { flag: '🇰🇷', name: '한국',           lang: 'ko' },
-  { flag: '🇮🇳', name: 'भारत',          lang: 'hi' },
-  { flag: '🇦🇷', name: 'Argentina',     lang: 'es' },
-  { flag: '🇵🇭', name: 'Pilipinas',     lang: 'tl' },
-  { flag: '🌍',  name: 'Other',         lang: 'en' },
+  { flag: '🇺🇸', name: 'English',    lang: 'en' },
+  { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
 // EN keys — used for internal state & routing logic, never change
@@ -402,10 +388,9 @@ export default function Onboarding() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 01 / 06</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Where are you from?</h2>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>Sets your language automatically.</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>What language do you speak?</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
                 {COUNTRIES.map(c => (
                   <button key={c.name} onClick={() => selectCountry(c)} style={{
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
