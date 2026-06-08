@@ -471,22 +471,22 @@ export default function Onboarding() {
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{t('What grade are you in?', 'Em que série você está?')}</h2>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {grades.map(g => (
+                {grades.map((displayGrade, i) => (
                   <button
-                    key={g}
-                    onClick={() => setGrade(g)}
+                    key={GRADES[i]}
+                    onClick={() => setGrade(GRADES[i])}
                     style={{
                       padding: '13px 8px', textAlign: 'center',
-                      background: grade === g ? BLACK : GREY,
-                      color: grade === g ? '#fff' : BLACK,
+                      background: grade === GRADES[i] ? BLACK : GREY,
+                      color: grade === GRADES[i] ? '#fff' : BLACK,
                       border: `1.5px solid ${BLACK}`,
-                      boxShadow: grade === g ? 'none' : `3px 3px 0 0 ${BLACK}`,
-                      transform: grade === g ? 'translate(3px,3px)' : 'none',
+                      boxShadow: grade === GRADES[i] ? 'none' : `3px 3px 0 0 ${BLACK}`,
+                      transform: grade === GRADES[i] ? 'translate(3px,3px)' : 'none',
                       fontFamily: DISP, fontSize: 13, cursor: 'pointer',
                       transition: 'all 0.12s',
                     }}
                   >
-                    {g}
+                    {displayGrade}
                   </button>
                 ))}
               </div>
