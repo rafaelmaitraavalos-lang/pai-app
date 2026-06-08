@@ -2,6 +2,7 @@ import type { WorldData, LessonData } from './index'
 import _we1 from './lessons/we1'
 import _we5 from './lessons/we5'
 import _we6 from './lessons/we6'
+import _we1_pt from './lessons/we1_pt'
 
 // ── Remap sister's lesson IDs to 100+ to avoid clashing with high-school lessons ──
 
@@ -22,6 +23,9 @@ const W102_LESSONS = remap(_we5, 111, 102)   // 111–118
 
 // World 103 — How PAI Thinks 3–5 (slightly harder questions)
 const W103_LESSONS = remap(_we6, 121, 103)   // 121–128
+
+// World 104 — Conheça a IA (Brazilian Portuguese, elementary)
+const W104_LESSONS = remap(_we1_pt, 131, 104) // 131–134
 
 // ── Elementary world definitions ──────────────────────────────────────────────
 
@@ -44,9 +48,16 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     level: 'Elementary',
     modules: Object.values(W103_LESSONS).map(l => ({ id: l.id, title: l.title })),
   },
+  104: {
+    id: 104,
+    title: 'Conheça a IA',
+    level: 'Elementary',
+    modules: Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })),
+  },
 }
 
-export const ELEMENTARY_WORLD_IDS = [101, 102, 103]
+export const ELEMENTARY_WORLD_IDS    = [101, 102, 103]
+export const ELEMENTARY_WORLD_IDS_PT = [104]
 
 // ── All elementary lessons ────────────────────────────────────────────────────
 
@@ -54,6 +65,7 @@ export const ELEMENTARY_LESSONS: Record<number, LessonData> = {
   ...W101_LESSONS,
   ...W102_LESSONS,
   ...W103_LESSONS,
+  ...W104_LESSONS,
 }
 
 // ── Grade routing helpers ─────────────────────────────────────────────────────

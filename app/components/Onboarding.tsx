@@ -30,24 +30,17 @@ const COUNTRIES = [
   { flag: '🌍',  name: 'Other',         lang: 'en' },
 ]
 
-const GRADES = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
+const GRADES    = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
+const GRADES_PT = ['1º ano','2º ano','3º ano','4º ano','5º ano','6º ano','7º ano','8º ano','9º ano','1º Médio','2º Médio','3º Médio']
 
-const GOALS = [
-  'Make games',
-  'Understand the future',
-  'Make art',
-  'Build robots',
-  'Become smarter with tech',
-]
+const GOALS    = ['Make games','Understand the future','Make art','Build robots','Become smarter with tech']
+const GOALS_PT = ['Criar jogos','Entender o futuro','Criar arte','Construir robôs','Me tornar mais inteligente com tecnologia']
 
-const LEVELS = [
-  'Nothing at all',
-  "I've used ChatGPT",
-  'I know some coding',
-  'I build AI projects',
-]
+const LEVELS    = ['Nothing at all',"I've used ChatGPT",'I know some coding','I build AI projects']
+const LEVELS_PT = ['Nada ainda','Já usei o ChatGPT','Sei um pouco de programação','Já crio projetos com IA']
 
-const FREQUENCIES = ['Never', 'A few times', 'Pretty often', 'Constantly']
+const FREQUENCIES    = ['Never', 'A few times', 'Pretty often', 'Constantly']
+const FREQUENCIES_PT = ['Nunca', 'Algumas vezes', 'Bastante', 'Constantemente']
 
 const USAGE_TILES = [
   'ChatGPT', 'YouTube', 'Siri / Alexa', 'Netflix / Spotify',
@@ -243,13 +236,26 @@ export default function Onboarding() {
     setTimeout(() => { setRevealPhase(1); setAnimComplete(false) }, 220)
   }
 
+  const isPT = country?.lang === 'pt'
+  const t    = (en: string, pt: string) => isPT ? pt : en
+
+  const grades      = isPT ? GRADES_PT      : GRADES
+  const goals       = isPT ? GOALS_PT       : GOALS
+  const levels      = isPT ? LEVELS_PT      : LEVELS
+  const frequencies = isPT ? FREQUENCIES_PT : FREQUENCIES
+
   const showCTA     = screen !== 1 && (screen !== 5 || screenFlip === 'back')
   const canContinue = ([true, true, !!grade, !!goal, !!level, true, true][screen]) ?? true
-  const btnLabel    = screen === 0 ? 'Get Started' : screen === 5 ? "Let's see" : screen === 6 ? "That's it!" : 'Continue'
+  const btnLabel    =
+    screen === 0 ? t('Get Started', 'Começar') :
+    screen === 5 ? t("Let's see", 'Vamos ver') :
+    screen === 6 ? t("That's it!", 'É isso!')  : t('Continue', 'Continuar')
 
   const userNonObvious = usage.filter(u => NON_OBVIOUS.has(u))
   const exampleNames   = userNonObvious.length > 0 ? userNonObvious.slice(0, 4).map(shortName) : ['YouTube', 'Maps', 'Spotify', 'Face ID']
-  const bubbleText     = exampleNames.join(', ') + ' — none of those feel like AI. But they all are.'
+  const bubbleText     = isPT
+    ? exampleNames.join(', ') + ' — nenhum desses parece IA. Mas todos são.'
+    : exampleNames.join(', ') + ' — none of those feel like AI. But they all are.'
 
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
@@ -281,10 +287,12 @@ export default function Onboarding() {
                     {countDisplay}
                   </div>
                   <p style={{ fontFamily: DISP, fontSize: 16, color: BLACK, margin: '4px 0 0' }}>
-                    AI {usage.length === 1 ? 'tool' : 'tools'} used today
+                    {isPT
+                      ? `${usage.length === 1 ? 'ferramenta de IA' : 'ferramentas de IA'} usadas hoje`
+                      : `AI ${usage.length === 1 ? 'tool' : 'tools'} used today`}
                   </p>
                   <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: '4px 0 0', opacity: animComplete ? 1 : 0, transition: 'opacity 0.5s' }}>
-                    And it&apos;s not even noon.
+                    {t("And it's not even noon.", 'E ainda não é meio-dia.')}
                   </p>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
@@ -306,7 +314,7 @@ export default function Onboarding() {
                   })}
                 </div>
               </div>
-              <CTA label="Continue" onClick={advanceReveal} disabled={!animComplete} />
+              <CTA label={t('Continue', 'Continuar')} onClick={advanceReveal} disabled={!animComplete} />
             </>
           )}
 
@@ -319,29 +327,31 @@ export default function Onboarding() {
               {kickerFlip !== 'back' ? (
                 <>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 20px', gap: 16, justifyContent: 'center' }}>
-                    <h2 style={{ fontFamily: DISP, fontSize: 26, color: BLACK, margin: 0 }}>Here&apos;s the thing.</h2>
+                    <h2 style={{ fontFamily: DISP, fontSize: 26, color: BLACK, margin: 0 }}>{t("Here's the thing.", 'Olha só.')}</h2>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                       <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 18px' }}>
-                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>You said</p>
+                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('You said', 'Você disse')}</p>
                         <p style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>&ldquo;{frequency}&rdquo;</p>
                       </div>
                       <div style={{ background: BLACK, border: `1.5px solid ${BLACK}`, padding: '16px 18px' }}>
-                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', margin: '0 0 8px' }}>Reality</p>
+                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', margin: '0 0 8px' }}>{t('Reality', 'Realidade')}</p>
                         <p style={{ fontFamily: DISP, fontSize: 22, color: '#fff', margin: 0 }}>
-                          {usage.length} AI {usage.length === 1 ? 'interaction' : 'interactions'}
+                          {isPT
+                            ? `${usage.length} ${usage.length === 1 ? 'interação com IA' : 'interações com IA'}`
+                            : `${usage.length} AI ${usage.length === 1 ? 'interaction' : 'interactions'}`}
                         </p>
-                        <p style={{ fontFamily: BODY, fontSize: 12, color: 'rgba(255,255,255,0.55)', margin: '4px 0 0' }}>before noon</p>
+                        <p style={{ fontFamily: BODY, fontSize: 12, color: 'rgba(255,255,255,0.55)', margin: '4px 0 0' }}>{t('before noon', 'antes do meio-dia')}</p>
                       </div>
                     </div>
                   </div>
-                  <CTA label="Continue" onClick={advanceReveal} />
+                  <CTA label={t('Continue', 'Continuar')} onClick={advanceReveal} />
                 </>
               ) : (
                 <>
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 20px', gap: 20, alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
                     <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 20px', maxWidth: 280 }}>
                       <p style={{ fontFamily: BODY, fontSize: 14, fontWeight: 600, color: BLACK, lineHeight: 1.6, margin: '0 0 8px' }}>{bubbleText}</p>
-                      <p style={{ fontFamily: DISP, fontSize: 12, color: BLACK, margin: 0 }}>That&apos;s what this course is actually about.</p>
+                      <p style={{ fontFamily: DISP, fontSize: 12, color: BLACK, margin: 0 }}>{t("That's what this course is actually about.", 'É disso que esse curso realmente trata.')}</p>
                     </div>
                     {userNonObvious.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
@@ -364,7 +374,7 @@ export default function Onboarding() {
                         textTransform: 'uppercase', cursor: 'pointer',
                       }}
                     >
-                      Start Learning →
+                      {t('Start Learning →', 'Começar a Aprender →')}
                     </button>
                   </div>
                 </>
@@ -406,10 +416,10 @@ export default function Onboarding() {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28, textAlign: 'center' }}>
               <div>
                 <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', textShadow: `4px 4px 0 ${BLACK}` }}>PAI</div>
-                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 10, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
+                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 10, letterSpacing: '0.18em', textTransform: 'uppercase' }}>{t('Your AI Learning Buddy', 'Sua Parceira de Aprendizado em IA')}</div>
               </div>
               <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 260 }}>
-                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>Quick setup — 6 questions, about 2 minutes.</p>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>{t('Quick setup — 6 questions, about 2 minutes.', 'Configuração rápida — 6 perguntas, cerca de 2 minutos.')}</p>
               </div>
             </div>
           )}
@@ -420,7 +430,7 @@ export default function Onboarding() {
               <div>
                 <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 01 / 06</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Where are you from?</h2>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>Sets your language automatically.</p>
+                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>Sets your language automatically. / Define seu idioma.</p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
                 {COUNTRIES.map(c => (
@@ -450,11 +460,11 @@ export default function Onboarding() {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 02 / 06</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>What grade are you in?</h2>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('Step', 'Passo')} 02 / 06</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{t('What grade are you in?', 'Em que série você está?')}</h2>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {GRADES.map(g => (
+                {grades.map(g => (
                   <button
                     key={g}
                     onClick={() => setGrade(g)}
@@ -480,12 +490,12 @@ export default function Onboarding() {
           {screen === 3 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 03 / 06</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>Why do you want to learn AI?</h2>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('Step', 'Passo')} 03 / 06</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{t('Why do you want to learn AI?', 'Por que você quer aprender sobre IA?')}</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {GOALS.map(label => (
-                  <OptionRow key={label} label={label} selected={goal === label} onSelect={() => setGoal(label)} />
+                {goals.map((label, i) => (
+                  <OptionRow key={label} label={label} selected={goal === GOALS[i]} onSelect={() => setGoal(GOALS[i])} />
                 ))}
               </div>
             </div>
@@ -495,12 +505,12 @@ export default function Onboarding() {
           {screen === 4 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 04 / 06</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>How much do you already know?</h2>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('Step', 'Passo')} 04 / 06</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{t('How much do you already know?', 'O quanto você já sabe?')}</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {LEVELS.map(label => (
-                  <OptionRow key={label} label={label} selected={level === label} onSelect={() => setLevel(label)} />
+                {levels.map((label, i) => (
+                  <OptionRow key={label} label={label} selected={level === LEVELS[i]} onSelect={() => setLevel(LEVELS[i])} />
                 ))}
               </div>
             </div>
@@ -516,19 +526,19 @@ export default function Onboarding() {
               {screenFlip !== 'back' ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   <div>
-                    <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 05 / 06</p>
-                    <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>How often do you think you use AI per day?</h2>
+                    <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('Step', 'Passo')} 05 / 06</p>
+                    <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>{t('How often do you think you use AI per day?', 'Com que frequência você usa IA por dia?')}</h2>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {FREQUENCIES.map(label => (
-                      <OptionRow key={label} label={label} selected={frequency === label} onSelect={() => { if (!frequency) triggerScreenFlip(label) }} />
+                    {frequencies.map((label, i) => (
+                      <OptionRow key={label} label={label} selected={frequency === FREQUENCIES[i]} onSelect={() => { if (!frequency) triggerScreenFlip(FREQUENCIES[i]) }} />
                     ))}
                   </div>
                 </div>
               ) : (
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
                   <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 20px', maxWidth: 240 }}>
-                    <p style={{ fontFamily: DISP, fontSize: 18, color: BLACK, margin: 0 }}>&ldquo;Let&apos;s take a look together.&rdquo;</p>
+                    <p style={{ fontFamily: DISP, fontSize: 18, color: BLACK, margin: 0 }}>&ldquo;{t("Let's take a look together.", 'Vamos dar uma olhada juntos.')}&rdquo;</p>
                   </div>
                   <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)', border: `2px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }} />
                 </div>
@@ -540,9 +550,9 @@ export default function Onboarding() {
           {screen === 6 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 06 / 06</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px' }}>Have you used any of these today?</h2>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>Tap everything that applies.</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{t('Step', 'Passo')} 06 / 06</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px' }}>{t('Have you used any of these today?', 'Você usou algum desses hoje?')}</h2>
+                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>{t('Tap everything that applies.', 'Toque em tudo que se aplica.')}</p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {USAGE_TILES.map(tile => {
