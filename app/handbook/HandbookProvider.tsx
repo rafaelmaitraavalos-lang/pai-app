@@ -165,7 +165,7 @@ function EntryDetail({ entry, onBack }: { entry: HandbookEntry; onBack: () => vo
   )
 }
 
-// ── Handbook panel ────────────────────────────────────────────────────────────
+// ── Handbook modal ────────────────────────────────────────────────────────────
 
 function HandbookPanel({
   onClose, tutorialMode, highlightIdx, activeEntry, setActiveEntry, onTutorialContinue,
@@ -184,17 +184,19 @@ function HandbookPanel({
       {/* Backdrop */}
       <div
         onClick={tutorialMode ? undefined : onClose}
-        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 45 }}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 45 }}
       />
 
-      {/* Panel */}
+      {/* Centered modal */}
       <div style={{
-        position: 'fixed', top: 0, left: 0,
-        width: 340, maxWidth: '92vw', height: '100vh',
+        position: 'fixed', top: '50%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '92vw', maxWidth: 520,
+        maxHeight: '85vh',
         background: '#fff', border: `1.5px solid ${BLACK}`,
-        boxShadow: `6px 0 0 0 ${BLACK}`,
+        boxShadow: `8px 8px 0 0 ${BLACK}`,
         zIndex: 50, display: 'flex', flexDirection: 'column',
-        animation: 'slideInFromLeft 0.22s ease-out',
+        animation: 'popIn 0.22s ease-out',
       }}>
         {/* Header */}
         <div style={{
@@ -331,8 +333,8 @@ export default function HandbookProvider() {
 
   useEffect(() => {
     setMounted(true)
-    const lang = localStorage.getItem('pai_lang')
-    if (lang) setTutorialStep('intro')
+    const done = localStorage.getItem('pai_onboarding_done')
+    if (done) setTutorialStep('intro')
   }, [])
 
   // Highlight entries sequentially during 'panel' tutorial step

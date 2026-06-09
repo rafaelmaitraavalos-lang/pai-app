@@ -204,6 +204,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const advanceReveal = () => {
     if (revealPhase === 2) {
       const g = localStorage.getItem('pai_grade')
+      localStorage.setItem('pai_onboarding_done', 'true')
       router.push(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
       return
     }
