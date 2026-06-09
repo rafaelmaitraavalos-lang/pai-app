@@ -30,7 +30,7 @@ export default function MobileElementaryWorldPage() {
   const activeId = world.modules.find(m => !done[m.id])?.id ?? null
 
   return (
-    <div style={{ minHeight: '100svh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100svh', background: '#f5f5f5', fontFamily: BODY, display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
       <div style={{ background: BLACK, padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 20, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
         <button onClick={() => router.push('/mobile/elementary/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6, padding: '8px 0 8px 16px' }}>← Home</button>

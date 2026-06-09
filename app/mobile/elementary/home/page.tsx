@@ -30,9 +30,9 @@ export default function MobileElementaryHome() {
   const startHere = isPT ? 'Começar aqui' : 'Start here'
 
   return (
-    <div style={{ minHeight: '100svh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100svh', background: '#f5f5f5', fontFamily: BODY, display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
       <div style={{ background: BLACK, padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-        <span style={{ fontFamily: DISP, fontSize: 20, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+        <span style={{ fontFamily: DISP, fontSize: 26, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
         <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5 }}>{isPT ? 'Para Estudantes' : 'For Students'}</span>
       </div>
 

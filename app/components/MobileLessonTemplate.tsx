@@ -84,7 +84,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
     return (
-      <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+      <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff', maxWidth: 480, margin: '0 auto' }}>
         {header}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '100%', padding: '0 20px', textAlign: 'center' }}>
@@ -114,7 +114,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
     }
 
     return (
-      <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+      <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff', maxWidth: 480, margin: '0 auto' }}>
         {header}
         <div style={{ flex: 1, padding: '24px 20px 80px' }}>
 
@@ -183,7 +183,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
 
   // ── Slides ──────────────────────────────────────────────────────────────────
   return (
-    <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+    <main style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', background: '#fff', maxWidth: 480, margin: '0 auto' }}>
       {header}
       <div style={{ flex: 1, padding: '0 20px 80px' }}>
 
