@@ -99,7 +99,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     const nextModule   = world?.modules[modIdx + 1]
     const nextWorldIdx = WORLD_IDS.indexOf(worldId) + 1
     const nextWorldId  = nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
-    const nextWorldRoute = nextWorldId ? (nextWorldId === 1 ? '/lessons' : `/world/${nextWorldId}`) : null
+    const nextWorldRoute = nextWorldId ? `/world/${nextWorldId}` : null
+    const currentWorldRoute = worldId === 1 ? '/lessons' : `/world/${worldId}`
     const isLastInWorld = !nextModule
 
     return (
@@ -121,7 +122,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* Primary: next lesson or next world */}
+            {/* Mid-world: next lesson */}
             {nextModule && (
               <button
                 onClick={() => router.push(`/lesson/${nextModule.id}`)}
@@ -130,6 +131,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 Next: {nextModule.title} →
               </button>
             )}
+            {/* Last lesson: go to next world */}
             {isLastInWorld && nextWorldRoute && nextWorldId && (
               <button
                 onClick={() => router.push(nextWorldRoute)}
@@ -138,12 +140,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 Next World: {WORLDS[nextWorldId]?.title} →
               </button>
             )}
-            {/* Secondary: back to home */}
+            {/* Secondary: back to current world (not main home) */}
             <button
-              onClick={() => router.push('/home')}
+              onClick={() => router.push(isLastInWorld ? currentWorldRoute : currentWorldRoute)}
               style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
             >
-              Back to home
+              Back to {world?.title ?? 'World'}
             </button>
           </div>
         </div>
