@@ -12,7 +12,7 @@ export const viewport = {
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
-      minHeight: '100svh',
+      minHeight: '100vh',
       background: '#e8e8e8',
       backgroundImage: 'radial-gradient(circle, #d0d0d0 1px, transparent 1px)',
       backgroundSize: '22px 22px',
@@ -27,7 +27,7 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
       <div style={{
         position: 'relative',
         width: 390,
-        height: 'min(844px, calc(100svh - 40px))',
+        height: 'min(844px, calc(100vh - 40px))',
         background: 'linear-gradient(165deg, #2c2c2c 0%, #101010 60%, #0a0a0a 100%)',
         borderRadius: 52,
         boxShadow: [
@@ -37,6 +37,7 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
           'inset 0 1px 0 rgba(255,255,255,0.08)',
         ].join(', '),
         flexShrink: 0,
+        overflow: 'hidden',
       }}>
 
         {/* Silent / volume buttons */}
