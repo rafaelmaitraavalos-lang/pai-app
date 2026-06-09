@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import HandbookProvider from './handbook/HandbookProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <HandbookProvider />
+      </body>
     </html>
   )
 }
