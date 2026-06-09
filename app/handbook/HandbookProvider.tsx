@@ -13,7 +13,6 @@ const FAINT = '#d8d8d8'
 const CREAM = '#FAFAF8'
 
 type TutorialStep = 'intro' | 'spotlight' | 'panel' | 'done'
-type BookPhase    = 'cover' | 'opening' | 'reading'
 
 // ── PAI Orb ───────────────────────────────────────────────────────────────────
 
@@ -209,36 +208,60 @@ function EntryPage({ entry, onBack }: { entry: HandbookEntry; onBack: () => void
 
 // ── Book modal ────────────────────────────────────────────────────────────────
 
+const FLIP_MS = 780
+const FLIP_EASE = `transform ${FLIP_MS}ms cubic-bezier(0.4,0,0.2,1)`
+
 function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: {
   onClose: () => void
   tutorialMode: boolean
   highlightIdx: number
   onTutorialContinue: () => void
 }) {
-  const [bookPhase, setBookPhase]     = useState<BookPhase>('cover')
-  const [coverAngle, setCoverAngle]   = useState(0)
-  const [entry, setEntry]             = useState<HandbookEntry | null>(null)
-  const [pageFlip, setPageFlip]       = useState<'normal' | 'squishing'>('normal')
+  const [coverAngle, setCoverAngle]     = useState(0)
+  const [indexAngle, setIndexAngle]     = useState(0)
+  const [coverAnim, setCoverAnim]       = useState(false)
+  const [indexAnim, setIndexAnim]       = useState(false)
+  const [selectedEntry, setSelectedEntry] = useState<HandbookEntry | null>(null)
+  const [coverOpen, setCoverOpen]       = useState(false)
+  const [indexOpen, setIndexOpen]       = useState(false)
 
-  const openBook = () => {
-    if (bookPhase !== 'cover') return
-    setBookPhase('opening')
+  const openCover = () => {
+    if (coverOpen) return
+    setCoverAnim(true)
     setCoverAngle(-175)
-    setTimeout(() => setBookPhase('reading'), 780)
+    setTimeout(() => { setCoverOpen(true); setCoverAnim(false) }, FLIP_MS)
   }
 
-  const selectEntry = (e: HandbookEntry) => {
-    setPageFlip('squishing')
-    setTimeout(() => { setEntry(e); setPageFlip('normal') }, 280)
+  const selectEntry = (entry: HandbookEntry) => {
+    setSelectedEntry(entry)
+    setIndexAnim(true)
+    setIndexAngle(-175)
+    setTimeout(() => { setIndexOpen(true); setIndexAnim(false) }, FLIP_MS)
   }
 
   const goBack = () => {
-    setPageFlip('squishing')
-    setTimeout(() => { setEntry(null); setPageFlip('normal') }, 280)
+    setIndexAnim(true)
+    setIndexAngle(0)
+    setTimeout(() => { setSelectedEntry(null); setIndexOpen(false); setIndexAnim(false) }, FLIP_MS)
   }
 
-  const showContent = bookPhase === 'opening' || bookPhase === 'reading'
-  const showCover   = bookPhase === 'cover'   || bookPhase === 'opening'
+  const layer = (angle: number, anim: boolean, zIdx: number, ptrNone: boolean) => ({
+    position: 'absolute' as const, inset: 0,
+    transformOrigin: 'left center',
+    transform: `rotateY(${angle}deg)`,
+    transition: anim ? FLIP_EASE : 'none',
+    transformStyle: 'preserve-3d' as const,
+    zIndex: zIdx,
+    pointerEvents: (ptrNone ? 'none' : 'auto') as 'none' | 'auto',
+  })
+
+  const backFace = {
+    position: 'absolute' as const, inset: 0,
+    backfaceVisibility: 'hidden' as const,
+    transform: 'rotateY(180deg)',
+    background: '#ede9de',
+    border: `1.5px solid ${BLACK}`,
+  }
 
   return (
     <>
@@ -247,7 +270,6 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', zIndex: 45 }}
       />
 
-      {/* Outer container — centered, sets the book footprint */}
       <div style={{
         position: 'fixed', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -257,84 +279,54 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
         animation: 'modalIn 0.9s cubic-bezier(0.16,1,0.3,1)',
       }}>
 
-        {/* Page-edge stack (right side — shows book thickness) */}
+        {/* Page-edge stack on the right */}
         {[
-          { r: -3, t: 0,  b: 0,  w: 5, bg: '#f0ece0', bd: '#d8d4c8' },
-          { r: -7, t: 2,  b: 2,  w: 4, bg: '#e8e4d4', bd: '#ccc8b8' },
-          { r: -10, t: 4, b: 4,  w: 3, bg: '#dedad0', bd: '#beb8a8' },
+          { r: -3, t: 0, b: 0, w: 5, bg: '#f0ece0', bd: '#d8d4c8' },
+          { r: -7, t: 2, b: 2, w: 4, bg: '#e8e4d4', bd: '#ccc8b8' },
+          { r: -10, t: 4, b: 4, w: 3, bg: '#dedad0', bd: '#beb8a8' },
         ].map((s, i) => (
-          <div key={i} style={{
-            position: 'absolute', top: s.t, bottom: s.b, right: s.r, width: s.w,
-            background: s.bg, border: `1px solid ${s.bd}`,
-          }} />
+          <div key={i} style={{ position: 'absolute', top: s.t, bottom: s.b, right: s.r, width: s.w, background: s.bg, border: `1px solid ${s.bd}` }} />
         ))}
 
-        {/* Book body — 3D context for cover rotation */}
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        {/* Book — shared perspective */}
+        <div style={{ position: 'relative', width: '100%', height: '100%', perspective: '1100px' }}>
 
-          {/* Content page (always behind the cover) */}
-          {showContent && (
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: CREAM, border: `1.5px solid ${BLACK}`,
-              display: 'flex', flexDirection: 'column', overflow: 'hidden',
-              transform: pageFlip === 'squishing' ? 'scaleX(0)' : 'scaleX(1)',
-              transition: 'transform 0.28s ease-in-out',
-              transformOrigin: 'center',
-            }}>
-              {entry
-                ? <EntryPage entry={entry} onBack={goBack} />
-                : <IndexPage tutorialMode={tutorialMode} highlightIdx={highlightIdx} onSelect={selectEntry} onTutorialContinue={onTutorialContinue} />
-              }
+          {/* Layer 1 — Entry content (always at back) */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: indexOpen ? 'auto' : 'none' }}>
+            {selectedEntry && <EntryPage entry={selectedEntry} onBack={goBack} />}
+          </div>
+
+          {/* Layer 2 — Index page (flips to reveal entry) */}
+          <div style={layer(indexAngle, indexAnim, 2, indexOpen && !indexAnim)}>
+            <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: coverOpen && !indexOpen ? 'auto' : 'none' }}>
+              <IndexPage tutorialMode={tutorialMode} highlightIdx={highlightIdx} onSelect={selectEntry} onTutorialContinue={onTutorialContinue} />
             </div>
-          )}
+            <div style={backFace} />
+          </div>
 
-          {/* Cover — rotates around left spine */}
-          {showCover && (
+          {/* Layer 3 — Cover (flips to reveal index) */}
+          <div style={layer(coverAngle, coverAnim, 3, coverOpen && !coverAnim)}>
             <div
-              onClick={openBook}
+              onClick={!coverOpen ? openCover : undefined}
               style={{
                 position: 'absolute', inset: 0,
-                transformOrigin: 'left center',
-                transform: `perspective(1100px) rotateY(${coverAngle}deg)`,
-                transition: bookPhase === 'opening' ? 'transform 0.78s cubic-bezier(0.4,0,0.2,1)' : 'none',
-                transformStyle: 'preserve-3d',
-                cursor: bookPhase === 'cover' ? 'pointer' : 'default',
-                zIndex: 2,
+                backfaceVisibility: 'hidden',
+                background: BLACK,
+                border: `2px solid ${GREEN}`,
+                cursor: !coverOpen ? 'pointer' : 'default',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 18, padding: '0 28px',
               }}
             >
-              {/* Front face */}
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: '#060e06',
-                border: `2px solid ${GREEN}`,
-                boxShadow: `8px 8px 0 0 ${BLACK}`,
-                backfaceVisibility: 'hidden',
-                display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center',
-                gap: 18, padding: '0 28px',
-              }}>
-                <div style={{ position: 'absolute', top: 18, left: 18, right: 18, borderTop: `1px solid rgba(61,245,66,0.2)` }} />
-                <div style={{ position: 'absolute', bottom: 18, left: 18, right: 18, borderTop: `1px solid rgba(61,245,66,0.2)` }} />
-                <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.22em', color: GREEN, opacity: 0.5 }}>PAI</div>
-                <div style={{
-                  fontFamily: DISP, fontSize: 34, color: GREEN,
-                  letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.05,
-                  textShadow: '0 0 32px rgba(61,245,66,0.55)',
-                }}>HANDBOOK</div>
-                <div style={{ width: 48, height: 1.5, background: GREEN, opacity: 0.3 }} />
-                <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, opacity: 0.4 }}>tap to open</div>
-              </div>
-
-              {/* Back face (inside of cover — cream) */}
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: '#ede9de',
-                backfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg)',
-              }} />
+              <div style={{ position: 'absolute', top: 18, left: 18, right: 18, borderTop: `1px solid rgba(61,245,66,0.2)` }} />
+              <div style={{ position: 'absolute', bottom: 18, left: 18, right: 18, borderTop: `1px solid rgba(61,245,66,0.2)` }} />
+              <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.22em', color: GREEN, opacity: 0.5 }}>PAI</div>
+              <div style={{ fontFamily: DISP, fontSize: 34, color: GREEN, letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.05, textShadow: '0 0 32px rgba(61,245,66,0.55)' }}>HANDBOOK</div>
+              <div style={{ width: 48, height: 1.5, background: GREEN, opacity: 0.3 }} />
+              <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, opacity: 0.4 }}>tap to open</div>
             </div>
-          )}
+            <div style={backFace} />
+          </div>
         </div>
       </div>
     </>
