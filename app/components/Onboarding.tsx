@@ -117,6 +117,14 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   // L is the active language strings — falls back to EN until a country is picked
   const L = LANG_STRINGS[country?.lang ?? 'en'] ?? LANG_STRINGS.en
 
+  // Skip onboarding if already completed
+  useEffect(() => {
+    if (localStorage.getItem('pai_onboarding_done') === 'true') {
+      const g = localStorage.getItem('pai_grade')
+      router.replace(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (screen > 0 && stage === 'onboard') {
       const t = setTimeout(() => setVisible(true), 40)
