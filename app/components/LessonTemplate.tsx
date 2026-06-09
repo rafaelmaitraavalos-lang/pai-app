@@ -6,6 +6,7 @@ import GlossaryText from './GlossaryText'
 import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
+import { WORLDS, WORLD_IDS, getLessonWorldId } from '../data'
 
 export interface Stop {
   tag:    string
@@ -92,19 +93,59 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
   // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
+    const worldId      = getLessonWorldId(id)
+    const world        = WORLDS[worldId]
+    const modIdx       = world?.modules.findIndex(m => m.id === id) ?? -1
+    const nextModule   = world?.modules[modIdx + 1]
+    const nextWorldIdx = WORLD_IDS.indexOf(worldId) + 1
+    const nextWorldId  = nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
+    const nextWorldRoute = nextWorldId ? (nextWorldId === 1 ? '/lessons' : `/world/${nextWorldId}`) : null
+    const isLastInWorld = !nextModule
+
     return (
       <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
-        <div style={{ width: '100%', padding: '0 7vw', textAlign: 'center' }}>
+        <div style={{ width: '100%', maxWidth: 480, padding: '0 7vw', textAlign: 'center' }}>
           <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>Lesson complete</div>
           <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
             <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
             <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>
           </div>
-          <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 20px', fontWeight: 400 }}>{title}</h1>
-          <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 20 }} />
-          <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
-            Back to lessons →
-          </button>
+          <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 8px', fontWeight: 400 }}>{title}</h1>
+
+          {isLastInWorld && world && (
+            <p style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN, margin: '0 0 20px' }}>
+              World {worldId} complete
+            </p>
+          )}
+
+          <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* Primary: next lesson or next world */}
+            {nextModule && (
+              <button
+                onClick={() => router.push(`/lesson/${nextModule.id}`)}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
+              >
+                Next: {nextModule.title} →
+              </button>
+            )}
+            {isLastInWorld && nextWorldRoute && nextWorldId && (
+              <button
+                onClick={() => router.push(nextWorldRoute)}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
+              >
+                Next World: {WORLDS[nextWorldId]?.title} →
+              </button>
+            )}
+            {/* Secondary: back to home */}
+            <button
+              onClick={() => router.push('/home')}
+              style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
+            >
+              Back to home
+            </button>
+          </div>
         </div>
       </main>
     )
