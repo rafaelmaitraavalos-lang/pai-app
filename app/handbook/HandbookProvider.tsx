@@ -332,8 +332,7 @@ export default function HandbookProvider() {
   useEffect(() => {
     setMounted(true)
     const lang = localStorage.getItem('pai_lang')
-    const done = localStorage.getItem('pai_handbook_tutorial_done')
-    if (lang && !done) setTutorialStep('intro')
+    if (lang) setTutorialStep('intro')
   }, [])
 
   // Highlight entries sequentially during 'panel' tutorial step
@@ -351,13 +350,13 @@ export default function HandbookProvider() {
   if (!mounted || pathname === '/') return null
 
   const skipTutorial = () => {
-    localStorage.setItem('pai_handbook_tutorial_done', 'true')
+
     setTutorialStep(null)
     setPanelOpen(false)
   }
 
   const completeTutorial = () => {
-    localStorage.setItem('pai_handbook_tutorial_done', 'true')
+
     setTutorialStep(null)
     setPanelOpen(false)
   }
