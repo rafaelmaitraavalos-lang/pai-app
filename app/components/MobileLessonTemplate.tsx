@@ -141,14 +141,14 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
               {question.question}
             </h2>
             <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 20 }} />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {([true, false] as const).map(val => {
                 const state = btnState(val)
                 const bg  = state === 'correct' ? '#27AE60' : state === 'wrong' ? '#C0392B' : state === 'dimmed' ? FAINT : '#EBEBEB'
                 const clr = state === 'correct' || state === 'wrong' ? '#fff' : state === 'dimmed' ? DIM : BLACK
                 return (
                   <button key={String(val)} onClick={() => selected === null && setSelected(val)} disabled={selected !== null}
-                    style={{ fontFamily: DISP, fontSize: 14, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '20px 12px', background: bg, color: clr, border: 'none', cursor: selected === null ? 'pointer' : 'default', boxShadow: state === 'default' ? `4px 4px 0 0 ${BLACK}` : 'none', transition: 'all 0.12s' }}>
+                    style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '22px 16px', background: bg, color: clr, border: 'none', cursor: selected === null ? 'pointer' : 'default', boxShadow: state === 'default' ? `4px 4px 0 0 ${BLACK}` : 'none', transition: 'all 0.12s', width: '100%' }}>
                     {val ? 'True' : 'False'}
                   </button>
                 )
@@ -223,8 +223,8 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
 
           {/* Image below title on mobile */}
           {hasImage && (
-            <div style={{ marginBottom: 20, overflow: 'hidden', maxHeight: 220, boxShadow: `6px 6px 0 0 ${BLACK}` }}>
-              <img src={slideImage} alt={stop.title} style={{ width: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+            <div style={{ marginBottom: 20, aspectRatio: '4/3', overflow: 'hidden', boxShadow: `6px 6px 0 0 ${BLACK}` }}>
+              <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
             </div>
           )}
 
