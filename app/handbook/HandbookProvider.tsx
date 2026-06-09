@@ -307,13 +307,13 @@ function HandbookButton({ onClick, zIndex, isSpotlit }: {
         position: 'fixed', bottom: 24, left: 20, zIndex,
         width: 44, height: 44,
         background: BLACK,
-        border: `1.5px solid ${BLACK}`,
+        border: `1.5px solid ${GREEN}`,
+        boxShadow: isSpotlit
+          ? `4px 4px 0 0 ${GREEN}, 0 0 18px 6px rgba(61,245,66,0.65)`
+          : `4px 4px 0 0 ${GREEN}`,
         cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: isSpotlit
-          ? 'handbookPulseStrong 1.8s ease-in-out infinite'
-          : 'handbookPulse 2s ease-in-out infinite',
-        transition: 'animation 0.3s',
+        animation: isSpotlit ? 'handbookPulseStrong 1.8s ease-in-out infinite' : 'handbookPulse 2s ease-in-out infinite',
       }}
     >
       <span style={{ fontFamily: DISP, fontSize: 9, color: GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
