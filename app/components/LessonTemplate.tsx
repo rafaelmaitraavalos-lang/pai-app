@@ -86,21 +86,22 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     setSelected(null)
     setQIndex(i => i + 1)
   }
+  const worldId          = getLessonWorldId(id)
+  const currentWorldRoute = worldId === 1 ? '/lessons' : `/world/${worldId}`
+
   const skip = () => {
     localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-    router.push('/home')
+    router.push(currentWorldRoute)
   }
 
   // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
-    const worldId      = getLessonWorldId(id)
     const world        = WORLDS[worldId]
     const modIdx       = world?.modules.findIndex(m => m.id === id) ?? -1
     const nextModule   = world?.modules[modIdx + 1]
     const nextWorldIdx = WORLD_IDS.indexOf(worldId) + 1
     const nextWorldId  = nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
     const nextWorldRoute = nextWorldId ? `/world/${nextWorldId}` : null
-    const currentWorldRoute = worldId === 1 ? '/lessons' : `/world/${worldId}`
     const isLastInWorld = !nextModule
 
     return (
@@ -244,8 +245,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
-        <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
-          ← Home
+        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
+          ← World
         </button>
       </div>
 
@@ -261,7 +262,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ color: BLACK }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push('/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
                 Lesson {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
