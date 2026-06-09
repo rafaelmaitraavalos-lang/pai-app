@@ -51,7 +51,7 @@ function TutorialDialog({ text, ctaLabel, onCta, onSkip }: {
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           <PaiOrb size={52} talking />
           <div>
-            <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>PAI</div>
+            <div style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.02em', color: GREEN, marginBottom: 4, lineHeight: 1 }}>PAI</div>
             <p style={{ fontFamily: BODY, fontSize: 14, color: BLACK, lineHeight: 1.65, margin: 0 }}>{text}</p>
           </div>
         </div>
@@ -385,8 +385,9 @@ export default function HandbookProvider() {
 
   useEffect(() => {
     setMounted(true)
-    const done = localStorage.getItem('pai_onboarding_done')
-    if (done) setTutorialStep('intro')
+    const onboardingDone = localStorage.getItem('pai_onboarding_done')
+    const tutorialSeen   = localStorage.getItem('pai_handbook_seen')
+    if (onboardingDone && !tutorialSeen) setTutorialStep('intro')
   }, [])
 
   useEffect(() => {
@@ -401,8 +402,8 @@ export default function HandbookProvider() {
 
   if (!mounted || pathname === '/') return null
 
-  const skipTutorial = () => { setTutorialStep(null); setPanelOpen(false) }
-  const completeTutorial = () => { setTutorialStep(null); setPanelOpen(false) }
+  const skipTutorial     = () => { localStorage.setItem('pai_handbook_seen', 'true'); setTutorialStep(null); setPanelOpen(false) }
+  const completeTutorial = () => { localStorage.setItem('pai_handbook_seen', 'true'); setTutorialStep(null); setPanelOpen(false) }
 
   const handleButtonClick = () => {
     if (tutorialStep === 'spotlight') {
