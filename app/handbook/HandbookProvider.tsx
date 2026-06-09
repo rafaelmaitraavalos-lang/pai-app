@@ -128,7 +128,11 @@ function EntryDetail({ entry, onBack }: { entry: HandbookEntry; onBack: () => vo
         <div>
           <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>Handbook Entry</div>
           <h2 style={{ fontFamily: DISP, fontSize: 19, color: BLACK, margin: '0 0 14px', lineHeight: 1.15 }}>{entry.title}</h2>
-          <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, lineHeight: 1.75, margin: 0 }}>{entry.body}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {entry.body.split('\n\n').map((para, i) => (
+              <p key={i} style={{ fontFamily: BODY, fontSize: 13, color: BLACK, lineHeight: 1.75, margin: 0 }}>{para}</p>
+            ))}
+          </div>
         </div>
 
         {/* DO callout */}
