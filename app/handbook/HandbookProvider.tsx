@@ -196,7 +196,7 @@ function HandbookPanel({
         background: '#fff', border: `1.5px solid ${BLACK}`,
         boxShadow: `8px 8px 0 0 ${BLACK}`,
         zIndex: 50, display: 'flex', flexDirection: 'column',
-        animation: 'popIn 0.22s ease-out',
+        animation: 'modalIn 0.22s ease-out',
       }}>
         {/* Header */}
         <div style={{
