@@ -212,6 +212,6 @@
   50%       { box-shadow: 4px 4px 0 0 #3DF542, 0 0 32px 14px rgba(61,245,66,0.95); }
 }
 @keyframes modalIn {
-  from { opacity: 0; transform: translate(-50%, -47%); }
-  to   { opacity: 1; transform: translate(-50%, -50%); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
