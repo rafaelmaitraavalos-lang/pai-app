@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#2C1500"/>
+  <!-- Left phone (human) -->
+  <rect x="60" y="60" width="170" height="280" rx="22" fill="#F2EBE0"/>
+  <rect x="75" y="90" width="140" height="220" rx="10" fill="#E8D8C0"/>
+  <!-- Human chat bubbles -->
+  <rect x="82" y="100" width="110" height="36" rx="14" fill="#BA7517"/>
+  <rect x="82" y="148" width="85" height="36" rx="14" fill="#BA7517"/>
+  <rect x="82" y="196" width="100" height="36" rx="14" fill="#BA7517"/>
+  <!-- Human label -->
+  <circle cx="145" cy="328" r="16" fill="#BA7517"/>
+  <text x="145" y="333" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">H</text>
+  <!-- Right phone (robot) -->
+  <rect x="370" y="60" width="170" height="280" rx="22" fill="#F2EBE0"/>
+  <rect x="385" y="90" width="140" height="220" rx="10" fill="#E8D8C0"/>
+  <!-- Robot chat bubbles -->
+  <rect x="408" y="100" width="110" height="36" rx="14" fill="#3D1A00"/>
+  <rect x="433" y="148" width="85" height="36" rx="14" fill="#3D1A00"/>
+  <rect x="418" y="196" width="100" height="36" rx="14" fill="#3D1A00"/>
+  <!-- Robot label -->
+  <circle cx="455" cy="328" r="16" fill="#3D1A00"/>
+  <text x="455" y="333" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFE08A" text-anchor="middle">?</text>
+  <!-- Big question mark in center -->
+  <text x="300" y="240" font-family="Arial Black, sans-serif" font-size="110" font-weight="900" fill="#FFE08A" text-anchor="middle" opacity="0.9">?</text>
+  <text x="300" y="370" font-family="Arial, sans-serif" font-size="18" fill="#BA7517" text-anchor="middle">Which one is the machine?</text>
+</svg>

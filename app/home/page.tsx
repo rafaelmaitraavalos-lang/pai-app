@@ -37,7 +37,7 @@ export default function Home() {
   const worldDone = (id: number) =>
     (doneCounts[id] ?? 0) >= WORLDS[id].modules.length
 
-  const isWorldUnlocked = (id: number) => id === 1 || id === 6 || worldDone(id - 1)
+  const isWorldUnlocked = (id: number) => id === 1 || id === 6 || id === 7 || id === 8 || id === 9 || id === 10 || worldDone(id - 1)
 
   const visibleWorldIds = WORLD_IDS.filter(id => isElementary
     ? WORLDS[id].level === 'Elementary'

@@ -3,6 +3,10 @@ import w3 from './lessons/w3'
 import w4 from './lessons/w4'
 import w5 from './lessons/w5'
 import we1 from './lessons/we1'
+import we2 from './lessons/we2'
+import we4 from './lessons/we4'
+import we5 from './lessons/we5'
+import we6 from './lessons/we6'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -121,10 +125,74 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 43, title: 'The Future of PAI' },
     ],
   },
+  9: {
+    id: 9,
+    displayId: 2,
+    title: 'How PAI Thinks',
+    level: 'Elementary',
+    modules: [
+      { id: 60, title: "What Is PAI's Brain?" },
+      { id: 61, title: 'How PAI Learns' },
+      { id: 62, title: 'PAI Gets Smarter With More Practice' },
+      { id: 63, title: 'How Does PAI Talk With You?' },
+      { id: 64, title: 'How PAI Decides What to Show You' },
+      { id: 65, title: 'How PAI Sees Pictures' },
+      { id: 66, title: 'The Mystery Inside PAI' },
+      { id: 67, title: 'When PAI Gets Things Wrong' },
+    ],
+  },
+  10: {
+    id: 10,
+    displayId: 3,
+    title: 'How PAI Works',
+    level: 'Elementary',
+    modules: [
+      { id: 68, title: "What Is PAI's Brain?" },
+      { id: 69, title: 'How PAI Learns' },
+      { id: 70, title: 'PAI Gets Smarter With More Practice' },
+      { id: 71, title: 'How Does PAI Talk With You?' },
+      { id: 72, title: 'How PAI Decides What to Show You' },
+      { id: 73, title: 'How PAI Sees Pictures' },
+      { id: 74, title: 'The Mystery Inside PAI' },
+      { id: 75, title: 'When PAI Gets Things Wrong' },
+    ],
+  },
+  8: {
+    id: 8,
+    displayId: 4,
+    title: 'AI Ethics',
+    level: 'Elementary',
+    modules: [
+      { id: 52, title: 'What Is Ethics?' },
+      { id: 53, title: 'The Bias Problem' },
+      { id: 54, title: 'The Consent Problem' },
+      { id: 55, title: 'The Accountability Gap' },
+      { id: 56, title: 'The Transparency Paradox' },
+      { id: 57, title: 'Autonomy and Manipulation' },
+      { id: 58, title: 'The Alignment Problem' },
+      { id: 59, title: 'Who Decides?' },
+    ],
+  },
+  7: {
+    id: 7,
+    displayId: 5,
+    title: "AI's Big Future",
+    level: 'Elementary',
+    modules: [
+      { id: 44, title: 'Where We Are Now' },
+      { id: 45, title: 'The Road to AGI' },
+      { id: 46, title: 'The Alignment Problem' },
+      { id: 47, title: 'AI and Big Risks' },
+      { id: 48, title: 'Rules for AI' },
+      { id: 49, title: 'AI and What It Means to Be Human' },
+      { id: 50, title: 'What Your Generation Inherits' },
+      { id: 51, title: 'What You Do Next' },
+    ],
+  },
 }
 
 // Ordered list for the home screen
-export const WORLD_IDS = [1, 2, 3, 4, 5, 6]
+export const WORLD_IDS = [1, 2, 3, 4, 5, 6, 9, 10, 8, 7]
 
 // Helper: which world does a lesson belong to?
 export function getLessonWorldId(lessonId: number): number {
@@ -150,6 +218,10 @@ export const LESSONS: Record<number, LessonData> = {
   ...w4,
   ...w5,
   ...we1,
+  ...we2,
+  ...we4,
+  ...we5,
+  ...we6,
 
   // ── Add new lessons here ────────────────────────────────────────────────
   // 24: {

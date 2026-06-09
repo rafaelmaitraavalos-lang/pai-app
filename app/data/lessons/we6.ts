@@ -2,7 +2,7 @@ import { LessonData } from '../index'
 
 const we6: Record<number, LessonData> = {
   52: {
-    id: 52, worldId: 8, title: "What Is PAI's Brain?",
+    id: 68, worldId: 10, title: "What Is PAI's Brain?",
     stops: [
       { tag: 'Fact', title: "What Is PAI's Brain?", body: "PAI has a special brain made of tiny helpers all working together — kind of like a telephone game! Imagine you whisper something to your friend, they whisper it to the next friend, and so on. By the end, the message has passed through lots of people and something amazing comes out! PAI's brain works the same way. It has rows and rows of helpers. One row gets the question. The next row thinks about it. The next row thinks even more. And the last row gives you the answer!" },
     ],
@@ -16,7 +16,7 @@ const we6: Record<number, LessonData> = {
   },
 
   53: {
-    id: 53, worldId: 8, title: 'How PAI Learns',
+    id: 69, worldId: 10, title: 'How PAI Learns',
     stops: [
       { tag: 'Example', title: 'How PAI Learns', body: "PAI learns by trying, making mistakes, and trying again — just like you do! Imagine learning to throw a basketball. The first time, you might miss. But every time you miss, you learn a little more about how to aim better. You keep practicing and practicing until you get it right! PAI does the same thing — millions and millions of times — until it gets really, really good. 🏀" },
     ],
@@ -30,7 +30,7 @@ const we6: Record<number, LessonData> = {
   },
 
   54: {
-    id: 54, worldId: 8, title: 'PAI Gets Smarter With More Practice',
+    id: 70, worldId: 10, title: 'PAI Gets Smarter With More Practice',
     stops: [
       { tag: 'Big idea', title: 'PAI Gets Smarter With More Practice', body: "The more PAI practices, the better it gets at seeing the BIG picture. Think of it like drawing. When you first start, you can draw a dot. Then a line. Then a shape. Then a face! Each step builds on the last one. PAI starts by noticing small things — like lines and colors. Then it puts them together to see bigger things — like shapes. Then even bigger things — like a dog or a cat! Each step makes PAI smarter." },
     ],
@@ -44,7 +44,7 @@ const we6: Record<number, LessonData> = {
   },
 
   55: {
-    id: 55, worldId: 8, title: 'How Does PAI Talk With You?',
+    id: 71, worldId: 10, title: 'How Does PAI Talk With You?',
     stops: [
       { tag: 'Fact', title: 'How Does PAI Talk With You?', body: "When you type a question to PAI, it doesn't go find the answer in a book. It figures out the answer one word at a time — like a really smart guessing game! PAI reads everything you said, then thinks: \"What word probably comes next?\" Then the next word. Then the next. Until a whole answer appears! It's like finishing someone's sentence — but PAI is SO good at it, the whole answer makes sense! ✨" },
     ],
@@ -58,7 +58,7 @@ const we6: Record<number, LessonData> = {
   },
 
   56: {
-    id: 56, worldId: 8, title: 'How PAI Decides What to Show You',
+    id: 72, worldId: 10, title: 'How PAI Decides What to Show You',
     stops: [
       { tag: 'Example', title: 'How PAI Decides What to Show You', body: "Have you ever noticed that YouTube keeps showing you videos you actually like? PAI watches and learns what you enjoy. Then it finds other people who like the same things — and shows you what THEY liked too! It's like your friend saying: \"You love dinosaurs AND space? Then you HAVE to watch this — I love those things too!\" But remember — PAI is really good at showing exciting things that make you want to keep watching. It's always good to take breaks and do other things too! 🌟" },
     ],
@@ -72,7 +72,7 @@ const we6: Record<number, LessonData> = {
   },
 
   57: {
-    id: 57, worldId: 8, title: 'How PAI Sees Pictures',
+    id: 73, worldId: 10, title: 'How PAI Sees Pictures',
     stops: [
       { tag: 'Fact', title: 'How PAI Sees Pictures', body: "PAI can look at a picture and figure out what's in it — but it sees pictures in a very different way than you do! When you look at a dog, you just know it's a dog. But PAI sees millions of tiny colored squares called pixels. It looks at all those squares very carefully and finds patterns — pointy ears, four legs, a tail — and then guesses \"dog!\" It's like a puzzle. You don't look at every piece separately — you put them together to see the whole picture. PAI does the same thing! 🧩" },
     ],
@@ -86,7 +86,7 @@ const we6: Record<number, LessonData> = {
   },
 
   58: {
-    id: 58, worldId: 8, title: 'The Mystery Inside PAI',
+    id: 74, worldId: 10, title: 'The Mystery Inside PAI',
     stops: [
       { tag: 'Hot take', title: 'The Mystery Inside PAI', body: "Here's something really interesting — even the people who MADE PAI don't always understand exactly why it gives a certain answer! It's like asking someone how they knew a joke was funny. They just… knew. They can't always explain every single reason. PAI works through SO many steps so fast that even its makers can't always follow along. That's why scientists are always working hard to understand PAI better — so we can make sure it's always being helpful and kind. 🔬" },
     ],
@@ -100,7 +100,7 @@ const we6: Record<number, LessonData> = {
   },
 
   59: {
-    id: 59, worldId: 8, title: 'When PAI Gets Things Wrong',
+    id: 75, worldId: 10, title: 'When PAI Gets Things Wrong',
     stops: [
       { tag: 'Fact', title: 'When PAI Gets Things Wrong', body: "PAI is really smart, but it's NOT perfect. Sometimes it makes mistakes! Imagine if you learned a math rule wrong on day one — then every problem after that might also be a little wrong. Small mistakes can turn into bigger ones. That's why it's SO important to always double-check what PAI tells you, especially for really important things. PAI is a great helper, but YOU are the one who has to think and decide. Your brain is amazing and PAI needs people like you to keep it on track! 🌈" },
     ],

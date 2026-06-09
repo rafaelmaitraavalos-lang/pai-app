@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE08A"/>
+      <stop offset="100%" stop-color="#D4780A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- Circuit dots -->
+  <circle cx="60" cy="60" r="5" fill="white" opacity="0.3"/>
+  <circle cx="540" cy="340" r="5" fill="white" opacity="0.3"/>
+  <circle cx="540" cy="60" r="5" fill="white" opacity="0.3"/>
+  <circle cx="60" cy="340" r="5" fill="white" opacity="0.3"/>
+  <!-- Robot head -->
+  <rect x="210" y="70" width="180" height="150" rx="24" fill="white" opacity="0.95"/>
+  <!-- Eyes -->
+  <circle cx="263" cy="130" r="24" fill="#3D1A00"/>
+  <circle cx="337" cy="130" r="24" fill="#3D1A00"/>
+  <circle cx="263" cy="130" r="13" fill="#FFE08A"/>
+  <circle cx="337" cy="130" r="13" fill="#FFE08A"/>
+  <circle cx="268" cy="125" r="5" fill="white"/>
+  <circle cx="342" cy="125" r="5" fill="white"/>
+  <!-- Smile -->
+  <path d="M255 178 Q300 205 345 178" stroke="#3D1A00" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- Antenna -->
+  <line x1="300" y1="70" x2="300" y2="38" stroke="#3D1A00" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="300" cy="28" r="14" fill="#3D1A00"/>
+  <circle cx="300" cy="28" r="7" fill="#FFE08A"/>
+  <!-- Body -->
+  <rect x="230" y="235" width="140" height="90" rx="18" fill="white" opacity="0.9"/>
+  <text x="300" y="291" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#D4780A" text-anchor="middle">PAI</text>
+  <!-- Arms -->
+  <rect x="155" y="245" width="70" height="22" rx="11" fill="white" opacity="0.85"/>
+  <circle cx="155" cy="256" r="16" fill="white" opacity="0.85"/>
+  <rect x="375" y="245" width="70" height="22" rx="11" fill="white" opacity="0.85"/>
+  <circle cx="445" cy="256" r="16" fill="white" opacity="0.85"/>
+  <!-- Legs -->
+  <rect x="255" y="328" width="36" height="50" rx="10" fill="white" opacity="0.8"/>
+  <rect x="309" y="328" width="36" height="50" rx="10" fill="white" opacity="0.8"/>
+</svg>
