@@ -13,7 +13,7 @@ export default function MobileWorld5Complete() {
   const router = useRouter()
 
   return (
-    <div style={{ minHeight: '100svh', background: '#fff', display: 'flex', flexDirection: 'column', fontFamily: BODY }}>
+    <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', fontFamily: BODY }}>
       <div style={{ background: BLACK, padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 20, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
       </div>

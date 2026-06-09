@@ -14,7 +14,7 @@ export default function MobileLesson1Game() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F2EBE0] flex flex-col" style={{ animation: 'pageIn 0.25s ease-out' }}>
+    <div className="min-h-full bg-[#F2EBE0] flex flex-col" style={{ animation: 'pageIn 0.25s ease-out' }}>
       <div className="flex-shrink-0 px-5 py-3 border-b border-[#E5D4BA] flex items-center justify-between">
         <button onClick={() => router.push('/mobile/home')} className="flex items-center gap-1.5 text-[#BA7517] font-black text-sm">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

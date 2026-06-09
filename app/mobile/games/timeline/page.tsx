@@ -10,7 +10,7 @@ export default function MobileTimelinePage() {
   const [key, setKey] = useState(0)
 
   return (
-    <div className="min-h-screen bg-[#F5F1EB] flex flex-col" style={{ animation: 'pageIn 0.3s ease-out' }}>
+    <div className="min-h-full bg-[#F5F1EB] flex flex-col" style={{ animation: 'pageIn 0.3s ease-out' }}>
       <div className="flex-shrink-0 px-5 py-3 border-b border-[#E0DDD8] bg-white flex items-center justify-between">
         <button onClick={() => router.push('/mobile/home')} className="text-[#BA7517] font-black text-sm">← Home</button>
         <h1 className="text-base font-black text-[#1a1a1a] tracking-tight">Sort the Timeline</h1>

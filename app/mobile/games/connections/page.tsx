@@ -11,7 +11,7 @@ export default function MobileConnectionsPage() {
   const [key, setKey] = useState(0)
 
   return (
-    <div className="min-h-screen bg-[#f9f6f0] flex flex-col" style={{ animation: 'pageIn 0.3s ease-out' }}>
+    <div className="min-h-full bg-[#f9f6f0] flex flex-col" style={{ animation: 'pageIn 0.3s ease-out' }}>
       <div className="flex-shrink-0 px-5 py-3 border-b border-[#e0ddd8] bg-white flex items-center justify-between">
         <button onClick={() => router.push('/mobile/home')} className="text-[#1a1a1a] font-black text-sm">← Home</button>
         <h1 className="text-base font-black text-[#1a1a1a] tracking-tight">Connections</h1>

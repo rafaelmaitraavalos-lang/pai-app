@@ -37,7 +37,7 @@ export default function MobileHome() {
   const worldRoute = (id: number) => id === 1 ? '/mobile/lessons' : `/mobile/world/${id}`
 
   return (
-    <div style={{ minHeight: '100svh', background: '#f5f5f5', fontFamily: BODY, display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
+    <div style={{ minHeight: '100%', background: '#f5f5f5', fontFamily: BODY, display: 'flex', flexDirection: 'column', maxWidth: 480, margin: '0 auto' }}>
 
       {/* Header */}
       <div style={{ background: BLACK, padding: '18px 20px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
