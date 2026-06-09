@@ -20,16 +20,15 @@ function PaiOrb({ size = 48, talking = false }: { size?: number; talking?: boole
   return (
     <div style={{
       width: size, height: size, borderRadius: '50%', flexShrink: 0,
-      background: 'radial-gradient(circle at 34% 30%, #3e3028, #1e1812)',
-      boxShadow: '0 4px 18px rgba(0,0,0,0.40)',
+      background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)',
+      border: '2px solid #0a0a0a',
+      boxShadow: '4px 4px 0 0 #0a0a0a',
       animation: talking ? 'paiAnalystTalking 0.85s ease-in-out infinite' : 'paiAnalystIdle 3s ease-in-out infinite',
       position: 'relative',
     }}>
-      <div style={{ position: 'absolute', top: '20%', left: '22%', width: '26%', height: '20%', borderRadius: '50%', background: 'rgba(245,238,224,0.28)', filter: 'blur(1px)' }} />
+      <div style={{ position: 'absolute', top: '18%', left: '18%', width: '28%', height: '20%', borderRadius: '50%', background: 'rgba(255,255,255,0.38)', filter: 'blur(4px)' }} />
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: '33%', height: '33%', borderRadius: '50%', border: '1.5px solid rgba(245,238,224,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: '30%', height: '30%', borderRadius: '50%', background: 'rgba(245,238,224,0.40)' }} />
-        </div>
+        <div style={{ width: '33%', height: '33%', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.22)', background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.18), transparent 65%)' }} />
       </div>
     </div>
   )
