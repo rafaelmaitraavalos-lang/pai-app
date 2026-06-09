@@ -270,12 +270,15 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', zIndex: 45 }}
       />
 
+      {/* Outer container — green border lives here, never rotates away */}
       <div style={{
         position: 'fixed', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '88vw', maxWidth: 360,
         height: '80vh', maxHeight: 540,
         zIndex: 50,
+        border: `2px solid ${GREEN}`,
+        background: BLACK,
         animation: 'modalIn 0.9s cubic-bezier(0.16,1,0.3,1)',
       }}>
 
@@ -291,12 +294,12 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
         {/* Book — shared perspective */}
         <div style={{ position: 'relative', width: '100%', height: '100%', perspective: '1100px' }}>
 
-          {/* Layer 1 — Entry content (always at back) */}
-          <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: indexOpen ? 'auto' : 'none' }}>
+          {/* Layer 1 — Entry content */}
+          <div style={{ position: 'absolute', inset: 6, zIndex: 1, background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: indexOpen ? 'auto' : 'none' }}>
             {selectedEntry && <EntryPage entry={selectedEntry} onBack={goBack} />}
           </div>
 
-          {/* Layer 2 — Index page (slightly inset so cover border shows around it) */}
+          {/* Layer 2 — Index page (inset 6px — black gap + green outer border frames it) */}
           <div style={{
             position: 'absolute', top: 6, left: 6, right: 6, bottom: 6,
             transformOrigin: '-6px center',
@@ -306,13 +309,15 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
             zIndex: 2,
             pointerEvents: indexOpen && !indexAnim ? 'none' : 'auto',
           }}>
+            {/* Front: index content */}
             <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: coverOpen && !indexOpen ? 'auto' : 'none' }}>
               <IndexPage tutorialMode={tutorialMode} highlightIdx={highlightIdx} onSelect={selectEntry} onTutorialContinue={onTutorialContinue} />
             </div>
-            <div style={backFace} />
+            {/* Back: cream — visible as index page swings away */}
+            <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: '#ede9de', border: `1.5px solid ${BLACK}` }} />
           </div>
 
-          {/* Layer 3 — Cover (flips to reveal index) */}
+          {/* Layer 3 — Cover (full size, no back face — disappears cleanly past 90°) */}
           <div style={layer(coverAngle, coverAnim, 3, coverOpen && !coverAnim)}>
             <div
               onClick={!coverOpen ? openCover : undefined}
@@ -320,7 +325,6 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
                 position: 'absolute', inset: 0,
                 backfaceVisibility: 'hidden',
                 background: BLACK,
-                border: `2px solid ${GREEN}`,
                 cursor: !coverOpen ? 'pointer' : 'default',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 gap: 18, padding: '0 28px',
@@ -333,7 +337,7 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
               <div style={{ width: 48, height: 1.5, background: GREEN, opacity: 0.3 }} />
               <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, opacity: 0.4 }}>tap to open</div>
             </div>
-            <div style={backFace} />
+            {/* No back face — cover vanishes cleanly past 90°, revealing index */}
           </div>
         </div>
       </div>
