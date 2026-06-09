@@ -296,8 +296,16 @@ function BookModal({ onClose, tutorialMode, highlightIdx, onTutorialContinue }: 
             {selectedEntry && <EntryPage entry={selectedEntry} onBack={goBack} />}
           </div>
 
-          {/* Layer 2 — Index page (flips to reveal entry) */}
-          <div style={layer(indexAngle, indexAnim, 2, indexOpen && !indexAnim)}>
+          {/* Layer 2 — Index page (slightly inset so cover border shows around it) */}
+          <div style={{
+            position: 'absolute', top: 6, left: 6, right: 6, bottom: 6,
+            transformOrigin: '-6px center',
+            transform: `rotateY(${indexAngle}deg)`,
+            transition: indexAnim ? FLIP_EASE : 'none',
+            transformStyle: 'preserve-3d',
+            zIndex: 2,
+            pointerEvents: indexOpen && !indexAnim ? 'none' : 'auto',
+          }}>
             <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', background: CREAM, border: `1.5px solid ${BLACK}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', pointerEvents: coverOpen && !indexOpen ? 'auto' : 'none' }}>
               <IndexPage tutorialMode={tutorialMode} highlightIdx={highlightIdx} onSelect={selectEntry} onTutorialContinue={onTutorialContinue} />
             </div>
