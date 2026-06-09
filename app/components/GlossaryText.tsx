@@ -47,6 +47,17 @@ function parseBody(text: string): Segment[] {
 }
 
 function computePos(rect: DOMRect): PopPos {
+  // Inside phone frame: coordinates must be relative to the phone screen container
+  const phoneScreen = document.getElementById('mobile-phone-screen')
+  if (phoneScreen) {
+    const cr = phoneScreen.getBoundingClientRect()
+    const midY = (rect.top - cr.top) + rect.height / 2
+    let top = midY - POP_H_EST / 2
+    if (top < 8) top = 8
+    if (top + 120 > cr.height) top = cr.height - 120
+    return { left: 20, top, caretY: midY - top }
+  }
+  // Desktop: viewport-relative
   const midY = rect.top + rect.height / 2
   let top = midY - POP_H_EST / 2
   if (top < 8) top = 8
@@ -81,6 +92,8 @@ function Popover({
   }, [onClose])
 
   const body = defBody(def)
+
+  const portalTarget = document.getElementById('mobile-phone-screen') ?? document.body
 
   return createPortal(
     <div
@@ -126,7 +139,7 @@ function Popover({
         {body}
       </div>
     </div>,
-    document.body
+    portalTarget
   )
 }
 

@@ -47,14 +47,18 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
         {/* Power button */}
         <div style={{ position: 'absolute', right: -3, top: 192, width: 3, height: 82, background: '#1e1e1e', borderRadius: '0 2px 2px 0', boxShadow: 'inset -1px 0 0 rgba(255,255,255,0.06)' }} />
 
-        {/* Screen area */}
-        <div style={{
-          position: 'absolute',
-          top: 6, left: 6, right: 6, bottom: 6,
-          borderRadius: 46,
-          background: '#fff',
-          overflow: 'hidden',
-        }}>
+        {/* Screen area — contain:layout keeps position:fixed children inside this frame */}
+        <div
+          id="mobile-phone-screen"
+          style={{
+            position: 'absolute',
+            top: 6, left: 6, right: 6, bottom: 6,
+            borderRadius: 46,
+            background: '#fff',
+            overflow: 'hidden',
+            contain: 'layout' as React.CSSProperties['contain'],
+          }}
+        >
           {/* Dynamic Island */}
           <div style={{
             position: 'absolute',
