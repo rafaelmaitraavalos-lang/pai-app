@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { STARTER_ENTRIES, LOCKED_COUNT, type HandbookEntry } from './entries'
+import { STARTER_ENTRIES, UNLOCKABLE_ENTRIES, LOCKED_COUNT, type HandbookEntry } from './entries'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -15,7 +15,11 @@ const FAINT = '#d8d8d8'
 
 // ── Index view ────────────────────────────────────────────────────────────────
 
-function IndexView({ onSelect, onClose }: { onSelect: (e: HandbookEntry) => void; onClose: () => void }) {
+function IndexView({ onSelect, onClose, unlockedIds }: { onSelect: (e: HandbookEntry) => void; onClose: () => void; unlockedIds: Set<string> }) {
+  const unlocked = UNLOCKABLE_ENTRIES.filter(e => unlockedIds.has(e.id))
+  const stillLocked = LOCKED_COUNT - unlocked.length
+  const allEntries = [...STARTER_ENTRIES, ...unlocked]
+
   return (
     <>
       <div style={{ background: BLACK, padding: '10px 18px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -26,7 +30,7 @@ function IndexView({ onSelect, onClose }: { onSelect: (e: HandbookEntry) => void
         <span style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM }}>Handbook</span>
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '6px 16px 20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {STARTER_ENTRIES.map((entry, i) => (
+        {allEntries.map((entry, i) => (
           <button key={entry.id} onClick={() => onSelect(entry)} style={{
             padding: '12px 14px', textAlign: 'left', cursor: 'pointer',
             background: CREAM,
@@ -40,7 +44,7 @@ function IndexView({ onSelect, onClose }: { onSelect: (e: HandbookEntry) => void
             <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>→</span>
           </button>
         ))}
-        {Array.from({ length: LOCKED_COUNT }, (_, i) => (
+        {Array.from({ length: Math.max(0, stillLocked) }, (_, i) => (
           <div key={`locked-${i}`} style={{
             padding: '12px 14px',
             background: '#f5f4f0',
@@ -48,7 +52,7 @@ function IndexView({ onSelect, onClose }: { onSelect: (e: HandbookEntry) => void
             opacity: 0.5,
             display: 'flex', alignItems: 'center', gap: 12,
           }}>
-            <span style={{ fontFamily: BODY, fontSize: 10, color: FAINT, width: 20, flexShrink: 0 }}>{String(STARTER_ENTRIES.length + i + 1).padStart(2, '0')}</span>
+            <span style={{ fontFamily: BODY, fontSize: 10, color: FAINT, width: 20, flexShrink: 0 }}>{String(allEntries.length + i + 1).padStart(2, '0')}</span>
             <span style={{ fontFamily: DISP, fontSize: 12, color: FAINT, flex: 1 }}>🔒 Locked</span>
           </div>
         ))}
@@ -116,6 +120,7 @@ export default function HandbookProvider() {
   const [open, setOpen]                   = useState(false)
   const [visible, setVisible]             = useState(false)
   const [selectedEntry, setSelectedEntry] = useState<HandbookEntry | null>(null)
+  const [unlockedIds, setUnlockedIds]     = useState<Set<string>>(new Set())
 
   useEffect(() => {
     setMounted(true)
@@ -124,6 +129,14 @@ export default function HandbookProvider() {
     if (onboardingDone && !seen) {
       setTimeout(() => { setOpen(true); setVisible(true) }, 400)
     }
+    // Compute which unlockable entries the user has earned
+    const ids = new Set<string>()
+    for (const entry of UNLOCKABLE_ENTRIES) {
+      if (entry.unlocksAt && localStorage.getItem(`pai_lesson_${entry.unlocksAt}_done`)) {
+        ids.add(entry.id)
+      }
+    }
+    setUnlockedIds(ids)
   }, [])
 
   if (!mounted || pathname === '/') return null
@@ -175,7 +188,7 @@ export default function HandbookProvider() {
           }}>
             {selectedEntry
               ? <EntryView entry={selectedEntry} onBack={backToIndex} />
-              : <IndexView onSelect={selectEntry} onClose={closePopup} />
+              : <IndexView onSelect={selectEntry} onClose={closePopup} unlockedIds={unlockedIds} />
             }
           </div>
         </>
