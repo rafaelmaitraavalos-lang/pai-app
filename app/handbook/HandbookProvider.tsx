@@ -161,16 +161,16 @@ export default function HandbookProvider() {
             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 45 }}
           />
           <div style={{
-            position: 'fixed', bottom: 80, left: 20,
-            width: 'min(340px, calc(100vw - 40px))',
-            maxHeight: 'calc(100vh - 120px)',
+            position: 'fixed', top: '50%', left: '50%',
+            transform: visible ? 'translate(-50%, -50%)' : 'translate(-50%, calc(-50% + 10px))',
+            width: 'min(480px, calc(100vw - 40px))',
+            maxHeight: 'calc(100vh - 80px)',
             background: '#fff',
             border: `1.5px solid ${BLACK}`,
             boxShadow: `8px 8px 0 0 ${BLACK}`,
             zIndex: 50,
             display: 'flex', flexDirection: 'column',
             opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(8px)',
             transition: 'opacity 220ms ease, transform 220ms ease',
           }}>
             {selectedEntry
