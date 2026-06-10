@@ -80,20 +80,17 @@ function CTA({ label, onClick, disabled }: { label: string; onClick: () => void;
 export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const router = useRouter()
   // Steps: 0=welcome, 1=language, 2=username, 3=grade, 4=goal, 5=level, 6=frequency, 7=usage
-  const TOTAL_STEPS = 7
+  // Steps: 0=welcome, 1=language, 2=username, 3=grade
+  const TOTAL_STEPS = 3
 
-  const [screen, setScreen]         = useState(0)
-  const [visible, setVisible]       = useState(true)
-  const [country, setCountry]       = useState<typeof COUNTRIES[0] | null>(null)
-  const [username, setUsername]      = useState('')
+  const [screen, setScreen]               = useState(0)
+  const [visible, setVisible]             = useState(true)
+  const [country, setCountry]             = useState<typeof COUNTRIES[0] | null>(null)
+  const [username, setUsername]           = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [usernameLoading, setUsernameLoading] = useState(false)
   const [saving, setSaving]               = useState(false)
-  const [grade, setGrade]           = useState<string | null>(null)
-  const [goal, setGoal]             = useState<string | null>(null)
-  const [level, setLevel]           = useState<string | null>(null)
-  const [frequency, setFrequency]   = useState<string | null>(null)
-  const [usage, setUsage]           = useState<string[]>([])
+  const [grade, setGrade]                 = useState<string | null>(null)
   const usernameRef = useRef<HTMLInputElement>(null)
 
   const L = LANG_STRINGS[country?.lang ?? 'en'] ?? LANG_STRINGS.en
@@ -123,21 +120,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     }
   }, [country])
   useEffect(() => { if (grade) localStorage.setItem('pai_grade', grade) }, [grade])
-  useEffect(() => { if (goal)  localStorage.setItem('pai_goal', goal)   }, [goal])
-  useEffect(() => { if (level) localStorage.setItem('pai_level', level) }, [level])
-
-  const selectFrequency = (option: string) => {
-    setFrequency(option)
-    localStorage.setItem('pai_frequency', option)
-  }
-
-  const toggleUsage = (item: string) => {
-    setUsage(prev => {
-      const next = prev.includes(item) ? prev.filter(u => u !== item) : [...prev, item]
-      localStorage.setItem('pai_usage', JSON.stringify(next))
-      return next
-    })
-  }
 
   const goHome = (grade: string | null) => {
     localStorage.setItem('pai_onboarding_done', 'true')
@@ -200,10 +182,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             username: localStorage.getItem('pai_username'),
             lang: country?.lang ?? 'en',
             grade: g,
-            goal:  localStorage.getItem('pai_goal'),
-            level: localStorage.getItem('pai_level'),
-            frequency: localStorage.getItem('pai_frequency'),
-            usage: JSON.parse(localStorage.getItem('pai_usage') ?? '[]'),
           }),
         })
       } catch {}
@@ -222,7 +200,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   }
 
   const showCTA     = screen !== 1
-  const canContinue = ([true, true, !!username.trim(), !!grade, !!goal, !!level, !!frequency, true, true][screen]) ?? true
+  const canContinue = ([true, true, !!username.trim(), !!grade][screen]) ?? true
   const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? (saving ? '...' : L.btnDone) : (usernameLoading ? '...' : L.btnContinue)
 
   const card: React.CSSProperties = {
@@ -266,7 +244,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 0 && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28, textAlign: 'center' }}>
               <div>
-                <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', textShadow: `4px 4px 0 ${BLACK}` }}>PAI</div>
+                <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', }}>PAI</div>
                 <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 10, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
               </div>
               <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 260 }}>
@@ -306,7 +284,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 01 / 07</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 01 / 02</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Choose a username</h2>
                 <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>This is how you sign in. Pick one and remember it.</p>
               </div>
@@ -345,7 +323,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 3 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 07</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 02</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
@@ -362,81 +340,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                     {display}
                   </button>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {/* 4: Goal */}
-          {screen === 4 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 03 / 07</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.goalQ}</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {L.goals.map((label, i) => (
-                  <OptionRow key={GOALS[i]} label={label} selected={goal === GOALS[i]} onSelect={() => setGoal(GOALS[i])} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 5: Level */}
-          {screen === 5 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 04 / 07</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.levelQ}</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {L.levels.map((label, i) => (
-                  <OptionRow key={LEVELS[i]} label={label} selected={level === LEVELS[i]} onSelect={() => setLevel(LEVELS[i])} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 6: Frequency */}
-          {screen === 6 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 05 / 07</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>{L.freqQ}</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {L.freqs.map((label, i) => (
-                  <OptionRow key={FREQUENCIES[i]} label={label} selected={frequency === FREQUENCIES[i]} onSelect={() => selectFrequency(FREQUENCIES[i])} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 7: Usage tiles */}
-          {screen === 7 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 06 / 07</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px' }}>{L.usageQ}</h2>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>{L.usageSub}</p>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {USAGE_TILES.map((tile, i) => {
-                  const sel = usage.includes(tile)
-                  return (
-                    <button key={tile} onClick={() => toggleUsage(tile)} style={{
-                      padding: '11px 12px', textAlign: 'left',
-                      background: sel ? BLACK : GREY,
-                      color: sel ? '#fff' : BLACK,
-                      border: `1.5px solid ${BLACK}`,
-                      boxShadow: sel ? 'none' : `3px 3px 0 0 ${BLACK}`,
-                      transform: sel ? 'translate(3px,3px)' : 'none',
-                      fontFamily: BODY, fontSize: 12, fontWeight: 600,
-                      cursor: 'pointer', transition: 'all 0.12s',
-                    }}>
-                      {L.tiles[i]}
-                    </button>
-                  )
-                })}
               </div>
             </div>
           )}

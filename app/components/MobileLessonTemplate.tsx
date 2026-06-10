@@ -216,7 +216,6 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             fontSize: 'clamp(2rem, 8vw, 3.5rem)',
             lineHeight: 1.05, letterSpacing: '-0.03em',
             margin: '0 0 16px', color: BLACK,
-            textShadow: `4px 4px 0 ${FAINT}`,
           }}>
             {stop.title}
           </h1>

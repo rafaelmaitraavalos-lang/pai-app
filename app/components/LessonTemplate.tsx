@@ -298,7 +298,6 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               fontSize: 'clamp(3rem, 6vw, 5rem)',
               lineHeight: 1, letterSpacing: '-0.03em',
               margin: '0 0 28px', color: BLACK,
-              textShadow: `5px 5px 0 ${FAINT}`,
             }}>
               {stop.title}
             </h1>
