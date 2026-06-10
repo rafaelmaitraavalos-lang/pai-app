@@ -17,7 +17,6 @@ const COUNTRIES = [
   { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
-// EN keys — used for internal state & routing logic, never change
 const GRADES      = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
 const GOALS       = ['Make games','Understand the future','Make art','Build robots','Become smarter with tech']
 const LEVELS      = ['Nothing at all',"I've used ChatGPT",'I know some coding','I build AI projects']
@@ -27,21 +26,6 @@ const USAGE_TILES = [
   'Google Search','TikTok / Instagram','Midjourney / DALL-E','Google Maps',
   'Face ID','Autocomplete','Social media filters','Spam filter',
 ]
-
-const NON_OBVIOUS = new Set([
-  'YouTube','Netflix / Spotify','TikTok / Instagram','Google Maps',
-  'Face ID','Autocomplete','Social media filters','Spam filter',
-])
-
-function shortName(tile: string): string {
-  const map: Record<string, string> = {
-    'Netflix / Spotify': 'Spotify', 'TikTok / Instagram': 'TikTok',
-    'Google Maps': 'Maps', 'Midjourney / DALL-E': 'Midjourney', 'Siri / Alexa': 'Alexa',
-  }
-  return map[tile] ?? tile
-}
-
-type FlipPhase = 'front' | 'squishing' | 'back'
 
 function OptionRow({ label, selected, onSelect }: { label: string; selected: boolean; onSelect: () => void }) {
   return (
@@ -96,28 +80,17 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const router = useRouter()
   const TOTAL_STEPS = 6
 
-  const [screen, setScreen]           = useState(0)
-  const [visible, setVisible]         = useState(true)
-  const [country, setCountry]         = useState<typeof COUNTRIES[0] | null>(null)
-  const [grade, setGrade]             = useState<string | null>(null)
-  const [goal, setGoal]               = useState<string | null>(null)
-  const [level, setLevel]             = useState<string | null>(null)
-  const [frequency, setFrequency]     = useState<string | null>(null)
-  const [screenFlip, setScreenFlip]   = useState<FlipPhase>('front')
-  const [usage, setUsage]             = useState<string[]>([])
-  const [stage, setStage]             = useState<'onboard' | 'reveal'>('onboard')
+  const [screen, setScreen]       = useState(0)
+  const [visible, setVisible]     = useState(true)
+  const [country, setCountry]     = useState<typeof COUNTRIES[0] | null>(null)
+  const [grade, setGrade]         = useState<string | null>(null)
+  const [goal, setGoal]           = useState<string | null>(null)
+  const [level, setLevel]         = useState<string | null>(null)
+  const [frequency, setFrequency] = useState<string | null>(null)
+  const [usage, setUsage]         = useState<string[]>([])
 
-  const [revealPhase, setRevealPhase]     = useState<0 | 1 | 2>(0)
-  const [revealVisible, setRevealVisible] = useState(false)
-  const [glowedTiles, setGlowedTiles]     = useState<Set<string>>(new Set())
-  const [countDisplay, setCountDisplay]   = useState(0)
-  const [animComplete, setAnimComplete]   = useState(false)
-  const [kickerFlip, setKickerFlip]       = useState<FlipPhase>('front')
-
-  // L is the active language strings — falls back to EN until a country is picked
   const L = LANG_STRINGS[country?.lang ?? 'en'] ?? LANG_STRINGS.en
 
-  // Skip onboarding if already completed
   useEffect(() => {
     if (localStorage.getItem('pai_onboarding_done') === 'true') {
       const g = localStorage.getItem('pai_grade')
@@ -126,11 +99,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (screen > 0 && stage === 'onboard') {
+    if (screen > 0) {
       const t = setTimeout(() => setVisible(true), 40)
       return () => clearTimeout(t)
     }
-  }, [screen, stage])
+  }, [screen])
 
   useEffect(() => {
     if (country) {
@@ -142,13 +115,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   useEffect(() => { if (goal)  localStorage.setItem('pai_goal', goal)   }, [goal])
   useEffect(() => { if (level) localStorage.setItem('pai_level', level) }, [level])
 
-  const triggerScreenFlip = (option: string) => {
+  const selectFrequency = (option: string) => {
     setFrequency(option)
     localStorage.setItem('pai_frequency', option)
-    setTimeout(() => {
-      setScreenFlip('squishing')
-      setTimeout(() => setScreenFlip('back'), 300)
-    }, 500)
   }
 
   const toggleUsage = (item: string) => {
@@ -161,8 +130,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const advance = () => {
     if (screen === TOTAL_STEPS) {
-      setVisible(false)
-      setTimeout(() => setStage('reveal'), 220)
+      const g = localStorage.getItem('pai_grade')
+      localStorage.setItem('pai_onboarding_done', 'true')
+      router.push(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
       return
     }
     setVisible(false)
@@ -175,66 +145,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     setTimeout(() => advance(), 380)
   }
 
-  useEffect(() => {
-    if (stage !== 'reveal' || revealVisible) return
-    const t = setTimeout(() => setRevealVisible(true), 50)
-    return () => clearTimeout(t)
-  }, [stage, revealVisible])
-
-  useEffect(() => {
-    if (stage !== 'reveal' || revealPhase !== 0) return
-    const selected = USAGE_TILES.filter(t => usage.includes(t))
-    const timers: ReturnType<typeof setTimeout>[] = []
-    selected.forEach((tile, i) => {
-      timers.push(setTimeout(() => setGlowedTiles(prev => new Set([...prev, tile])), 300 + i * 200))
-    })
-    const target = selected.length
-    if (target === 0) {
-      timers.push(setTimeout(() => setAnimComplete(true), 800))
-      return () => timers.forEach(clearTimeout)
-    }
-    let current = 0
-    const tickMs = Math.max(80, 1200 / target)
-    let counter: ReturnType<typeof setInterval>
-    timers.push(setTimeout(() => {
-      counter = setInterval(() => {
-        current++
-        setCountDisplay(current)
-        if (current >= target) {
-          clearInterval(counter)
-          timers.push(setTimeout(() => setAnimComplete(true), 600))
-        }
-      }, tickMs)
-    }, 200))
-    return () => { timers.forEach(clearTimeout); clearInterval(counter) }
-  }, [stage, revealPhase, usage])
-
-  const advanceReveal = () => {
-    if (revealPhase === 2) {
-      const g = localStorage.getItem('pai_grade')
-      localStorage.setItem('pai_onboarding_done', 'true')
-      router.push(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
-      return
-    }
-    if (revealPhase === 1) {
-      setKickerFlip('squishing')
-      setTimeout(() => { setRevealPhase(2); setKickerFlip('back') }, 300)
-      return
-    }
-    setRevealVisible(false)
-    setTimeout(() => { setRevealPhase(1); setAnimComplete(false) }, 220)
-  }
-
-  const showCTA     = screen !== 1 && (screen !== 5 || screenFlip === 'back')
-  const canContinue = ([true, true, !!grade, !!goal, !!level, true, true][screen]) ?? true
-  const btnLabel    =
-    screen === 0 ? L.btnStart :
-    screen === 5 ? L.btnLookSee :
-    screen === 6 ? L.btnDone : L.btnContinue
-
-  const userNonObvious = usage.filter(u => NON_OBVIOUS.has(u))
-  const exampleNames   = userNonObvious.length > 0 ? userNonObvious.slice(0, 4).map(shortName) : ['YouTube', 'Maps', 'Spotify', 'Face ID']
-  const bubbleText     = exampleNames.join(', ') + L.bubbleSuffix
+  const showCTA     = screen !== 1
+  const canContinue = ([true, true, !!grade, !!goal, !!level, !!frequency, true][screen]) ?? true
+  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? L.btnDone : L.btnContinue
 
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
@@ -251,112 +164,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     </div>
   )
 
-  // ── Reveal ───────────────────────────────────────────────────────────────────
-  if (stage === 'reveal') {
-    return (
-      <div style={{ ...page, opacity: revealVisible ? 1 : 0, transform: revealVisible ? 'translateY(0)' : 'translateY(8px)', transition: 'opacity 220ms ease, transform 220ms ease' }}>
-        <div style={{ ...card, minHeight: 620 }}>
-          {header}
-
-          {revealPhase === 0 && (
-            <>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px', gap: 16, overflowY: 'auto' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div key={countDisplay} style={{ fontFamily: DISP, fontSize: 80, color: BLACK, lineHeight: 1 }}>{countDisplay}</div>
-                  <p style={{ fontFamily: DISP, fontSize: 16, color: BLACK, margin: '4px 0 0' }}>
-                    {usage.length === 1 ? L.toolSingular : L.toolPlural}
-                  </p>
-                  <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: '4px 0 0', opacity: animComplete ? 1 : 0, transition: 'opacity 0.5s' }}>
-                    {L.notNoon}
-                  </p>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                  {USAGE_TILES.map((tile, i) => {
-                    const sel    = usage.includes(tile)
-                    const glowed = glowedTiles.has(tile)
-                    return (
-                      <div key={tile} style={{
-                        padding: '10px 12px',
-                        background: glowed ? BLACK : GREY,
-                        color: glowed ? '#fff' : sel ? BLACK : '#BBB',
-                        border: `1.5px solid ${glowed ? BLACK : '#D4D4D4'}`,
-                        fontFamily: BODY, fontSize: 12, fontWeight: 600,
-                        transition: 'all 0.4s ease',
-                      }}>
-                        {L.tiles[i]}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-              <CTA label={L.btnContinue} onClick={advanceReveal} disabled={!animComplete} />
-            </>
-          )}
-
-          {revealPhase >= 1 && (
-            <div style={{
-              display: 'flex', flexDirection: 'column', flex: 1,
-              transform: kickerFlip === 'squishing' ? 'scaleX(0)' : 'scaleX(1)',
-              transition: 'transform 300ms ease-in-out', transformOrigin: 'center',
-            }}>
-              {kickerFlip !== 'back' ? (
-                <>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 20px', gap: 16, justifyContent: 'center' }}>
-                    <h2 style={{ fontFamily: DISP, fontSize: 26, color: BLACK, margin: 0 }}>{L.heresThing}</h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 18px' }}>
-                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.youSaid}</p>
-                        <p style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>&ldquo;{frequency}&rdquo;</p>
-                      </div>
-                      <div style={{ background: BLACK, border: `1.5px solid ${BLACK}`, padding: '16px 18px' }}>
-                        <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', margin: '0 0 8px' }}>{L.reality}</p>
-                        <p style={{ fontFamily: DISP, fontSize: 22, color: '#fff', margin: 0 }}>
-                          {usage.length} {usage.length === 1 ? L.interactionSingular : L.interactionPlural}
-                        </p>
-                        <p style={{ fontFamily: BODY, fontSize: 12, color: 'rgba(255,255,255,0.55)', margin: '4px 0 0' }}>{L.beforeNoon}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <CTA label={L.btnContinue} onClick={advanceReveal} />
-                </>
-              ) : (
-                <>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 20px', gap: 20, alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                    <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 20px', maxWidth: 280 }}>
-                      <p style={{ fontFamily: BODY, fontSize: 14, fontWeight: 600, color: BLACK, lineHeight: 1.6, margin: '0 0 8px' }}>{bubbleText}</p>
-                      <p style={{ fontFamily: DISP, fontSize: 12, color: BLACK, margin: 0 }}>{L.courseAbout}</p>
-                    </div>
-                    {userNonObvious.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
-                        {userNonObvious.map(tile => (
-                          <span key={tile} style={{ padding: '6px 12px', background: BLACK, color: '#fff', fontFamily: BODY, fontSize: 12, fontWeight: 600, border: `1.5px solid ${BLACK}` }}>
-                            {tile}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div style={{ padding: '8px 20px 24px', flexShrink: 0 }}>
-                    <button onClick={advanceReveal} style={{
-                      width: '100%', padding: '14px 0',
-                      background: GREEN, color: BLACK,
-                      border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`,
-                      fontFamily: DISP, fontSize: 13, letterSpacing: '0.1em',
-                      textTransform: 'uppercase', cursor: 'pointer',
-                    }}>
-                      {L.startLearning}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  // ── Onboard ──────────────────────────────────────────────────────────────────
   return (
     <div style={page}>
       <div style={card}>
@@ -474,33 +281,18 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 5: Frequency + flip */}
+          {/* 5: Frequency */}
           {screen === 5 && (
-            <div style={{
-              display: 'flex', flexDirection: 'column', flex: 1,
-              transform: screenFlip === 'squishing' ? 'scaleX(0)' : 'scaleX(1)',
-              transition: 'transform 300ms ease-in-out', transformOrigin: 'center',
-            }}>
-              {screenFlip !== 'back' ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div>
-                    <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 05 / 06</p>
-                    <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>{L.freqQ}</h2>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {L.freqs.map((label, i) => (
-                      <OptionRow key={FREQUENCIES[i]} label={label} selected={frequency === FREQUENCIES[i]} onSelect={() => { if (!frequency) triggerScreenFlip(FREQUENCIES[i]) }} />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
-                  <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`, padding: '16px 20px', maxWidth: 240 }}>
-                    <p style={{ fontFamily: DISP, fontSize: 18, color: BLACK, margin: 0 }}>&ldquo;{L.flipQuote}&rdquo;</p>
-                  </div>
-                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)', border: `2px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }} />
-                </div>
-              )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 05 / 06</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>{L.freqQ}</h2>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {L.freqs.map((label, i) => (
+                  <OptionRow key={FREQUENCIES[i]} label={label} selected={frequency === FREQUENCIES[i]} onSelect={() => selectFrequency(FREQUENCIES[i])} />
+                ))}
+              </div>
             </div>
           )}
 

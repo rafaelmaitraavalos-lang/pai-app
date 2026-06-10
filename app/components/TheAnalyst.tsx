@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { AnalystRound, Choice } from '../data/analystRounds'
 
-type PaiState = 'idle' | 'talking' | 'celebrate' | 'doubt' | 'thinking'
-type Phase    = 'intro' | 'choosing' | 'outcome' | 'complete'
+type Phase = 'intro' | 'choosing' | 'outcome' | 'complete'
 
 export interface AnalystResult {
   credibility: number
@@ -27,40 +26,6 @@ const GREEN   = '#3DF542'
 const CORRECT = '#27AE60'
 const WRONG   = '#C0392B'
 
-// ── PAI orb (kept — distinctive mascot) ──────────────────────────────────────
-
-const PAI_ANIM: Record<PaiState, string> = {
-  idle:      'paiAnalystIdle 3s ease-in-out infinite',
-  talking:   'paiAnalystTalking 0.85s ease-in-out infinite',
-  celebrate: 'paiAnalystCelebrate 0.65s ease-out',
-  doubt:     'paiAnalystDoubt 0.55s ease-in-out',
-  thinking:  'paiAnalystThinking 2s ease-in-out infinite',
-}
-
-function PaiOrb({ paiState }: { paiState: PaiState }) {
-  return (
-    <div style={{ width: 48, height: 48, borderRadius: '50%', flexShrink: 0, background: 'radial-gradient(circle at 34% 30%, #3e3028, #1e1812)', boxShadow: '0 4px 18px rgba(0,0,0,0.40)', animation: PAI_ANIM[paiState], position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '20%', left: '22%', width: '26%', height: '20%', borderRadius: '50%', background: 'rgba(245,238,224,0.28)', filter: 'blur(1px)' }} />
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 16, height: 16, borderRadius: '50%', border: '1.5px solid rgba(245,238,224,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(245,238,224,0.40)' }} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Speech bubble — Hearth hard-shadow style ──────────────────────────────────
-
-function SpeechBubble({ msg, msgKey }: { msg: string | null; msgKey: number }) {
-  if (!msg) return null
-  return (
-    <div key={msgKey} style={{ background: '#fff', border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '10px 14px', maxWidth: 260, fontSize: 13, fontFamily: BODY, color: BLACK, lineHeight: 1.5, animation: 'popIn 0.22s ease-out', position: 'relative', marginBottom: 8 }}>
-      {msg}
-      <div style={{ position: 'absolute', bottom: -7, left: 16, width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderTop: `7px solid ${BLACK}` }} />
-    </div>
-  )
-}
 
 // ── Credibility meter ─────────────────────────────────────────────────────────
 
@@ -229,9 +194,6 @@ export default function TheAnalyst({ rounds, onComplete }: Props) {
   const [prevCred,     setPrevCred]     = useState(500)
   const [phase,        setPhase]        = useState<Phase>('intro')
   const [selected,     setSelected]     = useState<Choice | null>(null)
-  const [paiState,     setPaiState]     = useState<PaiState>('talking')
-  const [paiMsg,       setPaiMsg]       = useState<string | null>(null)
-  const [paiKey,       setPaiKey]       = useState(0)
   const [showCase,     setShowCase]     = useState(false)
   const [showChoices,  setShowChoices]  = useState(false)
   const [eraShiftDone, setEraShiftDone] = useState(false)
@@ -242,25 +204,14 @@ export default function TheAnalyst({ rounds, onComplete }: Props) {
   const prevEra   = roundIdx > 0 ? rounds[roundIdx - 1].era : null
   const firstTest = isTest && prevEra === 'training' && !eraShiftDone
 
-  const say = useCallback((msg: string) => { setPaiMsg(msg); setPaiKey(k => k + 1) }, [])
-
   useEffect(() => {
     if (phase !== 'intro') return
     const timers: ReturnType<typeof setTimeout>[] = []
     if (firstTest) {
-      setPaiState('thinking')
-      say("Alright. You've seen the history. Now let's see if you actually learned the pattern — this next one's not in your notes.")
       setEraShiftDone(true)
-      timers.push(setTimeout(() => {
-        setPaiState('talking'); say(round.paiIntro)
-        timers.push(setTimeout(() => setShowCase(true), 600))
-        timers.push(setTimeout(() => { setPhase('choosing'); setPaiState('idle'); setPaiMsg(null); setShowChoices(true) }, 2800))
-      }, 2600))
-    } else {
-      setPaiState('talking'); say(round.paiIntro)
-      timers.push(setTimeout(() => setShowCase(true), 700))
-      timers.push(setTimeout(() => { setPhase('choosing'); setPaiState('idle'); setPaiMsg(null); setShowChoices(true) }, 2500))
     }
+    timers.push(setTimeout(() => setShowCase(true), 300))
+    timers.push(setTimeout(() => { setPhase('choosing'); setShowChoices(true) }, 1200))
     return () => timers.forEach(clearTimeout)
   }, [phase, round, firstTest]) // eslint-disable-line
 
@@ -271,13 +222,12 @@ export default function TheAnalyst({ rounds, onComplete }: Props) {
     const newCred = Math.max(0, Math.min(1000, credibility + outcome.delta))
     const isWin   = choice === round.best || !!round.good?.includes(choice)
     if (isWin) setRoundsWon(w => w + 1)
-    setPaiState('thinking'); setPaiMsg(null)
-    setTimeout(() => { setPrevCred(credibility); setCredibility(newCred); setPhase('outcome'); setPaiState(outcome.delta > 0 ? 'celebrate' : 'doubt'); say(outcome.pai) }, 600)
-  }, [selected, phase, round, credibility, say])
+    setTimeout(() => { setPrevCred(credibility); setCredibility(newCred); setPhase('outcome') }, 400)
+  }, [selected, phase, round, credibility])
 
   const nextRound = useCallback(() => {
     if (roundIdx >= rounds.length - 1) { setPhase('complete'); onComplete?.({ credibility, roundsWon }); return }
-    setPaiState('thinking'); setPaiMsg(null); setSelected(null); setShowCase(false); setShowChoices(false)
+    setSelected(null); setShowCase(false); setShowChoices(false)
     setTimeout(() => { setRoundIdx(i => i + 1); setPhase('intro') }, 420)
   }, [roundIdx, rounds.length, credibility, roundsWon, onComplete])
 
@@ -312,11 +262,6 @@ export default function TheAnalyst({ rounds, onComplete }: Props) {
         </div>
       )}
 
-      {/* PAI orb — fixed bottom-left */}
-      <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 60, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8 }}>
-        <SpeechBubble msg={paiMsg} msgKey={paiKey} />
-        <PaiOrb paiState={paiState} />
-      </div>
     </div>
   )
 }

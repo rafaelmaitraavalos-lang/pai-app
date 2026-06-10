@@ -74,51 +74,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PAI — fixed bottom-left presence
-// ─────────────────────────────────────────────────────────────────────────────
-
-function Pai({ message, key: msgKey }: { message: string | null; key?: string | number }) {
-  return (
-    <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 60, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8 }}>
-      {message && (
-        <div
-          key={msgKey}
-          style={{
-            background: C.white, borderRadius: 12, padding: '10px 14px',
-            maxWidth: 260, boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-            fontSize: 13, fontWeight: 700, color: C.brown, lineHeight: 1.45,
-            animation: 'popIn 0.28s ease-out',
-            position: 'relative',
-          }}
-        >
-          {message}
-          <div style={{
-            position: 'absolute', bottom: -7, left: 18,
-            width: 0, height: 0,
-            borderLeft: '7px solid transparent',
-            borderRight: '7px solid transparent',
-            borderTop: `7px solid ${C.white}`,
-          }} />
-        </div>
-      )}
-      <div style={{
-        width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
-        background: 'radial-gradient(circle at 40% 33%, #FFE08A, #D4780A 80%)',
-        boxShadow: '0 6px 18px rgba(186,117,23,0.32), 0 0 0 4px rgba(186,117,23,0.08)',
-        animation: 'paiFloat 3s ease-in-out infinite',
-        position: 'relative',
-      }}>
-        <div style={{
-          position: 'absolute', inset: '22%', borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.22)',
-          background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.18), transparent 65%)',
-        }} />
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // Era tag — matches slide aesthetic (MYTH BUST style)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -400,9 +355,7 @@ export default function TimelineGame({ puzzle, onComplete }: Props) {
   const otherCards = puzzle.r1.cards.filter(c => c.id !== anchorCard.id)
 
   // ── State ──────────────────────────────────────────────────────────────────
-  const [phase, setPhase]     = useState<Phase>('intro')
-  const [paiMsg, setPaiMsg]   = useState<string | null>(null)
-  const [paiKey, setPaiKey]   = useState(0)
+  const [phase, setPhase] = useState<Phase>('intro')
 
   const [placed, setPlaced] = useState<PlacedState[]>([
     { card: anchorCard, yearRevealed: true, yearJustRevealed: false, wrong: false }
@@ -422,12 +375,6 @@ export default function TimelineGame({ puzzle, onComplete }: Props) {
   const gapRefs      = useRef<Array<HTMLElement | null>>([])
 
   const currentCard = deck[0] ?? null
-
-  // ── PAI helper ──────────────────────────────────────────────────────────────
-  const say = useCallback((msg: string) => {
-    setPaiMsg(msg)
-    setPaiKey(k => k + 1)
-  }, [])
 
   // ── Gap detection ───────────────────────────────────────────────────────────
   const detectGap = useCallback((clientX: number, clientY: number) => {
@@ -519,35 +466,15 @@ export default function TimelineGame({ puzzle, onComplete }: Props) {
       setLives(newLives)
       setLostLife(2 - (lives - 1)) // index from right → left
       setTimeout(() => setLostLife(null), 700)
-      const wrongMsg = currentCard.explanation
-        ? currentCard.explanation
-        : `That one goes ${currentCard.year}.`
-      say(wrongMsg)
-    } else {
-      // Correct placement feedback on notable cards
-      if (currentCard.id === 'alexnet') say("2012. This one matters more than most people know.")
-      else if (currentCard.id === 'chatgpt') say("Here's where we are now.")
-      else if (currentCard.id === 'aristotle') say("2,500 years of asking the same question.")
     }
-  }, [dragging, currentCard, hoveredGap, placed, lives, say])
+  }, [dragging, currentCard, hoveredGap, placed, lives])
 
   // ── Round 1 complete ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (phase === 'round1' && deck.length === 0 && currentCard === null) {
-      setTimeout(() => {
-        const perfect = lives === 3
-        if (perfect) say(puzzle.r1.feedback.perfect)
-        else if (lives >= 2) say(puzzle.r1.feedback.close)
-        else say(puzzle.r1.feedback.off)
-      }, 400)
-      setTimeout(() => setPhase('round2-intro'), 2600)
+      setTimeout(() => setPhase('round2-intro'), 1200)
     }
-  }, [deck, currentCard, phase, lives, puzzle, say])
-
-  // ── Round 1 intro ────────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (phase === 'round1') say(puzzle.intro)
-  }, [phase])  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [deck, currentCard, phase])
 
   // ── Sorted placed cards for display ─────────────────────────────────────────
   const sortedPlaced = [...placed].sort((a, b) => a.card.yearValue - b.card.yearValue)
@@ -598,16 +525,13 @@ export default function TimelineGame({ puzzle, onComplete }: Props) {
   // ─────────────────────────────────────────────────────────────────────────────
   if (phase === 'round2') {
     return (
-      <>
-        <Round2
-          puzzle={puzzle}
-          onDone={() => {
-            setPhase('complete')
-            setTimeout(() => onComplete?.(150), 600)
-          }}
-        />
-        <Pai message={paiMsg} key={paiKey} />
-      </>
+      <Round2
+        puzzle={puzzle}
+        onDone={() => {
+          setPhase('complete')
+          setTimeout(() => onComplete?.(150), 600)
+        }}
+      />
     )
   }
 
@@ -771,8 +695,6 @@ export default function TimelineGame({ puzzle, onComplete }: Props) {
         </div>
       )}
 
-      {/* PAI */}
-      <Pai message={paiMsg} key={paiKey} />
     </div>
   )
 }
