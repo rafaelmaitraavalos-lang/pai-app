@@ -13,7 +13,8 @@ const FAINT = '#d8d8d8'
 
 export default function Home() {
   const router = useRouter()
-  const [done, setDone] = useState<Record<number, boolean>>({})
+  const [done, setDone]         = useState<Record<number, boolean>>({})
+  const [username, setUsername] = useState('')
 
   useEffect(() => {
     const map: Record<number, boolean> = {}
@@ -21,7 +22,16 @@ export default function Home() {
       w.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
     )
     setDone(map)
+    setUsername(localStorage.getItem('pai_username') ?? '')
   }, [])
+
+  const signOut = async () => {
+    await fetch('/api/auth', { method: 'DELETE' })
+    localStorage.removeItem('pai_onboarding_done')
+    localStorage.removeItem('pai_username')
+    localStorage.removeItem('pai_handbook_seen')
+    router.replace('/')
+  }
 
   const worldDone     = (id: number) => WORLDS[id].modules.every(m => done[m.id])
   const worldUnlocked = (id: number) => id === 1 || worldDone(id - 1)
@@ -42,7 +52,19 @@ export default function Home() {
       {/* Black PAI header */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
-        <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5 }}>AI Literacy</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {username && (
+            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>
+              {username}
+            </span>
+          )}
+          <button
+            onClick={signOut}
+            style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          >
+            Sign out
+          </button>
+        </div>
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>

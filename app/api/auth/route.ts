@@ -56,6 +56,20 @@ export async function POST(req: NextRequest) {
       RETURNING *
     `
     user = rows[0]
+  } else if (grade) {
+    // Returning user completing / updating profile — save it
+    const rows = await getSql()`
+      UPDATE users SET
+        lang       = ${lang ?? user.lang},
+        grade      = ${grade},
+        goal       = ${goal ?? user.goal},
+        level      = ${level ?? user.level},
+        frequency  = ${frequency ?? user.frequency},
+        usage_data = ${JSON.stringify(usage ?? user.usage_data)}::jsonb
+      WHERE id = ${user.id}
+      RETURNING *
+    `
+    user = rows[0]
   }
 
   // Create session token
