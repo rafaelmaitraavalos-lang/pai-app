@@ -89,26 +89,57 @@ function EntryView({ entry, onBack }: { entry: HandbookEntry; onBack: () => void
   )
 }
 
-// ── HB button ─────────────────────────────────────────────────────────────────
+// ── HB button + welcome tooltip ───────────────────────────────────────────────
 
-function HBButton({ onClick }: { onClick: () => void }) {
+function HBButton({ onClick, showWelcome, username }: { onClick: () => void; showWelcome: boolean; username: string }) {
   return (
-    <button
-      onClick={onClick}
-      aria-label="Open handbook"
-      style={{
-        position: 'fixed', bottom: 24, left: 20, zIndex: 40,
-        width: 44, height: 44,
-        background: BLACK,
-        border: `1.5px solid ${GREEN}`,
-        boxShadow: `4px 4px 0 0 ${GREEN}`,
-        cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: 'handbookPulse 2s ease-in-out infinite',
-      }}
-    >
-      <span style={{ fontFamily: DISP, fontSize: 9, color: GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
-    </button>
+    <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 40 }}>
+      {/* PAI welcome tooltip */}
+      {showWelcome && (
+        <div style={{
+          position: 'absolute', bottom: 54, left: 0,
+          background: BLACK, color: GREEN,
+          border: `1.5px solid ${GREEN}`,
+          boxShadow: `3px 3px 0 0 ${GREEN}`,
+          padding: '10px 14px',
+          width: 200,
+          pointerEvents: 'none',
+        }}>
+          {/* Speech bubble arrow pointing down-left */}
+          <div style={{
+            position: 'absolute', bottom: -8, left: 14,
+            width: 0, height: 0,
+            borderLeft: '7px solid transparent',
+            borderRight: '7px solid transparent',
+            borderTop: `8px solid ${GREEN}`,
+          }} />
+          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 4, opacity: 0.6 }}>PAI</div>
+          <div style={{ fontFamily: DISP, fontSize: 13, lineHeight: 1.3 }}>
+            Welcome, {username}!
+          </div>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 6, lineHeight: 1.4, opacity: 0.85 }}>
+            Tap here to open your handbook ↓
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={onClick}
+        aria-label="Open handbook"
+        style={{
+          width: 44, height: 44,
+          background: BLACK,
+          border: `1.5px solid ${GREEN}`,
+          boxShadow: showWelcome ? `0 0 0 4px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}` : `4px 4px 0 0 ${GREEN}`,
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          animation: 'handbookPulse 2s ease-in-out infinite',
+          transition: 'box-shadow 0.3s',
+        }}
+      >
+        <span style={{ fontFamily: DISP, fontSize: 9, color: GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
+      </button>
+    </div>
   )
 }
 
@@ -121,13 +152,18 @@ export default function HandbookProvider() {
   const [visible, setVisible]             = useState(false)
   const [selectedEntry, setSelectedEntry] = useState<HandbookEntry | null>(null)
   const [unlockedIds, setUnlockedIds]     = useState<Set<string>>(new Set())
+  const [showWelcome, setShowWelcome]     = useState(false)
+  const [username, setUsername]           = useState('')
 
   useEffect(() => {
     setMounted(true)
     const onboardingDone = localStorage.getItem('pai_onboarding_done')
     const seen           = localStorage.getItem('pai_handbook_seen')
+    const storedName     = localStorage.getItem('pai_username') ?? ''
+    setUsername(storedName)
     if (onboardingDone && !seen) {
-      setTimeout(() => { setOpen(true); setVisible(true) }, 400)
+      // Show welcome tooltip first, then let user tap to open handbook
+      setTimeout(() => setShowWelcome(true), 600)
     }
     // Compute which unlockable entries the user has earned
     const ids = new Set<string>()
@@ -142,6 +178,7 @@ export default function HandbookProvider() {
   if (!mounted || pathname === '/') return null
 
   const openPopup = () => {
+    setShowWelcome(false)
     setSelectedEntry(null)
     setOpen(true)
     setTimeout(() => setVisible(true), 20)
@@ -165,7 +202,7 @@ export default function HandbookProvider() {
 
   return (
     <>
-      <HBButton onClick={open ? closePopup : openPopup} />
+      <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />
 
       {open && (
         <>
