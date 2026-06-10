@@ -84,7 +84,7 @@ export const LANG_STRINGS: Record<string, OnboardingStrings> = {
     flipQuote: 'Vamos dar uma olhada juntos.',
     usageQ: 'Você usou algum desses hoje?',
     usageSub: 'Toque em tudo que se aplica.',
-    grades: ['1º ano','2º ano','3º ano','4º ano','5º ano','6º ano','7º ano','8º ano','9º ano','1º Médio','2º Médio','3º Médio'],
+    grades: ['Fundamental I (1º–5º ano)', 'Fundamental II (6º–9º ano)', 'Ensino Médio (1ª–3ª série)'],
     goals: ['Criar jogos','Entender o futuro','Criar arte','Construir robôs','Me tornar mais inteligente com tecnologia'],
     levels: ['Nada ainda','Já usei o ChatGPT','Sei um pouco de programação','Já crio projetos com IA'],
     freqs: ['Nunca','Algumas vezes','Bastante','Constantemente'],

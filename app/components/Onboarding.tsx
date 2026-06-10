@@ -18,10 +18,8 @@ const COUNTRIES = [
   { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
-const GRADES      = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
-const GOALS       = ['Make games','Understand the future','Make art','Build robots','Become smarter with tech']
-const LEVELS      = ['Nothing at all',"I've used ChatGPT",'I know some coding','I build AI projects']
-const FREQUENCIES = ['Never','A few times','Pretty often','Constantly']
+const GRADES    = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th']
+const GRADES_PT = ['fund1', 'fund2', 'medio']  // Brazilian stages
 const USAGE_TILES = [
   'ChatGPT','YouTube','Siri / Alexa','Netflix / Spotify',
   'Google Search','TikTok / Instagram','Midjourney / DALL-E','Google Maps',
@@ -320,29 +318,36 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           )}
 
           {/* 3: Grade */}
-          {screen === 3 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 02</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>
+          {screen === 3 && (() => {
+            const isPT    = country?.lang === 'pt'
+            const keys    = isPT ? GRADES_PT : GRADES
+            const cols    = isPT ? 1 : 3
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div>
+                  <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 02</p>
+                  <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 8 }}>
+                  {L.grades.map((display, i) => (
+                    <button key={keys[i]} onClick={() => setGrade(keys[i])} style={{
+                      padding: isPT ? '16px 14px' : '13px 8px',
+                      textAlign: isPT ? 'left' : 'center',
+                      background: grade === keys[i] ? BLACK : GREY,
+                      color: grade === keys[i] ? '#fff' : BLACK,
+                      border: `1.5px solid ${BLACK}`,
+                      boxShadow: grade === keys[i] ? 'none' : `3px 3px 0 0 ${BLACK}`,
+                      transform: grade === keys[i] ? 'translate(3px,3px)' : 'none',
+                      fontFamily: DISP, fontSize: isPT ? 14 : 13,
+                      cursor: 'pointer', transition: 'all 0.12s',
+                    }}>
+                      {display}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {L.grades.map((display, i) => (
-                  <button key={GRADES[i]} onClick={() => setGrade(GRADES[i])} style={{
-                    padding: '13px 8px', textAlign: 'center',
-                    background: grade === GRADES[i] ? BLACK : GREY,
-                    color: grade === GRADES[i] ? '#fff' : BLACK,
-                    border: `1.5px solid ${BLACK}`,
-                    boxShadow: grade === GRADES[i] ? 'none' : `3px 3px 0 0 ${BLACK}`,
-                    transform: grade === GRADES[i] ? 'translate(3px,3px)' : 'none',
-                    fontFamily: DISP, fontSize: 13, cursor: 'pointer', transition: 'all 0.12s',
-                  }}>
-                    {display}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+            )
+          })()}
 
         </div>
 
