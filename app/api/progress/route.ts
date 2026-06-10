@@ -3,8 +3,14 @@ import { sql } from '@/lib/db'
 
 const COOKIE = 'pai_session'
 
+async function ensureTables() {
+  await sql`CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, username TEXT UNIQUE NOT NULL, lang TEXT NOT NULL DEFAULT 'en', grade TEXT, goal TEXT, level TEXT, frequency TEXT, usage_data JSONB DEFAULT '[]'::jsonb, progress JSONB DEFAULT '{}'::jsonb, created_at TIMESTAMPTZ DEFAULT NOW())`
+  await sql`CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, created_at TIMESTAMPTZ DEFAULT NOW())`
+}
+
 // GET /api/progress — load progress for current user
 export async function GET(req: NextRequest) {
+  await ensureTables()
   const token = req.cookies.get(COOKIE)?.value
   if (!token) return NextResponse.json({ progress: {} })
 
@@ -18,6 +24,7 @@ export async function GET(req: NextRequest) {
 
 // POST /api/progress — save progress for current user
 export async function POST(req: NextRequest) {
+  await ensureTables()
   const token = req.cookies.get(COOKIE)?.value
   if (!token) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
 

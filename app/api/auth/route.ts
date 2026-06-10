@@ -2,11 +2,38 @@ import { NextRequest, NextResponse } from 'next/server'
 import { sql } from '@/lib/db'
 import { randomUUID } from 'crypto'
 
-const COOKIE = 'pai_session'
+const COOKIE  = 'pai_session'
 const MAX_AGE = 60 * 60 * 24 * 365 // 1 year
+
+// Auto-create tables on first use — idempotent
+async function ensureTables() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS users (
+      id         SERIAL PRIMARY KEY,
+      username   TEXT UNIQUE NOT NULL,
+      lang       TEXT NOT NULL DEFAULT 'en',
+      grade      TEXT,
+      goal       TEXT,
+      level      TEXT,
+      frequency  TEXT,
+      usage_data JSONB DEFAULT '[]'::jsonb,
+      progress   JSONB DEFAULT '{}'::jsonb,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `
+  await sql`
+    CREATE TABLE IF NOT EXISTS sessions (
+      token      TEXT PRIMARY KEY,
+      user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `
+}
 
 // POST /api/auth — login or create account
 export async function POST(req: NextRequest) {
+  await ensureTables()
+
   const { username, lang, grade, goal, level, frequency, usage } = await req.json()
 
   if (!username || typeof username !== 'string') {
@@ -22,7 +49,6 @@ export async function POST(req: NextRequest) {
   let user = (await sql`SELECT * FROM users WHERE username = ${clean}`)[0]
 
   if (!user) {
-    // New user — create with profile data
     const rows = await sql`
       INSERT INTO users (username, lang, grade, goal, level, frequency, usage_data)
       VALUES (${clean}, ${lang ?? 'en'}, ${grade ?? null}, ${goal ?? null},
@@ -32,7 +58,7 @@ export async function POST(req: NextRequest) {
     user = rows[0]
   }
 
-  // Create session
+  // Create session token
   const token = randomUUID()
   await sql`INSERT INTO sessions (token, user_id) VALUES (${token}, ${user.id})`
 
@@ -47,8 +73,9 @@ export async function POST(req: NextRequest) {
   return res
 }
 
-// GET /api/auth — validate session and return current user
+// GET /api/auth — validate session, return current user
 export async function GET(req: NextRequest) {
+  await ensureTables()
   const token = req.cookies.get(COOKIE)?.value
   if (!token) return NextResponse.json({ user: null })
 
@@ -72,14 +99,14 @@ export async function DELETE(req: NextRequest) {
 
 function sanitize(u: Record<string, unknown>) {
   return {
-    id: u.id,
-    username: u.username,
-    lang: u.lang,
-    grade: u.grade,
-    goal: u.goal,
-    level: u.level,
+    id:        u.id,
+    username:  u.username,
+    lang:      u.lang,
+    grade:     u.grade,
+    goal:      u.goal,
+    level:     u.level,
     frequency: u.frequency,
-    usage: u.usage_data,
-    progress: u.progress ?? {},
+    usage:     u.usage_data,
+    progress:  u.progress ?? {},
   }
 }
