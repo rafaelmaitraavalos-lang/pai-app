@@ -161,13 +161,13 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       const data = await res.json()
       if (!res.ok) { setUsernameError(data.error ?? 'Something went wrong'); return }
 
-      const user = data.user
+      const { user, isNew } = data
       localStorage.setItem('pai_username', user.username)
 
-      // Returning user — load their profile + progress and go straight home
-      if (user.grade) {
-        localStorage.setItem('pai_lang',      user.lang ?? 'en')
-        localStorage.setItem('pai_grade',     user.grade)
+      // Returning user — load their saved profile + progress and skip onboarding
+      if (!isNew) {
+        if (user.lang)      localStorage.setItem('pai_lang',      user.lang)
+        if (user.grade)     localStorage.setItem('pai_grade',     user.grade)
         if (user.goal)      localStorage.setItem('pai_goal',      user.goal)
         if (user.level)     localStorage.setItem('pai_level',     user.level)
         if (user.frequency) localStorage.setItem('pai_frequency', user.frequency)
@@ -177,7 +177,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         return
       }
 
-      // New user — continue onboarding
+      // Brand new user — continue onboarding
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)
     } catch {

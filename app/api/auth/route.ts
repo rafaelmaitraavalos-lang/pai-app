@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
 
   // Find or create user
   let user = (await getSql()`SELECT * FROM users WHERE username = ${clean}`)[0]
+  const isNew = !user
 
   if (!user) {
     const rows = await getSql()`
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest) {
   const token = randomUUID()
   await getSql()`INSERT INTO sessions (token, user_id) VALUES (${token}, ${user.id})`
 
-  const res = NextResponse.json({ user: sanitize(user) })
+  const res = NextResponse.json({ user: sanitize(user), isNew })
   res.cookies.set(COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
