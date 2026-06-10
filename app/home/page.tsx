@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { WORLDS, WORLD_IDS } from '../data'
+import { isElementaryGrade } from '../data/elementary'
+import { loadProgress } from '@/lib/progress'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -17,13 +19,18 @@ export default function Home() {
   const [username, setUsername] = useState('')
 
   useEffect(() => {
-    const map: Record<number, boolean> = {}
-    Object.values(WORLDS).forEach(w =>
-      w.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
-    )
-    setDone(map)
+    const grade = localStorage.getItem('pai_grade')
+    if (isElementaryGrade(grade)) { router.replace('/elementary/home'); return }
+
+    loadProgress().then(() => {
+      const map: Record<number, boolean> = {}
+      Object.values(WORLDS).forEach(w =>
+        w.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
+      )
+      setDone(map)
+    })
     setUsername(localStorage.getItem('pai_username') ?? '')
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const signOut = async () => {
     await fetch('/api/auth', { method: 'DELETE' })
