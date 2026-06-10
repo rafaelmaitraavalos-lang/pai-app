@@ -737,7 +737,7 @@ def main():
             save_progress(done)
             break
 
-        time.sleep(0.35)
+        time.sleep(0.8)
 
     write_slide_images(done)
     total_done = len(done)
