@@ -646,7 +646,7 @@ SLIDES = [
 ]
 
 
-def search_pexels(query):
+def search_pexels(query, retries=3):
     params = urllib.parse.urlencode({
         'query': query,
         'per_page': 1,
@@ -659,12 +659,19 @@ def search_pexels(query):
             'User-Agent': 'Mozilla/5.0 (compatible; PAI-app/1.0)',
         }
     )
-    with urllib.request.urlopen(req, timeout=10) as r:
-        remaining = int(r.headers.get('X-Ratelimit-Remaining', 999))
-        data = json.loads(r.read())
-    photos = data.get('photos', [])
-    url = photos[0]['src']['large'] if photos else None
-    return url, remaining
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                remaining = int(r.headers.get('X-Ratelimit-Remaining', 999))
+                data = json.loads(r.read())
+            photos = data.get('photos', [])
+            url = photos[0]['src']['large'] if photos else None
+            return url, remaining
+        except Exception as e:
+            if attempt < retries - 1:
+                time.sleep(2)
+                continue
+            raise
 
 
 def load_progress():
