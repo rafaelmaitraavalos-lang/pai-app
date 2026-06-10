@@ -88,6 +88,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const [username, setUsername]      = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [usernameLoading, setUsernameLoading] = useState(false)
+  const [saving, setSaving]               = useState(false)
   const [grade, setGrade]           = useState<string | null>(null)
   const [goal, setGoal]             = useState<string | null>(null)
   const [level, setLevel]           = useState<string | null>(null)
@@ -186,23 +187,26 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     }
   }
 
-  const advance = () => {
+  const advance = async () => {
     if (screen === TOTAL_STEPS) {
-      // Final step — save full profile to DB then go home
+      // Final step — AWAIT the profile save so grade is in DB before we navigate
       const g = localStorage.getItem('pai_grade')
-      fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: localStorage.getItem('pai_username'),
-          lang: country?.lang ?? 'en',
-          grade: g,
-          goal:  localStorage.getItem('pai_goal'),
-          level: localStorage.getItem('pai_level'),
-          frequency: localStorage.getItem('pai_frequency'),
-          usage: JSON.parse(localStorage.getItem('pai_usage') ?? '[]'),
-        }),
-      }).catch(() => {})
+      setSaving(true)
+      try {
+        await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: localStorage.getItem('pai_username'),
+            lang: country?.lang ?? 'en',
+            grade: g,
+            goal:  localStorage.getItem('pai_goal'),
+            level: localStorage.getItem('pai_level'),
+            frequency: localStorage.getItem('pai_frequency'),
+            usage: JSON.parse(localStorage.getItem('pai_usage') ?? '[]'),
+          }),
+        })
+      } catch {}
       goHome(g)
       return
     }
@@ -219,7 +223,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const showCTA     = screen !== 1
   const canContinue = ([true, true, !!username.trim(), !!grade, !!goal, !!level, !!frequency, true, true][screen]) ?? true
-  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? L.btnDone : (usernameLoading ? '...' : L.btnContinue)
+  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? (saving ? '...' : L.btnDone) : (usernameLoading ? '...' : L.btnContinue)
 
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
