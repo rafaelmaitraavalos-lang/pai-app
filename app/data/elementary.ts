@@ -92,7 +92,7 @@ export const ELEMENTARY_LESSONS: Record<number, LessonData> = {
 
 // ── Grade routing helpers ─────────────────────────────────────────────────────
 
-export const ELEMENTARY_GRADES = new Set(['K', '1st', '2nd', '3rd', '4th', '5th', 'fund1'])
+export const ELEMENTARY_GRADES = new Set(['K', '1st', '2nd', '3rd', '4th', '5th', 'fund1', 'elem'])
 
 export function isElementaryGrade(grade: string | null): boolean {
   return ELEMENTARY_GRADES.has(grade ?? '')

@@ -50,7 +50,7 @@ export const LANG_STRINGS: Record<string, OnboardingStrings> = {
     flipQuote: "Let's take a look together.",
     usageQ: 'Have you used any of these today?',
     usageSub: 'Tap everything that applies.',
-    grades: ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th'],
+    grades: ['Elementary (K–5)', 'Middle School (6–8)', 'High School (9–12)'],
     goals: ['Make games','Understand the future','Make art','Build robots','Become smarter with tech'],
     levels: ['Nothing at all',"I've used ChatGPT",'I know some coding','I build AI projects'],
     freqs: ['Never','A few times','Pretty often','Constantly'],
