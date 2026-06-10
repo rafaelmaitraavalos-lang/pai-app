@@ -9,15 +9,16 @@ const BLACK = '#0a0a0a'
 const GREEN = '#3DF542'
 const DIM   = '#555555'
 const GREY  = '#EBEBEB'
-const RED   = '#FF4444'
+const RED   = '#FF3B3B'
 
-const LIVES = 3
-const ROUND_COUNT = 16  // total items per game
+const LIVES       = 3
+const TOTAL_ITEMS = 20   // items per game
+const FALL_STEPS  = 12   // how many ticks an item takes to reach bottom
+const BASE_TICK   = 420  // ms per tick (gets faster over time)
 
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
-
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
@@ -27,264 +28,355 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-type Phase = 'intro' | 'playing' | 'feedback' | 'facts' | 'end'
-type Feedback = 'correct-catch' | 'correct-dodge' | 'wrong' | 'miss'
-
-interface Item {
-  text:      string
+interface FallingItem {
+  id:          number
+  text:        string
   shouldCatch: boolean
+  lane:        0 | 1        // 0 = left, 1 = right
+  step:        number       // 0 (top) → FALL_STEPS (bottom)
 }
 
+interface FlashMsg {
+  text:  string
+  good:  boolean
+  id:    number
+}
+
+type Phase = 'intro' | 'playing' | 'facts' | 'end'
+
 interface Props {
-  game:       CatcherGame
+  game:        CatcherGame
   onComplete?: (score: number, total: number) => void
 }
 
 export default function CatcherGame({ game, onComplete }: Props) {
-  const [phase,    setPhase]    = useState<Phase>('intro')
-  const [items,    setItems]    = useState<Item[]>([])
-  const [idx,      setIdx]      = useState(0)
-  const [lives,    setLives]    = useState(LIVES)
-  const [caught,   setCaught]   = useState(0)  // correct catches
-  const [feedback, setFeedback] = useState<Feedback | null>(null)
-  const [fbText,   setFbText]   = useState('')
-  const [timerPct, setTimerPct] = useState(100)
-  const [factIdx,  setFactIdx]  = useState(0)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [phase,      setPhase]      = useState<Phase>('intro')
+  const [queue,      setQueue]      = useState<{ text: string; shouldCatch: boolean }[]>([])
+  const [items,      setItems]      = useState<FallingItem[]>([])
+  const [catcher,    setCatcher]    = useState<0 | 1>(0)   // lane player is in
+  const [lives,      setLives]      = useState(LIVES)
+  const [caught,     setCaught]     = useState(0)
+  const [spawned,    setSpawned]    = useState(0)
+  const [flashes,    setFlashes]    = useState<FlashMsg[]>([])
+  const [factIdx,    setFactIdx]    = useState(0)
+  const [finalScore, setFinalScore] = useState(0)
+  const tickRef    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const idRef      = useRef(0)
+  const livesRef   = useRef(LIVES)
+  const caughtRef  = useRef(0)
+  const spawnedRef = useRef(0)
+  const queueRef   = useRef<{ text: string; shouldCatch: boolean }[]>([])
 
-  // Build shuffled item sequence on start
-  const startGame = useCallback(() => {
-    const catchItems = shuffle(game.items.catch).slice(0, ROUND_COUNT / 2).map(t => ({ text: t, shouldCatch: true }))
-    const dodgeItems = shuffle(game.items.dodge).slice(0, ROUND_COUNT / 2).map(t => ({ text: t, shouldCatch: false }))
-    setItems(shuffle([...catchItems, ...dodgeItems]))
-    setIdx(0); setLives(LIVES); setCaught(0); setFeedback(null)
-    setPhase('playing')
+  const addFlash = (text: string, good: boolean) => {
+    const id = ++idRef.current
+    setFlashes(f => [...f, { text, good, id }])
+    setTimeout(() => setFlashes(f => f.filter(x => x.id !== id)), 900)
+  }
+
+  const buildQueue = useCallback(() => {
+    const catchItems = shuffle(game.items.catch).slice(0, TOTAL_ITEMS / 2).map(t => ({ text: t, shouldCatch: true }))
+    const dodgeItems = shuffle(game.items.dodge).slice(0, TOTAL_ITEMS / 2).map(t => ({ text: t, shouldCatch: false }))
+    return shuffle([...catchItems, ...dodgeItems])
   }, [game])
 
-  const currentItem = items[idx]
+  const endGame = useCallback((finalCaught: number) => {
+    if (tickRef.current) clearInterval(tickRef.current)
+    setFinalScore(finalCaught)
+    setItems([])
+    setFlashes([])
+    setFactIdx(0)
+    setPhase('facts')
+    onComplete?.(finalCaught, TOTAL_ITEMS / 2)
+  }, [onComplete])
 
-  // Timer for each item — speeds up as game progresses
+  const startGame = useCallback(() => {
+    const q = buildQueue()
+    setQueue(q)
+    queueRef.current = q
+    setItems([])
+    setCatcher(0)
+    setLives(LIVES)
+    setCaught(0)
+    setSpawned(0)
+    setFlashes([])
+    livesRef.current  = LIVES
+    caughtRef.current = 0
+    spawnedRef.current = 0
+    setPhase('playing')
+  }, [buildQueue])
+
+  // Main game tick
   useEffect(() => {
     if (phase !== 'playing') return
-    const duration = Math.max(2500, 5000 - idx * 100) // gets faster
-    const start = Date.now()
-    setTimerPct(100)
 
-    timerRef.current = setInterval(() => {
-      const elapsed = Date.now() - start
-      const pct = Math.max(0, 100 - (elapsed / duration) * 100)
-      setTimerPct(pct)
-      if (pct === 0) {
-        clearInterval(timerRef.current!)
-        // Time's up — treat as miss if it was a catch item
-        if (currentItem?.shouldCatch) {
-          showFeedback('miss', pick(game.missReacts))
-          setLives(l => l - 1)
-        } else {
-          // dodged by not acting — counts as correct
-          showFeedback('correct-dodge', pick(game.dodgeReacts))
+    const tickMs = Math.max(BASE_TICK * 0.35, BASE_TICK - spawned * 10) / FALL_STEPS
+    let tickCount = 0
+    tickRef.current = setInterval(() => {
+      tickCount++
+
+      setItems(prev => {
+        const moved = prev.map(item => ({ ...item, step: item.step + 1 }))
+
+        // Check items that reached bottom (step >= FALL_STEPS)
+        let newLives  = livesRef.current
+        let newCaught = caughtRef.current
+        const landed: FallingItem[] = []
+
+        for (const item of moved) {
+          if (item.step < FALL_STEPS) continue
+          landed.push(item)
+
+          // Determine if catcher is in same lane
+          const inLane = item.lane === (catcher as 0 | 1)
+
+          if (inLane) {
+            if (item.shouldCatch) {
+              // Caught a good item
+              newCaught++
+              addFlash(pick(game.catchReacts), true)
+            } else {
+              // Caught a bad item (should have dodged)
+              newLives--
+              addFlash(pick(game.dodgeReacts), false)
+            }
+          } else {
+            if (!item.shouldCatch) {
+              // Dodged correctly
+              addFlash(pick(game.dodgeReacts), true)
+            } else {
+              // Missed a catch item
+              newLives--
+              addFlash(pick(game.missReacts), false)
+            }
+          }
         }
-      }
-    }, 50)
 
-    return () => { if (timerRef.current) clearInterval(timerRef.current) }
-  }, [phase, idx]) // eslint-disable-line react-hooks/exhaustive-deps
+        livesRef.current  = newLives
+        caughtRef.current = newCaught
+        setLives(newLives)
+        setCaught(newCaught)
 
-  const showFeedback = (type: Feedback, text: string) => {
-    if (timerRef.current) clearInterval(timerRef.current)
-    setFeedback(type)
-    setFbText(text)
-    setPhase('feedback')
-    setTimeout(() => {
-      setFeedback(null)
-      setFbText('')
-      const nextIdx = idx + 1
-      const nextLives = type === 'wrong' || type === 'miss' ? lives - 1 : lives
-      if (nextLives <= 0 || nextIdx >= items.length) {
-        setPhase('facts')
-        setFactIdx(0)
-      } else {
-        setIdx(nextIdx)
-        setPhase('playing')
-      }
-    }, 1100)
-  }
+        const remaining = moved.filter(i => i.step < FALL_STEPS)
 
-  const handleCatch = () => {
+        // Check end conditions
+        if (newLives <= 0) {
+          setTimeout(() => endGame(newCaught), 300)
+          return remaining
+        }
+        if (spawnedRef.current >= queueRef.current.length && remaining.length === 0) {
+          setTimeout(() => endGame(newCaught), 400)
+          return remaining
+        }
+
+        // Spawn new item every 2 ticks if queue has items and max 2 items on screen
+        const canSpawn = tickCount % 2 === 0
+          && spawnedRef.current < queueRef.current.length
+          && remaining.length < 2
+
+        if (canSpawn) {
+          const next = queueRef.current[spawnedRef.current]
+          spawnedRef.current++
+          setSpawned(spawnedRef.current)
+          const newItem: FallingItem = {
+            id:          ++idRef.current,
+            text:        next.text,
+            shouldCatch: next.shouldCatch,
+            lane:        (Math.random() < 0.5 ? 0 : 1) as 0 | 1,
+            step:        0,
+          }
+          return [...remaining, newItem]
+        }
+
+        return remaining
+      })
+    }, tickMs)
+
+    return () => { if (tickRef.current) clearInterval(tickRef.current) }
+  }, [phase, catcher, endGame, game]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keyboard controls
+  useEffect(() => {
     if (phase !== 'playing') return
-    if (currentItem.shouldCatch) {
-      setCaught(c => c + 1)
-      showFeedback('correct-catch', pick(game.catchReacts))
-    } else {
-      setLives(l => l - 1)
-      showFeedback('wrong', pick(game.missReacts))
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft')  setCatcher(0)
+      if (e.key === 'ArrowRight') setCatcher(1)
     }
-  }
-
-  const handleDodge = () => {
-    if (phase !== 'playing') return
-    if (!currentItem.shouldCatch) {
-      showFeedback('correct-dodge', pick(game.dodgeReacts))
-    } else {
-      setLives(l => l - 1)
-      showFeedback('wrong', pick(game.missReacts))
-    }
-  }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [phase])
 
   const endScreen = () => {
-    const pct = caught / (items.filter(i => i.shouldCatch).length || 1)
+    const total = TOTAL_ITEMS / 2
+    const pct   = finalScore / total
     if (pct === 1)    return game.endScreens.perfect
-    if (pct >= 0.8)   return game.endScreens.great
-    if (pct >= 0.6)   return game.endScreens.ok
+    if (pct >= 0.75)  return game.endScreens.great
+    if (pct >= 0.5)   return game.endScreens.ok
     return game.endScreens.bad
   }
 
   const wrap: React.CSSProperties = {
-    minHeight: '100%', display: 'flex', flexDirection: 'column',
+    height: '100%', display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'center',
-    padding: '24px 20px', fontFamily: BODY,
+    padding: '20px', fontFamily: BODY,
   }
 
   // ── Intro ──────────────────────────────────────────────────────────────────
   if (phase === 'intro') return (
     <div style={wrap}>
-      <div style={{ maxWidth: 440, width: '100%', display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div>
           <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Catcher</p>
           <h1 style={{ fontFamily: DISP, fontSize: 32, color: BLACK, margin: '0 0 16px', lineHeight: 1.1 }}>{game.title}</h1>
-          <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, lineHeight: 1.65, margin: 0 }}>{game.intro}</p>
+          <p style={{ fontFamily: BODY, fontSize: 14, color: BLACK, lineHeight: 1.65, margin: 0 }}>{game.intro}</p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <div style={{ flex: 1, background: GREY, border: `1.5px solid ${BLACK}`, padding: '10px 14px', textAlign: 'center' }}>
-            <div style={{ fontFamily: DISP, fontSize: 20, color: GREEN }}>CATCH</div>
-            <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 2 }}>labeled data</div>
-          </div>
-          <div style={{ flex: 1, background: GREY, border: `1.5px solid ${BLACK}`, padding: '10px 14px', textAlign: 'center' }}>
-            <div style={{ fontFamily: DISP, fontSize: 20, color: RED }}>DODGE</div>
-            <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 2 }}>unlabeled noise</div>
-          </div>
+        <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <p style={{ fontFamily: DISP, fontSize: 11, color: BLACK, margin: 0 }}>← → Move your catcher between lanes</p>
+          <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>Items fall in two columns. Get under labeled data to catch it. Stay away from noise.</p>
         </div>
-        <button
-          onClick={startGame}
-          style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer', width: '100%' }}
-        >
+        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer' }}>
           {game.ctaLabel}
         </button>
       </div>
     </div>
   )
 
-  // ── Playing / Feedback ─────────────────────────────────────────────────────
-  if (phase === 'playing' || phase === 'feedback') {
-    const fbColor = feedback === 'correct-catch' || feedback === 'correct-dodge' ? GREEN
-                  : feedback ? RED : 'transparent'
+  // ── Playing ────────────────────────────────────────────────────────────────
+  if (phase === 'playing') {
+    const LANE_W = 'calc(50% - 4px)'
     return (
-      <div style={wrap}>
-        <div style={{ maxWidth: 440, width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', userSelect: 'none' }}>
 
-          {/* HUD */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', gap: 6 }}>
-              {Array.from({ length: LIVES }, (_, i) => (
-                <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: i < lives ? GREEN : GREY, border: `1.5px solid ${BLACK}` }} />
-              ))}
-            </div>
-            <span style={{ fontFamily: DISP, fontSize: 11, color: DIM, letterSpacing: '0.08em' }}>
-              {caught} {game.hudLabel}
-            </span>
-            <span style={{ fontFamily: DISP, fontSize: 10, color: DIM, letterSpacing: '0.1em' }}>
-              {idx + 1} / {items.length}
-            </span>
+        {/* HUD */}
+        <div style={{ padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {Array.from({ length: LIVES }, (_, i) => (
+              <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: i < lives ? GREEN : GREY, border: `1.5px solid ${BLACK}`, transition: 'background 0.2s' }} />
+            ))}
           </div>
-
-          {/* Timer bar */}
-          <div style={{ height: 3, background: GREY, border: `1px solid ${BLACK}` }}>
-            <div style={{ height: '100%', background: timerPct > 40 ? BLACK : RED, width: `${timerPct}%`, transition: 'width 50ms linear, background 0.3s' }} />
-          </div>
-
-          {/* Item card */}
-          <div style={{
-            background: phase === 'feedback' ? fbColor : GREY,
-            border: `1.5px solid ${BLACK}`,
-            boxShadow: `6px 6px 0 0 ${BLACK}`,
-            padding: '28px 20px',
-            textAlign: 'center',
-            minHeight: 120,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
-            transition: 'background 0.15s',
-          }}>
-            {phase === 'feedback' ? (
-              <>
-                <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.2 }}>
-                  {feedback === 'correct-catch' || feedback === 'correct-dodge' ? '✓' : '✗'}
-                </div>
-                <div style={{ fontFamily: BODY, fontSize: 14, color: BLACK, fontWeight: 600 }}>{fbText}</div>
-              </>
-            ) : (
-              <>
-                <div style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, marginBottom: 4 }}>
-                  {currentItem?.shouldCatch ? 'Incoming data' : 'Incoming signal'}
-                </div>
-                <div style={{ fontFamily: DISP, fontSize: 17, color: BLACK, lineHeight: 1.3 }}>
-                  {currentItem?.text}
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <button
-              onClick={handleCatch}
-              disabled={phase === 'feedback'}
-              style={{
-                fontFamily: DISP, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase',
-                background: BLACK, color: GREEN, padding: '16px 0',
-                border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${GREEN}`,
-                cursor: phase === 'feedback' ? 'default' : 'pointer',
-                opacity: phase === 'feedback' ? 0.4 : 1,
-              }}
-            >
-              {game.catchLabel}
-            </button>
-            <button
-              onClick={handleDodge}
-              disabled={phase === 'feedback'}
-              style={{
-                fontFamily: DISP, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase',
-                background: '#fff', color: BLACK, padding: '16px 0',
-                border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}`,
-                cursor: phase === 'feedback' ? 'default' : 'pointer',
-                opacity: phase === 'feedback' ? 0.4 : 1,
-              }}
-            >
-              {game.dodgeLabel}
-            </button>
-          </div>
+          <span style={{ fontFamily: DISP, fontSize: 11, color: DIM }}>{caught} {game.hudLabel}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, color: DIM }}>{spawned}/{TOTAL_ITEMS}</span>
         </div>
+
+        {/* Flash messages */}
+        <div style={{ position: 'relative', height: 28, flexShrink: 0 }}>
+          {flashes.map(f => (
+            <div key={f.id} style={{
+              position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+              fontFamily: DISP, fontSize: 11, color: f.good ? GREEN : RED,
+              letterSpacing: '0.08em', whiteSpace: 'nowrap',
+              animation: 'flashUp 0.9s ease-out forwards',
+            }}>
+              {f.text}
+            </div>
+          ))}
+        </div>
+
+        {/* Game field — two lanes */}
+        <div style={{ flex: 1, display: 'flex', gap: 8, padding: '0 16px', position: 'relative', minHeight: 0 }}>
+
+          {[0, 1].map(lane => (
+            <div
+              key={lane}
+              onClick={() => setCatcher(lane as 0 | 1)}
+              style={{
+                width: LANE_W, position: 'relative', overflow: 'hidden',
+                border: `1.5px solid ${catcher === lane ? BLACK : GREY}`,
+                background: catcher === lane ? '#f8f8f8' : '#fff',
+                transition: 'border-color 0.15s, background 0.15s',
+                cursor: 'pointer',
+              }}
+            >
+              {/* Lane label */}
+              <div style={{ position: 'absolute', top: 8, left: 0, right: 0, textAlign: 'center', fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREY }}>
+                {lane === 0 ? 'LEFT' : 'RIGHT'}
+              </div>
+
+              {/* Falling items in this lane */}
+              {items.filter(i => i.lane === lane).map(item => {
+                const topPct = (item.step / FALL_STEPS) * 100
+                return (
+                  <div key={item.id} style={{
+                    position: 'absolute',
+                    top:   `${topPct}%`,
+                    left:  8, right: 8,
+                    transform: 'translateY(-50%)',
+                    background: item.shouldCatch ? GREY : '#fff',
+                    border: `1.5px solid ${item.shouldCatch ? BLACK : GREY}`,
+                    padding: '8px 10px',
+                    transition: 'top 0.12s linear',
+                  }}>
+                    {item.shouldCatch && (
+                      <div style={{ fontFamily: DISP, fontSize: 7, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN, marginBottom: 3 }}>labeled</div>
+                    )}
+                    <div style={{ fontFamily: BODY, fontSize: 11, color: BLACK, lineHeight: 1.3 }}>{item.text}</div>
+                  </div>
+                )
+              })}
+
+              {/* Catcher at bottom */}
+              {catcher === lane && (
+                <div style={{
+                  position: 'absolute', bottom: 8, left: 8, right: 8,
+                  height: 36,
+                  background: BLACK,
+                  border: `1.5px solid ${GREEN}`,
+                  boxShadow: `0 0 12px ${GREEN}66`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <span style={{ fontFamily: DISP, fontSize: 9, color: GREEN, letterSpacing: '0.12em' }}>CATCH</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Tap zone labels */}
+        <div style={{ display: 'flex', gap: 8, padding: '8px 16px 12px', flexShrink: 0 }}>
+          {[0, 1].map(lane => (
+            <button
+              key={lane}
+              onClick={() => setCatcher(lane as 0 | 1)}
+              style={{
+                flex: 1, padding: '10px 0',
+                fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
+                background: catcher === lane ? BLACK : GREY,
+                color:      catcher === lane ? '#fff' : DIM,
+                border: `1.5px solid ${BLACK}`,
+                cursor: 'pointer',
+                transition: 'all 0.1s',
+              }}
+            >
+              {lane === 0 ? '← Left' : 'Right →'}
+            </button>
+          ))}
+        </div>
+
+        <style>{`
+          @keyframes flashUp {
+            0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-18px); }
+          }
+        `}</style>
       </div>
     )
   }
 
   // ── Facts ─────────────────────────────────────────────────────────────────
   if (phase === 'facts') {
-    const fact = game.facts[factIdx]
+    const fact   = game.facts[factIdx]
     const isLast = factIdx === game.facts.length - 1
     return (
       <div style={wrap}>
-        <div style={{ maxWidth: 440, width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: 0 }}>
             Fact {factIdx + 1} of {game.facts.length}
           </p>
           <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, padding: '24px 20px' }}>
-            <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, lineHeight: 1.7, margin: 0 }}>{fact}</p>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: BLACK, lineHeight: 1.7, margin: 0 }}>{fact}</p>
           </div>
           <button
-            onClick={() => {
-              if (isLast) { setPhase('end') ; onComplete?.(caught, items.filter(i => i.shouldCatch).length) }
-              else setFactIdx(f => f + 1)
-            }}
-            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer', width: '100%' }}
+            onClick={() => isLast ? setPhase('end') : setFactIdx(f => f + 1)}
+            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer' }}
           >
             {isLast ? 'See results →' : 'Next →'}
           </button>
@@ -294,28 +386,22 @@ export default function CatcherGame({ game, onComplete }: Props) {
   }
 
   // ── End ───────────────────────────────────────────────────────────────────
-  const total = items.filter(i => i.shouldCatch).length
   return (
     <div style={wrap}>
-      <div style={{ maxWidth: 440, width: '100%', display: 'flex', flexDirection: 'column', gap: 20, textAlign: 'center' }}>
+      <div style={{ maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 20, textAlign: 'center' }}>
         <div>
           <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 12px' }}>Training complete</p>
           <div style={{ fontFamily: DISP, fontSize: 64, color: BLACK, lineHeight: 1, letterSpacing: '-0.03em' }}>
-            {caught}<span style={{ fontSize: 32, color: DIM }}>/{total}</span>
+            {finalScore}<span style={{ fontSize: 32, color: DIM }}>/{TOTAL_ITEMS / 2}</span>
           </div>
           <p style={{ fontFamily: DISP, fontSize: 11, color: DIM, margin: '4px 0 0', letterSpacing: '0.08em' }}>clean examples caught</p>
         </div>
         <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, padding: '20px' }}>
           <p style={{ fontFamily: BODY, fontSize: 14, color: BLACK, lineHeight: 1.6, margin: 0 }}>{endScreen()}</p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <button
-            onClick={startGame}
-            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer' }}
-          >
-            Play again
-          </button>
-        </div>
+        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 0', border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 #555`, cursor: 'pointer' }}>
+          Play again
+        </button>
       </div>
     </div>
   )
