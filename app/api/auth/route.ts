@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sql } from '@/lib/db'
+import { getSql } from "@/lib/db"
 import { randomUUID } from 'crypto'
 
 const COOKIE  = 'pai_session'
@@ -7,7 +7,7 @@ const MAX_AGE = 60 * 60 * 24 * 365 // 1 year
 
 // Auto-create tables on first use — idempotent
 async function ensureTables() {
-  await sql`
+  await getSql()`
     CREATE TABLE IF NOT EXISTS users (
       id         SERIAL PRIMARY KEY,
       username   TEXT UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ async function ensureTables() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `
-  await sql`
+  await getSql()`
     CREATE TABLE IF NOT EXISTS sessions (
       token      TEXT PRIMARY KEY,
       user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -46,10 +46,10 @@ export async function POST(req: NextRequest) {
   }
 
   // Find or create user
-  let user = (await sql`SELECT * FROM users WHERE username = ${clean}`)[0]
+  let user = (await getSql()`SELECT * FROM users WHERE username = ${clean}`)[0]
 
   if (!user) {
-    const rows = await sql`
+    const rows = await getSql()`
       INSERT INTO users (username, lang, grade, goal, level, frequency, usage_data)
       VALUES (${clean}, ${lang ?? 'en'}, ${grade ?? null}, ${goal ?? null},
               ${level ?? null}, ${frequency ?? null}, ${JSON.stringify(usage ?? [])})
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
   // Create session token
   const token = randomUUID()
-  await sql`INSERT INTO sessions (token, user_id) VALUES (${token}, ${user.id})`
+  await getSql()`INSERT INTO sessions (token, user_id) VALUES (${token}, ${user.id})`
 
   const res = NextResponse.json({ user: sanitize(user) })
   res.cookies.set(COOKIE, token, {
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
   const token = req.cookies.get(COOKIE)?.value
   if (!token) return NextResponse.json({ user: null })
 
-  const rows = await sql`
+  const rows = await getSql()`
     SELECT u.* FROM users u
     JOIN sessions s ON s.user_id = u.id
     WHERE s.token = ${token}
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
 // DELETE /api/auth — logout
 export async function DELETE(req: NextRequest) {
   const token = req.cookies.get(COOKIE)?.value
-  if (token) await sql`DELETE FROM sessions WHERE token = ${token}`
+  if (token) await getSql()`DELETE FROM sessions WHERE token = ${token}`
   const res = NextResponse.json({ ok: true })
   res.cookies.delete(COOKIE)
   return res

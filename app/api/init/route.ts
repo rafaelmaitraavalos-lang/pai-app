@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { sql } from '@/lib/db'
+import { getSql } from "@/lib/db"
 
 // GET /api/init — run once to create DB tables (dev only)
 export async function GET() {
@@ -7,7 +7,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Run manually in production' }, { status: 403 })
   }
 
-  await sql`
+  await getSql()`
     CREATE TABLE IF NOT EXISTS users (
       id         SERIAL PRIMARY KEY,
       username   TEXT UNIQUE NOT NULL,
@@ -21,7 +21,7 @@ export async function GET() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `
-  await sql`
+  await getSql()`
     CREATE TABLE IF NOT EXISTS sessions (
       token      TEXT PRIMARY KEY,
       user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
