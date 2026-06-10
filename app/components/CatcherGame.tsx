@@ -13,8 +13,8 @@ const RED   = '#FF3B3B'
 
 const LIVES       = 3
 const TOTAL_ITEMS = 20   // items per game
-const FALL_STEPS  = 12   // how many ticks an item takes to reach bottom
-const BASE_TICK   = 420  // ms per tick (gets faster over time)
+const FALL_STEPS  = 24   // visual steps from top to bottom
+const BASE_TICK   = 4000 // ms for one full fall (gets slightly faster over time)
 
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -109,7 +109,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
   useEffect(() => {
     if (phase !== 'playing') return
 
-    const tickMs = Math.max(BASE_TICK * 0.35, BASE_TICK - spawned * 10) / FALL_STEPS
+    const tickMs = Math.max(BASE_TICK * 0.55, BASE_TICK - spawned * 30) / FALL_STEPS
     let tickCount = 0
     tickRef.current = setInterval(() => {
       tickCount++
@@ -169,7 +169,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
         }
 
         // Spawn new item every 2 ticks if queue has items and max 2 items on screen
-        const canSpawn = tickCount % 2 === 0
+        const canSpawn = tickCount % 5 === 0
           && spawnedRef.current < queueRef.current.length
           && remaining.length < 2
 
