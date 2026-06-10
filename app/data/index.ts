@@ -160,7 +160,7 @@ export const WORLDS: Record<number, WorldData> = {
 }
 
 // Ordered list for the home screen
-export const WORLD_IDS = [1, 2, 3, 4, 5, 6]
+export const WORLD_IDS = [1, 2, 3, 4, 5, 6, 7, 8]
 
 // Helper: which world does a lesson belong to?
 export function getLessonWorldId(lessonId: number): number {
