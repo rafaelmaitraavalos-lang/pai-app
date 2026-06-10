@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { isElementaryGrade } from '../data/elementary'
 import { LANG_STRINGS } from '../data/onboardingStrings'
+import { loadProgress, applyProgress } from '@/lib/progress'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -78,16 +79,21 @@ function CTA({ label, onClick, disabled }: { label: string; onClick: () => void;
 
 export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const router = useRouter()
-  const TOTAL_STEPS = 6
+  // Steps: 0=welcome, 1=language, 2=username, 3=grade, 4=goal, 5=level, 6=frequency, 7=usage
+  const TOTAL_STEPS = 7
 
-  const [screen, setScreen]       = useState(0)
-  const [visible, setVisible]     = useState(true)
-  const [country, setCountry]     = useState<typeof COUNTRIES[0] | null>(null)
-  const [grade, setGrade]         = useState<string | null>(null)
-  const [goal, setGoal]           = useState<string | null>(null)
-  const [level, setLevel]         = useState<string | null>(null)
-  const [frequency, setFrequency] = useState<string | null>(null)
-  const [usage, setUsage]         = useState<string[]>([])
+  const [screen, setScreen]         = useState(0)
+  const [visible, setVisible]       = useState(true)
+  const [country, setCountry]       = useState<typeof COUNTRIES[0] | null>(null)
+  const [username, setUsername]      = useState('')
+  const [usernameError, setUsernameError] = useState('')
+  const [usernameLoading, setUsernameLoading] = useState(false)
+  const [grade, setGrade]           = useState<string | null>(null)
+  const [goal, setGoal]             = useState<string | null>(null)
+  const [level, setLevel]           = useState<string | null>(null)
+  const [frequency, setFrequency]   = useState<string | null>(null)
+  const [usage, setUsage]           = useState<string[]>([])
+  const usernameRef = useRef<HTMLInputElement>(null)
 
   const L = LANG_STRINGS[country?.lang ?? 'en'] ?? LANG_STRINGS.en
 
@@ -97,6 +103,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       router.replace(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (screen === 2) setTimeout(() => usernameRef.current?.focus(), 300)
+  }, [screen])
 
   useEffect(() => {
     if (screen > 0) {
@@ -128,13 +138,75 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     })
   }
 
+  const goHome = (grade: string | null) => {
+    localStorage.setItem('pai_onboarding_done', 'true')
+    router.push(isElementaryGrade(grade) ? `${basePath}/elementary/home` : `${basePath}/home`)
+  }
+
+  const submitUsername = async () => {
+    const clean = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
+    if (!clean) { setUsernameError('Please enter a username'); return }
+    setUsernameLoading(true)
+    setUsernameError('')
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: clean,
+          lang: country?.lang ?? 'en',
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setUsernameError(data.error ?? 'Something went wrong'); return }
+
+      const user = data.user
+      localStorage.setItem('pai_username', user.username)
+
+      // Returning user — load their profile + progress and go straight home
+      if (user.grade) {
+        localStorage.setItem('pai_lang',      user.lang ?? 'en')
+        localStorage.setItem('pai_grade',     user.grade)
+        if (user.goal)      localStorage.setItem('pai_goal',      user.goal)
+        if (user.level)     localStorage.setItem('pai_level',     user.level)
+        if (user.frequency) localStorage.setItem('pai_frequency', user.frequency)
+        if (user.usage)     localStorage.setItem('pai_usage',     JSON.stringify(user.usage))
+        applyProgress(user.progress ?? {})
+        goHome(user.grade)
+        return
+      }
+
+      // New user — continue onboarding
+      setVisible(false)
+      setTimeout(() => setScreen(s => s + 1), 220)
+    } catch {
+      setUsernameError('Something went wrong. Check your connection.')
+    } finally {
+      setUsernameLoading(false)
+    }
+  }
+
   const advance = () => {
     if (screen === TOTAL_STEPS) {
+      // Final step — save full profile to DB then go home
       const g = localStorage.getItem('pai_grade')
-      localStorage.setItem('pai_onboarding_done', 'true')
-      router.push(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: localStorage.getItem('pai_username'),
+          lang: country?.lang ?? 'en',
+          grade: g,
+          goal:  localStorage.getItem('pai_goal'),
+          level: localStorage.getItem('pai_level'),
+          frequency: localStorage.getItem('pai_frequency'),
+          usage: JSON.parse(localStorage.getItem('pai_usage') ?? '[]'),
+        }),
+      }).catch(() => {})
+      goHome(g)
       return
     }
+    if (screen === 2) { submitUsername(); return }
     setVisible(false)
     setTimeout(() => setScreen(s => s + 1), 220)
   }
@@ -142,12 +214,12 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const selectCountry = (c: typeof COUNTRIES[0]) => {
     if (country) return
     setCountry(c)
-    setTimeout(() => advance(), 380)
+    setTimeout(() => { setVisible(false); setTimeout(() => setScreen(s => s + 1), 220) }, 380)
   }
 
   const showCTA     = screen !== 1
-  const canContinue = ([true, true, !!grade, !!goal, !!level, !!frequency, true][screen]) ?? true
-  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? L.btnDone : L.btnContinue
+  const canContinue = ([true, true, !!username.trim(), !!grade, !!goal, !!level, !!frequency, true, true][screen]) ?? true
+  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? L.btnDone : (usernameLoading ? '...' : L.btnContinue)
 
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
@@ -226,11 +298,50 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 2: Grade */}
+          {/* 2: Username */}
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 06</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 01 / 07</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Choose a username</h2>
+                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>This is how you sign in. Pick one and remember it.</p>
+              </div>
+              <div>
+                <input
+                  ref={usernameRef}
+                  type="text"
+                  value={username}
+                  onChange={e => { setUsername(e.target.value); setUsernameError('') }}
+                  onKeyDown={e => e.key === 'Enter' && canContinue && submitUsername()}
+                  placeholder="e.g. coollearner42"
+                  maxLength={30}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  style={{
+                    width: '100%', padding: '13px 14px',
+                    fontFamily: BODY, fontSize: 16,
+                    border: `1.5px solid ${usernameError ? '#e53e3e' : BLACK}`,
+                    boxShadow: `3px 3px 0 0 ${usernameError ? '#e53e3e' : BLACK}`,
+                    background: '#fff', color: BLACK,
+                    outline: 'none', boxSizing: 'border-box',
+                  }}
+                />
+                {usernameError && (
+                  <p style={{ fontFamily: BODY, fontSize: 12, color: '#e53e3e', margin: '8px 0 0' }}>{usernameError}</p>
+                )}
+                <p style={{ fontFamily: BODY, fontSize: 11, color: DIM, margin: '8px 0 0' }}>
+                  Only letters, numbers, and underscores. Already have one? Just type it to sign back in.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* 3: Grade */}
+          {screen === 3 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 07</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
@@ -251,11 +362,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 3: Goal */}
-          {screen === 3 && (
+          {/* 4: Goal */}
+          {screen === 4 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 03 / 06</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 03 / 07</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.goalQ}</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -266,11 +377,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 4: Level */}
-          {screen === 4 && (
+          {/* 5: Level */}
+          {screen === 5 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 04 / 06</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 04 / 07</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.levelQ}</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -281,11 +392,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 5: Frequency */}
-          {screen === 5 && (
+          {/* 6: Frequency */}
+          {screen === 6 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 05 / 06</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 05 / 07</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 20, color: BLACK, margin: 0, lineHeight: 1.2 }}>{L.freqQ}</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -296,11 +407,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 6: Usage tiles */}
-          {screen === 6 && (
+          {/* 7: Usage tiles */}
+          {screen === 7 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 06 / 06</p>
+                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 06 / 07</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px' }}>{L.usageQ}</h2>
                 <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>{L.usageSub}</p>
               </div>

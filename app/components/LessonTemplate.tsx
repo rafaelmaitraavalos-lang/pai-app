@@ -79,6 +79,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) {
       localStorage.setItem(`pai_lesson_${id}_done`, 'true')
+      // Sync progress to server (fire-and-forget)
+      import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
       if (completionPage) router.push(completionPage)
       else setPhase('complete')
       return
