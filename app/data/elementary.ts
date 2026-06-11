@@ -56,9 +56,10 @@ const W204_LESSONS: Record<number, LessonData> = { 204: { ..._wm1[204], worldId:
 // ── Shared game modules appended after lessons ────────────────────────────────
 
 const GAMES = [
-  { id: 9001, title: 'Signal Drop',   type: 'game' as const, gameUrl: '/games/signal-drop' },
-  { id: 9002, title: 'Prompt Pizza',  type: 'game' as const, gameUrl: '/games/prompt-pizza' },
-  { id: 9003, title: 'Fix the Robot', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+  { id: 9001, title: 'Signal Drop',    type: 'game' as const, gameUrl: '/games/signal-drop' },
+  { id: 9002, title: 'Prompt Pizza',   type: 'game' as const, gameUrl: '/games/prompt-pizza' },
+  { id: 9003, title: 'Fix the Robot',  type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+  { id: 9004, title: 'Build-a-Robot',  type: 'game' as const, gameUrl: '/games/build-a-robot' },
 ]
 
 // ── Elementary world definitions ──────────────────────────────────────────────
