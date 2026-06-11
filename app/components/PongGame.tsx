@@ -43,7 +43,7 @@ const PADDLE_W = 14
 const BALL_R   = 12
 const LIVES    = 3
 
-type Phase = 'intro' | 'playing' | 'facts' | 'end'
+type Phase = 'intro' | 'countdown' | 'playing' | 'facts' | 'end'
 
 // All mutable game state in one ref — no stale closure issues
 interface GS {
@@ -63,10 +63,11 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const gs        = useRef<GS | null>(null)
   const frameRef  = useRef(0)
 
-  const [phase,   setPhase]   = useState<Phase>('intro')
-  const [lives,   setLives]   = useState(LIVES)
-  const [score,   setScore]   = useState(0)
-  const [idx,     setIdx]     = useState(0)
+  const [phase,     setPhase]     = useState<Phase>('intro')
+  const [lives,     setLives]     = useState(LIVES)
+  const [score,     setScore]     = useState(0)
+  const [idx,       setIdx]       = useState(0)
+  const [countdown, setCountdown] = useState(3)
   const [factIdx, setFactIdx] = useState(0)
   const [lastMsg, setLastMsg] = useState<{ text: string; good: boolean } | null>(null)
 
@@ -118,8 +119,16 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     spawnBall(g, W, H)
     gs.current = g
     setLives(LIVES); setScore(0); setIdx(0); setLastMsg(null)
-    setPhase('playing')
+    setCountdown(3)
+    setPhase('countdown')
   }
+
+  useEffect(() => {
+    if (phase !== 'countdown') return
+    if (countdown <= 0) { setPhase('playing'); return }
+    const t = setTimeout(() => setCountdown(c => c - 1), 900)
+    return () => clearTimeout(t)
+  }, [phase, countdown])
 
   useEffect(() => {
     if (phase !== 'playing') return
@@ -268,6 +277,31 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           Start
         </button>
       </div>
+    </div>
+  )
+
+  // ── Countdown ────────────────────────────────────────────────────────────
+  if (phase === 'countdown') return (
+    <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: BLACK }} onPointerMove={onPointer}>
+      <div style={{ textAlign: 'center' }}>
+        <div key={countdown} style={{
+          fontFamily: DISP, fontSize: countdown > 0 ? 120 : 64,
+          color: countdown > 0 ? '#fff' : GREEN,
+          lineHeight: 1,
+          letterSpacing: '-0.04em',
+          textShadow: `0 0 60px ${countdown > 0 ? 'rgba(255,255,255,0.3)' : GREEN}`,
+          animation: 'countPop 0.85s cubic-bezier(0.34,1.56,0.64,1) forwards',
+        }}>
+          {countdown > 0 ? countdown : 'GO'}
+        </div>
+      </div>
+      <style>{`
+        @keyframes countPop {
+          0%   { transform: scale(1.4); opacity: 0; }
+          30%  { opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
     </div>
   )
 
