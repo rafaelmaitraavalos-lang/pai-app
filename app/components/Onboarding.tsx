@@ -77,13 +77,13 @@ function CTA({ label, onClick, disabled }: { label: string; onClick: () => void;
 
 export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const router = useRouter()
-  // Steps: 0=welcome, 1=language, 2=username, 3=grade, 4=goal, 5=level, 6=frequency, 7=usage
-  // Steps: 0=welcome, 1=language, 2=username, 3=grade
-  const TOTAL_STEPS = 3
+  // Steps: 0=welcome, 1=language, 2=auth-mode, 3=username, 4=grade (signup only)
+  const TOTAL_STEPS = 4
 
   const [screen, setScreen]               = useState(0)
   const [visible, setVisible]             = useState(true)
   const [country, setCountry]             = useState<typeof COUNTRIES[0] | null>(null)
+  const [authMode, setAuthMode]           = useState<'signup' | 'login' | null>(null)
   const [username, setUsername]           = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [usernameLoading, setUsernameLoading] = useState(false)
@@ -105,7 +105,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (screen === 2) setTimeout(() => usernameRef.current?.focus(), 300)
+    if (screen === 3) setTimeout(() => usernameRef.current?.focus(), 300)
   }, [screen])
 
   useEffect(() => {
@@ -145,6 +145,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         body: JSON.stringify({
           username: clean,
           lang: country?.lang ?? 'en',
+          mode: authMode ?? undefined,
         }),
       })
       const data = await res.json()
@@ -153,8 +154,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       const { user, isNew } = data
       localStorage.setItem('pai_username', user.username)
 
-      // Returning user — load their saved profile + progress and skip onboarding
-      if (!isNew) {
+      // Returning user (login mode, or signup found existing) — load profile and go home
+      if (!isNew || authMode === 'login') {
         if (user.lang)      localStorage.setItem('pai_lang',      user.lang)
         if (user.grade)     localStorage.setItem('pai_grade',     user.grade)
         if (user.goal)      localStorage.setItem('pai_goal',      user.goal)
@@ -166,7 +167,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         return
       }
 
-      // Brand new user — continue onboarding
+      // Brand new signup — continue to grade selection
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)
     } catch {
@@ -178,7 +179,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const advance = async () => {
     if (screen === TOTAL_STEPS) {
-      // Final step — AWAIT the profile save so grade is in DB before we navigate
       const g = localStorage.getItem('pai_grade')
       setSaving(true)
       try {
@@ -195,7 +195,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       goHome(g)
       return
     }
-    if (screen === 2) { submitUsername(); return }
+    if (screen === 3) { submitUsername(); return }
     setVisible(false)
     setTimeout(() => setScreen(s => s + 1), 220)
   }
@@ -206,8 +206,13 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     setTimeout(() => { setVisible(false); setTimeout(() => setScreen(s => s + 1), 220) }, 380)
   }
 
-  const showCTA     = screen !== 1
-  const canContinue = ([true, true, !!username.trim(), !!grade][screen]) ?? true
+  const selectAuthMode = (m: 'signup' | 'login') => {
+    setAuthMode(m)
+    setTimeout(() => { setVisible(false); setTimeout(() => setScreen(s => s + 1), 220) }, 200)
+  }
+
+  const showCTA     = screen !== 1 && screen !== 2
+  const canContinue = ([true, true, true, !!username.trim(), !!grade][screen]) ?? true
   const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? (saving ? '...' : L.btnDone) : (usernameLoading ? '...' : L.btnContinue)
 
   const card: React.CSSProperties = {
@@ -287,13 +292,45 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             </div>
           )}
 
-          {/* 2: Username */}
+          {/* 2: Auth mode */}
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 01 / 02</p>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Choose a username</h2>
-                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>This is how you sign in. Pick one and remember it.</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Welcome to PAI</h2>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: 0 }}>First time here, or coming back?</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {([
+                  { mode: 'signup' as const, label: "I'm new here", sub: "Create an account" },
+                  { mode: 'login'  as const, label: "I have an account", sub: "Sign back in" },
+                ]).map(({ mode, label, sub }) => (
+                  <button key={mode} onClick={() => selectAuthMode(mode)} style={{
+                    padding: '20px 18px', textAlign: 'left',
+                    background: authMode === mode ? BLACK : GREY,
+                    color: authMode === mode ? '#fff' : BLACK,
+                    border: `1.5px solid ${BLACK}`,
+                    boxShadow: authMode === mode ? 'none' : `4px 4px 0 0 ${BLACK}`,
+                    transform: authMode === mode ? 'translate(4px,4px)' : 'none',
+                    cursor: 'pointer', transition: 'all 0.12s',
+                  }}>
+                    <div style={{ fontFamily: DISP, fontSize: 16 }}>{label}</div>
+                    <div style={{ fontFamily: BODY, fontSize: 12, marginTop: 4, opacity: 0.65 }}>{sub}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 3: Username */}
+          {screen === 3 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>
+                  {authMode === 'login' ? 'Enter your username' : 'Choose a username'}
+                </h2>
+                <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>
+                  {authMode === 'login' ? 'Type the username you signed up with.' : 'This is how you sign in. Pick one and remember it.'}
+                </p>
               </div>
               <div>
                 <input
@@ -302,7 +339,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   value={username}
                   onChange={e => { setUsername(e.target.value); setUsernameError('') }}
                   onKeyDown={e => e.key === 'Enter' && canContinue && submitUsername()}
-                  placeholder="e.g. coollearner42"
+                  placeholder={authMode === 'login' ? 'Your username' : 'e.g. coollearner42'}
                   maxLength={30}
                   autoCapitalize="none"
                   autoCorrect="off"
@@ -319,15 +356,17 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 {usernameError && (
                   <p style={{ fontFamily: BODY, fontSize: 12, color: '#e53e3e', margin: '8px 0 0' }}>{usernameError}</p>
                 )}
-                <p style={{ fontFamily: BODY, fontSize: 11, color: DIM, margin: '8px 0 0' }}>
-                  Only letters, numbers, and underscores. Already have one? Just type it to sign back in.
-                </p>
+                {!usernameError && authMode === 'signup' && (
+                  <p style={{ fontFamily: BODY, fontSize: 11, color: DIM, margin: '8px 0 0' }}>
+                    Letters, numbers, and underscores only.
+                  </p>
+                )}
               </div>
             </div>
           )}
 
-          {/* 3: Grade */}
-          {screen === 3 && (() => {
+          {/* 4: Grade */}
+          {screen === 4 && (() => {
             const keys = country?.lang === 'pt' ? GRADES_PT : GRADES
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

@@ -34,7 +34,7 @@ async function ensureTables() {
 export async function POST(req: NextRequest) {
   await ensureTables()
 
-  const { username, lang, grade, goal, level, frequency, usage } = await req.json()
+  const { username, lang, grade, goal, level, frequency, usage, mode } = await req.json()
 
   if (!username || typeof username !== 'string') {
     return NextResponse.json({ error: 'Username required' }, { status: 400 })
@@ -48,6 +48,14 @@ export async function POST(req: NextRequest) {
   // Find or create user
   let user = (await getSql()`SELECT * FROM users WHERE username = ${clean}`)[0]
   const isNew = !user
+
+  // Mode constraints — enforce signup vs login intent
+  if (mode === 'signup' && !isNew) {
+    return NextResponse.json({ error: 'That username is taken' }, { status: 409 })
+  }
+  if (mode === 'login' && isNew) {
+    return NextResponse.json({ error: 'No account with that username' }, { status: 404 })
+  }
 
   if (!user) {
     const rows = await getSql()`
