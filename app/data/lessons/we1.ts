@@ -14,6 +14,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Example',
         title: 'Meet Alan Turing!',
+        image: '/images/w1m1/alan-turing.png',
         body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. A mathematician is someone who solves big puzzles using numbers and patterns. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. Then he asked: Can a machine think? People build machines to perform a task. An example of a machine is a washing machine or a car. Machines only do what people tell them to do. That is why Alan's question was so surprising. Everyone started thinking about it. No one knew the answer!",
       },
       {
