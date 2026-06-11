@@ -346,7 +346,7 @@ const wm1: Record<number, LessonData> = {
         question: `"AI is more likely to change what people do within their jobs than to completely eliminate large numbers of professions overnight."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "The more likely near-term impact is that AI reshapes individual tasks — changing what people actually do during the workday — rather than eliminating entire professions all at once. The bigger long-term question is whether new opportunities appear quickly enough for people to adapt.",
+        explanation: "The more likely near-term impact is that AI reshapes individual tasks — changing what people actually do during the workday — rather than eliminating entire professions all at once.",
       },
     ],
   },
