@@ -7,84 +7,84 @@ import { useRouter } from 'next/navigation'
 const PINK  = '#ff2d78'
 const GREEN = '#39ff14'
 
-// ── orders ─────────────────────────────────────────────────────────────────
-interface Order {
-  customer: string
-  order:    string
-  hint:     string
-  required: string[][]   // one synonym per group must appear
+// ── rounds ─────────────────────────────────────────────────────────────────
+interface Round {
+  image:    string      // Pexels photo URL
+  label:    string      // short pizza name shown under image
+  hint:     string      // "I can see: ..."
+  required: string[][]  // one synonym per group must appear
   forbidden: string[]
   time:     number
 }
 
-const ORDERS: Order[] = [
+const ROUNDS: Round[] = [
   {
-    customer: 'Marco 🧑',
-    order:    '"Just a plain cheese pizza, nothing fancy."',
-    hint:     'Say: cheese + pizza',
-    required: [['cheese','cheesy'],['pizza']],
-    forbidden:['pepperoni','sausage','mushroom','bacon','no cheese'],
+    image:    'https://images.pexels.com/photos/2619970/pexels-photo-2619970.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Classic Margherita',
+    hint:     'I can see: cheese, tomato, basil',
+    required: [['cheese','cheesy','mozzarella'],['tomato','tomato sauce','marinara'],['basil']],
+    forbidden:[],
     time: 60,
   },
   {
-    customer: 'Sofia 👩',
-    order:    '"Pepperoni pizza with extra sauce. No mushrooms!"',
-    hint:     'Say: pepperoni + extra sauce. Avoid: mushroom',
-    required: [['pepperoni'],['extra sauce','more sauce','lots of sauce']],
-    forbidden:['mushroom','fungi'],
+    image:    'https://images.pexels.com/photos/803290/pexels-photo-803290.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Pepperoni',
+    hint:     'I can see: pepperoni, cheese, pizza',
+    required: [['pepperoni'],['cheese','mozzarella'],['pizza']],
+    forbidden:[],
     time: 55,
   },
   {
-    customer: 'Jake 🧔',
-    order:    '"Vegetarian pizza with bell peppers and onions. Gluten-free crust please!"',
-    hint:     'Say: vegetarian + bell pepper + onion + gluten free',
-    required: [['vegetarian','veggie'],['bell pepper','capsicum'],['onion'],['gluten free','gluten-free','no gluten']],
-    forbidden:['meat','pepperoni','sausage','chicken','beef','pork'],
+    image:    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Veggie Supreme',
+    hint:     'I can see: vegetables, bell pepper, mushroom, onion',
+    required: [['vegetable','veggie','vegetarian'],['bell pepper','pepper'],['mushroom'],['onion']],
+    forbidden:['meat','pepperoni','chicken','sausage'],
     time: 55,
   },
   {
-    customer: 'Priya 👩‍🦱',
-    order:    '"Spicy buffalo chicken, thin crust, light on cheese!"',
-    hint:     'Say: buffalo + chicken + thin crust + light cheese',
-    required: [['buffalo','hot sauce'],['chicken'],['thin crust','thin'],['light cheese','less cheese','light on cheese']],
-    forbidden:['thick crust','deep dish','extra cheese','no cheese'],
-    time: 50,
-  },
-  {
-    customer: 'Ben 🧑‍🍳',
-    order:    '"BBQ pulled pork with jalapeños. Ranch base, NO tomato sauce!"',
-    hint:     'Say: BBQ + pork + jalapeño + ranch. Avoid: tomato sauce',
-    required: [['bbq','barbecue','barbeque'],['pork','pulled pork'],['jalapeño','jalapeno'],['ranch']],
+    image:    'https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'BBQ Chicken',
+    hint:     'I can see: chicken, BBQ sauce, onion',
+    required: [['chicken'],['bbq','barbecue','barbeque'],['onion']],
     forbidden:['tomato sauce','marinara','red sauce'],
     time: 50,
   },
   {
-    customer: 'Lia 🧕',
-    order:    '"Vegan margherita, fresh basil, dairy-free cheese, crispy crust!"',
-    hint:     'Say: vegan + basil + dairy free + crispy',
-    required: [['vegan','plant based','plant-based'],['basil'],['dairy free','dairy-free','no dairy'],['crispy','crispy crust']],
-    forbidden:['mozzarella','parmesan','regular cheese'],
-    time: 45,
+    image:    'https://images.pexels.com/photos/4109111/pexels-photo-4109111.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Hawaiian',
+    hint:     'I can see: pineapple, ham, cheese',
+    required: [['pineapple'],['ham'],['cheese','mozzarella']],
+    forbidden:[],
+    time: 50,
   },
   {
-    customer: 'Zara 👱‍♀️',
-    order:    '"Supreme pizza: pepperoni, sausage, olives, bell peppers, onions. Well done thin crust!"',
-    hint:     'Say: pepperoni + sausage + olive + bell pepper + onion + thin + well done',
-    required: [['pepperoni'],['sausage'],['olive'],['bell pepper'],['onion'],['thin'],['well done','extra crispy','crispy']],
-    forbidden:['thick','deep dish','soft'],
+    image:    'https://images.pexels.com/photos/3682837/pexels-photo-3682837.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Mushroom & Garlic',
+    hint:     'I can see: mushroom, garlic, cheese, thin crust',
+    required: [['mushroom'],['garlic'],['cheese','mozzarella'],['thin crust','thin']],
+    forbidden:[],
+    time: 50,
+  },
+  {
+    image:    'https://images.pexels.com/photos/1049627/pexels-photo-1049627.jpeg?auto=compress&cs=tinysrgb&w=800',
+    label:    'Supreme',
+    hint:     'I can see: pepperoni, sausage, olive, bell pepper, onion',
+    required: [['pepperoni'],['sausage'],['olive'],['bell pepper','pepper'],['onion']],
+    forbidden:[],
     time: 45,
   },
 ]
 
 // ── helpers ─────────────────────────────────────────────────────────────────
-function evaluate(text: string, order: Order) {
+function evaluate(text: string, round: Round) {
   const t = text.toLowerCase()
-  const missing   = order.required.filter(g => !g.some(k => t.includes(k))).map(g => g[0])
-  const violated  = order.forbidden.filter(k => t.includes(k))
+  const missing  = round.required.filter(g => !g.some(k => t.includes(k))).map(g => g[0])
+  const violated = round.forbidden.filter(k => t.includes(k))
   return { ok: missing.length === 0 && violated.length === 0, missing, violated }
 }
 
-// ── pizza SVG ───────────────────────────────────────────────────────────────
+// ── pizza SVG (used only on title / result / gameover) ─────────────────────
 function PizzaSVG({ mood }: { mood: 'wait' | 'happy' | 'sad' }) {
   const face =
     mood === 'happy' ? 'M 36 56 Q 50 68 64 56' :
@@ -92,14 +92,10 @@ function PizzaSVG({ mood }: { mood: 'wait' | 'happy' | 'sad' }) {
                        'M 38 58 L 62 58'
   const eyeColor = mood === 'sad' ? PINK : mood === 'happy' ? GREEN : '#fff'
   return (
-    <svg width="100" height="100" viewBox="0 0 100 100">
-      {/* crust */}
+    <svg width="90" height="90" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="46" fill="#c47a1e" />
-      {/* sauce */}
       <circle cx="50" cy="50" r="38" fill="#e03030" />
-      {/* cheese */}
       <circle cx="50" cy="50" r="32" fill="#f5c842" />
-      {/* toppings */}
       {mood !== 'wait' && <>
         <circle cx="50" cy="32" r="5" fill={mood==='happy'?'#bb2020':'#555'} />
         <circle cx="34" cy="44" r="5" fill={mood==='happy'?'#bb2020':'#555'} />
@@ -107,7 +103,6 @@ function PizzaSVG({ mood }: { mood: 'wait' | 'happy' | 'sad' }) {
         <circle cx="40" cy="60" r="5" fill={mood==='happy'?'#bb2020':'#555'} />
         <circle cx="60" cy="60" r="5" fill={mood==='happy'?'#bb2020':'#555'} />
       </>}
-      {/* face */}
       <circle cx="40" cy="46" r="4" fill={eyeColor} />
       <circle cx="60" cy="46" r="4" fill={eyeColor} />
       <path d={face} stroke={eyeColor} strokeWidth="3" strokeLinecap="round" fill="none" />
@@ -117,140 +112,125 @@ function PizzaSVG({ mood }: { mood: 'wait' | 'happy' | 'sad' }) {
 
 // ── types ───────────────────────────────────────────────────────────────────
 type Screen = 'title' | 'play' | 'result' | 'gameover'
-
 interface Result { ok: boolean; missing: string[]; violated: string[]; points: number }
 
 // ── game ─────────────────────────────────────────────────────────────────────
 export default function PromptPizzaGame() {
   const router = useRouter()
 
-  const [screen,     setScreen]     = useState<Screen>('title')
-  const [orderIdx,   setOrderIdx]   = useState(0)
-  const [prompt,     setPrompt]     = useState('')
-  const [score,      setScore]      = useState(0)
-  const [timeLeft,   setTimeLeft]   = useState(ORDERS[0].time)
-  const [result,     setResult]     = useState<Result | null>(null)
-  const [shake,      setShake]      = useState(false)
+  const [screen,   setScreen]   = useState<Screen>('title')
+  const [idx,      setIdx]      = useState(0)
+  const [prompt,   setPrompt]   = useState('')
+  const [score,    setScore]    = useState(0)
+  const [timeLeft, setTimeLeft] = useState(ROUNDS[0].time)
+  const [result,   setResult]   = useState<Result | null>(null)
+  const [shake,    setShake]    = useState(false)
 
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  const order = ORDERS[orderIdx]
+  const round = ROUNDS[idx]
 
-  // ── timer ──────────────────────────────────────────────────────────────────
   useEffect(() => {
     if (screen !== 'play') return
-    setTimeLeft(order.time)
+    setTimeLeft(round.time)
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) {
-          clearInterval(timerRef.current!)
-          handleTimeout()
-          return 0
-        }
+        if (t <= 1) { clearInterval(timerRef.current!); handleTimeout(); return 0 }
         return t - 1
       })
     }, 1000)
     setTimeout(() => inputRef.current?.focus(), 50)
     return () => clearInterval(timerRef.current!)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen, orderIdx])
+  }, [screen, idx])
 
-  function handleTimeout() {
-    const res = evaluate(prompt, order)
-    finalise(res)
-  }
+  function handleTimeout() { finalise(evaluate(prompt, round)) }
 
   function submit() {
     if (!prompt.trim()) { triggerShake(); return }
     clearInterval(timerRef.current!)
-    const res = evaluate(prompt, order)
-    finalise(res)
+    finalise(evaluate(prompt, round))
   }
 
   function finalise(res: ReturnType<typeof evaluate>) {
     const timeBonus = timeLeft * 3
-    const base      = res.ok ? 200 : Math.max(0, (1 - res.missing.length * 0.3 - res.violated.length * 0.4)) * 100
-    const pts       = Math.round(res.ok ? base + timeBonus : base)
+    const base = res.ok ? 200 : Math.max(0, (1 - res.missing.length * 0.3 - res.violated.length * 0.4)) * 100
+    const pts  = Math.round(res.ok ? base + timeBonus : base)
     setResult({ ...res, points: pts })
     setScore(s => s + pts)
     setScreen('result')
   }
 
-  function nextOrder() {
-    setPrompt('')
-    setResult(null)
-    if (orderIdx + 1 >= ORDERS.length) {
-      setScreen('gameover')
-    } else {
-      setOrderIdx(i => i + 1)
-      setScreen('play')
-    }
+  function next() {
+    setPrompt(''); setResult(null)
+    if (idx + 1 >= ROUNDS.length) { setScreen('gameover') }
+    else { setIdx(i => i + 1); setScreen('play') }
   }
 
   function restart() {
-    setOrderIdx(0); setScore(0); setPrompt(''); setResult(null); setScreen('title')
+    setIdx(0); setScore(0); setPrompt(''); setResult(null); setScreen('title')
   }
 
-  function triggerShake() {
-    setShake(true); setTimeout(() => setShake(false), 400)
-  }
+  function triggerShake() { setShake(true); setTimeout(() => setShake(false), 400) }
 
-  const timerPct = (timeLeft / order.time) * 100
+  const timerPct   = (timeLeft / round.time) * 100
   const timerColor = timerPct > 50 ? GREEN : timerPct > 25 ? '#ffdd00' : PINK
 
-  // ── title screen ───────────────────────────────────────────────────────────
+  // ── title ──────────────────────────────────────────────────────────────────
   if (screen === 'title') return (
-    <div style={styles.root}>
-      <button onClick={() => router.back()} style={styles.backBtn}>← back</button>
-      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:24 }}>
+    <div style={S.root}>
+      <button onClick={() => router.back()} style={S.backBtn}>← back</button>
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
         <PizzaSVG mood="happy" />
-        <h1 style={{ ...styles.neonText(PINK), fontSize:48, letterSpacing:4, textAlign:'center' }}>
+        <h1 style={{ ...S.neon(PINK), fontSize:44, letterSpacing:4, textAlign:'center', margin:0 }}>
           PROMPT<br />PIZZA
         </h1>
-        <p style={{ color:'#aaa', fontFamily:'monospace', fontSize:13, textAlign:'center', maxWidth:280, lineHeight:1.6 }}>
-          Customers give orders.<br />
-          You write the AI prompt.<br />
-          Get every ingredient right!
+        <p style={{ color:'#aaa', fontFamily:'monospace', fontSize:13, textAlign:'center', maxWidth:280, lineHeight:1.6, margin:0 }}>
+          Look at the pizza photo.<br />
+          Write the AI prompt that made it.<br />
+          Describe every topping you see!
         </p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, width:260 }}>
-          {[['Required','List every ingredient they ask for'],['Forbidden','Never mention what they said NO to'],['Speed','Faster = more bonus points']].map(([t,d])=>(
+          {[
+            ['Describe', 'Name every topping and ingredient you can see'],
+            ['Be specific','The more detail in your prompt, the better'],
+            ['Speed','Faster answers earn more bonus points'],
+          ].map(([t,d]) => (
             <div key={t} style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
               <span style={{ color:GREEN, fontFamily:'monospace', fontSize:12, flexShrink:0 }}>▸</span>
-              <span style={{ color:'#ccc', fontFamily:'monospace', fontSize:12 }}><b style={{color:GREEN}}>{t}:</b> {d}</span>
+              <span style={{ color:'#ccc', fontFamily:'monospace', fontSize:12 }}>
+                <b style={{color:GREEN}}>{t}:</b> {d}
+              </span>
             </div>
           ))}
         </div>
-        <button style={styles.bigBtn(PINK)} onClick={() => setScreen('play')}>
-          START →
-        </button>
+        <button style={S.bigBtn(PINK)} onClick={() => setScreen('play')}>START →</button>
       </div>
     </div>
   )
 
-  // ── result screen ──────────────────────────────────────────────────────────
+  // ── result ─────────────────────────────────────────────────────────────────
   if (screen === 'result' && result) return (
-    <div style={styles.root}>
-      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:18, width:'100%', maxWidth:460 }}>
+    <div style={S.root}>
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:16, width:'100%', maxWidth:460 }}>
         <PizzaSVG mood={result.ok ? 'happy' : 'sad'} />
-
-        <div style={{ ...styles.neonText(result.ok ? GREEN : PINK), fontSize:28, letterSpacing:3 }}>
-          {result.ok ? '✓ PERFECT ORDER' : '✗ WRONG ORDER'}
+        <div style={{ ...S.neon(result.ok ? GREEN : PINK), fontSize:26, letterSpacing:3 }}>
+          {result.ok ? '✓ GREAT PROMPT!' : '✗ MISSING DETAILS'}
         </div>
-
         {!result.ok && (
           <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:8 }}>
             {result.missing.length > 0 && (
-              <div style={styles.feedbackBox(PINK)}>
-                <span style={{ color:PINK, fontFamily:'monospace', fontSize:11 }}>MISSING</span>
+              <div style={S.feedbackBox(PINK)}>
+                <span style={{ color:PINK, fontFamily:'monospace', fontSize:11 }}>SHOULD HAVE MENTIONED</span>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginTop:4 }}>
                   {result.missing.map(m => <Tag key={m} label={m} color={PINK} />)}
                 </div>
               </div>
             )}
             {result.violated.length > 0 && (
-              <div style={styles.feedbackBox('#ff8800')}>
-                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>SHOULD NOT INCLUDE</span>
+              <div style={S.feedbackBox('#ff8800')}>
+                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>THAT PIZZA DOESN'T HAVE</span>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginTop:4 }}>
                   {result.violated.map(v => <Tag key={v} label={v} color="#ff8800" />)}
                 </div>
@@ -258,36 +238,32 @@ export default function PromptPizzaGame() {
             )}
           </div>
         )}
-
         <div style={{ color: result.ok ? GREEN : '#aaa', fontFamily:'monospace', fontSize:22, letterSpacing:2 }}>
           +{result.points} pts
         </div>
-        <div style={{ color:'#666', fontFamily:'monospace', fontSize:12 }}>
-          Total: {score} pts
-        </div>
-
-        <button style={styles.bigBtn(GREEN)} onClick={nextOrder}>
-          {orderIdx + 1 >= ORDERS.length ? 'SEE SCORE →' : 'NEXT ORDER →'}
+        <div style={{ color:'#555', fontFamily:'monospace', fontSize:12 }}>Total: {score} pts</div>
+        <button style={S.bigBtn(GREEN)} onClick={next}>
+          {idx + 1 >= ROUNDS.length ? 'SEE SCORE →' : 'NEXT PIZZA →'}
         </button>
       </div>
     </div>
   )
 
-  // ── game over ─────────────────────────────────────────────────────────────
+  // ── game over ──────────────────────────────────────────────────────────────
   if (screen === 'gameover') {
-    const max   = ORDERS.length * 200 + ORDERS.reduce((a,o) => a+o.time*3,0)
-    const pct   = Math.round((score / max) * 100)
-    const grade = pct >= 90 ? 'S' : pct >= 75 ? 'A' : pct >= 55 ? 'B' : pct >= 35 ? 'C' : 'D'
-    const gradeColor = pct >= 75 ? GREEN : pct >= 55 ? '#ffdd00' : PINK
+    const max = ROUNDS.length * 200 + ROUNDS.reduce((a,r) => a+r.time*3, 0)
+    const pct = Math.round((score / max) * 100)
+    const grade = pct>=90?'S':pct>=75?'A':pct>=55?'B':pct>=35?'C':'D'
+    const gc    = pct>=75?GREEN:pct>=55?'#ffdd00':PINK
     return (
-      <div style={styles.root}>
+      <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
           <PizzaSVG mood="happy" />
-          <div style={{ ...styles.neonText(GREEN), fontSize:32, letterSpacing:4 }}>RESTAURANT CLOSED</div>
-          <div style={{ ...styles.neonText(gradeColor), fontSize:72, letterSpacing:8 }}>{grade}</div>
+          <div style={{ ...S.neon(GREEN), fontSize:28, letterSpacing:4 }}>RESTAURANT CLOSED</div>
+          <div style={{ ...S.neon(gc), fontSize:72, letterSpacing:8 }}>{grade}</div>
           <div style={{ color:GREEN, fontFamily:'monospace', fontSize:24, letterSpacing:2 }}>{score} pts</div>
-          <div style={{ color:'#555', fontFamily:'monospace', fontSize:11 }}>{ORDERS.length} orders · max {max} pts</div>
-          <button style={styles.bigBtn(PINK)} onClick={restart}>PLAY AGAIN →</button>
+          <div style={{ color:'#555', fontFamily:'monospace', fontSize:11 }}>{ROUNDS.length} pizzas · max {max} pts</div>
+          <button style={S.bigBtn(PINK)} onClick={restart}>PLAY AGAIN →</button>
           <button onClick={() => router.back()} style={{ background:'none', border:'none', color:'#444', fontFamily:'monospace', fontSize:12, cursor:'pointer' }}>
             ← back
           </button>
@@ -296,13 +272,13 @@ export default function PromptPizzaGame() {
     )
   }
 
-  // ── play screen ────────────────────────────────────────────────────────────
+  // ── play ───────────────────────────────────────────────────────────────────
   return (
-    <div style={styles.root}>
+    <div style={S.root}>
       {/* HUD */}
       <div style={{ width:'100%', maxWidth:520, display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
         <span style={{ color:'#444', fontFamily:'monospace', fontSize:11 }}>
-          ORDER {orderIdx+1} / {ORDERS.length}
+          PIZZA {idx+1} / {ROUNDS.length}
         </span>
         <span style={{ color:GREEN, fontFamily:'monospace', fontSize:13, letterSpacing:1 }}>
           {score} pts
@@ -321,47 +297,46 @@ export default function PromptPizzaGame() {
       </div>
 
       <div style={{ width:'100%', maxWidth:520, display:'flex', flexDirection:'column', gap:14 }}>
-        {/* Customer order */}
-        <div style={styles.card}>
-          <div style={{ color:'#555', fontFamily:'monospace', fontSize:10, marginBottom:4, letterSpacing:1 }}>
-            CUSTOMER
-          </div>
-          <div style={{ color:GREEN, fontFamily:'monospace', fontSize:13, marginBottom:8 }}>
-            {order.customer}
-          </div>
-          <div style={{ color:'#fff', fontFamily:'monospace', fontSize:14, lineHeight:1.6 }}>
-            {order.order}
-          </div>
-          <div style={{ color:'#444', fontFamily:'monospace', fontSize:10, marginTop:8, borderTop:'1px solid #222', paddingTop:8 }}>
-            hint: {order.hint}
+
+        {/* Pizza photo */}
+        <div style={{ position:'relative', borderRadius:8, overflow:'hidden', border:`1px solid #222` }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={round.image}
+            alt={round.label}
+            style={{ width:'100%', height:240, objectFit:'cover', display:'block' }}
+          />
+          <div style={{
+            position:'absolute', bottom:0, left:0, right:0,
+            padding:'8px 12px',
+            background:'linear-gradient(transparent, #000c)',
+            fontFamily:'monospace', fontSize:12, color:'#fff', letterSpacing:1,
+          }}>
+            {round.label}
           </div>
         </div>
 
-        {/* Pizza preview */}
-        <div style={{ display:'flex', justifyContent:'center' }}>
-          <PizzaSVG mood="wait" />
+        {/* Instruction */}
+        <div style={{ color:'#555', fontFamily:'monospace', fontSize:11, textAlign:'center', letterSpacing:1 }}>
+          WRITE THE AI PROMPT THAT MADE THIS PIZZA ↓
         </div>
 
         {/* Prompt input */}
         <div style={{ position:'relative' }}>
-          <div style={{ color:'#444', fontFamily:'monospace', fontSize:10, marginBottom:6, letterSpacing:1 }}>
-            YOUR PROMPT →
-          </div>
           <div style={{
-            padding: '2px 2px',
-            borderRadius: 6,
-            background: `linear-gradient(135deg, ${PINK}, ${GREEN})`,
+            padding:'2px 2px', borderRadius:6,
+            background:`linear-gradient(135deg, ${PINK}, ${GREEN})`,
             animation: shake ? 'shake 0.4s ease' : undefined,
           }}>
             <textarea
               ref={inputRef}
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit() } }}
+              onKeyDown={e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); submit() } }}
               rows={3}
-              placeholder='Type your AI prompt here... (Enter to submit)'
+              placeholder="Describe the pizza you see... (Enter to submit)"
               style={{
-                width:'100%', boxSizing:'border-box',
+                width:'100%', boxSizing:'border-box' as const,
                 background:'#0a0a0a', color:'#fff',
                 border:'none', borderRadius:5,
                 padding:'10px 12px',
@@ -372,14 +347,15 @@ export default function PromptPizzaGame() {
           </div>
         </div>
 
-        <button
-          style={styles.bigBtn(GREEN)}
-          onClick={submit}
-        >
+        {/* Hint */}
+        <div style={{ color:'#333', fontFamily:'monospace', fontSize:10, letterSpacing:1, textAlign:'center' }}>
+          hint: {round.hint}
+        </div>
+
+        <button style={S.bigBtn(GREEN)} onClick={submit}>
           SUBMIT PROMPT →
         </button>
 
-        {/* Timer */}
         <div style={{ textAlign:'center', color:timerColor, fontFamily:'monospace', fontSize:11,
           textShadow:`0 0 6px ${timerColor}`, letterSpacing:2 }}>
           {timeLeft}s remaining
@@ -399,74 +375,42 @@ export default function PromptPizzaGame() {
   )
 }
 
-// ── small components ──────────────────────────────────────────────────────────
 function Tag({ label, color }: { label: string; color: string }) {
   return (
     <span style={{
-      border: `1px solid ${color}`, color, borderRadius:4,
+      border:`1px solid ${color}`, color, borderRadius:4,
       padding:'2px 8px', fontFamily:'monospace', fontSize:11,
-      textTransform:'lowercase',
     }}>
       {label}
     </span>
   )
 }
 
-// ── styles ────────────────────────────────────────────────────────────────────
-const styles = {
+const S = {
   root: {
-    minHeight: '100vh',
-    background: '#000',
-    display: 'flex' as const,
-    flexDirection: 'column' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    padding: '24px 16px',
-    gap: 0,
+    minHeight:'100vh', background:'#000',
+    display:'flex' as const, flexDirection:'column' as const,
+    alignItems:'center' as const, justifyContent:'center' as const,
+    padding:'24px 16px', gap:0,
   },
-  neonText: (color: string) => ({
-    color,
-    fontFamily: 'monospace',
-    fontWeight: 900,
-    textShadow: `0 0 10px ${color}, 0 0 30px ${color}55`,
+  neon: (c: string) => ({
+    color:c, fontFamily:'monospace', fontWeight:900,
+    textShadow:`0 0 10px ${c}, 0 0 30px ${c}55`,
   }),
-  bigBtn: (color: string) => ({
-    width: '100%' as const,
-    maxWidth: 320,
-    padding: '14px 0',
-    background: 'none',
-    border: `2px solid ${color}`,
-    borderRadius: 6,
-    color,
-    fontFamily: 'monospace',
-    fontSize: 15,
-    fontWeight: 900,
-    letterSpacing: 2,
-    cursor: 'pointer' as const,
-    boxShadow: `0 0 12px ${color}55`,
-    transition: 'box-shadow 0.2s, background 0.2s',
+  bigBtn: (c: string) => ({
+    width:'100%' as const, maxWidth:320, padding:'14px 0',
+    background:'none', border:`2px solid ${c}`, borderRadius:6,
+    color:c, fontFamily:'monospace', fontSize:15, fontWeight:900,
+    letterSpacing:2, cursor:'pointer' as const,
+    boxShadow:`0 0 12px ${c}55`, transition:'box-shadow 0.2s',
   }),
-  card: {
-    background: '#0d0d0d',
-    border: '1px solid #222',
-    borderRadius: 8,
-    padding: '14px 16px',
-  },
-  feedbackBox: (color: string) => ({
-    background: '#0d0d0d',
-    border: `1px solid ${color}44`,
-    borderRadius: 6,
-    padding: '10px 14px',
+  feedbackBox: (c: string) => ({
+    background:'#0d0d0d', border:`1px solid ${c}44`,
+    borderRadius:6, padding:'10px 14px',
   }),
   backBtn: {
-    position: 'fixed' as const,
-    top: 14, left: 16,
-    background: 'none',
-    border: 'none',
-    color: '#444',
-    fontFamily: 'monospace',
-    fontSize: 12,
-    cursor: 'pointer' as const,
-    letterSpacing: 1,
+    position:'fixed' as const, top:14, left:16,
+    background:'none', border:'none', color:'#444',
+    fontFamily:'monospace', fontSize:12, cursor:'pointer' as const, letterSpacing:1,
   },
 }
