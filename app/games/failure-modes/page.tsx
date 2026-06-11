@@ -27,11 +27,7 @@ export default function FailureModesPage() {
         </button>
       </div>
       <div style={{ width: '100%', maxWidth: 620, padding: '32px 16px 80px' }}>
-        <ConnectionsGame key={key} puzzle={puzzle} onComplete={r => setResult(r)} /> style={{ padding: '10px 24px', borderRadius: 999, border: '2px solid #2a2a2a', background: '#2a2a2a', color: '#fff', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
-              Back to games
-            </button>
-          </div>
-        )}
+        <ConnectionsGame key={key} puzzle={puzzle} onComplete={r => setResult(r)} />
       </div>
     </div>
   )

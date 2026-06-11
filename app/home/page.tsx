@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { WORLDS, WORLD_IDS } from '../data'
-import { isElementaryGrade } from '../data/elementary'
+import { isElementaryGrade, isMiddleSchoolGrade } from '../data/elementary'
 import { loadProgress } from '@/lib/progress'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -20,7 +20,8 @@ export default function Home() {
 
   useEffect(() => {
     const grade = localStorage.getItem('pai_grade')
-    if (isElementaryGrade(grade)) { router.replace('/elementary/home'); return }
+    if (isElementaryGrade(grade))   { router.replace('/elementary/home'); return }
+    if (isMiddleSchoolGrade(grade)) { router.replace('/middle/home');     return }
 
     loadProgress().then(() => {
       const map: Record<number, boolean> = {}
