@@ -216,12 +216,13 @@
   to   { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* ── Lesson slide: shrink image column on narrow screens ────────────────────── */
+/* ── Lesson slide: desktop grid ─────────────────────────────────────────────── */
 .lesson-slide-grid {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 0;
 }
+/* ── Lesson slide: tablet shrink ────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .lesson-slide-grid {
     grid-template-columns: 1fr 120px;
@@ -231,5 +232,32 @@
   }
   .lesson-slide-text {
     padding-right: 14px !important;
+  }
+}
+/* ── Lesson slide: mobile — scrollable, single column, no side image ─────────── */
+@media (max-width: 480px) {
+  .lesson-slide-main {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  .lesson-slide-scaler {
+    transform: none !important;
+    padding: 0 5vw !important;
+  }
+  .lesson-slide-grid {
+    display: block !important;
+  }
+  .lesson-slide-image {
+    display: none !important;
+  }
+  .lesson-slide-text {
+    padding-right: 0 !important;
+    border-right: none !important;
+  }
+  .lesson-slide-title {
+    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+    margin-bottom: 16px !important;
   }
 }

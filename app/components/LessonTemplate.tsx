@@ -273,7 +273,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     : BLACK
 
   return (
-    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
+    <main className="lesson-slide-main" style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
 
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -286,6 +286,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
       <div
         id="lesson-content-wrapper"
+        className="lesson-slide-scaler"
         style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0, transform: 'scale(1.06)', transformOrigin: 'center center', transition: 'transform 0.28s ease' }}
       >
 
@@ -325,7 +326,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         >
           {/* Left: headline + body */}
           <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${slideText}44` : 'none', display: 'flex', flexDirection: 'column' }}>
-            <h1 style={{
+            <h1 className="lesson-slide-title" style={{
               fontFamily: DISP, fontWeight: 400,
               fontSize: 'clamp(3rem, 6vw, 5rem)',
               lineHeight: 1, letterSpacing: '-0.03em',
