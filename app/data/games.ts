@@ -12,7 +12,7 @@ export interface GameDef {
 export const GAMES: GameDef[] = [
   // World 1
   { slug: 'analyst',       title: 'The Analyst',        world: 1, module: 1, type: 'interstitial', built: true  },
-  { slug: 'signal-drop',   title: 'Signal Drop',        world: 1, module: 3, type: 'catcher',      built: true  },
+  { slug: 'signal-drop',   title: 'Sort the Data',      world: 1, module: 3, type: 'catcher',      built: true  },
   { slug: 'static',        title: 'Static',             world: 1, module: 6, type: 'connections',  built: true  },
 
   // World 2

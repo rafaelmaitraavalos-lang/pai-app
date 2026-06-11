@@ -118,7 +118,7 @@ interface GS {
   aiY: number; playerY: number; prevPlayerY: number
   lives: number; totalScore: number; combo: number; rallies: number
   itemIdx: number; items: string[]
-  redDots: RedDot[]; nextDotAt: number; dotIdCounter: number
+  redDots: RedDot[]; dotIdCounter: number
   spawned: boolean
   missFlash: number
   respawnPending: boolean
@@ -191,7 +191,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       bx: 0, by: 0, vx: 0, vy: 0,
       aiY: 0, playerY: 0,
       lives: LIVES, totalScore: 0, combo: 0, rallies: 0,
-      redDots: [], nextDotAt: performance.now() + 4000, dotIdCounter: 0,
+      redDots: [], dotIdCounter: 0,
       prevPlayerY: 0,
       itemIdx: 0, items: shuffled,
       spawned: false, missFlash: 0, respawnPending: false,
@@ -255,19 +255,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       }
       g.prevPlayerY = g.playerY
 
-      // ── Spawn red dots (bad data obstacles) ───────────────────────────────
-      if (now >= g.nextDotAt) {
-        const dotSpd = 3 + g.rallies * 0.08
-        g.redDots.push({
-          id: ++g.dotIdCounter,
-          x: W * 0.1,
-          y: H * (0.1 + Math.random() * 0.8),
-          vy: (Math.random() - 0.5) * dotSpd * 0.5,
-          spd: dotSpd,
-        })
-        // Spawn interval decreases as game progresses (min 2.5s)
-        g.nextDotAt = now + Math.max(2500, 5000 - g.rallies * 80)
-      }
+      // Red dots spawn on player hits (see player hit section below)
 
       // ── Move + check red dots ──────────────────────────────────────────────
       g.redDots = g.redDots.filter(d => {
@@ -331,6 +319,18 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           g.vx = -Math.abs(spd)
           g.vy = rel * spd * 0.7
           g.itemIdx = (g.itemIdx + 1) % g.items.length
+          // Spawn a red dot every 2 hits (more frequent as rallies build)
+          const spawnEvery = Math.max(1, 3 - Math.floor(g.rallies / 6))
+          if (g.combo % spawnEvery === 0) {
+            const dotSpd = 3.5 + g.rallies * 0.1
+            g.redDots.push({
+              id: ++g.dotIdCounter,
+              x: W * 0.08,
+              y: H * (0.1 + Math.random() * 0.8),
+              vy: (Math.random() - 0.5) * dotSpd * 0.6,
+              spd: dotSpd,
+            })
+          }
         } else if (g.bx > PLAYER_X + PADDLE_W) {
           // Miss
           g.lives--; g.combo = 0; g.missFlash = now
