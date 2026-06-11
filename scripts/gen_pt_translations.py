@@ -79,7 +79,7 @@ def parse(paras):
             save_stop(); save_q()
             cur_m = int(mm.group(1))
             title = mm.group(2).strip() or ''
-            section = None
+            # Don't reset section — W7/W8 have SLIDES at world level before modules
             if cur_m not in worlds[cur_w]['mods']:
                 worlds[cur_w]['mods'][cur_m] = {'title': title, 'stops': [], 'questions': []}
             continue
@@ -175,6 +175,16 @@ def main():
     print(f'  High school content starts at para {start}', file=sys.stderr)
 
     worlds = parse(paras[start:])
+
+    # Merge W7/W8 from pre-normalized file if available
+    norm_path = os.path.join(APP, 'scripts', 'pt_w7w8_normalized.txt')
+    if os.path.exists(norm_path):
+        print(f'  Merging W7/W8 from {norm_path}', file=sys.stderr)
+        with open(norm_path, encoding='utf-8') as f:
+            norm_paras = [line.rstrip('\n') for line in f if line.strip()]
+        extra = parse(norm_paras)
+        for wnum, wd in extra.items():
+            worlds[wnum] = wd   # always prefer normalized over stub
 
     # Stats
     total_lessons = sum(len(wd['mods']) for wd in worlds.values())
