@@ -59,11 +59,13 @@ const FACTS_PT: string[] = typeof _pt?.facts === 'string'
   ? (_pt.facts as string).split('. ').filter((s: string) => s.trim().length > 20).map((s: string) => s.trim())
   : Array.isArray(_pt?.facts) ? (_pt.facts as string[]) : FACTS_EN
 
-const PADDLE_H = 80
-const PADDLE_W = 12
-const BALL_R   = 11
-const LIVES    = 3
-const BASE_SPD = 4.5
+const PADDLE_H  = 80
+const PADDLE_W  = 12
+const BALL_R    = 11
+const DOT_R     = 7
+const LIVES     = 3
+const BASE_SPD  = 4.5
+const RED       = '#FF3B3B'
 
 type Phase = 'intro' | 'countdown' | 'playing' | 'facts' | 'end'
 
@@ -71,16 +73,45 @@ function shuffle<T>(a: T[]): T[] {
   const b = [...a]; for (let i = b.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]] } return b
 }
 
+// ── Web Audio helpers ─────────────────────────────────────────────────────────
+let _actx: AudioContext | null = null
+function getAudio() {
+  if (!_actx) _actx = new (window.AudioContext || (window as any).webkitAudioContext)()
+  return _actx
+}
+function beep(freq: number, type: OscillatorType, duration: number, gain = 0.15, freqEnd?: number) {
+  try {
+    const ctx = getAudio()
+    const osc = ctx.createOscillator()
+    const env = ctx.createGain()
+    osc.connect(env); env.connect(ctx.destination)
+    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime)
+    if (freqEnd) osc.frequency.linearRampToValueAtTime(freqEnd, ctx.currentTime + duration)
+    env.gain.setValueAtTime(gain, ctx.currentTime)
+    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration)
+    osc.start(); osc.stop(ctx.currentTime + duration)
+  } catch {}
+}
+const sfx = {
+  hit:     () => beep(280, 'sine',     0.06, 0.18, 420),
+  swoosh:  () => beep(600, 'sine',     0.07, 0.06, 200),
+  bad:     () => beep(90,  'sawtooth', 0.18, 0.22, 60),
+  miss:    () => beep(180, 'triangle', 0.22, 0.15, 80),
+  combo:   (n: number) => beep(200 + n * 30, 'sine', 0.08, 0.12, 300 + n * 40),
+}
+
+interface RedDot { id: number; x: number; y: number; vy: number; spd: number }
 interface Pop { id: number; text: string; x: number; y: number }
 interface Board { username: string; best: number }
 
 interface GS {
   bx: number; by: number; vx: number; vy: number
-  aiY: number; playerY: number
+  aiY: number; playerY: number; prevPlayerY: number
   lives: number; totalScore: number; combo: number; rallies: number
   itemIdx: number; items: string[]
+  redDots: RedDot[]; nextDotAt: number; dotIdCounter: number
   spawned: boolean
-  missFlash: number   // timestamp of last miss (0 = none)
+  missFlash: number
   respawnPending: boolean
 }
 
@@ -151,6 +182,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       bx: 0, by: 0, vx: 0, vy: 0,
       aiY: 0, playerY: 0,
       lives: LIVES, totalScore: 0, combo: 0, rallies: 0,
+      redDots: [], nextDotAt: performance.now() + 4000, dotIdCounter: 0,
+      prevPlayerY: 0,
       itemIdx: 0, items: shuffled,
       spawned: false, missFlash: 0, respawnPending: false,
     }
@@ -202,8 +235,45 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
       // Apply held arrow keys — fast and smooth
       const keySpeed = 9
+      const prevY = g.playerY
       if (keysRef.current.has('ArrowUp'))   g.playerY = Math.max(PADDLE_H/2, g.playerY - keySpeed)
       if (keysRef.current.has('ArrowDown')) g.playerY = Math.min(H - PADDLE_H/2, g.playerY + keySpeed)
+      // Swoosh when paddle moves significantly
+      if (Math.abs(g.playerY - prevY) > 4 && Math.abs(g.playerY - g.prevPlayerY) < 1) sfx.swoosh()
+      g.prevPlayerY = g.playerY
+
+      // ── Spawn red dots (bad data obstacles) ───────────────────────────────
+      if (now >= g.nextDotAt) {
+        const dotSpd = 3 + g.rallies * 0.08
+        g.redDots.push({
+          id: ++g.dotIdCounter,
+          x: W * 0.1,
+          y: H * (0.1 + Math.random() * 0.8),
+          vy: (Math.random() - 0.5) * dotSpd * 0.5,
+          spd: dotSpd,
+        })
+        // Spawn interval decreases as game progresses (min 2.5s)
+        g.nextDotAt = now + Math.max(2500, 5000 - g.rallies * 80)
+      }
+
+      // ── Move + check red dots ──────────────────────────────────────────────
+      g.redDots = g.redDots.filter(d => {
+        d.x += d.spd
+        d.y += d.vy
+        if (d.y - DOT_R < 0)   { d.y = DOT_R;     d.vy =  Math.abs(d.vy) }
+        if (d.y + DOT_R > H)   { d.y = H - DOT_R; d.vy = -Math.abs(d.vy) }
+        // Hit player paddle?
+        if (d.x + DOT_R >= PLAYER_X && d.x - DOT_R <= PLAYER_X + PADDLE_W) {
+          if (Math.abs(d.y - g.playerY) < PADDLE_H / 2 + DOT_R) {
+            // Ouch — reset combo, flash
+            g.combo = 0; g.missFlash = now
+            setCombo(0); sfx.bad()
+            addPop('✗ bad data!', (PLAYER_X - 40) / W, d.y / H)
+            return false // remove dot
+          }
+        }
+        return d.x < W + 20  // remove when off screen
+      })
 
       // AI always tracks ball perfectly — guarantee it hits every time
       const targetY = g.by + (g.vx < 0 ? (g.bx / speed) * g.vy : 0)
@@ -227,6 +297,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           g.vx = Math.abs(spd)
           g.vy = rel * spd * 0.7
           g.itemIdx = (g.itemIdx + 1) % g.items.length
+          sfx.hit()
         }
       }
 
@@ -239,6 +310,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           g.totalScore += pts
           finalScore.current = g.totalScore
           setScore(g.totalScore); setCombo(g.combo)
+          sfx.combo(g.combo)
           addPop(`+${pts}`, g.bx / W, g.by / H)
           g.bx = PLAYER_X - BALL_R
           const spd = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
@@ -249,7 +321,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         } else if (g.bx > PLAYER_X + PADDLE_W) {
           // Miss
           g.lives--; g.combo = 0; g.missFlash = now
-          setLives(g.lives); setCombo(0)
+          setLives(g.lives); setCombo(0); sfx.miss()
           if (g.lives <= 0) {
             const fs = g.totalScore
             finalScore.current = fs
@@ -296,6 +368,15 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         ctx.beginPath(); ctx.arc(g.bx, g.by, BALL_R, 0, Math.PI*2); ctx.fill()
         ctx.shadowBlur = 0; ctx.fillStyle = GREEN
         ctx.beginPath(); ctx.arc(g.bx, g.by, BALL_R*0.35, 0, Math.PI*2); ctx.fill()
+      }
+
+      // Red obstacle dots
+      for (const d of g.redDots) {
+        ctx.fillStyle = RED; ctx.shadowColor = RED; ctx.shadowBlur = 14
+        ctx.beginPath(); ctx.arc(d.x, d.y, DOT_R, 0, Math.PI*2); ctx.fill()
+        ctx.shadowBlur = 0
+        ctx.fillStyle = '#fff'
+        ctx.beginPath(); ctx.arc(d.x, d.y, DOT_R*0.35, 0, Math.PI*2); ctx.fill()
       }
 
       // Lives
