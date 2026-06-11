@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { isElementaryGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
+import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
 import { LANG_STRINGS } from '../data/onboardingStrings'
 import { loadProgress, applyProgress } from '@/lib/progress'
 
@@ -96,7 +96,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   useEffect(() => {
     if (localStorage.getItem('pai_onboarding_done') === 'true') {
       const g = localStorage.getItem('pai_grade')
-      router.replace(isElementaryGrade(g) ? `${basePath}/elementary/home` : `${basePath}/home`)
+      const dest = isElementaryGrade(g)             ? `${basePath}/elementary/home`
+                 : MIDDLE_SCHOOL_GRADES_PT.has(g ?? '') ? `${basePath}/elementary/middle-pt`
+                 : isMiddleSchoolGrade(g)           ? `${basePath}/middle/home`
+                 : `${basePath}/home`
+      router.replace(dest)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -123,6 +127,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     localStorage.setItem('pai_onboarding_done', 'true')
     const dest = isElementaryGrade(grade)             ? `${basePath}/elementary/home`
                : MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? `${basePath}/elementary/middle-pt`
+               : isMiddleSchoolGrade(grade)           ? `${basePath}/middle/home`
                : `${basePath}/home`
     router.push(dest)
   }
