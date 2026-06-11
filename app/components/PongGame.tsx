@@ -1,68 +1,49 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import GAMES_PT from '../data/gamesContent_pt'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
 const GREEN = '#3DF542'
-const RED   = '#FF3B3B'
 const BLACK = '#0a0a0a'
 
+// Data items shown on the ball — educational flavour, not a mechanic
 const ITEMS_EN = [
-  { label: 'Expert-verified diagnoses',       shouldCatch: true  },
-  { label: 'Native speaker transcriptions',   shouldCatch: true  },
-  { label: '3 radiologists per scan',         shouldCatch: true  },
-  { label: 'Court-confirmed fraud cases',     shouldCatch: true  },
-  { label: 'Certified biologist labels',      shouldCatch: true  },
-  { label: 'Independent fact-checkers',       shouldCatch: true  },
-  { label: 'Peer-reviewed ground truth',      shouldCatch: true  },
-  { label: 'Domain expert annotations',       shouldCatch: true  },
-  { label: 'Surveillance footage',            shouldCatch: false },
-  { label: 'No labels — raw data',            shouldCatch: false },
-  { label: 'Machine auto-translated',         shouldCatch: false },
-  { label: 'Biased hiring history',           shouldCatch: false },
-  { label: '$0.01 labels, 20 seconds each',   shouldCatch: false },
-  { label: 'One hospital, global model',      shouldCatch: false },
-  { label: 'Over-policed neighborhood data',  shouldCatch: false },
-  { label: 'No user consent',                 shouldCatch: false },
-  { label: 'Only 1-star and 5-star reviews',  shouldCatch: false },
-  { label: 'Half misread the question',       shouldCatch: false },
+  'Expert-verified diagnoses', '3 radiologists per scan', 'Native speaker transcriptions',
+  'Court-confirmed fraud cases', 'Independent fact-checkers', 'Peer-reviewed ground truth',
+  'Surveillance footage', 'No labels — raw data', 'Machine auto-translated',
+  'Biased hiring history', '$0.01 labels, 20 seconds each', 'One hospital, global model',
+  'Over-policed neighborhood data', 'No user consent', 'Only 1-star and 5-star reviews',
+  'Half misread the question', 'Domain expert annotations', 'Certified biologist labels',
 ]
 
 const ITEMS_PT = [
-  { label: 'Diagnósticos verificados por especialistas',  shouldCatch: true  },
-  { label: 'Transcrições por falantes nativos',          shouldCatch: true  },
-  { label: '3 radiologistas por exame',                  shouldCatch: true  },
-  { label: 'Casos de fraude confirmados em juízo',       shouldCatch: true  },
-  { label: 'Rótulos de biólogos certificados',           shouldCatch: true  },
-  { label: 'Checadores de fatos independentes',          shouldCatch: true  },
-  { label: 'Verdade de referência revisada por pares',   shouldCatch: true  },
-  { label: 'Anotações de especialistas do domínio',      shouldCatch: true  },
-  { label: 'Imagens de câmeras de vigilância',           shouldCatch: false },
-  { label: 'Sem rótulos — dados brutos',                 shouldCatch: false },
-  { label: 'Traduzido automaticamente por máquina',      shouldCatch: false },
-  { label: 'Histórico de contratações com viés',         shouldCatch: false },
-  { label: 'Rótulos a US$0,01 — 20 segundos cada',       shouldCatch: false },
-  { label: 'Um hospital, modelo global',                 shouldCatch: false },
-  { label: 'Dados de bairro com policiamento excessivo', shouldCatch: false },
-  { label: 'Sem consentimento do usuário',               shouldCatch: false },
-  { label: 'Só avaliações de 1 e 5 estrelas',            shouldCatch: false },
-  { label: 'Metade interpretou mal a pergunta',          shouldCatch: false },
+  'Diagnósticos verificados por especialistas', '3 radiologistas por exame',
+  'Transcrições por falantes nativos', 'Casos de fraude confirmados em juízo',
+  'Checadores de fatos independentes', 'Verdade de referência revisada por pares',
+  'Imagens de câmeras de vigilância', 'Sem rótulos — dados brutos',
+  'Traduzido automaticamente por máquina', 'Histórico de contratações com viés',
+  'Rótulos a US$0,01 — 20 segundos cada', 'Um hospital, modelo global',
+  'Dados de bairro com policiamento excessivo', 'Sem consentimento do usuário',
+  'Só avaliações de 1 e 5 estrelas', 'Metade interpretou mal a pergunta',
+  'Anotações de especialistas do domínio', 'Rótulos de biólogos certificados',
 ]
 
 const VERDICTS_EN = [
-  { min: 0.9, verdict: 'CLEAN DATASET.',        sub: "Your AI is sharp. That's how it's done." },
-  { min: 0.7, verdict: 'MOSTLY CLEAN.',         sub: 'A few bad examples slipped in. Your model has minor issues.' },
-  { min: 0.5, verdict: 'NOISY TRAINING SET.',   sub: 'Your AI learned some wrong patterns. It will make mistakes.' },
-  { min: 0,   verdict: 'YOU BUILT A BAD AI.',   sub: 'Too much bias got through. Your model is going to cause real problems.' },
+  { min: 3000, h: 'YOUR AI HAS SURPASSED ALL BENCHMARKS OF HUMAN UNDERSTANDING.',  s: 'That rally was something special. The training set was immaculate.' },
+  { min: 1500, h: 'EXCEPTIONAL DATASET.',    s: 'Your AI is brilliantly trained. Data scientists are weeping with joy.' },
+  { min: 800,  h: 'SOLID TRAINING SET.',     s: 'Your model will work. It will be right most of the time. Mostly.' },
+  { min: 300,  h: 'NOISY DATA.',             s: 'Your AI has absorbed significant bias. It will make very confident mistakes.' },
+  { min: 0,    h: 'YOU HAVE A HORRIBLY BIASED AI.', s: 'This should concern everyone involved. Especially your users.' },
 ]
 
 const VERDICTS_PT = [
-  { min: 0.9, verdict: 'CONJUNTO IMPECÁVEL.',        sub: 'O seu modelo é preciso. É assim que se faz.' },
-  { min: 0.7, verdict: 'CONJUNTO ROBUSTO.',          sub: 'Algumas lacunas, mas o modelo vai treinar bem.' },
-  { min: 0.5, verdict: 'DADOS RUIDOSOS.',            sub: 'O modelo vai aprender alguns padrões ruins junto com os bons.' },
-  { min: 0,   verdict: 'VOCÊ CONSTRUIU UMA IA RUIM.', sub: 'Ruído excessivo. O modelo aprendeu coisas erradas. É assim que o viés começa.' },
+  { min: 3000, h: 'SUA IA SUPEROU TODOS OS BENCHMARKS DO ENTENDIMENTO HUMANO.', s: 'Esse rally foi algo especial. O conjunto de treinamento estava impecável.' },
+  { min: 1500, h: 'CONJUNTO DE DADOS EXCEPCIONAL.', s: 'A sua IA é brilhantemente treinada. Cientistas de dados estão chorando de alegria.' },
+  { min: 800,  h: 'CONJUNTO DE TREINAMENTO SÓLIDO.', s: 'O seu modelo vai funcionar. Vai acertar na maior parte do tempo. Em sua maioria.' },
+  { min: 300,  h: 'DADOS RUIDOSOS.', s: 'A sua IA absorveu viés significativo. Vai cometer erros com muita confiança.' },
+  { min: 0,    h: 'VOCÊ TEM UMA IA HORRIVELMENTE TENDENCIOSA.', s: 'Isso deveria preocupar a todos os envolvidos. Especialmente seus usuários.' },
 ]
 
 const FACTS_EN = [
@@ -74,16 +55,14 @@ const FACTS_EN = [
   "When data is collected without consent, the privacy violation happens before the model even exists.",
 ]
 
-// PT facts come from the parsed doc
 const _pt = GAMES_PT['signal-drop']
 const FACTS_PT: string[] = typeof _pt?.facts === 'string'
-  ? (_pt.facts as string).split('. ').filter(Boolean).map(s => s.trim())
+  ? (_pt.facts as string).split('. ').filter((s: string) => s.trim().length > 20).map((s: string) => s.trim())
   : Array.isArray(_pt?.facts) ? (_pt.facts as string[]) : FACTS_EN
 
-const TOTAL    = ITEMS_EN.length  // items per cycle — game loops until lives run out
-const PADDLE_H = 78
+const PADDLE_H = 80
 const PADDLE_W = 12
-const BALL_R   = 12
+const BALL_R   = 11
 const LIVES    = 3
 const BASE_SPD = 5
 
@@ -95,68 +74,64 @@ function shuffle<T>(a: T[]): T[] {
   return b
 }
 
+interface PopUp { id: number; text: string; x: number; y: number; t: number }
+
 interface GS {
   bx: number; by: number; vx: number; vy: number
   aiY: number; playerY: number
-  lives: number; score: number; idx: number; total: number
-  rallies: number                           // total AI hits — drives speed
-  ballCatch: boolean                        // true = GREEN (hit), false = RED (let past)
-  decided: boolean                          // player already judged this pass
-  flash:  { text: string; good: boolean; t: number } | null
-  label:  { text: string; t: number } | null  // brief item label on color change
-  items:  typeof ITEMS_EN
+  lives: number
+  totalScore: number
+  combo: number          // current rally streak
+  rallies: number        // total hits ever (drives speed)
+  itemIdx: number        // which item to show on ball
+  items: string[]
   spawned: boolean
+  flash: { text: string; t: number } | null
 }
 
 export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const gs        = useRef<GS | null>(null)
   const frameRef  = useRef(0)
+  const popIdRef  = useRef(0)
 
   const [phase,     setPhase]     = useState<Phase>('intro')
   const [lives,     setLives]     = useState(LIVES)
   const [score,     setScore]     = useState(0)
+  const [combo,     setCombo]     = useState(0)
   const [countdown, setCountdown] = useState(3)
   const [factIdx,   setFactIdx]   = useState(0)
+  const [pops,      setPops]      = useState<PopUp[]>([])
   const [isPT,      setIsPT]      = useState(false)
 
-  useEffect(() => {
-    setIsPT(localStorage.getItem('pai_lang') === 'pt')
-  }, [])
+  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
   const ITEMS    = isPT ? ITEMS_PT    : ITEMS_EN
   const VERDICTS = isPT ? VERDICTS_PT : VERDICTS_EN
   const FACTS    = isPT ? FACTS_PT    : FACTS_EN
 
-  function spawnBall(g: GS, W: number, H: number, fromAI = false) {
+  function addPop(text: string, x: number, y: number) {
+    const id = ++popIdRef.current
+    setPops(p => [...p.slice(-5), { id, text, x, y, t: performance.now() }])
+    setTimeout(() => setPops(p => p.filter(pp => pp.id !== id)), 900)
+  }
+
+  function spawnBall(g: GS, W: number, H: number) {
     const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
-    if (fromAI) {
-      // AI just hit — pick random new item + color
-      const remaining = g.items.slice(g.idx)
-      if (remaining.length === 0) return
-      const pick = Math.floor(Math.random() * remaining.length)
-      g.ballCatch = remaining[pick].shouldCatch
-      g.label = { text: remaining[pick].label, t: performance.now() }
-      // swap picked item to front of remaining
-      const tmp = g.items[g.idx]; g.items[g.idx] = g.items[g.idx + pick]; g.items[g.idx + pick] = tmp
-    } else {
-      g.ballCatch = g.items[g.idx]?.shouldCatch ?? true
-    }
     g.bx = W * 0.5; g.by = H * (0.25 + Math.random() * 0.5)
     g.vx = speed; g.vy = (Math.random() - 0.5) * speed * 0.65
-    g.decided = false
   }
 
   function startGame() {
+    const shuffled = shuffle([...ITEMS])
     gs.current = {
       bx: 0, by: 0, vx: 0, vy: 0,
       aiY: 0, playerY: 0,
-      lives: LIVES, score: 0, idx: 0, total: 0, rallies: 0,
-      ballCatch: true, decided: false,
-      flash: null, label: null,
-      items: shuffle(isPT ? ITEMS_PT : ITEMS_EN), spawned: false,
+      lives: LIVES, totalScore: 0, combo: 0, rallies: 0,
+      itemIdx: 0, items: shuffled,
+      spawned: false, flash: null,
     }
-    setLives(LIVES); setScore(0)
+    setLives(LIVES); setScore(0); setCombo(0); setPops([])
     setCountdown(3); setPhase('countdown')
   }
 
@@ -171,7 +146,6 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     if (phase !== 'playing') return
     const cv = canvasRef.current; if (!cv) return
     const ctx = cv.getContext('2d')!
-
     const resize = () => { cv.width = cv.clientWidth; cv.height = cv.clientHeight }
     resize(); window.addEventListener('resize', resize)
 
@@ -186,10 +160,9 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
       const PLAYER_X = W - 30
       const AI_X     = 18
-      const ballColor = g.ballCatch ? GREEN : RED
 
-      // AI paddle smoothly tracks ball
-      const aiSpd = Math.min(28, 4 * Math.pow(1.11, g.rallies))
+      // AI tracks ball
+      const aiSpd = Math.min(24, 3.5 * (1 + g.rallies * 0.06))
       const aiDiff = g.by - g.aiY
       g.aiY += Math.sign(aiDiff) * Math.min(aiSpd, Math.abs(aiDiff))
 
@@ -198,131 +171,87 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       if (g.by - BALL_R < 0)   { g.by = BALL_R;     g.vy =  Math.abs(g.vy) }
       if (g.by + BALL_R > H)   { g.by = H - BALL_R; g.vy = -Math.abs(g.vy) }
 
-      // AI paddle hit
+      // AI paddle — bounce and keep rally
       if (g.bx - BALL_R <= AI_X + PADDLE_W && g.vx < 0) {
         if (Math.abs(g.by - g.aiY) < PADDLE_H / 2 + 4) {
-          // Natural bounce — keep the rally going, just pick a new item + color
           g.bx = AI_X + PADDLE_W + BALL_R
           g.rallies++
           const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
           g.vx = Math.abs(speed)
           const rel = (g.by - g.aiY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
-          // Assign new random item + color without teleporting the ball
-          const remaining = g.items.slice(g.idx)
-          if (remaining.length > 0) {
-            const pick = Math.floor(Math.random() * remaining.length)
-            g.ballCatch = remaining[pick].shouldCatch
-            g.label = { text: remaining[pick].label, t: now }
-            const tmp = g.items[g.idx]; g.items[g.idx] = g.items[g.idx + pick]; g.items[g.idx + pick] = tmp
-          }
-          g.decided = false
+          // Cycle to next item
+          g.itemIdx = (g.itemIdx + 1) % g.items.length
         } else if (g.bx < AI_X - 4) {
-          // AI missed — respawn from center
-          g.idx++; g.total++
-          if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
+          // AI missed — reset
+          g.combo = 0; setCombo(0)
           spawnBall(g, W, H)
         }
       }
 
-      // Player paddle hit
-      if (g.bx + BALL_R >= PLAYER_X && g.vx > 0 && !g.decided) {
-        const inPaddle = Math.abs(g.by - g.playerY) < PADDLE_H / 2 + 4
-        g.decided = true
-        const correct = inPaddle === g.ballCatch
-
-        if (correct) {
-          g.score++; setScore(g.score)
-          g.flash = { text: inPaddle ? '✓ Good data — in' : '✓ Bad data — out', good: true, t: now }
-        } else {
-          g.lives--; setLives(g.lives)
-          g.flash = { text: inPaddle ? '✗ That was bad data' : '✗ That was clean data', good: false, t: now }
-        }
-
-        g.idx++; g.total++; setScore(g.score)
-        if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
-        if (g.lives <= 0) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return }
-
-        if (inPaddle) {
-          g.bx = PLAYER_X - BALL_R
+      // Player paddle
+      if (g.bx + BALL_R >= PLAYER_X && g.vx > 0) {
+        const hit = Math.abs(g.by - g.playerY) < PADDLE_H / 2 + 4
+        if (hit) {
+          // Score! combo builds
+          g.combo++
           g.rallies++
+          const pts = g.combo * 10
+          g.totalScore += pts
+          setScore(g.totalScore)
+          setCombo(g.combo)
+          addPop(`+${pts}`, g.bx / W, g.by / H)
+
+          g.bx = PLAYER_X - BALL_R
           const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
           g.vx = -Math.abs(speed)
           const rel = (g.by - g.playerY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
-          g.decided = false
-        } else {
-          setTimeout(() => { if (gs.current) spawnBall(gs.current, W, H) }, 450)
+          g.itemIdx = (g.itemIdx + 1) % g.items.length
+        } else if (g.bx > PLAYER_X + PADDLE_W) {
+          // Missed — lose life, reset combo
+          g.lives--; g.combo = 0
+          setLives(g.lives); setCombo(0)
+          g.flash = { text: 'Miss!', t: now }
+          if (g.lives <= 0) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 600); return }
+          spawnBall(g, W, H)
         }
-      }
-
-      // Ball off right
-      if (g.bx > W + 16 && !g.decided) {
-        g.decided = true
-        const correct = !g.ballCatch
-        if (correct) { g.score++; setScore(g.score); g.flash = { text: '✓ Bad data — out', good: true, t: now } }
-        else          { g.lives--; setLives(g.lives); g.flash = { text: '✗ That was clean data', good: false, t: now } }
-        g.idx++; g.total++
-        if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
-        if (g.lives <= 0) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return }
-        setTimeout(() => { if (gs.current) spawnBall(gs.current, W, H) }, 450)
       }
 
       // ── Render ────────────────────────────────────────────────────────────
       ctx.clearRect(0, 0, W, H); ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H)
+      for (let y = 0; y < H; y += 4) { ctx.fillStyle = 'rgba(255,255,255,0.018)'; ctx.fillRect(0, y, W, 2) }
 
-      // Scan lines
-      for (let y = 0; y < H; y += 4) { ctx.fillStyle = 'rgba(255,255,255,0.02)'; ctx.fillRect(0, y, W, 2) }
-
-      // White border
+      // Border + divider
       ctx.strokeStyle = 'rgba(255,255,255,0.14)'; ctx.lineWidth = 2; ctx.strokeRect(1, 1, W - 2, H - 2)
-
-      // White dotted center line
       ctx.setLineDash([5, 10]); ctx.strokeStyle = 'rgba(255,255,255,0.16)'; ctx.lineWidth = 2
       ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([])
 
-      // AI paddle (white, semi)
-      ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.fillRect(AI_X, g.aiY - PADDLE_H / 2, PADDLE_W, PADDLE_H)
+      // AI paddle
+      ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(AI_X, g.aiY - PADDLE_H / 2, PADDLE_W, PADDLE_H)
 
-      // Player paddle (green glow)
+      // Player paddle — green glow
       ctx.fillStyle = GREEN; ctx.shadowColor = GREEN; ctx.shadowBlur = 14
       ctx.fillRect(PLAYER_X, g.playerY - PADDLE_H / 2, PADDLE_W, PADDLE_H); ctx.shadowBlur = 0
 
-      // Ball — glows its color
-      ctx.fillStyle = ballColor
-      ctx.shadowColor = ballColor; ctx.shadowBlur = 36
+      // Ball — white with glow
+      ctx.fillStyle = '#fff'; ctx.shadowColor = GREEN; ctx.shadowBlur = 18
       ctx.beginPath(); ctx.arc(g.bx, g.by, BALL_R, 0, Math.PI * 2); ctx.fill()
-      // inner bright core
-      ctx.fillStyle = '#fff'; ctx.shadowBlur = 0
-      ctx.beginPath(); ctx.arc(g.bx, g.by, BALL_R * 0.45, 0, Math.PI * 2); ctx.fill()
-      ctx.shadowBlur = 0
+      ctx.shadowBlur = 0; ctx.fillStyle = GREEN
+      ctx.beginPath(); ctx.arc(g.bx, g.by, BALL_R * 0.35, 0, Math.PI * 2); ctx.fill()
 
-      // Brief item label near AI side
-      if (g.label) {
-        const age = (now - g.label.t) / 1400
-        if (age < 1) {
-          const fade = age < 0.2 ? age / 0.2 : age > 0.7 ? 1 - (age - 0.7) / 0.3 : 1
-          ctx.globalAlpha = fade * 0.75
-          ctx.fillStyle = ballColor
-          ctx.font = `600 13px ${BODY}`; ctx.textAlign = 'left'
-          ctx.fillText(g.label.text, AI_X + PADDLE_W + 10, H * 0.5)
-          ctx.globalAlpha = 1
-        } else { g.label = null }
-      }
-
-      // Flash feedback
+      // Miss flash
       if (g.flash) {
-        const age = (now - g.flash.t) / 350
+        const age = Math.min(1, (now - g.flash.t) / 300)
         if (age < 1) {
           ctx.globalAlpha = 1 - age
-          ctx.fillStyle = g.flash.good ? GREEN : RED
-          ctx.font = `700 12px ${BODY}`; ctx.textAlign = 'center'
-          ctx.fillText(g.flash.text, W / 2, H * 0.1)
+          ctx.fillStyle = '#ff6b6b'; ctx.font = `700 14px ${BODY}`; ctx.textAlign = 'center'
+          ctx.fillText(g.flash.text, W / 2, H * 0.12)
           ctx.globalAlpha = 1
         } else { g.flash = null }
       }
 
-      // Lives (top left)
+      // Lives
       for (let i = 0; i < LIVES; i++) {
         ctx.beginPath(); ctx.arc(16 + i * 16, 16, 5, 0, Math.PI * 2)
         ctx.fillStyle = i < g.lives ? GREEN : '#222'
@@ -330,17 +259,19 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         ctx.fill(); ctx.shadowBlur = 0
       }
 
-      // Score display (replacing progress bar)
-      ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.font = `700 11px ${BODY}`; ctx.textAlign = 'right'
-      ctx.fillText(`${g.score}/${g.total || 1}`, W - 10, H - 10)
+      // Score top right
+      ctx.fillStyle = GREEN; ctx.font = `700 13px ${DISP}`; ctx.textAlign = 'right'
+      ctx.fillText(g.totalScore.toLocaleString(), W - 10, 22)
 
-      // Speed indicator (top right)
-      ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.font = `600 10px ${BODY}`; ctx.textAlign = 'right'
-      ctx.fillText(`×${Math.pow(1.13, g.rallies).toFixed(1)}`, W - 10, 22)
+      // Combo indicator
+      if (g.combo > 1) {
+        ctx.fillStyle = `rgba(61,245,66,${Math.min(1, g.combo / 8)})`
+        ctx.font = `700 10px ${BODY}`; ctx.textAlign = 'right'
+        ctx.fillText(`×${g.combo} COMBO`, W - 10, 38)
+      }
 
       frameRef.current = requestAnimationFrame(loop)
     }
-
     frameRef.current = requestAnimationFrame(loop)
     return () => { cancelAnimationFrame(frameRef.current); window.removeEventListener('resize', resize) }
   }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -351,9 +282,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     gs.current.playerY = Math.max(PADDLE_H / 2, Math.min(rect.height - PADDLE_H / 2, e.clientY - rect.top))
   }
 
-  const total   = gs.current?.total || TOTAL
-  const pct     = score / Math.max(1, total)
-  const verdict = VERDICTS.find(v => pct >= v.min) ?? VERDICTS[VERDICTS.length - 1]
+  const currentItem = gs.current?.items[gs.current.itemIdx % ITEMS.length] ?? ITEMS[0]
+  const verdict = [...VERDICTS].sort((a, b) => b.min - a.min).find(v => score >= v.min) ?? VERDICTS[VERDICTS.length - 1]
 
   if (phase === 'intro') return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, background: BLACK, overflowY: 'auto' }}>
@@ -361,19 +291,12 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         <div>
           <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, margin: '0 0 10px', opacity: 0.6 }}>Signal Drop · W1 M3</p>
           <h1 style={{ fontFamily: DISP, fontSize: 38, color: '#fff', margin: '0 0 12px', lineHeight: 1 }}>Sort the Data</h1>
-          <p style={{ fontFamily: BODY, fontSize: 14, color: '#666', lineHeight: 1.6, margin: 0 }}>The ball glows green or red. That's your signal.</p>
+          <p style={{ fontFamily: BODY, fontSize: 14, color: '#666', lineHeight: 1.6, margin: 0 }}>Rally the ball. Every hit scores points. Longer rallies score more. Don't miss.</p>
         </div>
-        <div style={{ border: '1px solid #222', background: '#0d0d0d' }}>
-          <div style={{ padding: '13px 18px', borderBottom: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 20, height: 20, borderRadius: '50%', background: GREEN, flexShrink: 0, boxShadow: `0 0 12px ${GREEN}` }} />
-            <span style={{ fontFamily: BODY, fontSize: 14, color: '#ccc' }}>Green glow — hit it back</span>
-          </div>
-          <div style={{ padding: '13px 18px', display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 20, height: 20, borderRadius: '50%', background: RED, flexShrink: 0, boxShadow: `0 0 12px ${RED}` }} />
-            <span style={{ fontFamily: BODY, fontSize: 14, color: '#ccc' }}>Red glow — let it past</span>
-          </div>
+        <div style={{ border: '1px solid #222', background: '#0d0d0d', padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontFamily: BODY, fontSize: 13, color: '#888' }}>Each hit: <span style={{ color: GREEN, fontWeight: 700 }}>+10 pts × your combo</span></div>
+          <div style={{ fontFamily: BODY, fontSize: 13, color: '#888' }}>Miss: combo resets, lose a life</div>
         </div>
-        <p style={{ fontFamily: BODY, fontSize: 12, color: '#3a3a3a', margin: 0, textAlign: 'center' }}>Gets faster every rally.</p>
         <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '16px 0', border: 'none', cursor: 'pointer', touchAction: 'manipulation', boxShadow: `0 0 28px ${GREEN}55` }}>
           Start
         </button>
@@ -392,7 +315,39 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
   if (phase === 'playing') return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: BLACK }} onPointerMove={onPointer}>
-      <canvas ref={canvasRef} style={{ flex: 1, display: 'block', width: '100%', touchAction: 'none', cursor: 'none' }} />
+      {/* Current item label */}
+      <div style={{ padding: '8px 16px', borderBottom: '1px solid #111', flexShrink: 0, textAlign: 'center' }}>
+        <span style={{ fontFamily: BODY, fontSize: 12, color: '#444', letterSpacing: '0.04em' }}>{currentItem}</span>
+      </div>
+
+      {/* Canvas */}
+      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none', cursor: 'none' }} />
+
+        {/* Floating +points popups */}
+        {pops.map(p => (
+          <div key={p.id} style={{
+            position: 'absolute',
+            left: `${p.x * 100}%`, top: `${p.y * 100}%`,
+            transform: 'translate(-50%, -50%)',
+            fontFamily: DISP, fontSize: 18, color: GREEN,
+            letterSpacing: '-0.02em',
+            pointerEvents: 'none',
+            textShadow: `0 0 12px ${GREEN}`,
+            animation: 'popUp 0.9s ease-out forwards',
+          }}>
+            {p.text}
+          </div>
+        ))}
+      </div>
+
+      <style>{`
+        @keyframes popUp {
+          0%   { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+          40%  { opacity: 1; transform: translate(-50%, calc(-50% - 20px)) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, calc(-50% - 50px)) scale(0.8); }
+        }
+      `}</style>
     </div>
   )
 
@@ -405,7 +360,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           <div style={{ border: '1px solid #1e1e1e', padding: '24px 22px', background: '#0d0d0d' }}>
             <p style={{ fontFamily: BODY, fontSize: 16, color: '#ccc', lineHeight: 1.7, margin: 0 }}>{FACTS[factIdx]}</p>
           </div>
-          <button onClick={() => isLast ? setPhase('end') : setFactIdx(f => f + 1)} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', touchAction: 'manipulation', boxShadow: `0 0 18px ${GREEN}55` }}>
+          <button onClick={() => isLast ? setPhase('end') : setFactIdx(f => f + 1)}
+            style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', touchAction: 'manipulation', boxShadow: `0 0 18px ${GREEN}55` }}>
             {isLast ? 'See results →' : 'Next →'}
           </button>
         </div>
@@ -417,11 +373,11 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, background: BLACK, overflowY: 'auto' }}>
       <div style={{ maxWidth: 380, width: '100%', display: 'flex', flexDirection: 'column', gap: 22, textAlign: 'center' }}>
         <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', textShadow: `0 0 40px ${GREEN}66` }}>
-          {score}<span style={{ fontSize: 36, color: '#333' }}>/{total}</span>
+          {score.toLocaleString()}
         </div>
         <div style={{ border: '1px solid #1e1e1e', padding: '22px', background: '#0d0d0d' }}>
-          <p style={{ fontFamily: DISP, fontSize: 20, color: pct >= 0.7 ? GREEN : RED, margin: '0 0 8px', lineHeight: 1.2 }}>{verdict.verdict}</p>
-          <p style={{ fontFamily: BODY, fontSize: 14, color: '#888', margin: 0, lineHeight: 1.55 }}>{verdict.sub}</p>
+          <p style={{ fontFamily: DISP, fontSize: 18, color: GREEN, margin: '0 0 10px', lineHeight: 1.2 }}>{verdict.h}</p>
+          <p style={{ fontFamily: BODY, fontSize: 14, color: '#888', margin: 0, lineHeight: 1.55 }}>{verdict.s}</p>
         </div>
         <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', touchAction: 'manipulation', boxShadow: `0 0 22px ${GREEN}66` }}>
           Play again
