@@ -93,7 +93,9 @@ function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () =
 
 // ── HB button + welcome tooltip ───────────────────────────────────────────────
 
-function HBButton({ onClick, showWelcome, username, isPT }: { onClick: () => void; showWelcome: boolean; username: string; isPT: boolean }) {
+function HBButton({ onClick, showWelcome, username }: { onClick: () => void; showWelcome: boolean; username: string }) {
+  // Read lang directly from localStorage so it's always current (no stale state)
+  const isPT = typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt'
   return (
     <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 40 }}>
       {/* PAI welcome tooltip */}
@@ -214,7 +216,7 @@ export default function HandbookProvider() {
 
   return (
     <>
-      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} isPT={isPT} />}
+      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />}
 
       {open && (
         <>
