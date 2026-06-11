@@ -2,6 +2,21 @@ export interface OnboardingStrings {
   welcomeSubtitle: string
   welcomeInfo: string
   step: string
+  // Auth mode screen
+  authTitle?: string
+  authSub?: string
+  authNewLabel?: string
+  authNewSub?: string
+  authBackLabel?: string
+  authBackSub?: string
+  // Username screen
+  usernameChoose?: string
+  usernameEnter?: string
+  usernameChooseSub?: string
+  usernameEnterSub?: string
+  usernamePlaceholder?: string
+  usernameLoginPlaceholder?: string
+  usernameHint?: string
   gradeQ: string
   goalQ: string
   levelQ: string
@@ -43,6 +58,19 @@ export const LANG_STRINGS: Record<string, OnboardingStrings> = {
     welcomeSubtitle: 'Your AI Learning Buddy',
     welcomeInfo: 'Quick setup — 6 questions, about 2 minutes.',
     step: 'Step',
+    authTitle: 'Welcome to PAI',
+    authSub: 'First time here, or coming back?',
+    authNewLabel: "I'm new here",
+    authNewSub: 'Create an account',
+    authBackLabel: 'I have an account',
+    authBackSub: 'Sign back in',
+    usernameChoose: 'Choose a username',
+    usernameEnter: 'Enter your username',
+    usernameChooseSub: 'This is how you sign in. Pick one and remember it.',
+    usernameEnterSub: 'Type the username you signed up with.',
+    usernamePlaceholder: 'e.g. coollearner42',
+    usernameLoginPlaceholder: 'Your username',
+    usernameHint: 'Letters, numbers, and underscores only.',
     gradeQ: 'What grade are you in?',
     goalQ: 'Why do you want to learn AI?',
     levelQ: 'How much do you already know?',
@@ -77,6 +105,19 @@ export const LANG_STRINGS: Record<string, OnboardingStrings> = {
     welcomeSubtitle: 'Sua Parceira de Aprendizado em IA',
     welcomeInfo: 'Configuração rápida — 6 perguntas, cerca de 2 minutos.',
     step: 'Passo',
+    authTitle: 'Bem-vindo ao PAI',
+    authSub: 'Primeira vez aqui ou voltando?',
+    authNewLabel: 'Sou novo aqui',
+    authNewSub: 'Criar uma conta',
+    authBackLabel: 'Já tenho uma conta',
+    authBackSub: 'Entrar novamente',
+    usernameChoose: 'Escolha um nome de usuário',
+    usernameEnter: 'Digite seu nome de usuário',
+    usernameChooseSub: 'É assim que você entra. Escolha um e lembre dele.',
+    usernameEnterSub: 'Digite o nome de usuário com que você se cadastrou.',
+    usernamePlaceholder: 'ex: aprendiz42',
+    usernameLoginPlaceholder: 'Seu nome de usuário',
+    usernameHint: 'Apenas letras, números e sublinhados.',
     gradeQ: 'Em que série você está?',
     goalQ: 'Por que você quer aprender sobre IA?',
     levelQ: 'O quanto você já sabe?',

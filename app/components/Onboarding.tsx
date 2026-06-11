@@ -135,7 +135,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const submitUsername = async () => {
     const clean = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
-    if (!clean) { setUsernameError('Please enter a username'); return }
+    if (!clean) { setUsernameError(country?.lang === 'pt' ? 'Por favor, insira um nome de usuário' : 'Please enter a username'); return }
     setUsernameLoading(true)
     setUsernameError('')
     try {
@@ -176,7 +176,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)
     } catch {
-      setUsernameError('Something went wrong. Check your connection.')
+      setUsernameError(country?.lang === 'pt' ? 'Algo deu errado. Verifique sua conexão.' : 'Something went wrong. Check your connection.')
     } finally {
       setUsernameLoading(false)
     }
@@ -301,13 +301,13 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>Welcome to PAI</h2>
-                <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: 0 }}>First time here, or coming back?</p>
+                <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>{L.authTitle ?? 'Welcome to PAI'}</h2>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: 0 }}>{L.authSub ?? 'First time here, or coming back?'}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {([
-                  { mode: 'signup' as const, label: "I'm new here", sub: "Create an account" },
-                  { mode: 'login'  as const, label: "I have an account", sub: "Sign back in" },
+                  { mode: 'signup' as const, label: L.authNewLabel  ?? "I'm new here",      sub: L.authNewSub  ?? 'Create an account' },
+                  { mode: 'login'  as const, label: L.authBackLabel ?? 'I have an account', sub: L.authBackSub ?? 'Sign back in'       },
                 ]).map(({ mode, label, sub }) => (
                   <button key={mode} onClick={() => selectAuthMode(mode)} style={{
                     padding: '20px 18px', textAlign: 'left',
@@ -331,10 +331,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>
-                  {authMode === 'login' ? 'Enter your username' : 'Choose a username'}
+                  {authMode === 'login' ? (L.usernameEnter ?? 'Enter your username') : (L.usernameChoose ?? 'Choose a username')}
                 </h2>
                 <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: 0 }}>
-                  {authMode === 'login' ? 'Type the username you signed up with.' : 'This is how you sign in. Pick one and remember it.'}
+                  {authMode === 'login' ? (L.usernameEnterSub ?? 'Type the username you signed up with.') : (L.usernameChooseSub ?? 'This is how you sign in. Pick one and remember it.')}
                 </p>
               </div>
               <div>
@@ -344,7 +344,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   value={username}
                   onChange={e => { setUsername(e.target.value); setUsernameError('') }}
                   onKeyDown={e => e.key === 'Enter' && canContinue && submitUsername()}
-                  placeholder={authMode === 'login' ? 'Your username' : 'e.g. coollearner42'}
+                  placeholder={authMode === 'login' ? (L.usernameLoginPlaceholder ?? 'Your username') : (L.usernamePlaceholder ?? 'e.g. coollearner42')}
                   maxLength={30}
                   autoCapitalize="none"
                   autoCorrect="off"
@@ -363,7 +363,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 )}
                 {!usernameError && authMode === 'signup' && (
                   <p style={{ fontFamily: BODY, fontSize: 11, color: DIM, margin: '8px 0 0' }}>
-                    Letters, numbers, and underscores only.
+                    {L.usernameHint ?? 'Letters, numbers, and underscores only.'}
                   </p>
                 )}
               </div>
