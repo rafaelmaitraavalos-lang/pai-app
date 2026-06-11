@@ -104,11 +104,6 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   }
 
   function startGame() {
-    const cv = canvasRef.current
-    if (!cv) return
-    const W = cv.clientWidth, H = cv.clientHeight
-    cv.width = W; cv.height = H
-
     const g: GS = {
       bx: 0, by: 0, vx: 0, vy: 0,
       paddleY: 0.5,
@@ -116,7 +111,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       resolved: false, resolvedAt: 0,
       flash: null,
       items: shuffle(ITEMS),
-      spawned: false,  // spawn on first game-loop frame when canvas has real dimensions
+      spawned: false,  // ball spawns on first game-loop frame when canvas is mounted
     }
     gs.current = g
     setLives(LIVES); setScore(0); setIdx(0); setLastMsg(null)
