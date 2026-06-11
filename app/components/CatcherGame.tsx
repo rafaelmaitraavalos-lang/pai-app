@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { CatcherGame } from '../data/catcherGames'
+import type { CatcherGame, CatcherItem } from '../data/catcherGames'
 
 const DISP = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY = "var(--font-body, system-ui, sans-serif)"
@@ -19,12 +19,13 @@ const CATCH_ZONE   = 60    // px from bottom where basket can catch
 
 interface FallingItem {
   id:          number
-  text:        string
+  icon:        string
+  label:       string
   shouldCatch: boolean
-  x:           number   // left px (varies per frame — we store fraction)
-  xFrac:       number   // 0–1 of container width
+  x:           number
+  xFrac:       number
   startTime:   number
-  duration:    number   // ms to fall
+  duration:    number
   done:        boolean
 }
 
@@ -58,7 +59,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
   const livesRef      = useRef(LIVES)
   const scoreRef      = useRef(0)
   const totalRef      = useRef(0)
-  const queueRef      = useRef<{ text: string; shouldCatch: boolean }[]>([])
+  const queueRef      = useRef<{ icon: string; label: string; shouldCatch: boolean }[]>([])
   const spawnedRef    = useRef(0)
   const frameRef      = useRef<number>(0)
   const lastSpawnRef  = useRef(0)
@@ -86,8 +87,8 @@ export default function CatcherGame({ game, onComplete }: Props) {
   }, [onComplete])
 
   const startGame = useCallback(() => {
-    const catchItems = shuffle(game.items.catch).slice(0, TOTAL_ITEMS / 2).map(t => ({ text: t, shouldCatch: true }))
-    const dodgeItems = shuffle(game.items.dodge).slice(0, TOTAL_ITEMS / 2).map(t => ({ text: t, shouldCatch: false }))
+    const catchItems = shuffle(game.items.catch).slice(0, TOTAL_ITEMS / 2).map((t: CatcherItem) => ({ ...t, shouldCatch: true }))
+    const dodgeItems = shuffle(game.items.dodge).slice(0, TOTAL_ITEMS / 2).map((t: CatcherItem) => ({ ...t, shouldCatch: false }))
     queueRef.current  = shuffle([...catchItems, ...dodgeItems])
     spawnedRef.current = 0
     livesRef.current  = LIVES
@@ -132,7 +133,8 @@ export default function CatcherGame({ game, onComplete }: Props) {
           const xFrac = 0.1 + Math.random() * 0.8
           const newItem: FallingItem = {
             id: ++idRef.current,
-            text: next.text,
+            icon: next.icon,
+            label: next.label,
             shouldCatch: next.shouldCatch,
             x: 0, xFrac,
             startTime: now,
@@ -315,12 +317,14 @@ export default function CatcherGame({ game, onComplete }: Props) {
               width: ITEM_W,
               transform: 'translateY(-50%)',
               background: '#0f0f0f',
-              border: '1.5px solid #2a2a2a',
-              padding: '10px 12px',
+              border: '1.5px solid #222',
+              padding: '14px 12px 12px',
               zIndex: 5,
+              textAlign: 'center',
             }}>
-              <div style={{ fontFamily: BODY, fontSize: 11, color: '#ccc', lineHeight: 1.4 }}>
-                {item.text}
+              <div style={{ fontSize: 36, lineHeight: 1, marginBottom: 8 }}>{item.icon}</div>
+              <div style={{ fontFamily: BODY, fontSize: 11, color: '#bbb', lineHeight: 1.45, whiteSpace: 'pre-line' }}>
+                {item.label}
               </div>
             </div>
           )
