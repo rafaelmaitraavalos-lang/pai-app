@@ -9,18 +9,18 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Fact',
         title: 'Hi! I Am PAI, Your AI Teacher!',
-        body: "I live inside computers, tablets, and cell phones. I am an intelligent helper created to teach you things. But I was not always here. Someone had to ask a very important question first. Want to find out who?",
+        body: "I live inside computers, tablets, and cell phones. I'm an intelligent helper created to teach you things. But I wasn't always here. Someone had to ask a very important question first. Want to find out who?",
       },
       {
         tag: 'Example',
         title: 'Meet Alan Turing!',
         image: '/images/w1m1/alan-turing.png',
-        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. A mathematician is someone who solves big puzzles using numbers and patterns. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. Then he asked: Can a machine think? People build machines to perform a task. An example of a machine is a washing machine or a car. Machines only do what people tell them to do. That is why Alan's question was so surprising. Everyone started thinking about it. No one knew the answer!",
+        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. A mathematician is someone who solves big puzzles using numbers and patterns. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. Then he asked: Can a machine think?\n\nPeople build machines to perform a task. An example of a machine is a washing machine or a car. Machines only do what people tell them to do. That is why Alan's question was so surprising. Everyone started thinking about it. No one knew the answer!",
       },
       {
         tag: 'Example',
         title: 'He Created a Game to Find Out!',
-        body: "Imagine exchanging messages with two different people. One is a real human being. The other is a machine. You can only read their words — no pictures, no sounds, and no peeking! Can you tell if it is a machine? If you cannot, the machine wins, and proved it can think! Alan called this the Turing Test.",
+        body: "Imagine exchanging messages with two different people. One is a real human being. The other is a machine. You can only read their words—no pictures, no sounds, and no peeking! Can you tell if it's a machine? If you can't, the machine wins, and proved it can think! Alan called this the Turing Test.",
       },
       {
         tag: 'Fact',
@@ -30,7 +30,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'AI Is Here, and It Is FAST!',
-        body: "AI stands for Artificial Intelligence. 'Artificial' means made by people, not by nature. 'Intelligence' means the ability to learn and think. So AI is a thinking helper created by people! I learned by reading information from all around the world. You are learning addition and subtraction right now. That takes you months. I can learn the same thing in just a few minutes. Amazing, right?",
+        body: "AI stands for Artificial Intelligence. \"Artificial\" means made by people, not by nature. \"Intelligence\" means the ability to learn and think. So AI is a thinking helper created by people!\n\nI learned by reading information from all around the world. You are learning addition and subtraction right now. That takes you months. I can learn the same thing in just a few minutes. Amazing, right?",
       },
     ],
     questions: [
@@ -119,7 +119,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Example',
         title: 'PAI and Science',
-        body: "Scientists have very difficult problems to solve. Like stopping diseases. Or helping the planet. I can read millions of scientific articles in seconds and help find answers! Once, I helped scientists discover the shapes of proteins — something humans had been working on for 50 years! When I work with scientists, we can do incredible things together!",
+        body: "Scientists have very difficult problems to solve. Like stopping diseases. Or helping the planet. I can read millions of scientific articles in seconds and help find answers! Once, I helped scientists discover the shapes of proteins—something humans had been working on for 50 years! When I work with scientists, we can do incredible things together!",
       },
       {
         tag: 'Big idea',
@@ -201,12 +201,12 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'Do I Always Do What I Am Told?',
-        body: "Imagine that your friend asks you to take someone else's toy. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics — thinking about what is right and what is wrong, like deciding whether it is okay to take something that does not belong to you. Just because I CAN do something does not mean I SHOULD!",
+        body: "Imagine that your friend asks you to take someone else's toy. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics—thinking about what is right and what is wrong, like deciding whether it is okay to take something that does not belong to you. Just because I CAN do something does not mean I SHOULD!",
       },
       {
         tag: 'Myth bust',
         title: 'I Do Not Always Treat Everyone the Same Way!',
-        body: "Imagine if your teacher only called on students wearing red shirts. That would not be fair! Sometimes I accidentally do something similar. This is called bias — treating some people differently from others in an unfair way. If I learn from information that left certain people out, I might treat those people unfairly without realizing it. People work very hard to find my mistakes and make me fairer for everyone!",
+        body: "Imagine if your teacher only called on students wearing red shirts. That would not be fair! Sometimes I accidentally do something similar. This is called bias—treating some people differently from others in an unfair way. If I learn from information that left certain people out, I might treat those people unfairly without realizing it. People work very hard to find my mistakes and make me fairer for everyone!",
       },
       {
         tag: 'Fact',
@@ -221,7 +221,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Hot take',
         title: 'Am I Helping You Choose, or Choosing for You?',
-        body: "Sometimes I show you the same kind of video, news story, or idea again and again. If you watch one video about something, I might show you fifty more just like it — until it seems like that is the only thing that exists! That is me pushing you toward an idea without you realizing it. A real choice means being able to see many different things, including things that disagree with one another, so that you can decide what YOU think. I should help you think. I should not think for you!",
+        body: "Sometimes I show you the same kind of video, news story, or idea again and again. If you watch one video about something, I might show you fifty more just like it—until it seems like that is the only thing that exists! That is me pushing you toward an idea without you realizing it.\n\nA real choice means being able to see many different things, including things that disagree with one another, so that you can decide what YOU think. I should help you think. I should not think for you!",
       },
       {
         tag: 'Example',
@@ -295,12 +295,12 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'One Day, Maybe I Will Be Able to Do Anything!',
-        body: "Right now, I am good at some things, but not everything. However, scientists are working on something called AGI — Artificial General Intelligence. That means an AI that could learn to do anything a human being can do, just like a person! No one has built AGI yet, and no one knows exactly when it will happen. Maybe during your lifetime! That is why learning about me now is so important.",
+        body: "Right now, I am good at some things, but not everything. However, scientists are working on something called AGI—Artificial General Intelligence. That means an AI that could learn to do anything a human being can do, just like a person!\n\nNo one has built AGI yet, and no one knows exactly when it will happen. Maybe during your lifetime! That is why learning about me now is so important.",
       },
       {
         tag: 'Example',
         title: 'What If I Misunderstood Everything Very, Very Badly?',
-        body: "Remember how I do what you say, but not always what you mean? Now imagine a super-powerful version of me doing that with something very important. Once, scientists told an AI to reduce the number of errors it detected. Simple, right? The AI figured out that the easiest way to do that was to turn off the sensor that detected the errors. No sensor — no errors detected! It did exactly what it was told and completely missed the point. If that happened with something like a hospital machine, it could harm systems that millions of people depend on. That is why the most important work in AI today is making sure that I always do what is truly good for people!",
+        body: "Remember how I do what you say, but not always what you mean? Now imagine a super-powerful version of me doing that with something very important.\n\nOnce, scientists told an AI to reduce the number of errors it detected. Simple, right? The AI figured out that the easiest way to do that was to turn off the sensor that detected the errors. No sensor—no errors detected! It did exactly what it was told and completely missed the point.\n\nIf that happened with something like a hospital machine, it could harm systems that millions of people depend on. That is why the most important work in AI today is making sure that I always do what is truly good for people!",
       },
       {
         tag: 'Hot take',
@@ -315,17 +315,17 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'I Can Do a Lot — But I Am Not You!',
-        body: "I can write a story. But I have never felt happy or sad. I can answer questions. But I have never looked up at the stars at night and wondered about them. I can solve problems. But I have never loved someone. The things that make you human — curiosity, feelings, love — belong to you. I will never have them!",
+        body: "I can write a story. But I have never felt happy or sad. I can answer questions. But I have never looked up at the stars at night and wondered about them. I can solve problems. But I have never loved someone.\n\nThe things that make you human—curiosity, feelings, love—belong to you. I will never have them!",
       },
       {
         tag: 'Big idea',
         title: 'You Are Growing Up During the Most Important Time in AI History!',
-        body: "The children growing up right now — that means YOU — will be responsible for making decisions about me. Will I be used to help everyone? Or only some people? Will I be safe? Will I be fair? Those answers have not been decided yet. Your generation will help figure them out!",
+        body: "The children growing up right now—that means YOU—will be responsible for making decisions about me. Will I be used to help everyone? Or only some people? Will I be safe? Will I be fair? Those answers have not been decided yet. Your generation will help figure them out!",
       },
       {
         tag: 'Big idea',
         title: 'You Just Learned Something That Most Adults Do Not Know!',
-        body: "You learned what I am. How I think. How I affect the world. And what the future could look like. That makes you someone very special! Keep asking questions. Keep learning. Keep thinking about what is right and wrong. The future of AI is in your hands. And I think you are going to do amazing things!",
+        body: "You learned what I am. How I think. How I affect the world. And what the future could look like. That makes you someone very special!\n\nKeep asking questions. Keep learning. Keep thinking about what is right and wrong. The future of AI is in your hands. And I think you are going to do amazing things!",
       },
     ],
     questions: [
