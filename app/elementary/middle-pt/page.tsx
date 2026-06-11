@@ -20,8 +20,8 @@ export default function MiddlePtHome() {
     setUsername(localStorage.getItem('pai_username') ?? '')
     const map: Record<number, boolean> = {}
     MIDDLE_SCHOOL_WORLD_IDS_PT.forEach(wid => {
-      const world = ELEMENTARY_WORLDS[wid]
-      world?.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
+      const lessonId = ELEMENTARY_WORLDS[wid]?.modules[0]?.id
+      if (lessonId) map[lessonId] = localStorage.getItem(`pai_lesson_${lessonId}_done`) === 'true'
     })
     setDone(map)
   }, [])
@@ -34,8 +34,14 @@ export default function MiddlePtHome() {
     router.replace('/')
   }
 
+  const firstUndoneIdx = MIDDLE_SCHOOL_WORLD_IDS_PT.findIndex(wid => {
+    const lessonId = ELEMENTARY_WORLDS[wid]?.modules[0]?.id
+    return lessonId && !done[lessonId]
+  })
+
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
+
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -46,26 +52,48 @@ export default function MiddlePtHome() {
         </div>
       </div>
 
-      <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px' }}>
+      <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Seus Mundos</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Conteúdo</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
 
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {MIDDLE_SCHOOL_WORLD_IDS_PT.map((wid, idx) => {
-            const world   = ELEMENTARY_WORLDS[wid]
-            const isFirst = idx === 0
+            const world    = ELEMENTARY_WORLDS[wid]
+            const lessonId = world?.modules[0]?.id
+            const isActive = idx === firstUndoneIdx
+            const isDone   = lessonId ? done[lessonId] : false
+
             return (
-              <div key={wid} onClick={() => router.push(`/elementary/world/${wid}`)}
-                style={{ display: 'flex', alignItems: 'center', padding: '15px 16px', background: '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none' }}>
-                <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>U{String(idx + 1).padStart(2, '0')}</span>
-                <span style={{ fontFamily: DISP, fontSize: 17, letterSpacing: '-0.01em', flex: 1, color: BLACK }}>{world.title}</span>
-                {isFirst && (
+              <div
+                key={wid}
+                onClick={() => lessonId && router.push(`/elementary/lesson/${lessonId}`)}
+                style={{
+                  display: 'flex', alignItems: 'center',
+                  padding: '15px 16px',
+                  background: '#EBEBEB',
+                  border: `1.5px solid ${BLACK}`,
+                  boxShadow: `6px 6px 0 0 ${BLACK}`,
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                }}
+              >
+                <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>
+                  M{String(idx + 1).padStart(2, '0')}
+                </span>
+                <span style={{ fontFamily: DISP, fontSize: 'clamp(13px, 3.8vw, 17px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>
+                  {world?.title}
+                </span>
+                {isActive && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                     <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                    Começar aqui
+                    Em andamento
                   </span>
+                )}
+                {isDone && (
+                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, border: `1px solid ${FAINT}`, padding: '2px 7px', marginRight: 14 }}>Concluído</span>
                 )}
                 <span style={{ fontFamily: DISP, fontSize: 14, color: DIM }}>→</span>
               </div>
