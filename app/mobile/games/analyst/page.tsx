@@ -1,9 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import TheAnalyst from '../../../components/TheAnalyst'
 import analystRounds from '../../../data/analystRounds'
-import type { AnalystResult } from '../../../components/TheAnalyst'
+import MobileGameComplete from '../../../components/MobileGameComplete'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BLACK = '#0a0a0a'
@@ -11,6 +12,7 @@ const GREEN = '#3DF542'
 
 export default function MobileAnalystPage() {
   const router = useRouter()
+  const [done, setDone] = useState(false)
 
   if (done) return <MobileGameComplete slug="analyst" />
 
