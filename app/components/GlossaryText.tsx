@@ -216,7 +216,7 @@ function GlossaryTerm({
           background: 'none', border: 'none', padding: 0, margin: 0,
           font: 'inherit', fontSize: 'inherit', lineHeight: 'inherit',
           fontFamily: 'var(--font-display)',
-          color: BLACK,
+          color: 'inherit',
           textDecorationLine: 'underline',
           textDecorationStyle: (isOpen && !closing) ? 'dotted' : 'solid',
           textDecorationColor: GREEN,
