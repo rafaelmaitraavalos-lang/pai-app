@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import GAMES_PT from '../data/gamesContent_pt'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -8,7 +9,7 @@ const GREEN = '#3DF542'
 const RED   = '#FF3B3B'
 const BLACK = '#0a0a0a'
 
-const ITEMS = [
+const ITEMS_EN = [
   { label: 'Expert-verified diagnoses',       shouldCatch: true  },
   { label: 'Native speaker transcriptions',   shouldCatch: true  },
   { label: '3 radiologists per scan',         shouldCatch: true  },
@@ -29,14 +30,42 @@ const ITEMS = [
   { label: 'Half misread the question',       shouldCatch: false },
 ]
 
-const VERDICTS = [
+const ITEMS_PT = [
+  { label: 'Diagnósticos verificados por especialistas',  shouldCatch: true  },
+  { label: 'Transcrições por falantes nativos',          shouldCatch: true  },
+  { label: '3 radiologistas por exame',                  shouldCatch: true  },
+  { label: 'Casos de fraude confirmados em juízo',       shouldCatch: true  },
+  { label: 'Rótulos de biólogos certificados',           shouldCatch: true  },
+  { label: 'Checadores de fatos independentes',          shouldCatch: true  },
+  { label: 'Verdade de referência revisada por pares',   shouldCatch: true  },
+  { label: 'Anotações de especialistas do domínio',      shouldCatch: true  },
+  { label: 'Imagens de câmeras de vigilância',           shouldCatch: false },
+  { label: 'Sem rótulos — dados brutos',                 shouldCatch: false },
+  { label: 'Traduzido automaticamente por máquina',      shouldCatch: false },
+  { label: 'Histórico de contratações com viés',         shouldCatch: false },
+  { label: 'Rótulos a US$0,01 — 20 segundos cada',       shouldCatch: false },
+  { label: 'Um hospital, modelo global',                 shouldCatch: false },
+  { label: 'Dados de bairro com policiamento excessivo', shouldCatch: false },
+  { label: 'Sem consentimento do usuário',               shouldCatch: false },
+  { label: 'Só avaliações de 1 e 5 estrelas',            shouldCatch: false },
+  { label: 'Metade interpretou mal a pergunta',          shouldCatch: false },
+]
+
+const VERDICTS_EN = [
   { min: 0.9, verdict: 'CLEAN DATASET.',        sub: "Your AI is sharp. That's how it's done." },
   { min: 0.7, verdict: 'MOSTLY CLEAN.',         sub: 'A few bad examples slipped in. Your model has minor issues.' },
   { min: 0.5, verdict: 'NOISY TRAINING SET.',   sub: 'Your AI learned some wrong patterns. It will make mistakes.' },
   { min: 0,   verdict: 'YOU BUILT A BAD AI.',   sub: 'Too much bias got through. Your model is going to cause real problems.' },
 ]
 
-const FACTS = [
+const VERDICTS_PT = [
+  { min: 0.9, verdict: 'CONJUNTO IMPECÁVEL.',        sub: 'O seu modelo é preciso. É assim que se faz.' },
+  { min: 0.7, verdict: 'CONJUNTO ROBUSTO.',          sub: 'Algumas lacunas, mas o modelo vai treinar bem.' },
+  { min: 0.5, verdict: 'DADOS RUIDOSOS.',            sub: 'O modelo vai aprender alguns padrões ruins junto com os bons.' },
+  { min: 0,   verdict: 'VOCÊ CONSTRUIU UMA IA RUIM.', sub: 'Ruído excessivo. O modelo aprendeu coisas erradas. É assim que o viés começa.' },
+]
+
+const FACTS_EN = [
   "AI doesn't label its own training data — humans do. The labels carry the biases of whoever made them.",
   "More data doesn't fix bad data. A model trained on a million bad examples is worse than one trained on a thousand good ones.",
   "Amazon's hiring AI was trained on real hiring decisions. The bias in those decisions was real. The model learned both.",
@@ -45,7 +74,13 @@ const FACTS = [
   "When data is collected without consent, the privacy violation happens before the model even exists.",
 ]
 
-const TOTAL    = ITEMS.length  // items per cycle — game loops until lives run out
+// PT facts come from the parsed doc
+const _pt = GAMES_PT['signal-drop']
+const FACTS_PT: string[] = typeof _pt?.facts === 'string'
+  ? (_pt.facts as string).split('. ').filter(Boolean).map(s => s.trim())
+  : Array.isArray(_pt?.facts) ? (_pt.facts as string[]) : FACTS_EN
+
+const TOTAL    = ITEMS_EN.length  // items per cycle — game loops until lives run out
 const PADDLE_H = 78
 const PADDLE_W = 12
 const BALL_R   = 12
@@ -69,7 +104,7 @@ interface GS {
   decided: boolean                          // player already judged this pass
   flash:  { text: string; good: boolean; t: number } | null
   label:  { text: string; t: number } | null  // brief item label on color change
-  items:  typeof ITEMS
+  items:  typeof ITEMS_EN
   spawned: boolean
 }
 
@@ -83,6 +118,15 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const [score,     setScore]     = useState(0)
   const [countdown, setCountdown] = useState(3)
   const [factIdx,   setFactIdx]   = useState(0)
+  const [isPT,      setIsPT]      = useState(false)
+
+  useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
+  }, [])
+
+  const ITEMS    = isPT ? ITEMS_PT    : ITEMS_EN
+  const VERDICTS = isPT ? VERDICTS_PT : VERDICTS_EN
+  const FACTS    = isPT ? FACTS_PT    : FACTS_EN
 
   function spawnBall(g: GS, W: number, H: number, fromAI = false) {
     const speed = BASE_SPD * Math.pow(1.13, g.rallies)
@@ -110,7 +154,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       lives: LIVES, score: 0, idx: 0, total: 0, rallies: 0,
       ballCatch: true, decided: false,
       flash: null, label: null,
-      items: shuffle(ITEMS), spawned: false,
+      items: shuffle(isPT ? ITEMS_PT : ITEMS_EN), spawned: false,
     }
     setLives(LIVES); setScore(0)
     setCountdown(3); setPhase('countdown')
