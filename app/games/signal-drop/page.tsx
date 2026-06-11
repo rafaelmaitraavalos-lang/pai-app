@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import GameComplete from '../../components/GameComplete'
 import PongGame from '../../components/PongGame'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -9,6 +11,10 @@ const GREEN = '#3DF542'
 
 export default function SignalDropPage() {
   const router = useRouter()
+  const [done, setDone] = useState(false)
+
+
+  if (done) return <GameComplete slug="signal-drop" />
 
   return (
     <div style={{ height: '100vh', background: BLACK, display: 'flex', flexDirection: 'column' }}>
@@ -19,7 +25,7 @@ export default function SignalDropPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <PongGame onComplete={() => {}} />
+        <PongGame onComplete={() => setDone(true)} />
       </div>
     </div>
   )

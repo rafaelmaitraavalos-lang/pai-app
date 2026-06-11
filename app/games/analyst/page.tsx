@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import GameComplete from '../../components/GameComplete'
 import TheAnalyst from '../../components/TheAnalyst'
 import analystRounds from '../../data/analystRounds'
 import type { AnalystResult } from '../../components/TheAnalyst'
@@ -11,10 +12,12 @@ const GREEN = '#3DF542'
 
 export default function AnalystPage() {
   const router = useRouter()
+  const [done, setDone] = useState(false)
 
-  const handleComplete = (_r: AnalystResult) => {
-    router.push('/home')
-  }
+  const handleComplete = (_r: any) => { setDone(true) }
+
+
+  if (done) return <GameComplete slug="analyst" />
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>

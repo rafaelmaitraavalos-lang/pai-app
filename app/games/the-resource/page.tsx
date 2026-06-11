@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import GameComplete from '../../components/GameComplete'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/the-resource'
 import type { AnalystResult } from '../../components/TheAnalyst'
@@ -11,10 +12,12 @@ const GREEN = '#3DF542'
 
 export default function TheResourcePage() {
   const router = useRouter()
+  const [done, setDone] = useState(false)
 
-  const handleComplete = (_r: AnalystResult) => {
-    router.push('/games')
-  }
+  const handleComplete = (_r: any) => { setDone(true) }
+
+
+  if (done) return <GameComplete slug="the-resource" />
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>

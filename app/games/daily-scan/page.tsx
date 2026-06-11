@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import GameComplete from '../../components/GameComplete'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 
@@ -10,6 +11,10 @@ const GREEN = '#3DF542'
 
 export default function DailyScanPage() {
   const router = useRouter()
+  const [done, setDone] = useState(false)
+
+
+  if (done) return <GameComplete slug="daily-scan" />
 
   return (
     <div style={{ height: '100vh', background: BLACK, display: 'flex', flexDirection: 'column' }}>
@@ -20,7 +25,7 @@ export default function DailyScanPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame game={CATCHER_GAMES['daily-scan']} onComplete={() => router.push('/games')} />
+        <CatcherGame game={CATCHER_GAMES['daily-scan']} onComplete={() => setDone(true)} />
       </div>
     </div>
   )
