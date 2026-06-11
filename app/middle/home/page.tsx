@@ -59,7 +59,7 @@ export default function MiddleSchoolHome() {
             const world   = ELEMENTARY_WORLDS[wid]
             const isFirst = idx === 0
             return (
-              <div key={wid} onClick={() => router.push(`/elementary/world/${wid}`)}
+              <div key={wid} onClick={() => router.push(`/elementary/lesson/${wid}`)}
                 style={{ display: 'flex', alignItems: 'center', padding: '15px 16px', background: '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none' }}>
                 <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>U{String(idx + 1).padStart(2, '0')}</span>
                 <span style={{ fontFamily: DISP, fontSize: 'clamp(13px, 3.8vw, 17px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>{world.title}</span>

@@ -167,7 +167,12 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         return
       }
 
-      // Brand new signup — continue to grade selection
+      // Brand new signup — clear any stale state from a previous user on this device
+      localStorage.removeItem('pai_handbook_seen')
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('pai_lesson_'))
+        .forEach(k => localStorage.removeItem(k))
+
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)
     } catch {
