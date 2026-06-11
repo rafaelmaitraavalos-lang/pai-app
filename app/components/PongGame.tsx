@@ -48,14 +48,15 @@ type Phase = 'intro' | 'countdown' | 'playing' | 'facts' | 'end'
 // All mutable game state in one ref — no stale closure issues
 interface GS {
   bx: number; by: number; vx: number; vy: number
-  paddleY: number   // 0–1
+  paddleY: number
   lives: number
   score: number
   idx: number
   resolved: boolean
-  resolvedAt: number  // timestamp, 0 = not resolved
+  resolvedAt: number
   flash: { text: string; good: boolean; t: number } | null
   items: typeof ITEMS
+  spawned: boolean   // ball not yet placed — spawn on first frame
 }
 
 export default function PongGame({ onComplete }: { onComplete?: () => void }) {
@@ -115,8 +116,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       resolved: false, resolvedAt: 0,
       flash: null,
       items: shuffle(ITEMS),
+      spawned: false,  // spawn on first game-loop frame when canvas has real dimensions
     }
-    spawnBall(g, W, H)
     gs.current = g
     setLives(LIVES); setScore(0); setIdx(0); setLastMsg(null)
     setCountdown(3)
@@ -144,6 +145,10 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       const g = gs.current
       if (!g) return
       const W = cv.width, H = cv.height
+
+      // Spawn ball on first real frame (canvas has correct dimensions now)
+      if (!g.spawned && W > 0 && H > 0) { spawnBall(g, W, H); g.spawned = true }
+
       const py = g.paddleY * H
       const paddleX = W - 38
 
@@ -188,13 +193,17 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       // Scan lines
       for (let y = 0; y < H; y += 4) { ctx.fillStyle = 'rgba(0,0,0,0.07)'; ctx.fillRect(0, y, W, 2) }
 
-      // Divider
-      ctx.setLineDash([4, 10]); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 1
+      // White border
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 2
+      ctx.strokeRect(1, 1, W - 2, H - 2)
+
+      // Divider — white dots
+      ctx.setLineDash([6, 10]); ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 2
       ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke()
       ctx.setLineDash([])
 
-      // Left wall
-      ctx.fillStyle = '#181818'; ctx.fillRect(0, 0, 4, H)
+      // Left wall — white
+      ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(0, 0, 4, H)
 
       // Paddle
       ctx.fillStyle = GREEN
