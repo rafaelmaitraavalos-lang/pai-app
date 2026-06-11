@@ -92,16 +92,49 @@ function beep(freq: number, type: OscillatorType, duration: number, gain = 0.15,
     osc.start(); osc.stop(ctx.currentTime + duration)
   } catch {}
 }
+
+// ── Persistent paddle slide sound ─────────────────────────────────────────────
+let _padOsc: OscillatorNode | null = null
+let _padGain: GainNode | null = null
+let _padMoving = false
+
+function startPaddle() {
+  if (_padMoving) return; _padMoving = true
+  try {
+    const ctx = getAudio()
+    _padOsc  = ctx.createOscillator()
+    _padGain = ctx.createGain()
+    _padOsc.connect(_padGain); _padGain.connect(ctx.destination)
+    _padOsc.type = 'sine'; _padOsc.frequency.setValueAtTime(520, ctx.currentTime)
+    _padGain.gain.setValueAtTime(0, ctx.currentTime)
+    _padGain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 0.04)
+    _padOsc.start()
+  } catch {}
+}
+
+function stopPaddle() {
+  if (!_padMoving) return; _padMoving = false
+  try {
+    const ctx = getAudio()
+    if (_padGain) {
+      _padGain.gain.setValueAtTime(_padGain.gain.value, ctx.currentTime)
+      _padGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.06)
+    }
+    if (_padOsc) { _padOsc.stop(ctx.currentTime + 0.07); _padOsc = null; _padGain = null }
+    beep(380, 'sine', 0.05, 0.06)   // soft stop-click
+  } catch {}
+}
+
 const sfx = {
-  hit:      () => beep(280, 'sine',     0.06, 0.18, 420),
-  swoosh:   () => beep(700, 'sine',     0.06, 0.08, 250),
-  bad:      () => beep(90,  'sawtooth', 0.18, 0.22, 60),
-  miss:     () => beep(180, 'triangle', 0.22, 0.15, 80),
-  combo:    (n: number) => beep(200 + n * 30, 'sine', 0.08, 0.12, 300 + n * 40),
-  countdown:(n: number) => {
-    if (n > 0) beep(n === 1 ? 440 : 330, 'sine', 0.12, 0.25)   // 3,2 = 330Hz; 1 = 440Hz
+  hit:       () => beep(320, 'sine',     0.07, 0.2, 500),  // satisfying ping
+  ballWall:  () => beep(600, 'sine',     0.05, 0.06, 300),  // ball bounce whoosh
+  bad:       () => beep(90,  'sawtooth', 0.18, 0.22, 60),
+  miss:      () => beep(180, 'triangle', 0.22, 0.15, 80),
+  combo:     (n: number) => beep(200 + n * 30, 'sine', 0.08, 0.12, 300 + n * 40),
+  countdown: (n: number) => {
+    if (n > 0) beep(n === 1 ? 440 : 330, 'sine', 0.12, 0.25)
     else {
-      // GO! — quick ascending fanfare
+      // GO! — ascending fanfare
       beep(523, 'sine', 0.08, 0.2)
       setTimeout(() => beep(659, 'sine', 0.08, 0.2), 80)
       setTimeout(() => beep(784, 'sine', 0.15, 0.25), 160)
@@ -211,7 +244,6 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
   // Arrow key support — track held keys, apply movement in game loop
   const keysRef       = useRef<Set<string>>(new Set())
-  const swooshAt      = useRef(0)  // last swoosh timestamp
   useEffect(() => {
     if (phase !== 'playing') return
     const onDown = (e: KeyboardEvent) => {
@@ -249,10 +281,9 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       const prevY = g.playerY
       if (keysRef.current.has('ArrowUp'))   g.playerY = Math.max(PADDLE_H/2, g.playerY - keySpeed)
       if (keysRef.current.has('ArrowDown')) g.playerY = Math.min(H - PADDLE_H/2, g.playerY + keySpeed)
-      // Swoosh every ~120ms when paddle is moving
-      if (Math.abs(g.playerY - prevY) > 2 && now - swooshAt.current > 120) {
-        sfx.swoosh(); swooshAt.current = now
-      }
+      // Continuous slide sound while key held; stop-click when released
+      if (Math.abs(g.playerY - prevY) > 1) { startPaddle() }
+      else if (_padMoving) { stopPaddle() }
       g.prevPlayerY = g.playerY
 
       // Red dots spawn on player hits (see player hit section below)
@@ -285,8 +316,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
       // Physics
       g.bx += g.vx; g.by += g.vy
-      if (g.by - BALL_R < 0)   { g.by = BALL_R;     g.vy =  Math.abs(g.vy) }
-      if (g.by + BALL_R > H)   { g.by = H - BALL_R; g.vy = -Math.abs(g.vy) }
+      if (g.by - BALL_R < 0)   { g.by = BALL_R;     g.vy =  Math.abs(g.vy); sfx.ballWall() }
+      if (g.by + BALL_R > H)   { g.by = H - BALL_R; g.vy = -Math.abs(g.vy); sfx.ballWall() }
 
       // AI paddle — always hits
       if (g.bx - BALL_R <= AI_X + PADDLE_W && g.vx < 0) {
@@ -338,6 +369,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           if (g.lives <= 0) {
             const fs = g.totalScore
             finalScore.current = fs
+            stopPaddle()
             setPhase('facts')
             saveScore(fs)
             loadBoard()
@@ -421,9 +453,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     const newY = Math.max(PADDLE_H/2, Math.min(rect.height - PADDLE_H/2, e.clientY - rect.top))
     const moved = Math.abs(newY - gs.current.playerY)
     gs.current.playerY = newY
-    if (moved > 6 && Date.now() - swooshAt.current > 120) {
-      sfx.swoosh(); swooshAt.current = Date.now()
-    }
+    if (moved > 2) startPaddle()
+    else if (_padMoving) stopPaddle()
   }
 
   const currentItem = gs.current?.items[gs.current.itemIdx % ITEMS.length] ?? ITEMS[0]
