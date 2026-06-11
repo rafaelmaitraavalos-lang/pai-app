@@ -267,12 +267,15 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
-  const slideBg = theme === 'elementary'
+  const slideBg   = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
     : '#fff'
+  const slideText = theme === 'elementary'
+    ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
+    : BLACK
 
   return (
-    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease' }}>
+    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
 
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -292,21 +295,21 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         <div>
           <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <span style={{ color: BLACK }}>{stop.tag}</span>
-              <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+              <span style={{ color: slideText }}>{stop.tag}</span>
+              <span style={{ color: slideText, opacity: 0.4 }}>·</span>
+              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: slideText, opacity: 0.7, padding: 0 }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}
               </button>
-              <span style={{ color: FAINT }}>·</span>
-              <span style={{ color: DIM }}>{title}</span>
+              <span style={{ color: slideText, opacity: 0.4 }}>·</span>
+              <span style={{ color: slideText, opacity: 0.7 }}>{title}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
-              {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
-              <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+              {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: slideText, opacity: 0.7 }}>{stop.year}</span>}
+              <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: slideText, opacity: 0.7 }}>{stopIndex + 1} / {stops.length}</span>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: slideText, opacity: 0.4, padding: 0 }}>Skip</button>
             </div>
           </div>
-          <div style={{ borderTop: `1px solid ${BLACK}` }} />
+          <div style={{ borderTop: `1px solid ${slideText}` }} />
         </div>
 
         {/* Two-column grid — same as fake */}
@@ -323,27 +326,27 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           }}
         >
           {/* Left: headline + body */}
-          <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
+          <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${slideText}44` : 'none', display: 'flex', flexDirection: 'column' }}>
             <h1 style={{
               fontFamily: DISP, fontWeight: 400,
               fontSize: 'clamp(3rem, 6vw, 5rem)',
               lineHeight: 1, letterSpacing: '-0.03em',
-              margin: '0 0 28px', color: BLACK,
+              margin: '0 0 28px', color: slideText,
             }}>
               {stop.title}
             </h1>
 
-            <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
+            <div style={{ borderTop: `1px solid ${slideText}44`, marginBottom: 24 }} />
 
             <div id="lesson-text-col" style={{ transition: 'transform 0.28s ease' }}>
               <GlossaryText
                 text={stop.body}
-                style={{ fontFamily: BODY, fontSize: 18, lineHeight: 1.65, color: BLACK, margin: 0, fontWeight: 400, maxWidth: '54ch' }}
+                style={{ fontFamily: BODY, fontSize: 18, lineHeight: 1.65, color: slideText, margin: 0, fontWeight: 400, maxWidth: '54ch' }}
               />
             </div>
 
             {!hasImage && stop.year && (
-              <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
+              <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: slideText, opacity: 0.12, lineHeight: 1, userSelect: 'none' }}>
                 {stop.year}
               </div>
             )}
@@ -352,7 +355,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Right: image — same as fake */}
           {hasImage && (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${BLACK}` }}>
+              <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}` }}>
                 <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </div>
@@ -360,23 +363,23 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         </div>
 
         {/* Navigation — same as fake */}
-        <div style={{ borderTop: `2px solid ${BLACK}` }} />
+        <div style={{ borderTop: `2px solid ${slideText}` }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20, gap: 20 }}>
-          <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
+          <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${slideText}`, color: slideText, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
             {ui.backSlide}
           </button>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 20 : 6, height: 6, borderRadius: 3, background: i < stopIndex ? BLACK : i === stopIndex ? GREEN : FAINT, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
+            {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 20 : 6, height: 6, borderRadius: 3, background: i < stopIndex ? slideText : i === stopIndex ? slideText : `${slideText}44`, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
           </div>
-          <button onClick={timelineNext} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
+          <button onClick={timelineNext} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', background: slideText, color: slideBg, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${slideText}66` }}>
             {stopIndex === stops.length - 1 ? ui.takeQuiz : ui.nextSlide}
           </button>
         </div>
 
         {/* Footer — same as fake */}
-        <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
+        <div style={{ borderTop: `1px solid ${slideText}44`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: slideText, opacity: 0.6 }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: slideText, opacity: 0.6 }}>Slide</span>
         </div>
 
       </div>

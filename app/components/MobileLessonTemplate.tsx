@@ -183,9 +183,12 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   }
 
   // ── Slides ──────────────────────────────────────────────────────────────────
-  const slideBg = theme === 'elementary'
+  const slideBg   = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
     : '#fff'
+  const slideText = theme === 'elementary'
+    ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
+    : BLACK
 
   return (
     <main style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: slideBg, maxWidth: 480, margin: '0 auto', transition: 'background 0.4s ease' }}>
@@ -195,17 +198,17 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
         {/* Kicker */}
         <div style={{ paddingTop: 20, paddingBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <span style={{ color: BLACK }}>{stop.tag}</span>
-            <span style={{ color: FAINT }}>·</span>
-            <span style={{ color: DIM }}>{title}</span>
+            <span style={{ color: slideText }}>{stop.tag}</span>
+            <span style={{ color: slideText, opacity: 0.4 }}>·</span>
+            <span style={{ color: slideText, opacity: 0.7 }}>{title}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-            {stop.year && <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>{stop.year}</span>}
-            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-            <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+            {stop.year && <span style={{ fontFamily: BODY, fontSize: 12, color: slideText, opacity: 0.7 }}>{stop.year}</span>}
+            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: slideText, opacity: 0.7 }}>{stopIndex + 1} / {stops.length}</span>
+            <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: slideText, opacity: 0.4, padding: 0 }}>Skip</button>
           </div>
         </div>
-        <div style={{ borderTop: `1px solid ${BLACK}` }} />
+        <div style={{ borderTop: `1px solid ${slideText}` }} />
 
         {/* Content */}
         <div
@@ -220,50 +223,50 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             fontFamily: DISP, fontWeight: 400,
             fontSize: 'clamp(2rem, 8vw, 3.5rem)',
             lineHeight: 1.05, letterSpacing: '-0.03em',
-            margin: '0 0 16px', color: BLACK,
+            margin: '0 0 16px', color: slideText,
           }}>
             {stop.title}
           </h1>
 
           {/* Image below title on mobile */}
           {hasImage && (
-            <div style={{ marginBottom: 20, aspectRatio: '4/3', overflow: 'hidden', boxShadow: `6px 6px 0 0 ${BLACK}` }}>
+            <div style={{ marginBottom: 20, aspectRatio: '4/3', overflow: 'hidden', boxShadow: `6px 6px 0 0 ${slideText}` }}>
               <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
             </div>
           )}
 
-          <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 18 }} />
+          <div style={{ borderTop: `1px solid ${slideText}44`, marginBottom: 18 }} />
 
           <GlossaryText
             text={stop.body}
-            style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.7, color: BLACK, margin: 0, fontWeight: 400 }}
+            style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.7, color: slideText, margin: 0, fontWeight: 400 }}
           />
 
           {!hasImage && stop.year && (
-            <div style={{ marginTop: 24, fontFamily: DISP, fontSize: 'clamp(4rem, 18vw, 9rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
+            <div style={{ marginTop: 24, fontFamily: DISP, fontSize: 'clamp(4rem, 18vw, 9rem)', letterSpacing: '-0.04em', color: slideText, opacity: 0.12, lineHeight: 1, userSelect: 'none' }}>
               {stop.year}
             </div>
           )}
         </div>
 
         {/* Navigation */}
-        <div style={{ borderTop: `2px solid ${BLACK}` }} />
+        <div style={{ borderTop: `2px solid ${slideText}` }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, paddingBottom: 16, gap: 16 }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined}
-            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '12px 18px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1, flexShrink: 0 }}>
+            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${slideText}`, color: slideText, padding: '12px 18px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1, flexShrink: 0 }}>
             ← Back
           </button>
           <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
-            {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 18 : 5, height: 5, borderRadius: 3, background: i < stopIndex ? BLACK : i === stopIndex ? GREEN : FAINT, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
+            {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 18 : 5, height: 5, borderRadius: 3, background: i < stopIndex ? slideText : i === stopIndex ? slideText : `${slideText}44`, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
           </div>
           <button onClick={timelineNext}
-            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '12px 18px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}`, flexShrink: 0 }}>
+            style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: slideText, color: slideBg, padding: '12px 18px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${slideText}66`, flexShrink: 0 }}>
             {stopIndex === stops.length - 1 ? 'Quiz →' : 'Next →'}
           </button>
         </div>
 
-        <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 12 }}>
-          <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>Lesson {id} · {title} · Slide {stopIndex + 1} of {stops.length}</span>
+        <div style={{ borderTop: `1px solid ${slideText}44`, paddingTop: 12 }}>
+          <span style={{ fontFamily: BODY, fontSize: 12, color: slideText, opacity: 0.6 }}>Lesson {id} · {title} · Slide {stopIndex + 1} of {stops.length}</span>
         </div>
       </div>
     </main>
