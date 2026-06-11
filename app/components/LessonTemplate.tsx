@@ -80,7 +80,17 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const hasImage   = !!slideImage
 
   const timelineNext = () => {
-    if (stopIndex === stops.length - 1) { setPhase('quiz'); return }
+    if (stopIndex === stops.length - 1) {
+      // Skip quiz phase if no questions (e.g. elementary lessons)
+      if (questions.length === 0) {
+        localStorage.setItem(`pai_lesson_${id}_done`, 'true')
+        import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
+        if (completionPage) router.push(completionPage)
+        else setPhase('complete')
+        return
+      }
+      setPhase('quiz'); return
+    }
     setCardDir('right')
     setStopIndex(i => i + 1)
   }
