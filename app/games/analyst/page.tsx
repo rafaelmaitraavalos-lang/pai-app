@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
 import TheAnalyst from '../../components/TheAnalyst'
@@ -27,7 +28,7 @@ export default function AnalystPage() {
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
         <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
-          ← Home
+          {typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt' ? '← Início' : '← Home'}
         </button>
       </div>
 
