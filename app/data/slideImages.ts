@@ -423,6 +423,47 @@ export const SLIDE_IMAGES: Record<number, Record<number, string>> = {
     6: 'https://images.pexels.com/photos/17937669/pexels-photo-17937669.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     7: 'https://images.pexels.com/photos/8729951/pexels-photo-8729951.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
   },
+  // ── Elementary lesson IDs (remapped from 40–43) ───────────────────────────
+  // Lesson 101 — Hi! I Am PAI (5 slides)
+  101: {
+    0: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/3649874/pexels-photo-3649874.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/6602917/pexels-photo-6602917.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/6045332/pexels-photo-6045332.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/7111170/pexels-photo-7111170.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  // Lesson 102 — PAI and the World (8 slides)
+  102: {
+    0: 'https://images.pexels.com/photos/34207359/pexels-photo-34207359.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/7789212/pexels-photo-7789212.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/6192335/pexels-photo-6192335.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/7578802/pexels-photo-7578802.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/17484975/pexels-photo-17484975.png?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/9504092/pexels-photo-9504092.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/8442278/pexels-photo-8442278.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    7: 'https://images.pexels.com/photos/25626431/pexels-photo-25626431.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  // Lesson 103 — Is PAI Always Right? (7 slides)
+  103: {
+    0: 'https://images.pexels.com/photos/8088499/pexels-photo-8088499.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/8482062/pexels-photo-8482062.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/4137852/pexels-photo-4137852.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/6045332/pexels-photo-6045332.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/17273353/pexels-photo-17273353.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/31296071/pexels-photo-31296071.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/15380268/pexels-photo-15380268.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  // Lesson 104 — The Future of PAI (8 slides)
+  104: {
+    0: 'https://images.pexels.com/photos/12253295/pexels-photo-12253295.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/14151825/pexels-photo-14151825.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/5412325/pexels-photo-5412325.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/6990178/pexels-photo-6990178.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/63690/pexels-photo-63690.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/8729951/pexels-photo-8729951.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    7: 'https://images.pexels.com/photos/5192343/pexels-photo-5192343.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
   44: {
     0: 'https://images.pexels.com/photos/12996907/pexels-photo-12996907.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     1: 'https://images.pexels.com/photos/29708309/pexels-photo-29708309.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
