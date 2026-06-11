@@ -183,9 +183,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   }
 
   // ── Slides ──────────────────────────────────────────────────────────────────
-  const slideBg   = theme === 'elementary'
-    ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
-    : '#fff'
+  const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
   const slideText = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
     : BLACK

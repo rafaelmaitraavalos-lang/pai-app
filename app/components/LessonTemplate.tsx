@@ -267,9 +267,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
-  const slideBg   = theme === 'elementary'
-    ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
-    : '#fff'
+  const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
   const slideText = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
     : BLACK
