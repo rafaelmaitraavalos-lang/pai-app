@@ -125,6 +125,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const goHome = (grade: string | null) => {
     localStorage.setItem('pai_onboarding_done', 'true')
+    localStorage.setItem('pai_show_welcome', 'true')  // triggers handbook tooltip
     const dest = isElementaryGrade(grade)             ? `${basePath}/elementary/home`
                : MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? `${basePath}/elementary/middle-pt`
                : isMiddleSchoolGrade(grade)           ? `${basePath}/middle/home`

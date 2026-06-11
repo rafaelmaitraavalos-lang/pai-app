@@ -166,8 +166,13 @@ export default function HandbookProvider() {
     const lang           = localStorage.getItem('pai_lang') ?? 'en'
     setUsername(storedName)
     setIsPT(lang === 'pt')
-    // Re-check on every route change so it fires after onboarding redirect
-    if (onboardingDone && !seen && pathname !== '/') {
+    // Show welcome tooltip when onboarding just completed (dedicated flag)
+    const showWelcomeFlag = localStorage.getItem('pai_show_welcome')
+    if (showWelcomeFlag && onboardingDone && pathname !== '/') {
+      localStorage.removeItem('pai_show_welcome')
+      setTimeout(() => setShowWelcome(true), 800)
+    } else if (onboardingDone && !seen && pathname !== '/') {
+      // Fallback: show if handbook never opened
       setTimeout(() => setShowWelcome(true), 800)
     }
     // Compute which unlockable entries the user has earned
