@@ -14,6 +14,8 @@ export { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS } from './elementary'
 export interface WorldModule {
   id: number
   title: string
+  type?: 'lesson' | 'game'
+  gameUrl?: string
 }
 
 export interface WorldData {
