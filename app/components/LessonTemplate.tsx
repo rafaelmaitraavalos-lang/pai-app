@@ -326,6 +326,14 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         >
           {/* Left: headline + body */}
           <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${slideText}44` : 'none', display: 'flex', flexDirection: 'column' }}>
+
+            {/* Image stacked above title — only shown on mobile via CSS */}
+            {hasImage && (
+              <div className="lesson-slide-image-top" style={{ display: 'none', marginBottom: 18, aspectRatio: '4/3', overflow: 'hidden', boxShadow: `6px 6px 0 0 ${slideText}` }}>
+                <img src={slideImage!} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+              </div>
+            )}
+
             <h1 className="lesson-slide-title" style={{
               fontFamily: DISP, fontWeight: 400,
               fontSize: 'clamp(3rem, 6vw, 5rem)',

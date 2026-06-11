@@ -250,7 +250,10 @@
     display: block !important;
   }
   .lesson-slide-image {
-    display: none !important;
+    display: none !important;          /* hide the side column */
+  }
+  .lesson-slide-image-top {
+    display: block !important;         /* show the stacked image above title */
   }
   .lesson-slide-text {
     padding-right: 0 !important;
