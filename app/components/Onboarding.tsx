@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { isElementaryGrade } from '../data/elementary'
+import { isElementaryGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
 import { LANG_STRINGS } from '../data/onboardingStrings'
 import { loadProgress, applyProgress } from '@/lib/progress'
 
@@ -121,7 +121,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const goHome = (grade: string | null) => {
     localStorage.setItem('pai_onboarding_done', 'true')
-    router.push(isElementaryGrade(grade) ? `${basePath}/elementary/home` : `${basePath}/home`)
+    const dest = isElementaryGrade(grade)             ? `${basePath}/elementary/home`
+               : MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? `${basePath}/elementary/middle-pt`
+               : `${basePath}/home`
+    router.push(dest)
   }
 
   const submitUsername = async () => {

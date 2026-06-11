@@ -1,0 +1,15 @@
+import { LessonData } from '../index'
+
+const wms1_pt: Record<number, LessonData> = {
+  161: {
+    id: 161,
+    worldId: 107,
+    title: "O QUE É A IA?",
+    stops: [
+      { tag: 'Fact', title: "DEFININDO A IA", body: "A inteligência artificial é um software projetado para executar tarefas que normalmente exigem habilidades humanas, como entender a linguagem, reconhecer imagens, fazer previsões ou encontrar padrões em grandes volumes de informações. A IA não é uma tecnologia única. Um chatbot, um sistema de reconhecimento facial e um algoritmo de recomendação podem usar a IA, mas foram construídos para propósitos diferentes e não funcionam necessariamente da mesma maneira. A principal diferença entre o software tradicional e o machine learning é a forma como o sistema obtém suas regras. Um programa tradicional segue instruções escritas por um programador. Um sistema de machine learning aprende padrões a partir de exemplos. Em vez de escrever uma regra separada para cada situação possível, os desenvolvedores treinam o sistema com dados e permitem que ele melhore por meio da experiência. Ele ainda não está pensando como uma pessoa. Apenas se tornou muito bom em identificar padrões. A maioria dos sistemas modernos de IA aprende por meio de um processo chamado machine learning. Imagine ensinar um computador a reconhecer gatos. Você poderia mostrar a ele milhares de imagens rotuladas como “gato” e “não é gato”. No início, o sistema cometeria muitos erros. Com o tempo, ele ajustaria suas configurações internas e se tornaria melhor em prever a resposta correta. A mesma ideia básica pode ser usada para muitas tarefas: identificar e-mails de spam traduzir idiomas recomendar músicas reconhecer objetos em fotos identificar padrões em exames médicos O sistema melhora ao ver exemplos, fazer previsões, medir seus erros e se ajustar. Esse processo pode ser repetido milhões ou bilhões de vezes. A IA não é automaticamente mais inteligente que um humano. Ela simplesmente processou muito mais exemplos do que uma pessoa conseguiria analisar durante toda a vida. Isso a torna poderosa em algumas áreas e surpreendentemente frágil em outras. Em 1950, o matemático britânico Alan Turing publicou um artigo intitulado Computing Machinery and Intelligence. Ele começava com uma pergunta que ainda é relevante hoje: As máquinas podem pensar? Turing não tentou resolver a questão diretamente. Em vez disso, ele propôs um teste! Imagine um juiz humano tendo duas conversas por texto ao mesmo tempo. Uma conversa é com uma pessoa. A outra é com uma máquina. Se o juiz não conseguir distinguir de forma confiável quem é quem, a máquina passou no que mais tarde ficou conhecido como o Teste de Turing. Turing mudou o debate. Em vez de perguntar se uma máquina realmente pensa, ele perguntou se o comportamento dela poderia parecer inteligente visto de fora. O teste ainda é debatido. Uma máquina pode soar convincente sem entender o que está dizendo. Mas a pergunta de Turing ajudou a moldar o campo da IA e permanece relevante até hoje." },
+    ],
+    questions: [],
+  },
+}
+
+export default wms1_pt
