@@ -264,7 +264,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
   // ── Intro ────────────────────────────────────────────────────────────────
   if (phase === 'intro') return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: BLACK }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: BLACK, overflowY: 'auto' }}>
       <div style={{ maxWidth: 380, width: '100%', display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div>
           <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, margin: '0 0 10px', opacity: 0.6 }}>Signal Drop · W1 M3</p>
@@ -282,7 +282,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           </div>
         </div>
         <p style={{ fontFamily: BODY, fontSize: 13, color: '#3a3a3a', margin: 0, textAlign: 'center' }}>Some will try to trick you. Read carefully.</p>
-        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '16px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 28px ${GREEN}55` }}>
+        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '16px 0', border: 'none', touchAction: 'manipulation', cursor: 'pointer', boxShadow: `0 0 28px ${GREEN}55` }}>
           Start
         </button>
       </div>
@@ -291,7 +291,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
   // ── Countdown ────────────────────────────────────────────────────────────
   if (phase === 'countdown') return (
-    <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: BLACK }} onPointerMove={onPointer}>
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: BLACK }} onPointerMove={onPointer}>
       <div style={{ textAlign: 'center' }}>
         <div key={countdown} style={{
           fontFamily: DISP, fontSize: countdown > 0 ? 120 : 64,
@@ -351,7 +351,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
             <p style={{ fontFamily: BODY, fontSize: 16, color: '#ccc', lineHeight: 1.75, margin: 0 }}>{FACTS[factIdx]}</p>
           </div>
           <button onClick={() => isLast ? setPhase('end') : setFactIdx(f => f + 1)}
-            style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 18px ${GREEN}55` }}>
+            style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', touchAction: 'manipulation', cursor: 'pointer', boxShadow: `0 0 18px ${GREEN}55` }}>
             {isLast ? 'See results →' : 'Next →'}
           </button>
         </div>
@@ -377,7 +377,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         <div style={{ border: '1px solid #1e1e1e', padding: '22px', background: '#0d0d0d' }}>
           <p style={{ fontFamily: BODY, fontSize: 15, color: '#bbb', lineHeight: 1.65, margin: 0 }}>{msg}</p>
         </div>
-        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 22px ${GREEN}66` }}>
+        <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', touchAction: 'manipulation', cursor: 'pointer', boxShadow: `0 0 22px ${GREEN}66` }}>
           Play again
         </button>
       </div>
