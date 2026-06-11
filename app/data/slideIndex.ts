@@ -35,3 +35,11 @@ export const SLIDE_TITLES: Record<number, string[]> = { ...WORLD_1_2, ...fromLes
 export function getSlideTitles(lessonId: number): string[] {
   return SLIDE_TITLES[lessonId] ?? []
 }
+
+export function getSlideTitlesPT(lessonId: number, TRANSLATIONS: Record<string, Record<number, { stops: { title: string }[] }>>): string[] {
+  const ptStops = TRANSLATIONS['pt']?.[lessonId]?.stops
+  if (ptStops && ptStops.length > 0 && ptStops[0].title) {
+    return ptStops.map(s => s.title)
+  }
+  return getSlideTitles(lessonId)
+}

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { WorldData, getWorldTitle } from '../data'
 import TRANSLATIONS from '../data/lessonTranslations'
-import { getSlideTitles } from '../data/slideIndex'
+import { getSlideTitles, getSlideTitlesPT } from '../data/slideIndex'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -43,7 +43,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
           {/* World label */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN, marginBottom: 4 }}>
-              W{String(world.id).padStart(2, '0')} · {world.level}
+              W{String(world.id).padStart(2, '0')} · {world.level === 'Beginner' && isPT ? 'Iniciante' : world.level === 'Intermediate' && isPT ? 'Intermediário' : world.level === 'Advanced' && isPT ? 'Avançado' : world.level}
             </div>
             <h1 style={{ fontFamily: DISP, fontSize: 26, letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0, fontWeight: 400, color: BLACK }}>{getWorldTitle(world.id, isPT ? 'pt' : 'en')}</h1>
           </div>
@@ -102,7 +102,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                   }}>
                     <div style={{ overflow: 'hidden', minHeight: 0 }}>
                       <div style={{ paddingBottom: 4, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        {getSlideTitles(m.id).map((title, si) => (
+                        {(isPT ? getSlideTitlesPT(m.id, TRANSLATIONS) : getSlideTitles(m.id)).map((title, si) => (
                           <div
                             key={si}
                             style={{
@@ -150,7 +150,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN }}>W{String(world.id).padStart(2, '0')}</span>
           <h1 style={{ fontFamily: DISP, fontSize: 32, letterSpacing: '-0.02em', lineHeight: 1, margin: 0, fontWeight: 400, color: BLACK }}>{getWorldTitle(world.id, isPT ? 'pt' : 'en')}</h1>
-          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{world.level}</span>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{world.level === 'Beginner' && isPT ? 'Iniciante' : world.level === 'Intermediate' && isPT ? 'Intermediário' : world.level === 'Advanced' && isPT ? 'Avançado' : world.level}</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20 }}>
@@ -209,7 +209,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                   <div style={{ overflow: 'hidden', minHeight: 0 }}>
                     <div style={{ paddingBottom: 8, marginLeft: 24 }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingLeft: 20, paddingRight: 8 }}>
-                        {getSlideTitles(m.id).map((title, si) => (
+                        {(isPT ? getSlideTitlesPT(m.id, TRANSLATIONS) : getSlideTitles(m.id)).map((title, si) => (
                           <div
                             key={si}
                             style={{

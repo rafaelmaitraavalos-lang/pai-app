@@ -211,7 +211,7 @@ const TRANSLATIONS: Record<string, Record<number, TranslatedLesson>> = {
 
     // ── World 1 ──────────────────────────────────────────────────────────────
     1: {
-      title: "",
+      title: "História da IA",
       stops: [
         { title: "Antes dos computadores", body: "Mais de 2.000 anos antes do primeiro computador, Aristóteles tentou mapear as regras do raciocínio. Se uma afirmação fosse verdadeira e outra afirmação decorresse dela, seria possível chegar a uma conclusão correta todas as vezes? Ele não estava tentando construir uma máquina. Mas estava fazendo a pergunta por trás da IA: O pensamento pode ser dividido em etapas?" },
         { title: "Ada Lovelace", body: "Ada Lovelace estava escrevendo notas sobre uma máquina que ainda não havia sido construída. Charles Babbage projetou a Máquina Analítica: uma calculadora mecânica. Todos os outros viam uma calculadora. Ada viu algo totalmente diferente. Ela escreveu que a máquina poderia um dia compor música, produzir gráficos e resolver problemas de qualquer complexidade, caso lhe dessem as instruções certas. O primeiro algoritmo já publicado foi dela. Em 1843." },
@@ -257,7 +257,7 @@ const TRANSLATIONS: Record<string, Record<number, TranslatedLesson>> = {
       ],
     },
     3: {
-      title: "",
+      title: "IA na Sua Vida",
       stops: [
         { title: "Você já usa isso", body: "A IA não é uma tecnologia que você precisa se esforçar para encontrar. Você provavelmente interage com ela ao longo do dia sem perceber. Ela ajuda a classificar resultados de pesquisa, filtrar spam, recomendar músicas, organizar feeds de redes sociais e sugerir a próxima palavra quando você digita. Muitos desses sistemas fazem parte da vida cotidiana há anos." },
         { title: "O feed", body: "Quando você usa o TikTok, a plataforma presta atenção em mais coisas do que apenas nos vídeos que você curte. Ela também consegue rastrear quais vídeos você assiste até o fim, quais você pula, o que você repete e quanto tempo você pausa antes de rolar a tela. Com o tempo, o sistema de recomendação usa esses sinais para estimar o que você provavelmente vai assistir em seguida. Ele não precisa entender quem você é como pessoa. Ele só precisa de informações suficientes sobre o seu comportamento para fazer previsões cada vez mais precisas." },

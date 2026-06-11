@@ -93,7 +93,7 @@ function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () =
 
 // ── HB button + welcome tooltip ───────────────────────────────────────────────
 
-function HBButton({ onClick, showWelcome, username }: { onClick: () => void; showWelcome: boolean; username: string }) {
+function HBButton({ onClick, showWelcome, username, isPT }: { onClick: () => void; showWelcome: boolean; username: string; isPT: boolean }) {
   return (
     <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 40 }}>
       {/* PAI welcome tooltip */}
@@ -117,10 +117,10 @@ function HBButton({ onClick, showWelcome, username }: { onClick: () => void; sho
           }} />
           <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 4, opacity: 0.6 }}>PAI</div>
           <div style={{ fontFamily: DISP, fontSize: 13, lineHeight: 1.3 }}>
-            Welcome, {username}!
+            {isPT ? `Bem-vindo, ${username}!` : `Welcome, ${username}!`}
           </div>
           <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 6, lineHeight: 1.4, opacity: 0.85 }}>
-            Tap here to open your handbook ↓
+            {isPT ? 'Toque aqui para abrir seu manual ↓' : 'Tap here to open your handbook ↓'}
           </div>
         </div>
       )}
@@ -214,7 +214,7 @@ export default function HandbookProvider() {
 
   return (
     <>
-      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />}
+      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} isPT={isPT} />}
 
       {open && (
         <>
