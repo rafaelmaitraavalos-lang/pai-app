@@ -1,0 +1,134 @@
+import { LessonData } from '../index'
+
+const wm_w5_pt: Record<number, LessonData> = {
+  351: {
+    id: 351, worldId: 265,
+    title: "Ia E Empregos (Longo Prazo)",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "É improvável que a IA afete todos os empregos da mesma maneira. A questão mais importante não é se a IA afetará o trabalho, mas como, em que ritmo e quem estará posicionado para se adaptar." },
+      { tag: "Example", title: "Slide 2", body: "Algumas tarefas são mais fáceis de automatizar do que outras — especialmente aquelas que são repetitivas, estruturadas ou baseadas em padrões de dados. Outros trabalhos são mais difíceis de automatizar quando exigem habilidade física, confiança, discernimento ou experiência em situações imprevisíveis." },
+      { tag: "Big idea", title: "Slide 3", body: "A IA pode não eliminar todos os empregos. É mais provável que ela primeiro reformule tarefas individuais, mudando o que as pessoas realmente fazem durante o dia de trabalho. Essa mudança pode ainda ser significativamente perturbadora, especialmente para trabalhadores em funções de baixo salário e com muitas tarefas rotineiras." },
+      { tag: "Hot take", title: "Slide 4", body: "As questões mais amplas: Novas oportunidades surgirão rápido o suficiente? As pessoas terão acesso à requalificação de que precisam para se adaptar? Quem captura os ganhos de produtividade — os trabalhadores ou os donos dos sistemas de IA? Essas são questões políticas, e não apenas técnicas." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Como a transição se dará, em que ritmo e quem estará posicionado para se adaptar"`, answer: true, verdict: "Correto.", explanation: "Qual é a questão mais importante sobre IA e empregos, além de saber se a IA afetará o emprego? — Como a transição se dará, em que ritmo e quem estará posicionado para se adaptar" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Trabalhadores em funções de baixo salário e com muitas tarefas rotineiras"`, answer: true, verdict: "Correto.", explanation: "Que tipo de trabalhadores enfrenta a maior perturbação a curto prazo pela automação por IA? — Trabalhadores em funções de baixo salário e com muitas tarefas rotineiras" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Se novas oportunidades surgirão em tempo hábil e quem captura os ganhos de produtividade"`, answer: true, verdict: "Correto.", explanation: "Além de saber se os empregos desaparecem, que questões mais amplas a IA e o emprego levantam? — Se novas oportunidades surgirão em tempo hábil e quem captura os ganhos de produtividade" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Decisões sobre requalificação, redes de segurança e quem captura os ganhos de produtividade exigem escolhas políticas"`, answer: true, verdict: "Correto.", explanation: "Por que as questões sobre IA e emprego são políticas além de técnicas? — Decisões sobre requalificação, redes de segurança e quem captura os ganhos de produtividade exigem escolhas políticas" },
+    ],
+  },
+  352: {
+    id: 352, worldId: 265,
+    title: "Ia E Criatividade (Longo Prazo)",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "Os sistemas de IA agora podem gerar imagens, música, textos e vídeos. Isso levanta questões difíceis sobre a criatividade que se tornam mais urgentes à medida que esses sistemas melhoram." },
+      { tag: "Example", title: "Slide 2", body: "Obras geradas por IA são construídas a partir de padrões aprendidos de materiais criados por humanos. O sistema pode criar algo novo, mas faz isso de maneira diferente de uma pessoa. Um artista humano pode criar a partir da memória, da emoção, da frustração, da curiosidade ou de experiências vividas. Um sistema de IA não possui essas experiências." },
+      { tag: "Big idea", title: "Slide 3", body: "A ascensão da IA generativa também afeta pessoas que produzem trabalhos criativos profissionalmente. Escritores, designers, músicos, ilustradores e dubladores já estão debatendo questões sobre consentimento, remuneração, direitos autorais e substituição. Esses debates vão se intensificar à medida que a tecnologia melhorar." },
+      { tag: "Hot take", title: "Slide 4", body: "Se a IA pode ou não criar algo impressionante é apenas metade da questão. O resto é: quem se beneficia, o trabalho de quem treinou o sistema e o que acontece com as pessoas cujos meios de vida dependem do trabalho criativo." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Padrões aprendidos de conteúdo criado por humanos nos dados de treinamento"`, answer: true, verdict: "Correto.", explanation: "Qual é a base de todo trabalho criativo gerado por IA? — Padrões aprendidos de conteúdo criado por humanos nos dados de treinamento" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"A criatividade humana emerge da experiência vivida, intenção e significado; a IA gera continuações estatisticamente prováveis de padrões"`, answer: true, verdict: "Correto.", explanation: "O que torna a criatividade humana diferente da geração por IA em um sentido significativo? — A criatividade humana emerge da experiência vivida, intenção e significado; a IA gera continuações estatisticamente prováveis de padrões" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"À medida que a IA melhora, sistemas treinados com trabalhos humanos sem consentimento vão deslocar cada vez mais os criadores humanos nos mercados comerciais"`, answer: true, verdict: "Correto.", explanation: "Que preocupação de longo prazo a IA generativa levanta para criadores profissionais? — À medida que a IA melhora, sistemas treinados com trabalhos humanos sem consentimento vão deslocar cada vez mais os criadores humanos nos mercados comerciais" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Quem se beneficia, cujo trabalho sustentou o sistema e o que acontece com aqueles cujos meios de vida dependem do trabalho criativo"`, answer: true, verdict: "Correto.", explanation: "Que questões vão além de saber se a IA consegue produzir resultados criativos impressionantes? — Quem se beneficia, cujo trabalho sustentou o sistema e o que acontece com aqueles cujos meios de vida dependem do trabalho criativo" },
+    ],
+  },
+  353: {
+    id: 353, worldId: 265,
+    title: "Segurança Da Ia",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "Alguns dos pesquisadores mais sérios que trabalham com IA estão focados em um campo chamado segurança da IA — garantir que os sistemas de IA façam o que seus criadores pretendem e não causem danos não intencionais, inclusive à medida que se tornam mais capazes." },
+      { tag: "Example", title: "Slide 2", body: "A preocupação não é que a IA vá \"se tornar malvada\". É que sistemas poderosos que perseguem objetivos aparentemente razoáveis podem persegui-los de maneiras inesperadas. À medida que os sistemas ganham mais autonomia, os erros podem ser mais difíceis de corrigir. A pressão competitiva para implantar rapidamente pode levar a testes insuficientes." },
+      { tag: "Big idea", title: "Slide 3", body: "Conceitos-chave em segurança da IA: • Robustez: o sistema funciona de forma confiável em situações para as quais não foi treinado? • Corrigibilidade: os humanos conseguem corrigir ou substituir o sistema quando necessário? • Supervisão escalável: como os humanos mantêm uma supervisão significativa à medida que a IA se torna mais capaz?" },
+      { tag: "Hot take", title: "Slide 4", body: "Existe uma tensão real: a pesquisa de segurança exige desacelerar para testar e verificar. A pressão competitiva — entre empresas e entre países — empurra em direção a uma implantação mais rápida. Gerenciar essa tensão é um dos desafios centrais do campo." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Garantir que os sistemas de IA se comportem conforme o pretendido e permaneçam sob controle humano, inclusive à medida que se tornam mais capazes"`, answer: true, verdict: "Correto.", explanation: "Em que a pesquisa de segurança da IA está focada? — Garantir que os sistemas de IA se comportem conforme o pretendido e permaneçam sob controle humano, inclusive à medida que se tornam mais capazes" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Que sistemas poderosos que perseguem objetivos mensuráveis podem persegui-los de maneiras inesperadas que perdem a intenção real"`, answer: true, verdict: "Correto.", explanation: "Qual é a preocupação real que os pesquisadores de segurança de IA têm com sistemas de IA poderosos? — Que sistemas poderosos que perseguem objetivos mensuráveis podem persegui-los de maneiras inesperadas que perdem a intenção real" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"A propriedade de permitir que os humanos corrijam, ajustem ou desliguem o sistema quando necessário"`, answer: true, verdict: "Correto.", explanation: "O que \"corrigibilidade\" significa em segurança da IA? — A propriedade de permitir que os humanos corrijam, ajustem ou desliguem o sistema quando necessário" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Os testes de segurança completos entram em conflito com a pressão competitiva para implantar rapidamente"`, answer: true, verdict: "Correto.", explanation: "Qual é a tensão central no trabalho de segurança da IA? — Os testes de segurança completos entram em conflito com a pressão competitiva para implantar rapidamente" },
+    ],
+  },
+  354: {
+    id: 354, worldId: 265,
+    title: "Ia E Desigualdade",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "A IA tem o potencial de reduzir a desigualdade. Também tem o potencial de piorá-la significativamente. Qual resultado se concretiza depende de decisões — sobre acesso, propriedade e políticas — que ainda não foram finalizadas." },
+      { tag: "Example", title: "Slide 2", body: "Formas como a IA pode aumentar a desigualdade: • Trabalhadores em empregos rotineiros enfrentam deslocamento enquanto os donos dos sistemas de IA capturam os ganhos de produtividade • Ferramentas de IA avançadas estão disponíveis principalmente para indivíduos e instituições ricas • Sistemas de IA com desempenho inferior para grupos sub-representados reforçam as desvantagens existentes" },
+      { tag: "Big idea", title: "Slide 3", body: "Formas como a IA pode reduzir a desigualdade: • Acesso a assistência de nível especializado — jurídica, médica, educacional — para pessoas que anteriormente não podiam pagar • Ferramentas de aprendizado personalizado que funcionam independentemente dos recursos da escola • IA que ajuda pequenas empresas a competir com as grandes • Descobertas científicas que abordam doenças que afetam desproporcionalmente países de baixa renda" },
+      { tag: "Hot take", title: "Slide 4", body: "Quem é dono da infraestrutura de IA importa. Se os sistemas de IA mais poderosos estiverem concentrados em poucas empresas, os ganhos econômicos fluem principalmente para os acionistas, e não amplamente para a sociedade. Diferentes escolhas políticas poderiam mudar essa distribuição — mas são escolhas que precisam ser feitas." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Deslocar trabalhadores rotineiros enquanto os donos dos sistemas de IA capturam os ganhos de produtividade"`, answer: true, verdict: "Correto.", explanation: "Qual destes é uma forma pela qual a IA poderia aumentar a desigualdade? — Deslocar trabalhadores rotineiros enquanto os donos dos sistemas de IA capturam os ganhos de produtividade" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"As grandes revoluções tecnológicas criam riqueza significativa que é inicialmente distribuída de forma muito desigual"`, answer: true, verdict: "Correto.", explanation: "Que padrão histórico a IA corre o risco de repetir? — As grandes revoluções tecnológicas criam riqueza significativa que é inicialmente distribuída de forma muito desigual" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Se os ganhos se concentrarem em um pequeno número de empresas, os benefícios econômicos não fluem amplamente para a sociedade"`, answer: true, verdict: "Correto.", explanation: "Por que a propriedade da infraestrutura de IA importa para a desigualdade? — Se os ganhos se concentrarem em um pequeno número de empresas, os benefícios econômicos não fluem amplamente para a sociedade" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Principalmente uma questão política — acesso, estrutura de propriedade e distribuição dos ganhos exigem escolhas deliberadas"`, answer: true, verdict: "Correto.", explanation: "A distribuição dos benefícios da IA é principalmente uma questão técnica ou política? — Principalmente uma questão política — acesso, estrutura de propriedade e distribuição dos ganhos exigem escolhas deliberadas" },
+    ],
+  },
+  355: {
+    id: 355, worldId: 265,
+    title: "Ia E Poder Global",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "A IA não é apenas uma história de tecnologia. É uma história geopolítica. As nações estão competindo por vantagem em IA — em capacidade militar, produtividade econômica e influência global — e essa competição tem consequências reais." },
+      { tag: "Example", title: "Slide 2", body: "Os EUA e a China são atualmente as principais potências em IA pela maioria das métricas: produção de pesquisa, patentes de IA, investimento e número de empresas de IA de ponta. Essa concentração tem implicações políticas para o resto do mundo." },
+      { tag: "Big idea", title: "Slide 3", body: "Por que a IA importa geopoliticamente? As aplicações militares — sistemas autônomos, análise de inteligência, vigilância — conferem à IA um significado estratégico. As vantagens de produtividade econômica se acumulam com o tempo. As ferramentas de IA que o mundo usa moldam os fluxos globais de dados, os padrões técnicos e as normas." },
+      { tag: "Hot take", title: "Slide 4", body: "O risco de uma corrida armamentista de IA é real. A pressão competitiva entre as nações pode priorizar a velocidade de implantação em detrimento da segurança, dos testes e do alinhamento. Gerenciar essa corrida — potencialmente por meio de acordos internacionais — é uma das questões abertas mais consequentes na governança da IA." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"EUA e China"`, answer: true, verdict: "Correto.", explanation: "Quais dois países são atualmente as principais potências em IA pela maioria das métricas? — EUA e China" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"As aplicações militares, as vantagens de produtividade econômica e a influência sobre as normas técnicas globais conferem à IA importância estratégica"`, answer: true, verdict: "Correto.", explanation: "Por que a IA tem importância geopolítica além de suas aplicações comerciais? — As aplicações militares, as vantagens de produtividade econômica e a influência sobre as normas técnicas globais conferem à IA importância estratégica" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"As nações podem priorizar a velocidade de implantação em detrimento da segurança, dos testes e do alinhamento"`, answer: true, verdict: "Correto.", explanation: "Que risco a pressão competitiva entre as nações cria para o desenvolvimento de IA? — As nações podem priorizar a velocidade de implantação em detrimento da segurança, dos testes e do alinhamento" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Acordos internacionais que estabeleçam normas compartilhadas e limites para as aplicações mais perigosas"`, answer: true, verdict: "Correto.", explanation: "Que tipo de abordagem de governança poderia abordar o risco de uma corrida armamentista de IA? — Acordos internacionais que estabeleçam normas compartilhadas e limites para as aplicações mais perigosas" },
+    ],
+  },
+  356: {
+    id: 356, worldId: 265,
+    title: "Ia E Clima",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "A IA tem uma relação complicada com as mudanças climáticas. É ao mesmo tempo parte do problema e potencialmente parte da solução. O treinamento de grandes modelos de IA consome quantidades significativas de energia. Executar sistemas de IA em escala exige grandes data centers que usam enormes quantidades de eletricidade e água para resfriamento. À medida que o uso da IA se expande, o mesmo acontece com a sua demanda de energia." },
+      { tag: "Example", title: "Slide 2", body: "Por outro lado, as ferramentas de IA estão sendo aplicadas a desafios climáticos: otimizando redes de energia, melhorando a modelagem climática, acelerando a ciência dos materiais para baterias melhores, analisando dados de satélite para rastrear o desmatamento e as emissões." },
+      { tag: "Big idea", title: "Slide 3", body: "A avaliação honesta é que a IA pode ajudar a enfrentar as mudanças climáticas ao mesmo tempo em que contribui para elas. O efeito líquido depende de como a IA é desenvolvida, de como é alimentada e de onde caem os benefícios de sua aplicação." },
+      { tag: "Hot take", title: "Slide 4", body: "Este é um debate ativo e não resolvido. Se os custos de energia da IA valem suas possíveis contribuições para as soluções climáticas depende parcialmente de questões empíricas sobre o impacto e parcialmente de julgamentos de valor sobre quem se beneficia e quem arca com os custos." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Eles consomem quantidades significativas de energia"`, answer: true, verdict: "Correto.", explanation: "Qual é um custo ambiental significativo do treinamento de grandes modelos de IA? — Eles consomem quantidades significativas de energia" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Otimizar redes de energia para reduzir o desperdício"`, answer: true, verdict: "Correto.", explanation: "Qual destes é um exemplo de IA sendo aplicada para enfrentar desafios climáticos? — Otimizar redes de energia para reduzir o desperdício" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Data centers alimentados por combustíveis fósseis têm uma pegada de carbono muito maior do que aqueles que usam energia renovável"`, answer: true, verdict: "Correto.", explanation: "Por que a fonte de eletricidade para os data centers de IA importa para o clima? — Data centers alimentados por combustíveis fósseis têm uma pegada de carbono muito maior do que aqueles que usam energia renovável" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Envolve tanto incerteza empírica sobre o impacto líquido quanto julgamentos de valor sobre quem se beneficia e arca com os custos"`, answer: true, verdict: "Correto.", explanation: "O que torna a relação IA-clima difícil de resolver? — Envolve tanto incerteza empírica sobre o impacto líquido quanto julgamentos de valor sobre quem se beneficia e arca com os custos" },
+    ],
+  },
+  357: {
+    id: 357, worldId: 265,
+    title: "Vivendo Com A Ia",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "A IA já faz parte do seu mundo. A questão relevante não é se engajar com ela, mas como fazê-lo de forma crítica e mantendo seus próprios interesses e valores." },
+      { tag: "Example", title: "Slide 2", body: "Usar a IA bem significa conhecer seus limites. A IA pode estar errada. Ela pode afirmar inverdades com confiança. Ela reflete os vieses em seus dados de treinamento. Tratar os resultados da IA como um ponto de partida a ser verificado — especialmente para decisões importantes — é uma postura melhor do que tratá-los como autoritativos." },
+      { tag: "Big idea", title: "Slide 3", body: "Usar a IA bem também significa manter o controle. O melhor uso da IA amplia o seu próprio pensamento — ajuda você a ir mais longe e mais rápido enquanto constrói sua própria compreensão. O pior uso substitui o seu pensamento, deixando você dependente de uma ferramenta sem as habilidades subjacentes." },
+      { tag: "Hot take", title: "Slide 4", body: "Perguntas críticas que vale a pena fazer sobre qualquer sistema de IA: • Quem construiu isso, e quais são seus incentivos? • Com quais dados foi treinado, e que vieses isso pode introduzir? • Para que está otimizando? • Quem se beneficia quando funciona — e quem arca com o custo quando falha?" },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Tratá-las como um ponto de partida a ser verificado, e não como autoritativas"`, answer: true, verdict: "Correto.", explanation: "Qual é uma abordagem sólida em relação a informações geradas por IA, especialmente para decisões importantes? — Tratá-las como um ponto de partida a ser verificado, e não como autoritativas" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"A ampliação ajuda você a pensar melhor enquanto constrói suas próprias habilidades; a substituição produz resultados sem desenvolver compreensão"`, answer: true, verdict: "Correto.", explanation: "O que distingue a IA ampliando o seu pensamento de a IA substituindo-o? — A ampliação ajuda você a pensar melhor enquanto constrói suas próprias habilidades; a substituição produz resultados sem desenvolver compreensão" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Para que o sistema está otimizando e quem se beneficia quando funciona versus quem arca com o custo quando falha"`, answer: true, verdict: "Correto.", explanation: "Qual destas é uma pergunta crítica que vale a pena fazer sobre um sistema de IA que você usa? — Para que o sistema está otimizando e quem se beneficia quando funciona versus quem arca com o custo quando falha" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Falso — os usuários podem escolher ferramentas, avaliar resultados de forma crítica, optar por não compartilhar dados onde for possível e defender uma governança melhor"`, answer: true, verdict: "Correto.", explanation: "Verdadeiro ou falso: Os usuários não têm nenhuma agência significativa em como se engajam com os sistemas de IA. — Falso — os usuários podem escolher ferramentas, avaliar resultados de forma crítica, optar por não compartilhar dados onde for possível e defender uma governança melhor" },
+    ],
+  },
+  358: {
+    id: 358, worldId: 265,
+    title: "O Que Vem A Seguir",
+    stops: [
+      { tag: "Fact", title: "Slide 1", body: "O que sabemos: A IA já está profundamente integrada à vida cotidiana e está melhorando rapidamente. Ela levanta questões éticas, sociais e políticas genuínas que não têm respostas técnicas simples." },
+      { tag: "Example", title: "Slide 2", body: "O que não sabemos: se e quando a IAG vai surgir; se os problemas de alinhamento podem ser resolvidos antes que os sistemas se tornem significativamente mais poderosos; como a IA vai reformular o emprego a longo prazo; como as nações vão gerenciar a competição em IA; se os benefícios da IA serão distribuídos amplamente ou concentrados." },
+      { tag: "Big idea", title: "Slide 3", body: "Quem pode ajudar a responder essas perguntas? Pesquisadores, engenheiros, formuladores de políticas, eticistas, educadores, jornalistas, ativistas, eleitores — e as pessoas que estão estudando essas questões agora. Os problemas de IA mais importantes não são puramente técnicos. São sobre justiça, poder, confiança, responsabilização e que tipo de futuro estamos coletivamente dispostos a construir." },
+      { tag: "Hot take", title: "Slide 4", body: "Quanto mais você entender sobre como a IA funciona, o que ela não consegue fazer e quais interesses a moldam, mais bem posicionado você estará para se engajar com essas questões — como usuário, cidadão e potencialmente como alguém que constrói ou governa esses sistemas." },
+    ],
+    questions: [
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Se os problemas de alinhamento podem ser resolvidos antes que os sistemas de IA se tornem significativamente mais poderosos"`, answer: true, verdict: "Correto.", explanation: "Qual destes é algo que genuinamente não sabemos sobre o futuro da IA? — Se os problemas de alinhamento podem ser resolvidos antes que os sistemas de IA se tornem significativamente mais poderosos" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Pesquisadores, formuladores de políticas, cidadãos e qualquer pessoa disposta a se engajar seriamente com as questões"`, answer: true, verdict: "Correto.", explanation: "Quem pode ajudar a responder as questões mais importantes sobre o futuro da IA? — Pesquisadores, formuladores de políticas, cidadãos e qualquer pessoa disposta a se engajar seriamente com as questões" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Eles envolvem questões de justiça, poder, responsabilização e valores que não podem ser resolvidos apenas pela engenharia"`, answer: true, verdict: "Correto.", explanation: "O que torna os problemas de IA mais importantes não puramente técnicos? — Eles envolvem questões de justiça, poder, responsabilização e valores que não podem ser resolvidos apenas pela engenharia" },
+      { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `"Engajamento informado e crítico — entendendo como a IA funciona, quais interesses a moldam e quais escolhas ainda estão abertas"`, answer: true, verdict: "Correto.", explanation: "Qual é a postura mais útil a adotar em relação às questões sobre o futuro da IA? — Engajamento informado e crítico — entendendo como a IA funciona, quais interesses a moldam e quais escolhas ainda estão abertas" },
+    ],
+  },
+}
+
+export default wm_w5_pt

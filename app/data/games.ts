@@ -63,6 +63,33 @@ export const TYPE_LABEL_PT: Record<GameType, string> = {
   connections:  'Agrupar',
 }
 
+export const GAME_TITLES_PT: Record<string, string> = {
+  'analyst':       'O Analista',
+  'signal-drop':   'Queda de Sinal',
+  'static':        'Estático',
+  'weight-room':   'Sala de Musculação',
+  'the-feed':      'O Feed',
+  'failure-modes': 'Modos de Falha',
+  'daily-scan':    'Varredura Diária',
+  'data-trails':   'Rastros de Dados',
+  'the-call':      'A Chamada',
+  'the-framework': 'A Estrutura',
+  'bias-sources':  'Fontes de Viés',
+  'transparency':  'Tipos de Transparência',
+  'can-or-cant':   'Pode ou Não Pode',
+  'what-is-agi':   'O que é AGI',
+  'the-resource':  'O Recurso',
+  'signal-flow':   'Fluxo de Sinal',
+  'the-gradient':  'O Gradiente',
+  'transformer':   'Partes do Transformer',
+  'prompt-drop':   'Queda de Prompts',
+  'agent-parts':   'Partes do Agente',
+  'ship-it':       'Envie',
+  'multimodal':    'Multimodal',
+  'frontier':      'Conceitos de Fronteira',
+  'dispatch':      'Despacho',
+}
+
 export const WORLD_NAMES: Record<number, string> = {
   1: 'Meet AI',
   2: 'How AI Thinks',

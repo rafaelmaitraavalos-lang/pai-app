@@ -20,8 +20,8 @@ export default function MiddlePtHome() {
     setUsername(localStorage.getItem('pai_username') ?? '')
     const map: Record<number, boolean> = {}
     MIDDLE_SCHOOL_WORLD_IDS_PT.forEach(wid => {
-      const lessonId = ELEMENTARY_WORLDS[wid]?.modules[0]?.id
-      if (lessonId) map[lessonId] = localStorage.getItem(`pai_lesson_${lessonId}_done`) === 'true'
+      const world = ELEMENTARY_WORLDS[wid]
+      map[wid] = world?.modules.every(m => localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true') ?? false
     })
     setDone(map)
   }, [])
@@ -34,10 +34,7 @@ export default function MiddlePtHome() {
     router.replace('/')
   }
 
-  const firstUndoneIdx = MIDDLE_SCHOOL_WORLD_IDS_PT.findIndex(wid => {
-    const lessonId = ELEMENTARY_WORLDS[wid]?.modules[0]?.id
-    return lessonId && !done[lessonId]
-  })
+  const firstUndoneIdx = MIDDLE_SCHOOL_WORLD_IDS_PT.findIndex(wid => !done[wid])
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
@@ -62,14 +59,13 @@ export default function MiddlePtHome() {
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {MIDDLE_SCHOOL_WORLD_IDS_PT.map((wid, idx) => {
             const world    = ELEMENTARY_WORLDS[wid]
-            const lessonId = world?.modules[0]?.id
             const isActive = idx === firstUndoneIdx
-            const isDone   = lessonId ? done[lessonId] : false
+            const isDone   = done[wid] ?? false
 
             return (
               <div
                 key={wid}
-                onClick={() => lessonId && router.push(`/elementary/lesson/${lessonId}`)}
+                onClick={() => router.push(`/middle/world/${wid}`)}
                 style={{
                   display: 'flex', alignItems: 'center',
                   padding: '15px 16px',

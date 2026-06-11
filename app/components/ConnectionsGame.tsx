@@ -27,6 +27,7 @@ export interface CompletionResult {
 interface Props {
   puzzle: Puzzle
   onComplete?: (result: CompletionResult) => void
+  isPT?: boolean
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -160,7 +161,7 @@ function Btn({
 // Main game component
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function ConnectionsGame({ puzzle, onComplete }: Props) {
+export default function ConnectionsGame({ puzzle, onComplete, isPT = false }: Props) {
   const allCards = useMemo(() => puzzle.groups.flatMap(g => g.cards), [puzzle])
 
   const [grid, setGrid]     = useState<string[]>(() => shuffle(allCards))
@@ -287,14 +288,14 @@ export default function ConnectionsGame({ puzzle, onComplete }: Props) {
       <div style={{ height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 4 }}>
         {oneAway && (
           <span style={{ fontSize: 13, fontWeight: 600, color: '#555', animation: 'popIn 0.25s ease-out' }}>
-            One away…
+            {isPT ? 'Quase lá…' : 'One away…'}
           </span>
         )}
       </div>
 
       {/* Mistake dots */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 14 }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#777' }}>Mistakes remaining:</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#777' }}>{isPT ? 'Erros restantes:' : 'Mistakes remaining:'}</span>
         <div style={{ display: 'flex', gap: 5 }}>
           {Array.from({ length: MAX_MISTAKES }).map((_, i) => {
             const filled = i < MAX_MISTAKES - mistakes
@@ -317,12 +318,12 @@ export default function ConnectionsGame({ puzzle, onComplete }: Props) {
       {/* Controls */}
       {phase === 'playing' && (
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
-          <Btn onClick={() => setGrid(prev => shuffle(prev))}>Shuffle</Btn>
+          <Btn onClick={() => setGrid(prev => shuffle(prev))}>{isPT ? 'Embaralhar' : 'Shuffle'}</Btn>
           <Btn onClick={() => { setSel([]); setOneAway(false) }} disabled={selected.length === 0}>
-            Deselect all
+            {isPT ? 'Desmarcar todos' : 'Deselect all'}
           </Btn>
           <Btn onClick={submit} disabled={selected.length !== 4 || shaking} primary>
-            Submit
+            {isPT ? 'Confirmar' : 'Submit'}
           </Btn>
         </div>
       )}
@@ -331,10 +332,12 @@ export default function ConnectionsGame({ puzzle, onComplete }: Props) {
       {phase === 'won' && (
         <div style={{ textAlign: 'center', padding: '16px 0 8px', animation: 'popIn 0.4s ease-out' }}>
           <p style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 800, color: '#111' }}>
-            Solved it!
+            {isPT ? 'Resolvido!' : 'Solved it!'}
           </p>
           <p style={{ margin: 0, fontSize: 14, color: '#555', fontWeight: 600 }}>
-            {mistakes === 0 ? 'Perfect — no mistakes.' : `${mistakes} mistake${mistakes !== 1 ? 's' : ''}.`}
+            {isPT
+              ? (mistakes === 0 ? 'Perfeito — sem erros.' : `${mistakes} erro${mistakes !== 1 ? 's' : ''}.`)
+              : (mistakes === 0 ? 'Perfect — no mistakes.' : `${mistakes} mistake${mistakes !== 1 ? 's' : ''}.`)}
           </p>
         </div>
       )}
@@ -343,10 +346,10 @@ export default function ConnectionsGame({ puzzle, onComplete }: Props) {
       {phase === 'lost' && (
         <div style={{ textAlign: 'center', padding: '16px 0 8px', animation: 'popIn 0.4s ease-out' }}>
           <p style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 800, color: '#111' }}>
-            Nice try!
+            {isPT ? 'Boa tentativa!' : 'Nice try!'}
           </p>
           <p style={{ margin: 0, fontSize: 14, color: '#555', fontWeight: 600 }}>
-            Better luck next time.
+            {isPT ? 'Tente novamente.' : 'Better luck next time.'}
           </p>
         </div>
       )}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { GAMES, TYPE_LABEL, TYPE_LABEL_PT, WORLD_NAMES, type GameType } from '../data/games'
+import { GAMES, TYPE_LABEL, TYPE_LABEL_PT, WORLD_NAMES, GAME_TITLES_PT, type GameType } from '../data/games'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -83,7 +83,7 @@ export default function GamesHub() {
                     <div style={{ width: 8, height: 8, flexShrink: 0, background: TYPE_COLOR[game.type], border: `1px solid ${BLACK}`, opacity: game.built ? 1 : 0.4 }} />
 
                     {/* Title */}
-                    <span style={{ fontFamily: DISP, fontSize: 14, color: BLACK, flex: 1 }}>{game.title}</span>
+                    <span style={{ fontFamily: DISP, fontSize: 14, color: BLACK, flex: 1 }}>{isPT ? (GAME_TITLES_PT[game.slug] ?? game.title) : game.title}</span>
 
                     {/* Module tag */}
                     <span style={{ fontFamily: BODY, fontSize: 10, color: DIM }}>M{game.module}</span>

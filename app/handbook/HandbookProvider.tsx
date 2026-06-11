@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { STARTER_ENTRIES, UNLOCKABLE_ENTRIES, STARTER_ENTRIES_PT, UNLOCKABLE_ENTRIES_PT, LOCKED_COUNT, type HandbookEntry } from './entries'
 
@@ -15,12 +15,19 @@ const FAINT = '#d8d8d8'
 
 // ── Index view ────────────────────────────────────────────────────────────────
 
-function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: HandbookEntry) => void; onClose: () => void; unlockedIds: Set<string>; isPT: boolean }) {
+function IndexView({ onSelect, onClose, unlockedIds, isPT, tourIdx }: {
+  onSelect: (e: HandbookEntry, idx: number) => void
+  onClose:  () => void
+  unlockedIds: Set<string>
+  isPT:     boolean
+  tourIdx:  number   // -1 = no tour; 0..N = highlight this entry
+}) {
   const starters   = isPT ? STARTER_ENTRIES_PT   : STARTER_ENTRIES
   const unlockPool = isPT ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
   const unlocked   = unlockPool.filter(e => unlockedIds.has(e.id))
   const stillLocked = (isPT ? UNLOCKABLE_ENTRIES_PT.length : LOCKED_COUNT) - unlocked.length
   const allEntries = [...starters, ...unlocked]
+  const inTour = tourIdx >= 0
 
   return (
     <>
@@ -30,22 +37,40 @@ function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: Han
       </div>
       <div style={{ padding: '14px 16px 4px', flexShrink: 0 }}>
         <span style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Manual' : 'Handbook'}</span>
+        {inTour && (
+          <span style={{ fontFamily: BODY, fontSize: 10, color: GREEN, marginLeft: 10, opacity: 0.8 }}>
+            {isPT ? `↓ Leia entrada ${tourIdx + 1}` : `↓ Read entry ${tourIdx + 1}`}
+          </span>
+        )}
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '6px 16px 20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {allEntries.map((entry, i) => (
-          <button key={entry.id} onClick={() => onSelect(entry)} style={{
-            padding: '12px 14px', textAlign: 'left', cursor: 'pointer',
-            background: CREAM,
-            border: `1.5px solid ${BLACK}`,
-            boxShadow: `3px 3px 0 0 ${BLACK}`,
-            display: 'flex', alignItems: 'center', gap: 12,
-            transition: 'all 0.1s',
-          }}>
-            <span style={{ fontFamily: BODY, fontSize: 10, color: DIM, width: 20, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
-            <span style={{ fontFamily: DISP, fontSize: 12, lineHeight: 1.2, flex: 1, color: BLACK }}>{entry.title}</span>
-            <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>→</span>
-          </button>
-        ))}
+        {allEntries.map((entry, i) => {
+          const isHighlighted = inTour && i === tourIdx
+          const isDimmed      = inTour && i !== tourIdx && i < tourIdx
+
+          return (
+            <button
+              key={entry.id}
+              onClick={() => onSelect(entry, i)}
+              style={{
+                padding: '12px 14px', textAlign: 'left', cursor: 'pointer',
+                background: isHighlighted ? BLACK : CREAM,
+                border: `1.5px solid ${isHighlighted ? GREEN : BLACK}`,
+                boxShadow: isHighlighted
+                  ? `3px 3px 0 0 ${GREEN}, 0 0 0 4px rgba(61,245,66,0.18)`
+                  : `3px 3px 0 0 ${BLACK}`,
+                display: 'flex', alignItems: 'center', gap: 12,
+                opacity: isDimmed ? 0.45 : 1,
+                transition: 'all 0.2s',
+                animation: isHighlighted ? 'hbPulse 1.8s ease-in-out infinite' : undefined,
+              }}
+            >
+              <span style={{ fontFamily: BODY, fontSize: 10, color: isHighlighted ? GREEN : DIM, width: 20, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
+              <span style={{ fontFamily: DISP, fontSize: 12, lineHeight: 1.2, flex: 1, color: isHighlighted ? GREEN : BLACK }}>{entry.title}</span>
+              <span style={{ fontFamily: BODY, fontSize: 12, color: isHighlighted ? GREEN : DIM }}>{isHighlighted ? '→ read' : '→'}</span>
+            </button>
+          )
+        })}
         {Array.from({ length: Math.max(0, stillLocked) }, (_, i) => (
           <div key={`locked-${i}`} style={{
             padding: '12px 14px',
@@ -55,17 +80,41 @@ function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: Han
             display: 'flex', alignItems: 'center', gap: 12,
           }}>
             <span style={{ fontFamily: BODY, fontSize: 10, color: FAINT, width: 20, flexShrink: 0 }}>{String(allEntries.length + i + 1).padStart(2, '0')}</span>
-            <span style={{ fontFamily: DISP, fontSize: 12, color: FAINT, flex: 1 }}>🔒 Locked</span>
+            <span style={{ fontFamily: DISP, fontSize: 12, color: FAINT, flex: 1 }}>🔒 {isPT ? 'Bloqueado' : 'Locked'}</span>
           </div>
         ))}
       </div>
+      <style>{`
+        @keyframes hbPulse {
+          0%, 100% { box-shadow: 3px 3px 0 0 ${GREEN}, 0 0 0 4px rgba(61,245,66,0.18); }
+          50%       { box-shadow: 3px 3px 0 0 ${GREEN}, 0 0 0 8px rgba(61,245,66,0.35); }
+        }
+      `}</style>
     </>
   )
 }
 
 // ── Entry view ────────────────────────────────────────────────────────────────
 
-function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () => void; isPT: boolean }) {
+function EntryView({ entry, onBack, isPT, tourIdx, totalStarters, onTourAdvance }: {
+  entry:         HandbookEntry
+  onBack:        () => void
+  isPT:          boolean
+  tourIdx:       number
+  totalStarters: number
+  onTourAdvance: () => void
+}) {
+  const inTour    = tourIdx >= 0
+  const isLast    = tourIdx >= totalStarters - 1
+  const nextLabel = isLast
+    ? (isPT ? 'Concluir →' : 'Done →')
+    : (isPT ? `Próxima entrada →` : `Next entry →`)
+
+  const handleBack = () => {
+    if (inTour) onTourAdvance()
+    onBack()
+  }
+
   return (
     <>
       <div style={{ background: BLACK, padding: '10px 18px', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -74,7 +123,7 @@ function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () =
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 18px 24px', display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
-          <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>{entry.unlocksAt ? (isPT ? 'Entrada' : 'Entry') : (isPT ? 'Entrada' : 'Entry')}</div>
+          <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>{isPT ? 'Entrada' : 'Entry'}</div>
           <h2 style={{ fontFamily: DISP, fontSize: 18, color: BLACK, margin: '0 0 14px', lineHeight: 1.15 }}>{entry.title}</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {entry.body.split('\n\n').map((p, i) => (
@@ -86,30 +135,47 @@ function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () =
           <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: BLACK, marginBottom: 6 }}>{isPT ? 'FAÇA' : 'DO'}</div>
           <p style={{ fontFamily: BODY, fontSize: 13, fontWeight: 600, color: BLACK, margin: 0, lineHeight: 1.55 }}>{entry.doLine}</p>
         </div>
+        {inTour && (
+          <button
+            onClick={handleBack}
+            style={{
+              fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase',
+              background: BLACK, color: GREEN, padding: '12px 0',
+              border: `1.5px solid ${GREEN}`, cursor: 'pointer',
+              boxShadow: `3px 3px 0 0 ${GREEN}`,
+              marginTop: 4,
+            }}
+          >
+            {nextLabel}
+          </button>
+        )}
       </div>
     </>
   )
 }
 
-// ── HB button + welcome tooltip ───────────────────────────────────────────────
+// ── HB button + spotlight ─────────────────────────────────────────────────────
 
-function HBButton({ onClick, showWelcome, username }: { onClick: () => void; showWelcome: boolean; username: string }) {
-  // Read lang directly from localStorage so it's always current (no stale state)
+function HBButton({ onClick, showWelcome, username, spotlight }: {
+  onClick:     () => void
+  showWelcome: boolean
+  username:    string
+  spotlight:   boolean
+}) {
   const isPT = typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt'
   return (
-    <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 40 }}>
-      {/* PAI welcome tooltip */}
-      {showWelcome && (
+    <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 48 }}>
+      {/* PAI welcome / spotlight tooltip */}
+      {(showWelcome || spotlight) && (
         <div style={{
           position: 'absolute', bottom: 54, left: 0,
           background: BLACK, color: GREEN,
           border: `1.5px solid ${GREEN}`,
           boxShadow: `3px 3px 0 0 ${GREEN}`,
           padding: '10px 14px',
-          width: 200,
+          width: 210,
           pointerEvents: 'none',
         }}>
-          {/* Speech bubble arrow pointing down-left */}
           <div style={{
             position: 'absolute', bottom: -8, left: 14,
             width: 0, height: 0,
@@ -122,7 +188,9 @@ function HBButton({ onClick, showWelcome, username }: { onClick: () => void; sho
             {isPT ? `Bem-vindo, ${username}!` : `Welcome, ${username}!`}
           </div>
           <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 6, lineHeight: 1.4, opacity: 0.85 }}>
-            {isPT ? 'Toque aqui para abrir seu manual ↓' : 'Tap here to open your handbook ↓'}
+            {spotlight
+              ? (isPT ? 'Abra seu manual para começar ↓' : 'Open your handbook to get started ↓')
+              : (isPT ? 'Toque aqui para abrir seu manual ↓' : 'Tap here to open your handbook ↓')}
           </div>
         </div>
       )}
@@ -132,16 +200,18 @@ function HBButton({ onClick, showWelcome, username }: { onClick: () => void; sho
         aria-label="Open handbook"
         style={{
           width: 44, height: 44,
-          background: BLACK,
+          background: spotlight ? GREEN : BLACK,
           border: `1.5px solid ${GREEN}`,
-          boxShadow: showWelcome ? `0 0 0 4px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}` : `4px 4px 0 0 ${GREEN}`,
+          boxShadow: spotlight
+            ? `0 0 0 6px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}`
+            : ((showWelcome) ? `0 0 0 4px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}` : `4px 4px 0 0 ${GREEN}`),
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           animation: 'handbookPulse 2s ease-in-out infinite',
-          transition: 'box-shadow 0.3s',
+          transition: 'all 0.3s',
         }}
       >
-        <span style={{ fontFamily: DISP, fontSize: 9, color: GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
+        <span style={{ fontFamily: DISP, fontSize: 9, color: spotlight ? BLACK : GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
       </button>
     </div>
   )
@@ -155,10 +225,13 @@ export default function HandbookProvider() {
   const [open, setOpen]                   = useState(false)
   const [visible, setVisible]             = useState(false)
   const [selectedEntry, setSelectedEntry] = useState<HandbookEntry | null>(null)
+  const [selectedIdx, setSelectedIdx]     = useState(-1)
   const [unlockedIds, setUnlockedIds]     = useState<Set<string>>(new Set())
   const [showWelcome, setShowWelcome]     = useState(false)
+  const [spotlight, setSpotlight]         = useState(false)
   const [username, setUsername]           = useState('')
   const [isPT, setIsPT]                   = useState(false)
+  const [tourIdx, setTourIdx]             = useState(-1)
 
   useEffect(() => {
     setMounted(true)
@@ -168,16 +241,21 @@ export default function HandbookProvider() {
     const lang           = localStorage.getItem('pai_lang') ?? 'en'
     setUsername(storedName)
     setIsPT(lang === 'pt')
-    // Show welcome tooltip when onboarding just completed (dedicated flag)
+
     const showWelcomeFlag = localStorage.getItem('pai_show_welcome')
     if (showWelcomeFlag && onboardingDone && pathname !== '/') {
       localStorage.removeItem('pai_show_welcome')
-      setTimeout(() => setShowWelcome(true), 800)
+      if (!seen) {
+        // First ever visit after onboarding: show spotlight to guide to handbook
+        setTimeout(() => setSpotlight(true), 600)
+      } else {
+        setTimeout(() => setShowWelcome(true), 800)
+      }
     } else if (onboardingDone && !seen && pathname !== '/') {
-      // Fallback: show if handbook never opened
       setTimeout(() => setShowWelcome(true), 800)
     }
-    // Compute which unlockable entries the user has earned
+
+    // Compute unlocked entries
     const unlockables = lang === 'pt' ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
     const ids = new Set<string>()
     for (const entry of unlockables) {
@@ -188,35 +266,91 @@ export default function HandbookProvider() {
     setUnlockedIds(ids)
   }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const focusedRoute = /^\/(lesson|games|complete|elementary\/lesson|elementary\/world)/.test(pathname)
+  // Don't hide on /home, /elementary/home, or /games — only hide on actual lesson/game pages
+  const focusedRoute = /^\/(lesson\/|games\/[^/]+|complete|elementary\/lesson|elementary\/world)/.test(pathname)
   if (!mounted || pathname === '/') return null
 
   const openPopup = () => {
     setShowWelcome(false)
+    setSpotlight(false)
     setSelectedEntry(null)
+    setSelectedIdx(-1)
     setOpen(true)
+    setTimeout(() => setVisible(true), 20)
+  }
+
+  const openPopupWithTour = () => {
+    setShowWelcome(false)
+    setSpotlight(false)
+    setSelectedEntry(null)
+    setSelectedIdx(-1)
+    setOpen(true)
+    setTourIdx(0)
     setTimeout(() => setVisible(true), 20)
   }
 
   const closePopup = () => {
     setVisible(false)
+    setTourIdx(-1)
     localStorage.setItem('pai_handbook_seen', 'true')
-    setTimeout(() => { setOpen(false); setSelectedEntry(null) }, 220)
+    setTimeout(() => { setOpen(false); setSelectedEntry(null); setSelectedIdx(-1) }, 220)
   }
 
-  const selectEntry = (entry: HandbookEntry) => {
+  const selectEntry = (entry: HandbookEntry, idx: number) => {
     setVisible(false)
-    setTimeout(() => { setSelectedEntry(entry); setVisible(true) }, 180)
+    setTimeout(() => { setSelectedEntry(entry); setSelectedIdx(idx); setVisible(true) }, 180)
   }
 
   const backToIndex = () => {
     setVisible(false)
-    setTimeout(() => { setSelectedEntry(null); setVisible(true) }, 180)
+    setTimeout(() => { setSelectedEntry(null); setSelectedIdx(-1); setVisible(true) }, 180)
   }
+
+  const advanceTour = useCallback(() => {
+    const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
+    setTourIdx(prev => {
+      const next = prev + 1
+      if (next >= starters.length) {
+        // Tour complete
+        localStorage.setItem('pai_handbook_seen', 'true')
+        return -1
+      }
+      return next
+    })
+  }, [isPT])
+
+  const handleHBClick = () => {
+    if (open) {
+      closePopup()
+    } else if (spotlight) {
+      openPopupWithTour()
+    } else {
+      openPopup()
+    }
+  }
+
+  const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
 
   return (
     <>
-      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />}
+      {/* Spotlight overlay — dims everything except the HB button */}
+      {spotlight && !open && (
+        <div style={{
+          position: 'fixed', inset: 0,
+          background: 'rgba(0,0,0,0.82)',
+          zIndex: 46,
+          pointerEvents: 'all',
+        }} />
+      )}
+
+      {!focusedRoute && (
+        <HBButton
+          onClick={handleHBClick}
+          showWelcome={showWelcome}
+          username={username}
+          spotlight={spotlight}
+        />
+      )}
 
       {open && (
         <>
@@ -238,8 +372,21 @@ export default function HandbookProvider() {
             transition: 'opacity 220ms ease, transform 220ms ease',
           }}>
             {selectedEntry
-              ? <EntryView entry={selectedEntry} onBack={backToIndex} isPT={isPT} />
-              : <IndexView onSelect={selectEntry} onClose={closePopup} unlockedIds={unlockedIds} isPT={isPT} />
+              ? <EntryView
+                  entry={selectedEntry}
+                  onBack={backToIndex}
+                  isPT={isPT}
+                  tourIdx={tourIdx}
+                  totalStarters={starters.length}
+                  onTourAdvance={advanceTour}
+                />
+              : <IndexView
+                  onSelect={selectEntry}
+                  onClose={closePopup}
+                  unlockedIds={unlockedIds}
+                  isPT={isPT}
+                  tourIdx={tourIdx}
+                />
             }
           </div>
         </>
