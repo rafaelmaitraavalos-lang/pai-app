@@ -17,8 +17,10 @@ export default function ElementaryWorldPage() {
   const worldId = parseInt(params.id as string)
   const world   = ELEMENTARY_WORLDS[worldId]
   const [done, setDone] = useState<Record<number, boolean>>({})
+  const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
     if (!world) return
     const map: Record<number, boolean> = {}
     world.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
@@ -33,7 +35,7 @@ export default function ElementaryWorldPage() {
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
-        <button onClick={() => router.push('/elementary/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>{typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt' ? '← Início' : '← Home'}</button>
+        <button onClick={() => router.push('/elementary/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>{isPT ? '← Início' : '← Home'}</button>
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { GAMES, TYPE_LABEL, TYPE_LABEL_PT, WORLD_NAMES, GAME_TITLES_PT, type GameType } from '../data/games'
 
@@ -21,7 +22,8 @@ const worlds = Array.from(new Set(GAMES.map(g => g.world)))
 
 export default function GamesHub() {
   const router = useRouter()
-  const isPT = typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt'
+  const [isPT, setIsPT] = useState(false)
+  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY }}>

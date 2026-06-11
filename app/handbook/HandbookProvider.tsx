@@ -162,7 +162,8 @@ function HBButton({ onClick, showWelcome, username, spotlight }: {
   username:    string
   spotlight:   boolean
 }) {
-  const isPT = typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt'
+  const [isPT, setIsPT] = useState(false)
+  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
   return (
     <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 48 }}>
       {/* PAI welcome / spotlight tooltip */}
