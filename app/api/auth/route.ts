@@ -51,10 +51,10 @@ export async function POST(req: NextRequest) {
 
   // Mode constraints — enforce signup vs login intent
   if (mode === 'signup' && !isNew) {
-    return NextResponse.json({ error: 'That username is taken' }, { status: 409 })
+    return NextResponse.json({ error: 'Someone already has that one — try another!' }, { status: 409 })
   }
   if (mode === 'login' && isNew) {
-    return NextResponse.json({ error: 'No account with that username' }, { status: 404 })
+    return NextResponse.json({ error: "We don't recognize that username. Check the spelling?" }, { status: 404 })
   }
 
   if (!user) {
