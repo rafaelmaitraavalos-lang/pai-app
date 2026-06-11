@@ -129,7 +129,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const FACTS    = isPT ? FACTS_PT    : FACTS_EN
 
   function spawnBall(g: GS, W: number, H: number, fromAI = false) {
-    const speed = BASE_SPD * Math.pow(1.13, g.rallies)
+    const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
     if (fromAI) {
       // AI just hit — pick random new item + color
       const remaining = g.items.slice(g.idx)
@@ -201,15 +201,24 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       // AI paddle hit
       if (g.bx - BALL_R <= AI_X + PADDLE_W && g.vx < 0) {
         if (Math.abs(g.by - g.aiY) < PADDLE_H / 2 + 4) {
+          // Natural bounce — keep the rally going, just pick a new item + color
           g.bx = AI_X + PADDLE_W + BALL_R
           g.rallies++
-          const speed = BASE_SPD * Math.pow(1.13, g.rallies)
+          const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
           g.vx = Math.abs(speed)
           const rel = (g.by - g.aiY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
-          spawnBall(g, W, H, true)   // new random color + item
+          // Assign new random item + color without teleporting the ball
+          const remaining = g.items.slice(g.idx)
+          if (remaining.length > 0) {
+            const pick = Math.floor(Math.random() * remaining.length)
+            g.ballCatch = remaining[pick].shouldCatch
+            g.label = { text: remaining[pick].label, t: now }
+            const tmp = g.items[g.idx]; g.items[g.idx] = g.items[g.idx + pick]; g.items[g.idx + pick] = tmp
+          }
+          g.decided = false
         } else if (g.bx < AI_X - 4) {
-          // AI missed — respawn
+          // AI missed — respawn from center
           g.idx++; g.total++
           if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
           spawnBall(g, W, H)
@@ -237,7 +246,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         if (inPaddle) {
           g.bx = PLAYER_X - BALL_R
           g.rallies++
-          const speed = BASE_SPD * Math.pow(1.13, g.rallies)
+          const speed = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
           g.vx = -Math.abs(speed)
           const rel = (g.by - g.playerY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
