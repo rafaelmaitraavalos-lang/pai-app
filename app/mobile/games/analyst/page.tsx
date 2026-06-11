@@ -12,6 +12,8 @@ const GREEN = '#3DF542'
 export default function MobileAnalystPage() {
   const router = useRouter()
 
+  if (done) return <MobileGameComplete slug="analyst" />
+
   return (
     <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: BLACK, padding: '10px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -22,7 +24,7 @@ export default function MobileAnalystPage() {
       </div>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ width: '100%', overflowY: 'auto', padding: '24px 20px 80px' }}>
-          <TheAnalyst rounds={analystRounds} onComplete={() => router.push('/mobile/home')} />
+          <TheAnalyst rounds={analystRounds} onComplete={() => setDone(true)} />
         </div>
       </div>
     </div>
