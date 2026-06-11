@@ -10,6 +10,7 @@ export interface PuzzleGroup {
   name: string
   difficulty: 1 | 2 | 3 | 4
   cards: [string, string, string, string]
+  reveal?: string
 }
 
 export interface Puzzle {
