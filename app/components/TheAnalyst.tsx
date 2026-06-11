@@ -13,6 +13,7 @@ export interface AnalystResult {
 interface Props {
   rounds:      AnalystRound[]
   onComplete?: (result: AnalystResult) => void
+  isPT?:       boolean
 }
 
 // ── Hearth palette ────────────────────────────────────────────────────────────
@@ -29,14 +30,16 @@ const WRONG   = '#C0392B'
 
 // ── Credibility meter ─────────────────────────────────────────────────────────
 
-function CredMeter({ value }: { value: number }) {
+function CredMeter({ value, isPT }: { value: number; isPT?: boolean }) {
   const pct  = (value / 1000) * 100
-  const tier = value >= 800 ? 'Sharp' : value >= 600 ? 'Credible' : value >= 400 ? 'Developing' : 'Reckless'
+  const tier = isPT
+    ? (value >= 800 ? 'Preciso' : value >= 600 ? 'Credível' : value >= 400 ? 'Desenvolvendo' : 'Imprudente')
+    : (value >= 800 ? 'Sharp' : value >= 600 ? 'Credible' : value >= 400 ? 'Developing' : 'Reckless')
 
   return (
     <div style={{ marginBottom: 20 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-        <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Credibility</span>
+        <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Credibilidade' : 'Credibility'}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{tier}</span>
           <span style={{ fontFamily: DISP, fontSize: 13, color: BLACK, fontVariantNumeric: 'tabular-nums' }}>{value}</span>
@@ -51,16 +54,16 @@ function CredMeter({ value }: { value: number }) {
 
 // ── Case file — hard-shadow editorial box ─────────────────────────────────────
 
-function CaseFile({ round, visible }: { round: AnalystRound; visible: boolean }) {
+function CaseFile({ round, visible, isPT }: { round: AnalystRound; visible: boolean; isPT?: boolean }) {
   return (
     <div style={{ background: '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(8px)', transition: 'opacity 0.35s ease, transform 0.35s ease' }}>
       {/* Header */}
       <div style={{ padding: '10px 16px', borderBottom: `1px solid ${FAINT}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#E0E0E0' }}>
         <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>
-          Case File #{String(round.id).padStart(2, '0')}
+          {isPT ? 'Arquivo' : 'Case File'} #{String(round.id).padStart(2, '0')}
         </span>
         <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: BLACK, border: `1px solid ${round.era === 'test' ? BLACK : FAINT}`, padding: '1px 7px' }}>
-          {round.era === 'training' ? 'Training' : '★ Test'}
+          {round.era === 'training' ? (isPT ? 'Treinamento' : 'Training') : (isPT ? '★ Teste' : '★ Test')}
         </span>
       </div>
       {/* Body */}
@@ -78,13 +81,17 @@ function CaseFile({ round, visible }: { round: AnalystRound; visible: boolean })
 
 // ── Outcome panel ─────────────────────────────────────────────────────────────
 
-function OutcomePanel({ round, selected, visible }: { round: AnalystRound; selected: Choice; visible: boolean }) {
+function OutcomePanel({ round, selected, visible, isPT }: { round: AnalystRound; selected: Choice; visible: boolean; isPT?: boolean }) {
   if (!visible) return null
   const outcome      = round.outcomes[selected]
   const isGood       = outcome.delta > 0
   const isBest       = selected === round.best
   const isGoodEnough = round.good?.includes(selected)
-  const tag          = isBest ? 'Best read' : isGoodEnough ? 'Good enough' : 'Missed'
+  const tag          = isBest
+    ? (isPT ? 'Melhor leitura' : 'Best read')
+    : isGoodEnough
+    ? (isPT ? 'Suficiente' : 'Good enough')
+    : (isPT ? 'Errou' : 'Missed')
 
   return (
     <div style={{ animation: 'slideUpFade 0.3s ease-out', marginTop: 12 }}>
@@ -96,7 +103,7 @@ function OutcomePanel({ round, selected, visible }: { round: AnalystRound; selec
         <p style={{ margin: '0 0 10px', fontFamily: BODY, fontSize: 13, color: BLACK, lineHeight: 1.55 }}>{outcome.pai}</p>
         {!isBest && (
           <p style={{ margin: 0, fontFamily: DISP, fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: DIM }}>
-            Best read: {CHOICE_LABELS[round.best]}
+            {isPT ? 'Melhor leitura' : 'Best read'}: {isPT ? CHOICE_LABELS_PT[round.best] : CHOICE_LABELS[round.best]}
           </p>
         )}
       </div>
@@ -113,7 +120,14 @@ const CHOICE_LABELS: Record<Choice, string> = {
   bluff: 'Call the bluff',
 }
 
-function ChoiceGrid({ selected, phase, round, onPick }: { selected: Choice | null; phase: Phase; round: AnalystRound; onPick: (c: Choice) => void }) {
+const CHOICE_LABELS_PT: Record<Choice, string> = {
+  big:   'Investe pesado',
+  small: 'Investe pouco',
+  pass:  'Passa',
+  bluff: 'Desmascara o blefe',
+}
+
+function ChoiceGrid({ selected, phase, round, onPick, isPT }: { selected: Choice | null; phase: Phase; round: AnalystRound; onPick: (c: Choice) => void; isPT?: boolean }) {
   const choices: Choice[] = ['big', 'small', 'pass', 'bluff']
   const revealed = phase === 'outcome'
 
@@ -138,9 +152,9 @@ function ChoiceGrid({ selected, phase, round, onPick }: { selected: Choice | nul
 
         return (
           <button key={c} onClick={() => !selected && !revealed && onPick(c)} disabled={!!selected || revealed} style={{ padding: '13px 10px', background: bg, color, border: `1.5px solid ${BLACK}`, boxShadow: shadow, fontFamily: DISP, fontSize: 11, letterSpacing: '0.10em', textTransform: 'uppercase', cursor: selected ? 'default' : 'pointer', textAlign: 'center', transition: 'all 0.12s ease' }}>
-            {CHOICE_LABELS[c]}
+            {isPT ? CHOICE_LABELS_PT[c] : CHOICE_LABELS[c]}
             {revealed && c === round.best && !isSelected && (
-              <div style={{ fontSize: 8, letterSpacing: '0.10em', color: CORRECT, marginTop: 3 }}>← BEST</div>
+              <div style={{ fontSize: 8, letterSpacing: '0.10em', color: CORRECT, marginTop: 3 }}>{isPT ? '← MELHOR' : '← BEST'}</div>
             )}
           </button>
         )
@@ -151,22 +165,30 @@ function ChoiceGrid({ selected, phase, round, onPick }: { selected: Choice | nul
 
 // ── End screen ────────────────────────────────────────────────────────────────
 
-function EndScreen({ credibility, roundsWon, total, onBack }: { credibility: number; roundsWon: number; total: number; onBack: () => void }) {
+function EndScreen({ credibility, roundsWon, total, onBack, isPT }: { credibility: number; roundsWon: number; total: number; onBack: () => void; isPT?: boolean }) {
   const xp    = credibility >= 800 ? 200 : credibility >= 600 ? 150 : credibility >= 400 ? 100 : 75
-  const title = credibility >= 800 ? 'Sharp Analyst' : credibility >= 600 ? 'Credible Reader' : credibility >= 400 ? 'In Training' : 'Reckless'
-  const msg   = credibility >= 800
-    ? "Most adults fall for every hype cycle. You just didn't. That's the whole skill."
-    : credibility >= 600
-    ? "Good pattern recognition. A few cycles fooled you. That's how it goes."
-    : "The patterns are there. You're starting to see them. Study the history again."
+  const title = isPT
+    ? (credibility >= 800 ? 'Analista Preciso' : credibility >= 600 ? 'Leitor Credível' : credibility >= 400 ? 'Em Treinamento' : 'Imprudente')
+    : (credibility >= 800 ? 'Sharp Analyst' : credibility >= 600 ? 'Credible Reader' : credibility >= 400 ? 'In Training' : 'Reckless')
+  const msg = isPT
+    ? (credibility >= 800
+      ? "A maioria dos adultos cai em todo ciclo de hype. Você não caiu. Essa é a habilidade inteira."
+      : credibility >= 600
+      ? "Boa leitura de padrões. Alguns ciclos te enganaram. É assim que funciona."
+      : "Os padrões estão lá. Você está começando a vê-los. Estude o histórico novamente.")
+    : (credibility >= 800
+      ? "Most adults fall for every hype cycle. You just didn't. That's the whole skill."
+      : credibility >= 600
+      ? "Good pattern recognition. A few cycles fooled you. That's how it goes."
+      : "The patterns are there. You're starting to see them. Study the history again.")
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, paddingTop: 16, textAlign: 'center', maxWidth: 400, margin: '0 auto' }}>
       <div>
-        <p style={{ margin: '0 0 4px', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Final rating</p>
+        <p style={{ margin: '0 0 4px', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Avaliação final' : 'Final rating'}</p>
         <h2 style={{ margin: 0, fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, fontWeight: 400 }}>{title}</h2>
         <p style={{ margin: '6px 0 0', fontFamily: DISP, fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: DIM }}>
-          {credibility} / 1000 · {roundsWon}/{total} correct
+          {credibility} / 1000 · {roundsWon}/{total} {isPT ? 'corretos' : 'correct'}
         </p>
       </div>
 
@@ -180,7 +202,7 @@ function EndScreen({ credibility, roundsWon, total, onBack }: { credibility: num
       </div>
 
       <button onClick={onBack} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '12px 32px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
-        Back to lessons →
+        {isPT ? 'Voltar às aulas →' : 'Back to lessons →'}
       </button>
     </div>
   )
@@ -188,7 +210,7 @@ function EndScreen({ credibility, roundsWon, total, onBack }: { credibility: num
 
 // ── Main component (game logic unchanged) ─────────────────────────────────────
 
-export default function TheAnalyst({ rounds, onComplete }: Props) {
+export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
   const [roundIdx,     setRoundIdx]     = useState(0)
   const [credibility,  setCredibility]  = useState(500)
   const [prevCred,     setPrevCred]     = useState(500)
@@ -232,32 +254,34 @@ export default function TheAnalyst({ rounds, onComplete }: Props) {
   }, [roundIdx, rounds.length, credibility, roundsWon, onComplete])
 
   if (phase === 'complete') {
-    return <EndScreen credibility={credibility} roundsWon={roundsWon} total={rounds.length} onBack={() => onComplete?.({ credibility, roundsWon })} />
+    return <EndScreen credibility={credibility} roundsWon={roundsWon} total={rounds.length} onBack={() => onComplete?.({ credibility, roundsWon })} isPT={isPT} />
   }
 
   return (
     <div style={{ maxWidth: 560, margin: '0 auto', position: 'relative', paddingBottom: 90 }}>
 
-      <CredMeter value={credibility} />
+      <CredMeter value={credibility} isPT={isPT} />
 
       {/* Round dots */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Round {roundIdx + 1} of {rounds.length}</span>
+        <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>
+          {isPT ? `Rodada ${roundIdx + 1} de ${rounds.length}` : `Round ${roundIdx + 1} of ${rounds.length}`}
+        </span>
         <div style={{ display: 'flex', gap: 5 }}>
           {rounds.map((r, i) => <div key={r.id} style={{ width: 8, height: 8, borderRadius: '50%', background: i < roundIdx ? BLACK : i === roundIdx ? GREEN : FAINT, transition: 'background 0.3s' }} />)}
         </div>
       </div>
 
-      <CaseFile round={round} visible={showCase} />
+      <CaseFile round={round} visible={showCase} isPT={isPT} />
 
-      {phase === 'outcome' && selected && <OutcomePanel round={round} selected={selected} visible />}
+      {phase === 'outcome' && selected && <OutcomePanel round={round} selected={selected} visible isPT={isPT} />}
 
-      {showChoices && <ChoiceGrid selected={selected} phase={phase} round={round} onPick={handleChoice} />}
+      {showChoices && <ChoiceGrid selected={selected} phase={phase} round={round} onPick={handleChoice} isPT={isPT} />}
 
       {phase === 'outcome' && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 18 }}>
           <button onClick={nextRound} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}`, animation: 'popIn 0.3s ease-out 0.3s both' }}>
-            {roundIdx >= rounds.length - 1 ? 'See results →' : 'Next case →'}
+            {roundIdx >= rounds.length - 1 ? (isPT ? 'Ver resultados →' : 'See results →') : (isPT ? 'Próximo arquivo →' : 'Next case →')}
           </button>
         </div>
       )}

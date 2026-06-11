@@ -40,9 +40,9 @@ function shuffle<T>(a: T[]): T[] {
   return b
 }
 
-interface Props { game: CatcherGame; onComplete?: (score: number, total: number) => void }
+interface Props { game: CatcherGame; onComplete?: (score: number, total: number) => void; isPT?: boolean }
 
-export default function CatcherGame({ game, onComplete }: Props) {
+export default function CatcherGame({ game, onComplete, isPT = false }: Props) {
   const [phase,   setPhase]   = useState<Phase>('intro')
   const [lives,   setLives]   = useState(LIVES)
   const [score,   setScore]   = useState(0)
@@ -245,17 +245,17 @@ export default function CatcherGame({ game, onComplete }: Props) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: BLACK }}>
       <div style={{ maxWidth: 400, width: '100%', display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div>
-          <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, margin: '0 0 10px', opacity: 0.7 }}>Catcher · W1 M3</p>
+          <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, margin: '0 0 10px', opacity: 0.7 }}>{isPT ? 'Catcher · S1 M3' : 'Catcher · W1 M3'}</p>
           <h1 style={{ fontFamily: DISP, fontSize: 36, color: '#fff', margin: '0 0 16px', lineHeight: 1 }}>{game.title}</h1>
           <p style={{ fontFamily: BODY, fontSize: 14, color: '#aaa', lineHeight: 1.65, margin: 0 }}>{game.intro}</p>
         </div>
         <div style={{ border: '1.5px solid #222', padding: '14px 16px', background: '#0d0d0d', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ fontFamily: DISP, fontSize: 10, color: GREEN, letterSpacing: '0.1em' }}>CATCH — good labeled data</div>
-          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>Verified, thoughtfully labeled, trustworthy. Move under it.</div>
-          <div style={{ borderTop: '1px solid #222', paddingTop: 8, fontFamily: DISP, fontSize: 10, color: RED, letterSpacing: '0.1em' }}>DODGE — noise or bad data</div>
-          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>Unlabeled, biased, or collected without care. Let it fall.</div>
+          <div style={{ fontFamily: DISP, fontSize: 10, color: GREEN, letterSpacing: '0.1em' }}>{isPT ? 'PEGAR — dados bons rotulados' : 'CATCH — good labeled data'}</div>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>{isPT ? 'Verificados, cuidadosamente rotulados, confiáveis. Mova-se até eles.' : 'Verified, thoughtfully labeled, trustworthy. Move under it.'}</div>
+          <div style={{ borderTop: '1px solid #222', paddingTop: 8, fontFamily: DISP, fontSize: 10, color: RED, letterSpacing: '0.1em' }}>{isPT ? 'DESVIAR — ruído ou dados ruins' : 'DODGE — noise or bad data'}</div>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>{isPT ? 'Sem rótulo, enviesados ou coletados sem cuidado. Deixe cair.' : 'Unlabeled, biased, or collected without care. Let it fall.'}</div>
         </div>
-        <p style={{ fontFamily: BODY, fontSize: 11, color: '#444', margin: 0, textAlign: 'center' }}>Move with mouse or finger · Read carefully</p>
+        <p style={{ fontFamily: BODY, fontSize: 11, color: '#444', margin: 0, textAlign: 'center' }}>{isPT ? 'Use o mouse ou o dedo · Leia com atenção' : 'Move with mouse or finger · Read carefully'}</p>
         <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 24px ${GREEN}66` }}>
           {game.ctaLabel}
         </button>
@@ -286,7 +286,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
               <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: i < lives ? GREEN : '#222', boxShadow: i < lives ? `0 0 8px ${GREEN}` : 'none', transition: 'all 0.3s' }} />
             ))}
           </div>
-          <span style={{ fontFamily: DISP, fontSize: 12, color: GREEN, letterSpacing: '0.1em' }}>{score} CAUGHT</span>
+          <span style={{ fontFamily: DISP, fontSize: 12, color: GREEN, letterSpacing: '0.1em' }}>{isPT ? `${score} PEGOS` : `${score} CAUGHT`}</span>
           <span style={{ fontFamily: DISP, fontSize: 10, color: '#333', letterSpacing: '0.1em' }}>{spawnedRef.current}/{TOTAL_ITEMS}</span>
         </div>
 
@@ -397,7 +397,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
           </div>
           <button onClick={() => isLast ? setPhase('end') : setFactIdx(f => f + 1)}
             style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '14px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 16px ${GREEN}55` }}>
-            {isLast ? 'See results →' : 'Next →'}
+            {isLast ? (isPT ? 'Ver resultados →' : 'See results →') : (isPT ? 'Próximo →' : 'Next →')}
           </button>
         </div>
       </div>
@@ -409,7 +409,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, background: BLACK }}>
       <div style={{ maxWidth: 400, width: '100%', display: 'flex', flexDirection: 'column', gap: 20, textAlign: 'center' }}>
         <div>
-          <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, opacity: 0.6, margin: '0 0 12px' }}>Training complete</p>
+          <p style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, opacity: 0.6, margin: '0 0 12px' }}>{isPT ? 'Treinamento completo' : 'Training complete'}</p>
           <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', textShadow: `0 0 40px ${GREEN}88` }}>
             {finalScore}<span style={{ fontSize: 36, color: '#333' }}>/{TOTAL_ITEMS / 2}</span>
           </div>
@@ -418,7 +418,7 @@ export default function CatcherGame({ game, onComplete }: Props) {
           <p style={{ fontFamily: BODY, fontSize: 14, color: '#ccc', lineHeight: 1.6, margin: 0 }}>{endScreen()}</p>
         </div>
         <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '14px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 20px ${GREEN}66` }}>
-          Play again
+          {isPT ? 'Jogar novamente' : 'Play again'}
         </button>
       </div>
     </div>

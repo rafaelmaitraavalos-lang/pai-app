@@ -19,8 +19,11 @@ export default function MiddleSchoolHome() {
   useEffect(() => {
     setUsername(localStorage.getItem('pai_username') ?? '')
     const map: Record<number, boolean> = {}
-    MIDDLE_SCHOOL_WORLD_IDS.forEach(id => {
-      map[id] = localStorage.getItem(`pai_lesson_${id}_done`) === 'true'
+    MIDDLE_SCHOOL_WORLD_IDS.forEach(wid => {
+      const world = ELEMENTARY_WORLDS[wid]
+      // A world is "done" when ALL its modules are done
+      const allDone = world?.modules.every(m => localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true') ?? false
+      map[wid] = allDone
     })
     setDone(map)
   }, [])
@@ -66,7 +69,7 @@ export default function MiddleSchoolHome() {
             return (
               <div
                 key={id}
-                onClick={() => router.push(`/elementary/lesson/${id}`)}
+                onClick={() => router.push(`/middle/world/${id}`)}
                 style={{
                   display: 'flex', alignItems: 'center',
                   padding: '15px 16px',

@@ -9,7 +9,11 @@ import _wms1_pt from './lessons/wms1_pt'
 import _wms2_pt from './lessons/wms2_pt'
 import _wms3_pt from './lessons/wms3_pt'
 import _wms4_pt from './lessons/wms4_pt'
-import _wm1 from './lessons/wm1'
+import _wm_w1 from './lessons/wm_w1'
+import _wm_w2 from './lessons/wm_w2'
+import _wm_w3 from './lessons/wm_w3'
+import _wm_w4 from './lessons/wm_w4'
+import _wm_w5 from './lessons/wm_w5'
 
 // ── Remap sister's lesson IDs to 100+ to avoid clashing with high-school lessons ──
 
@@ -46,12 +50,12 @@ const W108_LESSONS = remap(_wms2_pt, 162, 108) // 162
 const W109_LESSONS = remap(_wms3_pt, 163, 109) // 163
 const W110_LESSONS = remap(_wms4_pt, 164, 110) // 164
 
-// Worlds 201-204 — Middle School English AI Curriculum
-// IDs: 201–204 (lessons keep their own IDs from wm1.ts; no remap needed)
-const W201_LESSONS: Record<number, LessonData> = { 201: { ..._wm1[201], worldId: 201 } }
-const W202_LESSONS: Record<number, LessonData> = { 202: { ..._wm1[202], worldId: 202 } }
-const W203_LESSONS: Record<number, LessonData> = { 203: { ..._wm1[203], worldId: 203 } }
-const W204_LESSONS: Record<number, LessonData> = { 204: { ..._wm1[204], worldId: 204 } }
+// Worlds 201-205 — Middle School English AI Curriculum (5 worlds × 8 modules)
+const W201_LESSONS = _wm_w1  // module IDs 211-218
+const W202_LESSONS = _wm_w2  // module IDs 221-228
+const W203_LESSONS = _wm_w3  // module IDs 231-238
+const W204_LESSONS = _wm_w4  // module IDs 241-248
+const W205_LESSONS = _wm_w5  // module IDs 251-258
 
 // ── Shared game modules appended after lessons ────────────────────────────────
 
@@ -105,17 +109,18 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
   108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   109: { id: 109, title: 'IA e Sociedade',             level: 'Intermediate', modules: Object.values(W109_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   110: { id: 110, title: 'Ética na IA',               level: 'Intermediate', modules: Object.values(W110_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  // Middle School English — Units 1–4
+  // Middle School English — 5 Worlds × 8 Modules
   201: { id: 201, title: 'What Is AI?',              level: 'Intermediate', modules: Object.values(W201_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   202: { id: 202, title: 'How AI Makes Decisions',   level: 'Intermediate', modules: Object.values(W202_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   203: { id: 203, title: 'AI and Society',           level: 'Intermediate', modules: Object.values(W203_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   204: { id: 204, title: 'AI Ethics',                level: 'Intermediate', modules: Object.values(W204_LESSONS).map(l => ({ id: l.id, title: l.title })) },
+  205: { id: 205, title: 'The Future of AI',         level: 'Intermediate', modules: Object.values(W205_LESSONS).map(l => ({ id: l.id, title: l.title })) },
 }
 
 export const ELEMENTARY_WORLD_IDS       = [101, 102, 103]
 export const ELEMENTARY_WORLD_IDS_PT    = [104, 105, 106]
 export const MIDDLE_SCHOOL_WORLD_IDS_PT = [107, 108, 109, 110]
-export const MIDDLE_SCHOOL_WORLD_IDS    = [201, 202, 203, 204]
+export const MIDDLE_SCHOOL_WORLD_IDS    = [201, 202, 203, 204, 205]
 
 // ── All elementary lessons ────────────────────────────────────────────────────
 
@@ -133,6 +138,7 @@ export const MIDDLE_SCHOOL_LESSONS: Record<number, LessonData> = {
   ...W202_LESSONS,
   ...W203_LESSONS,
   ...W204_LESSONS,
+  ...W205_LESSONS,
 }
 
 // ── Grade routing helpers ─────────────────────────────────────────────────────
