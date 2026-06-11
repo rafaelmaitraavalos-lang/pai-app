@@ -423,47 +423,6 @@ export const SLIDE_IMAGES: Record<number, Record<number, string>> = {
     6: 'https://images.pexels.com/photos/17937669/pexels-photo-17937669.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     7: 'https://images.pexels.com/photos/8729951/pexels-photo-8729951.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
   },
-  // ── Elementary lesson IDs (remapped from 40–43) ───────────────────────────
-  // Lesson 101 — Hi! I Am PAI (5 slides)
-  101: {
-    0: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    1: 'https://images.pexels.com/photos/3649874/pexels-photo-3649874.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    2: 'https://images.pexels.com/photos/6602917/pexels-photo-6602917.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    3: 'https://images.pexels.com/photos/6045332/pexels-photo-6045332.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    4: 'https://images.pexels.com/photos/7111170/pexels-photo-7111170.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  },
-  // Lesson 102 — PAI and the World (8 slides)
-  102: {
-    0: 'https://images.pexels.com/photos/34207359/pexels-photo-34207359.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    1: 'https://images.pexels.com/photos/7789212/pexels-photo-7789212.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    2: 'https://images.pexels.com/photos/6192335/pexels-photo-6192335.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    3: 'https://images.pexels.com/photos/7578802/pexels-photo-7578802.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    4: 'https://images.pexels.com/photos/17484975/pexels-photo-17484975.png?auto=compress&cs=tinysrgb&h=650&w=940',
-    5: 'https://images.pexels.com/photos/9504092/pexels-photo-9504092.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    6: 'https://images.pexels.com/photos/8442278/pexels-photo-8442278.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    7: 'https://images.pexels.com/photos/25626431/pexels-photo-25626431.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  },
-  // Lesson 103 — Is PAI Always Right? (7 slides)
-  103: {
-    0: 'https://images.pexels.com/photos/8088499/pexels-photo-8088499.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    1: 'https://images.pexels.com/photos/8482062/pexels-photo-8482062.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    2: 'https://images.pexels.com/photos/4137852/pexels-photo-4137852.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    3: 'https://images.pexels.com/photos/6045332/pexels-photo-6045332.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    4: 'https://images.pexels.com/photos/17273353/pexels-photo-17273353.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    5: 'https://images.pexels.com/photos/31296071/pexels-photo-31296071.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    6: 'https://images.pexels.com/photos/15380268/pexels-photo-15380268.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  },
-  // Lesson 104 — The Future of PAI (8 slides)
-  104: {
-    0: 'https://images.pexels.com/photos/12253295/pexels-photo-12253295.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    1: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    2: 'https://images.pexels.com/photos/14151825/pexels-photo-14151825.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    3: 'https://images.pexels.com/photos/5412325/pexels-photo-5412325.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    4: 'https://images.pexels.com/photos/6990178/pexels-photo-6990178.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    5: 'https://images.pexels.com/photos/63690/pexels-photo-63690.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    6: 'https://images.pexels.com/photos/8729951/pexels-photo-8729951.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    7: 'https://images.pexels.com/photos/5192343/pexels-photo-5192343.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-  },
   44: {
     0: 'https://images.pexels.com/photos/12996907/pexels-photo-12996907.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     1: 'https://images.pexels.com/photos/29708309/pexels-photo-29708309.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
@@ -663,5 +622,89 @@ export const SLIDE_IMAGES: Record<number, Record<number, string>> = {
     5: 'https://images.pexels.com/photos/8566526/pexels-photo-8566526.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     6: 'https://images.pexels.com/photos/8553341/pexels-photo-8553341.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
     7: 'https://images.pexels.com/photos/8761661/pexels-photo-8761661.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  101: {
+    0: 'https://images.pexels.com/photos/8566458/pexels-photo-8566458.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/5412110/pexels-photo-5412110.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/6669813/pexels-photo-6669813.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/16117754/pexels-photo-16117754.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/3905838/pexels-photo-3905838.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  102: {
+    0: 'https://images.pexels.com/photos/12955643/pexels-photo-12955643.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/6695117/pexels-photo-6695117.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/14408038/pexels-photo-14408038.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/20100299/pexels-photo-20100299.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/8500276/pexels-photo-8500276.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/20457108/pexels-photo-20457108.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/8533045/pexels-photo-8533045.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    7: 'https://images.pexels.com/photos/11286069/pexels-photo-11286069.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  103: {
+    0: 'https://images.pexels.com/photos/2646530/pexels-photo-2646530.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/8431787/pexels-photo-8431787.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/8382081/pexels-photo-8382081.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/20492225/pexels-photo-20492225.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/32240410/pexels-photo-32240410.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/16984799/pexels-photo-16984799.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/7103151/pexels-photo-7103151.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  104: {
+    0: 'https://images.pexels.com/photos/30917903/pexels-photo-30917903.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    1: 'https://images.pexels.com/photos/105226/pexels-photo-105226.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    2: 'https://images.pexels.com/photos/1888015/pexels-photo-1888015.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    3: 'https://images.pexels.com/photos/10321525/pexels-photo-10321525.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    4: 'https://images.pexels.com/photos/19979708/pexels-photo-19979708.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    5: 'https://images.pexels.com/photos/18871227/pexels-photo-18871227.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    6: 'https://images.pexels.com/photos/30489637/pexels-photo-30489637.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    7: 'https://images.pexels.com/photos/8612858/pexels-photo-8612858.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  111: {
+    0: 'https://images.pexels.com/photos/17483867/pexels-photo-17483867.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  112: {
+    0: 'https://images.pexels.com/photos/8337292/pexels-photo-8337292.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  113: {
+    0: 'https://images.pexels.com/photos/9616451/pexels-photo-9616451.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  114: {
+    0: 'https://images.pexels.com/photos/18512922/pexels-photo-18512922.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  115: {
+    0: 'https://images.pexels.com/photos/5697261/pexels-photo-5697261.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  116: {
+    0: 'https://images.pexels.com/photos/1258153/pexels-photo-1258153.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  117: {
+    0: 'https://images.pexels.com/photos/4553167/pexels-photo-4553167.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  118: {
+    0: 'https://images.pexels.com/photos/6192335/pexels-photo-6192335.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  121: {
+    0: 'https://images.pexels.com/photos/17483867/pexels-photo-17483867.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  122: {
+    0: 'https://images.pexels.com/photos/7991205/pexels-photo-7991205.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  123: {
+    0: 'https://images.pexels.com/photos/6539416/pexels-photo-6539416.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  124: {
+    0: 'https://images.pexels.com/photos/18536267/pexels-photo-18536267.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  125: {
+    0: 'https://images.pexels.com/photos/5053851/pexels-photo-5053851.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  126: {
+    0: 'https://images.pexels.com/photos/15277956/pexels-photo-15277956.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  127: {
+    0: 'https://images.pexels.com/photos/18493686/pexels-photo-18493686.png?auto=compress&cs=tinysrgb&h=650&w=940',
+  },
+  128: {
+    0: 'https://images.pexels.com/photos/3861943/pexels-photo-3861943.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
   },
 }

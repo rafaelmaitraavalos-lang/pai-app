@@ -643,6 +643,62 @@ SLIDES = [
     (63, 5, "future intelligence possibility"),
     (63, 6, "action responsibility engage"),
     (63, 7, "conversation continuing dialogue future"),
+
+    # ── Elementary Lesson 101 — Hi! I'm PAI ──────────────────────────────────
+    (101, 0, "friendly robot assistant computer tablet child"),
+    (101, 1, "mathematician code puzzle wartime codebreaker"),
+    (101, 2, "typing messages text conversation two people"),
+    (101, 3, "question mark mystery thinking child curious"),
+    (101, 4, "fast speed lightning technology bright"),
+
+    # ── Elementary Lesson 102 — PAI and the World ────────────────────────────
+    (102, 0, "teamwork human collaboration workplace together"),
+    (102, 1, "child drawing painting creative colorful art"),
+    (102, 2, "lock privacy door secure protection"),
+    (102, 3, "doctor stethoscope hospital helping patient"),
+    (102, 4, "student reading classroom learning school"),
+    (102, 5, "fake news camera misinformation media screen"),
+    (102, 6, "scientist laboratory research discovery microscope"),
+    (102, 7, "child smartphone everyday technology curious"),
+
+    # ── Elementary Lesson 103 — Is PAI Always Right? ─────────────────────────
+    (103, 0, "child decision choice right wrong path"),
+    (103, 1, "fairness balance scale equality children"),
+    (103, 2, "accountability responsibility person adult"),
+    (103, 3, "confused mystery unknown thinking person"),
+    (103, 4, "choice decision freedom influence options"),
+    (103, 5, "misunderstanding communication instructions literal"),
+    (103, 6, "government people voting community decision"),
+
+    # ── Elementary Lesson 104 — The Future of PAI ────────────────────────────
+    (104, 0, "evolution progress growth transformation timeline"),
+    (104, 1, "future horizon bright possibility light"),
+    (104, 2, "error mistake consequence broken machine"),
+    (104, 3, "fire danger safety dual nature warmth"),
+    (104, 4, "rules law signs regulations road"),
+    (104, 5, "unique human authentic individual person"),
+    (104, 6, "children future hope opportunity growing"),
+    (104, 7, "proud achievement learning success graduate child"),
+
+    # ── Elementary Lessons 111–118 — How PAI Thinks (K–2) ───────────────────
+    (111, 0, "brain network connections neurons illustration"),
+    (112, 0, "child practicing basketball sport learning improving"),
+    (113, 0, "repetition practice skill sport getting better"),
+    (114, 0, "conversation talking words communication friendly"),
+    (115, 0, "recommendation suggestion showing options choice"),
+    (116, 0, "camera eye vision seeing photo recognition"),
+    (117, 0, "mystery box inside unknown curiosity"),
+    (118, 0, "mistake error correction fixing learning"),
+
+    # ── Elementary Lessons 121–128 — How PAI Thinks (3–5) ───────────────────
+    (121, 0, "brain network connections neurons computing"),
+    (122, 0, "child learning sport practice improvement progress"),
+    (123, 0, "skill practice repetition getting better athlete"),
+    (124, 0, "conversation dialogue words typing communication"),
+    (125, 0, "personalized recommendation feed content showing"),
+    (126, 0, "computer vision camera recognition image scan"),
+    (127, 0, "complex system inside unknown black box"),
+    (128, 0, "error correction feedback loop improvement system"),
 ]
 
 
