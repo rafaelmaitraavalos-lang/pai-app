@@ -247,17 +247,13 @@ export default function CatcherGame({ game, onComplete }: Props) {
           <h1 style={{ fontFamily: DISP, fontSize: 36, color: '#fff', margin: '0 0 16px', lineHeight: 1 }}>{game.title}</h1>
           <p style={{ fontFamily: BODY, fontSize: 14, color: '#aaa', lineHeight: 1.65, margin: 0 }}>{game.intro}</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <div style={{ flex: 1, border: `1.5px solid ${GREEN}`, padding: '12px', background: '#0d0d0d' }}>
-            <div style={{ fontFamily: DISP, fontSize: 10, color: GREEN, letterSpacing: '0.1em', marginBottom: 4 }}>● LABELED</div>
-            <div style={{ fontFamily: BODY, fontSize: 11, color: '#888' }}>Move under it to catch</div>
-          </div>
-          <div style={{ flex: 1, border: '1.5px solid #333', padding: '12px', background: '#0d0d0d' }}>
-            <div style={{ fontFamily: DISP, fontSize: 10, color: RED, letterSpacing: '0.1em', marginBottom: 4 }}>✗ NO LABEL</div>
-            <div style={{ fontFamily: BODY, fontSize: 11, color: '#888' }}>Stay out of the way</div>
-          </div>
+        <div style={{ border: '1.5px solid #222', padding: '14px 16px', background: '#0d0d0d', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontFamily: DISP, fontSize: 10, color: GREEN, letterSpacing: '0.1em' }}>CATCH — good labeled data</div>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>Verified, thoughtfully labeled, trustworthy. Move under it.</div>
+          <div style={{ borderTop: '1px solid #222', paddingTop: 8, fontFamily: DISP, fontSize: 10, color: RED, letterSpacing: '0.1em' }}>DODGE — noise or bad data</div>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#666', lineHeight: 1.5 }}>Unlabeled, biased, or collected without care. Let it fall.</div>
         </div>
-        <p style={{ fontFamily: BODY, fontSize: 12, color: '#555', margin: 0, textAlign: 'center' }}>Move your catcher with mouse or finger</p>
+        <p style={{ fontFamily: BODY, fontSize: 11, color: '#444', margin: 0, textAlign: 'center' }}>Move with mouse or finger · Read carefully</p>
         <button onClick={startGame} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '15px 0', border: 'none', cursor: 'pointer', boxShadow: `0 0 24px ${GREEN}66` }}>
           {game.ctaLabel}
         </button>
@@ -292,6 +288,18 @@ export default function CatcherGame({ game, onComplete }: Props) {
           <span style={{ fontFamily: DISP, fontSize: 10, color: '#333', letterSpacing: '0.1em' }}>{spawnedRef.current}/{TOTAL_ITEMS}</span>
         </div>
 
+        {/* Progress bar — right edge */}
+        <div style={{ position: 'absolute', top: 16, right: 14, bottom: 44, width: 4, background: '#1a1a1a', borderRadius: 2, zIndex: 10 }}>
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            height: `${(spawnedRef.current / TOTAL_ITEMS) * 100}%`,
+            background: GREEN,
+            boxShadow: `0 0 8px ${GREEN}`,
+            borderRadius: 2,
+            transition: 'height 0.3s ease',
+          }} />
+        </div>
+
         {/* Falling items */}
         {items.map(item => {
           const elapsed = performance.now() - item.startTime
@@ -306,16 +314,12 @@ export default function CatcherGame({ game, onComplete }: Props) {
               left: xPx,
               width: ITEM_W,
               transform: 'translateY(-50%)',
-              background: '#111',
-              border: `1.5px solid ${item.shouldCatch ? GREEN : '#2a2a2a'}`,
-              boxShadow: item.shouldCatch ? `0 0 12px ${GREEN}44` : 'none',
-              padding: '8px 10px',
+              background: '#0f0f0f',
+              border: '1.5px solid #2a2a2a',
+              padding: '10px 12px',
               zIndex: 5,
             }}>
-              <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', color: item.shouldCatch ? GREEN : RED, marginBottom: 5, opacity: 0.9 }}>
-                {item.shouldCatch ? '● LABELED' : '✗ NO LABEL'}
-              </div>
-              <div style={{ fontFamily: BODY, fontSize: 11, color: item.shouldCatch ? '#eee' : '#555', lineHeight: 1.35 }}>
+              <div style={{ fontFamily: BODY, fontSize: 11, color: '#ccc', lineHeight: 1.4 }}>
                 {item.text}
               </div>
             </div>
