@@ -81,7 +81,7 @@ export default function MiddlePtHome() {
                 }}
               >
                 <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>
-                  M{String(idx + 1).padStart(2, '0')}
+                  W{String(idx + 1).padStart(2, '0')}
                 </span>
                 <span style={{ fontFamily: DISP, fontSize: 'clamp(13px, 3.8vw, 17px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>
                   {world?.title}
