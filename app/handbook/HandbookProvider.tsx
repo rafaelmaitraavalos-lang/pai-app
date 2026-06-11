@@ -166,8 +166,9 @@ export default function HandbookProvider() {
     const lang           = localStorage.getItem('pai_lang') ?? 'en'
     setUsername(storedName)
     setIsPT(lang === 'pt')
-    if (onboardingDone && !seen) {
-      setTimeout(() => setShowWelcome(true), 600)
+    // Re-check on every route change so it fires after onboarding redirect
+    if (onboardingDone && !seen && pathname !== '/') {
+      setTimeout(() => setShowWelcome(true), 800)
     }
     // Compute which unlockable entries the user has earned
     const unlockables = lang === 'pt' ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
@@ -178,7 +179,7 @@ export default function HandbookProvider() {
       }
     }
     setUnlockedIds(ids)
-  }, [])
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const focusedRoute = /^\/(lesson|games|complete|elementary\/lesson|elementary\/world)/.test(pathname)
   if (!mounted || pathname === '/') return null
