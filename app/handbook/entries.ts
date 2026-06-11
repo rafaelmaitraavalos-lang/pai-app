@@ -87,3 +87,91 @@ export const UNLOCKABLE_ENTRIES: HandbookEntry[] = [
 
 // Total locked slots shown in the handbook index before entries are unlocked
 export const LOCKED_COUNT = UNLOCKABLE_ENTRIES.length
+
+// ── PT-BR versions ────────────────────────────────────────────────────────────
+
+export const STARTER_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'what-ai-is',
+    title: 'O que a IA realmente é',
+    body: 'IA significa Inteligência Artificial: "artificial" porque foi construída por pessoas, "inteligência" porque faz coisas que antes exigiam uma mente humana, embora grande parte disso seja, na verdade, apenas um excelente reconhecimento de padrões.\n\nQuando alguém disser "a IA disse", pare e pergunte qual delas. ChatGPT, Claude e Gemini são ferramentas diferentes que fornecem respostas diferentes, da mesma forma que o Google e a Wikipedia não são a mesma coisa.',
+    doLine: 'Quando ouvir "a IA", pergunte "qual delas?".',
+  },
+  {
+    id: 'prompting-basics',
+    title: 'Conversando com a IA',
+    body: 'Não digite "explique a fotossíntese". Isso gera uma parede de texto genérica. Em vez disso, informe três coisas: para quem é, qual o tamanho e qualquer detalhe extra.\n\nDigite: "Explique a fotossíntese para um aluno do 9º ano em 5 frases, com uma analogia". Se a resposta ainda não estiver boa, continue corrigindo: "mais curto", "dê-me um exemplo real" ou "fale como se estivesse conversando com um amigo".',
+    doLine: 'Adicione para quem é, qual o tamanho e um detalhe extra, todas as vezes.',
+  },
+  {
+    id: 'verification-basics',
+    title: 'Como saber se ela está mentindo',
+    body: 'A IA diz coisas erradas com um tom confiante, e essa é a armadilha. Quando ela fornecer um fato, um número, uma citação ou uma fonte, não acredite de imediato.\n\nCopie a afirmação, cole-a em uma pesquisa e veja se há algo real que a comprove. Se ela forneceu uma citação, pesquise a citação exata entre aspas. Se o único lugar onde um "fato" existe for o chatbot, trate-o como uma alucinação.',
+    doLine: 'Cole qualquer coisa que seja importante em uma pesquisa antes de acreditar.',
+  },
+  {
+    id: 'academic-integrity',
+    title: 'Usando a IA para a escola sem trapacear',
+    body: 'Aqui está o teste definitivo: você conseguiria explicar isso em voz alta se o seu professor perguntasse? Se sim, você aprendeu. Se não, você trapaceou, mesmo que ninguém o pegue.\n\nUse a IA como um tutor, não como um ghostwriter. Boas abordagens: "faça um quiz comigo sobre este capítulo", "explique este problema passo a passo", "o que está confuso no meu parágrafo?". Péssima abordagem: "escreva a minha redação".',
+    doLine: 'Entregue apenas trabalhos que você mesmo conseguiria explicar.',
+  },
+]
+
+export const UNLOCKABLE_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'choosing-the-right-tool',
+    title: 'Escolhendo a ferramenta certa',
+    unlocksAt: 4,
+    body: 'Não existe uma IA que seja a melhor de todas — existem várias, e cada uma é boa em tarefas diferentes.\n\nUse o Claude para redação e textos longos. Use o Perplexity para pesquisa e verificação de fatos (ele responde com fontes clicáveis). Use o Gemini para trabalhos no Google Docs. Use o ChatGPT para uso geral. Use a Meta AI quando quiser algo totalmente gratuito.\n\nQuando algo for realmente importante, faça a mesma pergunta a duas IAs diferentes e compare. As versões gratuitas em 2026 são robustas — não é necessário pagar ainda.',
+    doLine: 'Escolha a ferramenta que se adequa à tarefa, mantenha duas nas quais você confia e pergunte a ambas quando o assunto for importante.',
+  },
+  {
+    id: 'prompting-leveled-up',
+    title: 'Prompting de alto nível',
+    unlocksAt: 5,
+    body: 'Três melhorias que tornam as respostas instantaneamente melhores.\n\nPrimeiro, dê a ela um trabalho: "Atue como um treinador de debates e aponte falhas no meu argumento". Segundo, mostre em vez de descrever: cole um parágrafo que você gosta e diga "escreva o meu neste estilo". Terceiro, peça o formato exato: "coloque em uma tabela", "dê-me 5 bullet points", "faça uma lista de verificação".\n\nPara qualquer tarefa grande, faça a IA planejar primeiro, para que você possa corrigir o plano antes que ela escreva a versão completa.',
+    doLine: 'Dê a ela uma função (role), um exemplo e um formato.',
+  },
+  {
+    id: 'catch-the-hallucination',
+    title: 'Detecte a alucinação',
+    unlocksAt: 6,
+    body: 'A coisa mais arriscada que uma IA pode lhe entregar é uma citação, porque as falsas parecem perfeitas. Copie qualquer citação, cole-a em uma pesquisa com aspas e confirme se é real e palavra por palavra antes de usá-la.\n\nO mesmo vale para as fontes: um título que soa real não significa nada até que você encontre a página verdadeira. Quanto maiores as apostas, mais a fundo você verifica — qualquer assunto sobre saúde, dinheiro ou leis deve ser verificado todas as vezes.',
+    doLine: 'Nunca repita uma citação ou fato que você não tenha encontrado em outro lugar.',
+  },
+  {
+    id: 'make-it-show-its-work',
+    title: 'Faça-a mostrar o seu trabalho',
+    unlocksAt: 11,
+    body: 'Quando uma resposta for importante, faça a IA desacelerar. Adicione "explique passo a passo" e ela mostrará o seu raciocínio, tornando os erros fáceis de detectar.\n\nPergunte "qual o seu grau de certeza e o que mudaria a sua resposta?" — "não tenho certeza" é uma resposta boa e honesta. Quer uma visão imparcial? Diga "argumente os dois lados antes de concluir".\n\nNunca confie na matemática mental dela — diga-lhe para usar uma calculadora ou verifique os números você mesmo.',
+    doLine: 'Faça a IA mostrar o trabalho, não apenas a resposta.',
+  },
+  {
+    id: 'making-things-with-ai',
+    title: 'Criando coisas com IA',
+    unlocksAt: 13,
+    body: 'Use a ferramenta construída para o que você está criando: uma ferramenta de imagem para imagens, uma ferramenta de codificação para código.\n\nPara imagens, prompts vagos geram resultados genéricos — acumule detalhes: "uma raposa em aquarela em uma floresta nevada ao entardecer, luz suave" é muito melhor do que "uma raposa".\n\nPara código, sempre adicione "explique o que este código faz" para que você possa corrigi-lo mais tarde. Nunca faça uma falsificação do rosto ou da voz de uma pessoa real sem autorização.',
+    doLine: 'Descreva em detalhes e, em seguida, verifique antes de compartilhar.',
+  },
+  {
+    id: 'privacy-and-safety',
+    title: 'Privacidade e segurança',
+    unlocksAt: 18,
+    body: 'Trate um chatbot como uma sala que pode estar sendo gravada. Nunca cole senhas, o seu endereço, números de documentos de identidade (CPF, RG) ou informações privadas de outras pessoas.\n\nAbra as Configurações na sua ferramenta principal, desative "treinar com meus dados" ou "melhorar o modelo" e use um chat temporário quando quiser que algo não seja salvo.\n\nExcluir um chat nem sempre o apaga no servidor da empresa — a regra real é simples: não digite nada que faria você entrar em pânico se vazasse.',
+    doLine: 'Verifique as suas configurações hoje mesmo e nunca cole nada do qual você precisaria cancelar o envio.',
+  },
+  {
+    id: 'when-not-to-use-ai',
+    title: 'Quando NÃO usar a IA',
+    unlocksAt: 29,  // W4 M6 — Autonomy and Manipulation
+    body: 'Algumas coisas simplesmente não devem ser passadas para um robô, e saber quais são elas é uma habilidade por si só.\n\nNão faça a IA decidir algo pessoal por você. Não se apoie nela como o seu único suporte quando o que você realmente precisa é de uma pessoa real. Não confie nela em decisões caras ou arriscadas que você não consiga verificar duas vezes.\n\nEscolha uma coisa que você faça completamente por conta própria, de propósito, para que essa habilidade continue sendo sua.',
+    doLine: 'Mantenha uma lista curta de "pergunte a uma pessoa, não a um bot" e siga-a de verdade.',
+  },
+  {
+    id: 'build-good-ai-habits',
+    title: 'Construa bons hábitos com a IA',
+    unlocksAt: 39,  // W5 M8
+    body: 'Aqui está o manual inteiro como uma única rotina que você pode executar toda vez que abrir um chatbot.\n\nEscolha a ferramenta certa para o trabalho. Diga a ela para quem é a resposta e qual formato você deseja. Verifique qualquer coisa importante em uma segunda fonte. Use-a para aprender sobre o assunto, não para pular o aprendizado. Mantenha os seus dados privados de fora. E tome a decisão final por si mesmo.',
+    doLine: 'Escolha a ferramenta, verifique o resultado e assuma a decisão.',
+  },
+]

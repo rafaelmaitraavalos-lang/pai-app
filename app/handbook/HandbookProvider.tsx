@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { STARTER_ENTRIES, UNLOCKABLE_ENTRIES, LOCKED_COUNT, type HandbookEntry } from './entries'
+import { STARTER_ENTRIES, UNLOCKABLE_ENTRIES, STARTER_ENTRIES_PT, UNLOCKABLE_ENTRIES_PT, LOCKED_COUNT, type HandbookEntry } from './entries'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -15,10 +15,12 @@ const FAINT = '#d8d8d8'
 
 // ── Index view ────────────────────────────────────────────────────────────────
 
-function IndexView({ onSelect, onClose, unlockedIds }: { onSelect: (e: HandbookEntry) => void; onClose: () => void; unlockedIds: Set<string> }) {
-  const unlocked = UNLOCKABLE_ENTRIES.filter(e => unlockedIds.has(e.id))
-  const stillLocked = LOCKED_COUNT - unlocked.length
-  const allEntries = [...STARTER_ENTRIES, ...unlocked]
+function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: HandbookEntry) => void; onClose: () => void; unlockedIds: Set<string>; isPT: boolean }) {
+  const starters   = isPT ? STARTER_ENTRIES_PT   : STARTER_ENTRIES
+  const unlockPool = isPT ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
+  const unlocked   = unlockPool.filter(e => unlockedIds.has(e.id))
+  const stillLocked = (isPT ? UNLOCKABLE_ENTRIES_PT.length : LOCKED_COUNT) - unlocked.length
+  const allEntries = [...starters, ...unlocked]
 
   return (
     <>
@@ -154,20 +156,23 @@ export default function HandbookProvider() {
   const [unlockedIds, setUnlockedIds]     = useState<Set<string>>(new Set())
   const [showWelcome, setShowWelcome]     = useState(false)
   const [username, setUsername]           = useState('')
+  const [isPT, setIsPT]                   = useState(false)
 
   useEffect(() => {
     setMounted(true)
     const onboardingDone = localStorage.getItem('pai_onboarding_done')
     const seen           = localStorage.getItem('pai_handbook_seen')
     const storedName     = localStorage.getItem('pai_username') ?? ''
+    const lang           = localStorage.getItem('pai_lang') ?? 'en'
     setUsername(storedName)
+    setIsPT(lang === 'pt')
     if (onboardingDone && !seen) {
-      // Show welcome tooltip first, then let user tap to open handbook
       setTimeout(() => setShowWelcome(true), 600)
     }
     // Compute which unlockable entries the user has earned
+    const unlockables = lang === 'pt' ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
     const ids = new Set<string>()
-    for (const entry of UNLOCKABLE_ENTRIES) {
+    for (const entry of unlockables) {
       if (entry.unlocksAt && localStorage.getItem(`pai_lesson_${entry.unlocksAt}_done`)) {
         ids.add(entry.id)
       }
@@ -226,7 +231,7 @@ export default function HandbookProvider() {
           }}>
             {selectedEntry
               ? <EntryView entry={selectedEntry} onBack={backToIndex} />
-              : <IndexView onSelect={selectEntry} onClose={closePopup} unlockedIds={unlockedIds} />
+              : <IndexView onSelect={selectEntry} onClose={closePopup} unlockedIds={unlockedIds} isPT={isPT} />
             }
           </div>
         </>
