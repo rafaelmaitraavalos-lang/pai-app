@@ -54,6 +54,18 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   // Apply translation overlay if available for the user's language
   const [lang, setLang] = useState('en')
   useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  const isPT = lang === 'pt'
+  const ui = {
+    lessonComplete:  isPT ? 'Aula concluída'       : 'Lesson complete',
+    worldComplete:   isPT ? 'Mundo concluído'       : 'World complete',
+    next:            isPT ? 'Próxima →'              : 'Next →',
+    finish:          isPT ? 'Finalizar →'            : 'Finish →',
+    nextLesson:      isPT ? 'Próximo:'               : 'Next:',
+    nextWorld:       isPT ? 'Próximo Mundo:'         : 'Next World:',
+    backTo:          isPT ? 'Voltar para'            : 'Back to',
+    trueBtn:         isPT ? 'Verdadeiro'             : 'True',
+    falseBtn:        isPT ? 'Falso'                  : 'False',
+  }
   const tx      = TRANSLATIONS[lang]?.[id]
   const title     = tx?.title     ?? titleEN
   const stops     = tx ? stopsEN.map((s, i)     => ({ ...s, title: tx.stops[i]?.title ?? s.title, body: tx.stops[i]?.body ?? s.body }))         : stopsEN
@@ -109,7 +121,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     return (
       <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
         <div style={{ width: '100%', maxWidth: 480, padding: '0 7vw', textAlign: 'center' }}>
-          <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>Lesson complete</div>
+          <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>{ui.lessonComplete}</div>
           <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
             <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
             <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>
@@ -118,7 +130,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
           {isLastInWorld && world && (
             <p style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN, margin: '0 0 20px' }}>
-              World {worldId} complete
+              {ui.worldComplete}
             </p>
           )}
 
@@ -131,16 +143,15 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 onClick={() => router.push(`/lesson/${nextModule.id}`)}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
               >
-                Next: {nextModule.title} →
+                {ui.nextLesson} {nextModule.title} →
               </button>
             )}
-            {/* Last lesson: go to next world */}
             {isLastInWorld && nextWorldRoute && nextWorldId && (
               <button
                 onClick={() => router.push(nextWorldRoute)}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
               >
-                Next World: {WORLDS[nextWorldId]?.title} →
+                {ui.nextWorld} {WORLDS[nextWorldId]?.title} →
               </button>
             )}
             {/* Secondary: back to current world (not main home) */}
@@ -148,7 +159,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               onClick={() => router.push(isLastInWorld ? currentWorldRoute : currentWorldRoute)}
               style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
             >
-              Back to {world?.title ?? 'World'}
+              {ui.backTo} {world?.title ?? 'World'}
             </button>
           </div>
         </div>
@@ -203,7 +214,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 const clr = state === 'correct' || state === 'wrong' ? '#fff' : state === 'dimmed' ? DIM : BLACK
                 return (
                   <button key={String(val)} onClick={() => selected === null && setSelected(val)} disabled={selected !== null} style={{ fontFamily: DISP, fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '22px 12px', background: bg, color: clr, border: 'none', cursor: selected === null ? 'pointer' : 'default', boxShadow: state === 'default' ? `4px 4px 0 0 ${BLACK}` : 'none', transition: 'all 0.12s' }}>
-                    {val ? 'True' : 'False'}
+                    {val ? ui.trueBtn : ui.falseBtn}
                   </button>
                 )
               })}
@@ -226,7 +237,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             </div>
             {selected !== null && (
               <button onClick={nextQuestion} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
-                {qIndex === questions.length - 1 ? 'Finish →' : 'Next →'}
+                {qIndex === questions.length - 1 ? ui.finish : ui.next}
               </button>
             )}
           </div>

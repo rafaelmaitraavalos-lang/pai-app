@@ -17,6 +17,7 @@ export default function Home() {
   const router = useRouter()
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [username, setUsername] = useState('')
+  const [isPT,     setIsPT]     = useState(false)
 
   useEffect(() => {
     const grade = localStorage.getItem('pai_grade')
@@ -31,6 +32,7 @@ export default function Home() {
       setDone(map)
     })
     setUsername(localStorage.getItem('pai_username') ?? '')
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const signOut = async () => {
@@ -70,7 +72,7 @@ export default function Home() {
             onClick={signOut}
             style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
-            Sign out
+            {isPT ? 'Sair' : 'Sign out'}
           </button>
         </div>
       </div>
@@ -78,7 +80,7 @@ export default function Home() {
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Contents</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Conteúdo' : 'Contents'}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
 
@@ -112,11 +114,11 @@ export default function Home() {
                 {isActive && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                     <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                    In Progress
+                    {isPT ? 'Em andamento' : 'In Progress'}
                   </span>
                 )}
                 {!unlocked && (
-                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, border: `1px solid ${FAINT}`, padding: '2px 7px' }}>Locked</span>
+                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, border: `1px solid ${FAINT}`, padding: '2px 7px' }}>{isPT ? 'Bloqueado' : 'Locked'}</span>
                 )}
                 {unlocked && (
                   <span style={{ fontFamily: DISP, fontSize: 14, color: DIM }}>→</span>

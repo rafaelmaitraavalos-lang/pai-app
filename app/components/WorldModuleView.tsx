@@ -16,8 +16,10 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
   const router = useRouter()
   const [done,     setDone]     = useState<Record<number, boolean>>({})
   const [expanded, setExpanded] = useState<number | null>(null)
+  const [isPT,     setIsPT]     = useState(false)
 
   useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
     const map: Record<number, boolean> = {}
     world.modules.forEach(m => {
       map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true'
@@ -123,7 +125,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                             onClick={() => router.push(`${basePath}/lesson/${m.id}`)}
                             style={{ width: '100%', fontFamily: DISP, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '16px 22px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
                           >
-                            {isDone ? 'Review →' : isCurrent ? 'Resume →' : 'Start →'}
+                            {isDone ? isPT ? 'Revisar →' : 'Review →' : isCurrent ? isPT ? 'Continuar →' : 'Resume →' : isPT ? 'Começar →' : 'Start →'}
                           </button>
                         </div>
                       </div>
@@ -185,12 +187,12 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                     {m.title}
                   </span>
                   {isDone && (
-                    <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>Done</span>
+                    <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Concluído' : 'Done'}</span>
                   )}
                   {isCurrent && !isDone && (
                     <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                       <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                      In Progress
+                      {isPT ? 'Em andamento' : 'In Progress'}
                     </span>
                   )}
                   <span style={{ fontFamily: DISP, fontSize: 18, color: BLACK, lineHeight: 1, transition: 'transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1)', transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', display: 'inline-block' }}>+</span>
@@ -232,7 +234,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                           onClick={() => router.push(`${basePath}/lesson/${m.id}`)}
                           style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}
                         >
-                          {isDone ? 'Review →' : isCurrent ? 'Resume →' : 'Start →'}
+                          {isDone ? isPT ? 'Revisar →' : 'Review →' : isCurrent ? isPT ? 'Continuar →' : 'Resume →' : isPT ? 'Começar →' : 'Start →'}
                         </button>
                       </div>
                     </div>
