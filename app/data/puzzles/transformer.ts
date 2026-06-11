@@ -5,26 +5,30 @@ const puzzle: Puzzle = {
   title: 'Transformer Parts',
   groups: [
     {
-      name: 'The attention mechanism',
+      name: 'WHAT ATTENTION DOES',
       difficulty: 1,
-      cards: ['Query vector', 'Key vector', 'Value vector', 'Attention score'],
+      cards: ['Decides which tokens are most relevant to the current one', 'Allows every position to look at every other position', 'Computes relationships across the full sequence at once', 'Weights the importance of different parts of the input'],
+      reveal: 'Attention lets every token in a sequence directly consider every other token simultaneously. This is why transformers handle long-range dependencies better than earlier architectures. Instead of proce',
     },
     {
-      name: 'Encodes position in the sequence',
+      name: 'WHAT POSITIONAL ENCODING DOES',
       difficulty: 2,
-      cards: ['Positional encoding', 'Sinusoidal embedding', 'Rotary embedding', 'Token position index'],
+      cards: ['Tells the model where in the sequence each token is', 'Injects order information since attention has none', 'Allows the model to distinguish first token from last', 'Encodes sequence position as part of the input representation'],
+      reveal: 'Attention by itself has no sense of order — it treats a sequence as a set. Positional encoding adds that information back in. Without it, "the cat sat on the mat" and "the mat sat on the cat" would lo',
     },
     {
-      name: 'Processes tokens after attention',
+      name: 'WHAT THE FEED-FORWARD LAYERS DO',
       difficulty: 3,
-      cards: ['Feed-forward layer', 'Layer normalization', 'Residual connection', 'Projection matrix'],
+      cards: ['Applies the same transformation to each token independently', 'Stores factual knowledge learned during training', 'Transforms each position after attention has run', 'Adds depth and nonlinearity after the attention computation'],
+      reveal: 'After attention mixes information across positions, feed-forward layers process each position independently. Researchers believe much of the factual knowledge stored in large language models lives in ',
     },
     {
-      name: 'Controls what the model can see',
+      name: 'WHAT LAYER NORMALIZATION DOES',
       difficulty: 4,
-      cards: ['Causal mask', 'Context window', 'Padding mask', 'KV cache'],
+      cards: ['Stabilizes activations before they reach the next layer', 'Prevents values from growing too large or collapsing to zero', 'Normalizes each layer\'s output to a consistent scale', 'Helps gradients flow during training without exploding or vanishing'],
+      reveal: 'Layer normalization keeps the numbers in each layer within a range that allows stable training. Most modern transformers apply it before attention and before the feed-forward layers. Invisible when it',
     },
-  ] as Puzzle['groups'],
+  ],
 }
 
 export default puzzle

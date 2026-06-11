@@ -5,26 +5,30 @@ const puzzle: Puzzle = {
   title: 'Static',
   groups: [
     {
-      name: 'AI makes things up',
+      name: 'WHAT A CNN DETECTS FIRST',
       difficulty: 1,
-      cards: ['Hallucination', 'Confident nonsense', 'Fake citations', 'Invented facts'],
+      cards: ['Edges', 'Lines', 'Textures', 'Brightness'],
+      reveal: 'Early layers in a CNN respond to the simplest visual signals — edges, lines, textures, differences in brightness. These are the building blocks everything else is built from.',
     },
     {
-      name: 'AI misses the point',
+      name: 'WHAT A CNN DETECTS LATER',
       difficulty: 2,
-      cards: ['Wrong tone', 'Off-topic output', 'Misread instructions', 'Ignored context'],
+      cards: ['Shapes', 'Patterns', 'Object parts', 'Combinations'],
+      reveal: 'Later layers combine those simple signals into more complex features. Shapes emerge from edges. Patterns emerge from textures. Object parts emerge from shapes.',
     },
     {
-      name: 'AI locks onto patterns badly',
+      name: 'WAYS COMPUTER VISION CAN FAIL',
       difficulty: 3,
-      cards: ['Spurious correlation', 'Overfitting', 'Distribution shift', 'Shortcut learning'],
+      cards: ['Bad lighting', 'Unusual angle', 'Adversarial noise', 'Out-of-distribution input'],
+      reveal: 'Computer vision systems fail when the input looks different from what they trained on. Bad lighting, unusual angles, adversarial examples, and inputs the model has never seen before can all break a sy',
     },
     {
-      name: 'AI fails on edge cases',
+      name: 'THINGS COMPUTER VISION DOES BEYOND LABELING',
       difficulty: 4,
-      cards: ['Out-of-distribution input', 'Adversarial example', 'Rare class failure', 'Long-tail blindspot'],
+      cards: ['Object detection', 'Semantic segmentation', 'Pose estimation', 'Depth estimation'],
+      reveal: 'Labeling an image is just one thing computer vision can do. It can also locate objects, label every pixel, track body positions, and estimate physical depth. These are used in medicine, robotics, acce',
     },
-  ] as Puzzle['groups'],
+  ],
 }
 
 export default puzzle

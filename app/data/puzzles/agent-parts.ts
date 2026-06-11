@@ -5,26 +5,30 @@ const puzzle: Puzzle = {
   title: 'Agent Parts',
   groups: [
     {
-      name: 'The agent perceives the world through these',
+      name: 'MEMORY',
       difficulty: 1,
-      cards: ['Text input', 'Web search results', 'Tool output', 'File contents'],
+      cards: ['Context window holding the current conversation', 'External database the agent can query', 'Summary of past sessions passed in at the start', 'Notes the agent writes to itself mid-task'],
+      reveal: 'Memory determines what the agent knows and for how long. Context window memory is fast but limited and disappears when the session ends. External memory persists but requires retrieval. The design of ',
     },
     {
-      name: 'The agent reasons using these',
+      name: 'TOOLS',
       difficulty: 2,
-      cards: ['Chain-of-thought', 'Scratchpad memory', 'Planning step', 'Goal decomposition'],
+      cards: ['Web search function the agent can call', 'Code interpreter for running calculations', 'API connection to an external service', 'File system access for reading and writing documents'],
+      reveal: 'Tools are what let an agent act on the world instead of just talking about it. Without tools, an agent is just a chatbot. With the right tools, it can search, calculate, connect to services, and modif',
     },
     {
-      name: 'The agent acts through these',
+      name: 'PLANNING',
       difficulty: 3,
-      cards: ['API call', 'Code execution', 'Browser click', 'File write'],
+      cards: ['Breaking a goal into subtasks', 'Deciding which tool to use for which step', 'Checking whether a previous step succeeded before continuing', 'Revising the plan when a step fails'],
+      reveal: 'Planning turns a high-level goal into a sequence of actions. Without planning, an agent can only respond to what\'s immediately in front of it. With planning, it can work toward something over time.',
     },
     {
-      name: 'What keeps an agent from going off-script',
+      name: 'EXECUTION GUARDRAILS',
       difficulty: 4,
-      cards: ['Scope constraint', 'Human-in-the-loop', 'Sandboxed environment', 'Rejection threshold'],
+      cards: ['Requiring human approval before irreversible actions', 'Logging every action taken for review', 'Hard limits on which tools can be used in which contexts', 'Automatic rollback if a step produces unexpected results'],
+      reveal: 'Guardrails are what make agents safe to deploy. An agent without guardrails can take irreversible actions — send emails, modify files, make purchases — based on misunderstanding a request. The more po',
     },
-  ] as Puzzle['groups'],
+  ],
 }
 
 export default puzzle
