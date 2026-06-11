@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { WORLDS, WORLD_IDS } from '../data'
+import { WORLDS, WORLD_IDS, getWorldTitle } from '../data'
 import { isElementaryGrade, isMiddleSchoolGrade } from '../data/elementary'
 import { loadProgress } from '@/lib/progress'
 
@@ -109,7 +109,7 @@ export default function Home() {
                   W{String(wid).padStart(2, '0')}
                 </span>
                 <span style={{ fontFamily: DISP, fontSize: 'clamp(13px, 3.8vw, 17px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>
-                  {world.title}
+                  {getWorldTitle(wid, isPT ? 'pt' : 'en')}
                 </span>
                 {isActive && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>

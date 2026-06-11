@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { WorldData } from '../data'
+import { WorldData, getWorldTitle } from '../data'
+import TRANSLATIONS from '../data/lessonTranslations'
 import { getSlideTitles } from '../data/slideIndex'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -44,7 +45,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN, marginBottom: 4 }}>
               W{String(world.id).padStart(2, '0')} · {world.level}
             </div>
-            <h1 style={{ fontFamily: DISP, fontSize: 26, letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0, fontWeight: 400, color: BLACK }}>{world.title}</h1>
+            <h1 style={{ fontFamily: DISP, fontSize: 26, letterSpacing: '-0.02em', lineHeight: 1.1, margin: 0, fontWeight: 400, color: BLACK }}>{getWorldTitle(world.id, isPT ? 'pt' : 'en')}</h1>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
@@ -79,7 +80,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.01em', flex: 1, color: BLACK, lineHeight: 1.15 }}>
-                      {m.title}
+                      {TRANSLATIONS['pt']?.[m.id]?.title || m.title}
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                       {isDone && (
@@ -148,7 +149,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
         {/* World label */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN }}>W{String(world.id).padStart(2, '0')}</span>
-          <h1 style={{ fontFamily: DISP, fontSize: 32, letterSpacing: '-0.02em', lineHeight: 1, margin: 0, fontWeight: 400, color: BLACK }}>{world.title}</h1>
+          <h1 style={{ fontFamily: DISP, fontSize: 32, letterSpacing: '-0.02em', lineHeight: 1, margin: 0, fontWeight: 400, color: BLACK }}>{getWorldTitle(world.id, isPT ? 'pt' : 'en')}</h1>
           <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{world.level}</span>
         </div>
 
@@ -184,7 +185,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: BLACK }}>
-                    {m.title}
+                    {TRANSLATIONS['pt']?.[m.id]?.title || m.title}
                   </span>
                   {isDone && (
                     <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Concluído' : 'Done'}</span>

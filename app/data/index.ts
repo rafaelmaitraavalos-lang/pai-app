@@ -164,6 +164,23 @@ export const WORLDS: Record<number, WorldData> = {
 // Ordered list for the home screen
 export const WORLD_IDS = [1, 2, 3, 4, 5, 6, 7, 8]
 
+// PT-BR world title translations
+export const WORLD_TITLES_PT: Record<number, string> = {
+  1: 'O que é IA?',
+  2: 'Como a IA Pensa',
+  3: 'IA e Sociedade',
+  4: 'Ética na IA',
+  5: 'O Futuro da IA',
+  6: 'Como as Redes Neurais Funcionam',
+  7: 'Construindo com IA',
+  8: 'A Fronteira',
+}
+
+export function getWorldTitle(id: number, lang: string): string {
+  if (lang === 'pt' && WORLD_TITLES_PT[id]) return WORLD_TITLES_PT[id]
+  return WORLDS[id]?.title ?? ''
+}
+
 // Helper: which world does a lesson belong to?
 export function getLessonWorldId(lessonId: number): number {
   for (const world of Object.values(WORLDS)) {
