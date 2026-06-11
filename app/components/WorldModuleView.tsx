@@ -48,7 +48,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}{isPT ? 'Módulos' : 'Modules'}</span>
+            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Módulos' : 'Modules'}</span>
             <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
           </div>
 
@@ -153,7 +153,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20 }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}{isPT ? 'Módulos' : 'Modules'}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Módulos' : 'Modules'}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
 
