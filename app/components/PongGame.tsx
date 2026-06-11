@@ -50,7 +50,7 @@ const PADDLE_H = 78
 const PADDLE_W = 12
 const BALL_R   = 12
 const LIVES    = 3
-const BASE_SPD = 5.5
+const BASE_SPD = 5
 
 type Phase = 'intro' | 'countdown' | 'playing' | 'facts' | 'end'
 
@@ -85,7 +85,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const [factIdx,   setFactIdx]   = useState(0)
 
   function spawnBall(g: GS, W: number, H: number, fromAI = false) {
-    const speed = BASE_SPD + g.rallies * 0.22
+    const speed = BASE_SPD * Math.pow(1.13, g.rallies)
     if (fromAI) {
       // AI just hit — pick random new item + color
       const remaining = g.items.slice(g.idx)
@@ -145,7 +145,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       const ballColor = g.ballCatch ? GREEN : RED
 
       // AI paddle smoothly tracks ball
-      const aiSpd = 4 + g.rallies * 0.12
+      const aiSpd = Math.min(28, 4 * Math.pow(1.11, g.rallies))
       const aiDiff = g.by - g.aiY
       g.aiY += Math.sign(aiDiff) * Math.min(aiSpd, Math.abs(aiDiff))
 
@@ -159,7 +159,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         if (Math.abs(g.by - g.aiY) < PADDLE_H / 2 + 4) {
           g.bx = AI_X + PADDLE_W + BALL_R
           g.rallies++
-          const speed = BASE_SPD + g.rallies * 0.22
+          const speed = BASE_SPD * Math.pow(1.13, g.rallies)
           g.vx = Math.abs(speed)
           const rel = (g.by - g.aiY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
@@ -194,7 +194,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         if (inPaddle) {
           g.bx = PLAYER_X - BALL_R
           g.rallies++
-          const speed = BASE_SPD + g.rallies * 0.22
+          const speed = BASE_SPD * Math.pow(1.13, g.rallies)
           g.vx = -Math.abs(speed)
           const rel = (g.by - g.playerY) / (PADDLE_H / 2)
           g.vy = rel * speed * 0.65
@@ -285,7 +285,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
       // Speed indicator (top right)
       ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.font = `600 10px ${BODY}`; ctx.textAlign = 'right'
-      ctx.fillText(`×${(1 + g.rallies * 0.04).toFixed(1)}`, W - 10, 22)
+      ctx.fillText(`×${Math.pow(1.13, g.rallies).toFixed(1)}`, W - 10, 22)
 
       frameRef.current = requestAnimationFrame(loop)
     }
