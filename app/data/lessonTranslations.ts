@@ -325,6 +325,20 @@ const TRANSLATIONS: Record<string, Record<number, TranslatedLesson>> = {
         { question: `“Um sistema de IA pode realizar uma tarefa com sucesso sem entendê-la da mesma forma que um humano.”`, verdict: "Correto.", explanation: "Um sistema de IA pode classificar uma imagem, gerar uma redação ou fazer uma recomendação sem vivenciar o mundo ou entender o significado da tarefa da mesma forma que uma pessoa. Essa é uma das razões pelas quais as discussões sobre IA exigem definições cuidadosas de palavras como “aprender”, “raciocinar” e “entender”." },
       ],
     },
+    6: {
+      title: "O que a IA Erra",
+      stops: [
+        { title: "Confiança não é exatidão", body: "" },
+        { title: "Alucinações", body: "" },
+        { title: "O viés está incorporado", body: "" },
+        { title: "O problema dos casos extremos", body: "" },
+        { title: "Mais dados não resolve tudo", body: "" },
+        { title: "O viés de automação", body: "" },
+        { title: "Quando realmente dá errado", body: "" },
+        { title: "A lacuna de responsabilidade", body: "" },
+      ],
+      questions: [],
+    },
     7: {
       title: "O que é IA?",
       stops: [

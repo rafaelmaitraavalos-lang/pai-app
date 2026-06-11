@@ -149,7 +149,17 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         }),
       })
       const data = await res.json()
-      if (!res.ok) { setUsernameError(data.error ?? 'Something went wrong'); return }
+      if (!res.ok) {
+        const isPT = country?.lang === 'pt'
+        const errMap: Record<string, string> = isPT ? {
+          'That username is taken': 'Este nome de usuário já está em uso',
+          'No account with that username': 'Nenhuma conta com esse nome de usuário',
+          'Username required': 'Nome de usuário obrigatório',
+          'Invalid username': 'Nome de usuário inválido',
+        } : {}
+        setUsernameError(errMap[data.error] ?? data.error ?? (isPT ? 'Algo deu errado' : 'Something went wrong'))
+        return
+      }
 
       const { user, isNew } = data
       localStorage.setItem('pai_username', user.username)

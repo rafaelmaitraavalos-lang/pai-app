@@ -80,7 +80,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.01em', flex: 1, color: BLACK, lineHeight: 1.15 }}>
-                      {TRANSLATIONS['pt']?.[m.id]?.title || m.title}
+                      {isPT && TRANSLATIONS['pt']?.[m.id]?.title ? TRANSLATIONS['pt'][m.id].title : m.title}
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                       {isDone && (
@@ -185,7 +185,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: BLACK }}>
-                    {TRANSLATIONS['pt']?.[m.id]?.title || m.title}
+                    {isPT && TRANSLATIONS['pt']?.[m.id]?.title ? TRANSLATIONS['pt'][m.id].title : m.title}
                   </span>
                   {isDone && (
                     <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Concluído' : 'Done'}</span>
