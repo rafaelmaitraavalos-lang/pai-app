@@ -65,6 +65,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     backTo:          isPT ? 'Voltar para'            : 'Back to',
     trueBtn:         isPT ? 'Verdadeiro'             : 'True',
     falseBtn:        isPT ? 'Falso'                  : 'False',
+    backWorld:       isPT ? '← Mundo'               : '← World',
+    backSlide:       isPT ? '← Voltar'              : '← Back',
+    nextSlide:       isPT ? 'Próximo slide →'        : 'Next slide →',
+    takeQuiz:        isPT ? 'Fazer o questionário →' : 'Take the quiz →',
   }
   const tx      = TRANSLATIONS[lang]?.[id]
   const title     = tx?.title     ?? titleEN
@@ -269,7 +273,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
         <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
-          ← World
+          {ui.backWorld}
         </button>
       </div>
 
@@ -354,13 +358,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         <div style={{ borderTop: `2px solid ${BLACK}` }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20, gap: 20 }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
-            ← Back
+            {ui.backSlide}
           </button>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 20 : 6, height: 6, borderRadius: 3, background: i < stopIndex ? BLACK : i === stopIndex ? GREEN : FAINT, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
           </div>
           <button onClick={timelineNext} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', background: '#EBEBEB', color: BLACK, padding: '10px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}` }}>
-            {stopIndex === stops.length - 1 ? 'Take the quiz →' : 'Next slide →'}
+            {stopIndex === stops.length - 1 ? ui.takeQuiz : ui.nextSlide}
           </button>
         </div>
 
