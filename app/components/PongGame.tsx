@@ -93,11 +93,20 @@ function beep(freq: number, type: OscillatorType, duration: number, gain = 0.15,
   } catch {}
 }
 const sfx = {
-  hit:     () => beep(280, 'sine',     0.06, 0.18, 420),
-  swoosh:  () => beep(600, 'sine',     0.07, 0.06, 200),
-  bad:     () => beep(90,  'sawtooth', 0.18, 0.22, 60),
-  miss:    () => beep(180, 'triangle', 0.22, 0.15, 80),
-  combo:   (n: number) => beep(200 + n * 30, 'sine', 0.08, 0.12, 300 + n * 40),
+  hit:      () => beep(280, 'sine',     0.06, 0.18, 420),
+  swoosh:   () => beep(700, 'sine',     0.06, 0.08, 250),
+  bad:      () => beep(90,  'sawtooth', 0.18, 0.22, 60),
+  miss:     () => beep(180, 'triangle', 0.22, 0.15, 80),
+  combo:    (n: number) => beep(200 + n * 30, 'sine', 0.08, 0.12, 300 + n * 40),
+  countdown:(n: number) => {
+    if (n > 0) beep(n === 1 ? 440 : 330, 'sine', 0.12, 0.25)   // 3,2 = 330Hz; 1 = 440Hz
+    else {
+      // GO! — quick ascending fanfare
+      beep(523, 'sine', 0.08, 0.2)
+      setTimeout(() => beep(659, 'sine', 0.08, 0.2), 80)
+      setTimeout(() => beep(784, 'sine', 0.15, 0.25), 160)
+    }
+  },
 }
 
 interface RedDot { id: number; x: number; y: number; vy: number; spd: number }
@@ -194,13 +203,15 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
 
   useEffect(() => {
     if (phase !== 'countdown') return
+    sfx.countdown(countdown)
     if (countdown <= 0) { setPhase('playing'); return }
     const t = setTimeout(() => setCountdown(c => c - 1), 850)
     return () => clearTimeout(t)
   }, [phase, countdown])
 
   // Arrow key support — track held keys, apply movement in game loop
-  const keysRef = useRef<Set<string>>(new Set())
+  const keysRef       = useRef<Set<string>>(new Set())
+  const swooshAt      = useRef(0)  // last swoosh timestamp
   useEffect(() => {
     if (phase !== 'playing') return
     const onDown = (e: KeyboardEvent) => {
@@ -238,8 +249,10 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       const prevY = g.playerY
       if (keysRef.current.has('ArrowUp'))   g.playerY = Math.max(PADDLE_H/2, g.playerY - keySpeed)
       if (keysRef.current.has('ArrowDown')) g.playerY = Math.min(H - PADDLE_H/2, g.playerY + keySpeed)
-      // Swoosh when paddle moves significantly
-      if (Math.abs(g.playerY - prevY) > 4 && Math.abs(g.playerY - g.prevPlayerY) < 1) sfx.swoosh()
+      // Swoosh every ~120ms when paddle is moving
+      if (Math.abs(g.playerY - prevY) > 2 && now - swooshAt.current > 120) {
+        sfx.swoosh(); swooshAt.current = now
+      }
       g.prevPlayerY = g.playerY
 
       // ── Spawn red dots (bad data obstacles) ───────────────────────────────
@@ -405,7 +418,12 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   const onPointer = (e: React.PointerEvent) => {
     if (!gs.current) return
     const rect = canvasRef.current?.getBoundingClientRect(); if (!rect) return
-    gs.current.playerY = Math.max(PADDLE_H/2, Math.min(rect.height - PADDLE_H/2, e.clientY - rect.top))
+    const newY = Math.max(PADDLE_H/2, Math.min(rect.height - PADDLE_H/2, e.clientY - rect.top))
+    const moved = Math.abs(newY - gs.current.playerY)
+    gs.current.playerY = newY
+    if (moved > 6 && Date.now() - swooshAt.current > 120) {
+      sfx.swoosh(); swooshAt.current = Date.now()
+    }
   }
 
   const currentItem = gs.current?.items[gs.current.itemIdx % ITEMS.length] ?? ITEMS[0]
