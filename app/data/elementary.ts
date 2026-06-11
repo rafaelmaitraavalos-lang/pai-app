@@ -45,6 +45,14 @@ const W108_LESSONS = remap(_wms2_pt, 162, 108) // 162
 const W109_LESSONS = remap(_wms3_pt, 163, 109) // 163
 const W110_LESSONS = remap(_wms4_pt, 164, 110) // 164
 
+// ── Shared game modules appended after lessons ────────────────────────────────
+
+const GAMES = [
+  { id: 9001, title: 'Signal Drop',   type: 'game' as const, gameUrl: '/games/signal-drop' },
+  { id: 9002, title: 'Prompt Pizza',  type: 'game' as const, gameUrl: '/games/prompt-pizza' },
+  { id: 9003, title: 'Fix the Robot', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+]
+
 // ── Elementary world definitions ──────────────────────────────────────────────
 
 export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
@@ -52,42 +60,42 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     id: 101,
     title: 'Meet AI',
     level: 'Elementary',
-    modules: Object.values(W101_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W101_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   102: {
     id: 102,
     title: 'How PAI Thinks',
     level: 'Elementary',
-    modules: Object.values(W102_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W102_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   103: {
     id: 103,
     title: 'How PAI Thinks (Advanced)',
     level: 'Elementary',
-    modules: Object.values(W103_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W103_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   104: {
     id: 104,
     title: 'Conheça a IA',
     level: 'Elementary',
-    modules: Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   105: {
     id: 105,
     title: 'Como a PAI Pensa',
     level: 'Elementary',
-    modules: Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   106: {
     id: 106,
     title: 'Como a PAI Pensa (Avançado)',
     level: 'Elementary',
-    modules: Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })),
+    modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
-  107: { id: 107, title: 'O que é a IA?',              level: 'Intermediate', modules: Object.values(W107_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  109: { id: 109, title: 'IA e Sociedade',             level: 'Intermediate', modules: Object.values(W109_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  110: { id: 110, title: 'Ética na IA',               level: 'Intermediate', modules: Object.values(W110_LESSONS).map(l => ({ id: l.id, title: l.title })) },
+  107: { id: 107, title: 'O que é a IA?',              level: 'Intermediate', modules: [...Object.values(W107_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: [...Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  109: { id: 109, title: 'IA e Sociedade',             level: 'Intermediate', modules: [...Object.values(W109_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  110: { id: 110, title: 'Ética na IA',               level: 'Intermediate', modules: [...Object.values(W110_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
 }
 
 export const ELEMENTARY_WORLD_IDS       = [101, 102, 103]
