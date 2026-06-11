@@ -282,9 +282,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         {/* Two-column grid — same as fake */}
         <div
           key={stopIndex}
+          className={hasImage ? 'lesson-slide-grid' : undefined}
           style={{
-            display: 'grid',
-            gridTemplateColumns: hasImage ? '1fr 300px' : '1fr',
+            display: hasImage ? undefined : 'grid',
+            gridTemplateColumns: hasImage ? undefined : '1fr',
             gap: 0,
             paddingTop: 44,
             paddingBottom: 32,
@@ -292,7 +293,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           }}
         >
           {/* Left: headline + body */}
-          <div style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
+          <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
             <h1 style={{
               fontFamily: DISP, fontWeight: 400,
               fontSize: 'clamp(3rem, 6vw, 5rem)',
@@ -320,7 +321,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
           {/* Right: image — same as fake */}
           {hasImage && (
-            <div style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${BLACK}` }}>
                 <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>

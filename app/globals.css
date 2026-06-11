@@ -215,3 +215,21 @@
   from { transform: translate(-50%, -50%) scale(0.95); }
   to   { transform: translate(-50%, -50%) scale(1); }
 }
+
+/* ── Lesson slide: shrink image column on narrow screens ────────────────────── */
+.lesson-slide-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 0;
+}
+@media (max-width: 640px) {
+  .lesson-slide-grid {
+    grid-template-columns: 1fr 120px;
+  }
+  .lesson-slide-image {
+    padding-left: 14px !important;
+  }
+  .lesson-slide-text {
+    padding-right: 14px !important;
+  }
+}

@@ -105,11 +105,8 @@ export default function Home() {
                 <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>
                   W{String(wid).padStart(2, '0')}
                 </span>
-                <span style={{ fontFamily: DISP, fontSize: 17, letterSpacing: '-0.01em', flex: 1, color: BLACK }}>
+                <span style={{ fontFamily: DISP, fontSize: 'clamp(13px, 3.8vw, 17px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>
                   {world.title}
-                </span>
-                <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, marginRight: 16 }}>
-                  {world.level}
                 </span>
                 {isActive && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>

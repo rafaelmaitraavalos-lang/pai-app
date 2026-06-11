@@ -175,6 +175,7 @@ export default function HandbookProvider() {
     setUnlockedIds(ids)
   }, [])
 
+  const focusedRoute = /^\/(lesson|games|complete|elementary\/lesson|elementary\/world)/.test(pathname)
   if (!mounted || pathname === '/') return null
 
   const openPopup = () => {
@@ -202,7 +203,7 @@ export default function HandbookProvider() {
 
   return (
     <>
-      <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />
+      {!focusedRoute && <HBButton onClick={open ? closePopup : openPopup} showWelcome={showWelcome} username={username} />}
 
       {open && (
         <>
