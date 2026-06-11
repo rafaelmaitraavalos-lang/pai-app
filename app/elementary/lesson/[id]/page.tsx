@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 export default function ElementaryLessonPage() {
   const params = useParams()
   const id     = parseInt(params.id as string)
+  const isElementary = id in ELEMENTARY_LESSONS
   const lesson = ELEMENTARY_LESSONS[id] ?? MIDDLE_SCHOOL_LESSONS[id]
 
   if (!lesson) notFound()
@@ -19,7 +20,7 @@ export default function ElementaryLessonPage() {
       stops={lesson.stops}
       questions={lesson.questions}
       completionPage={`/elementary/world/${lesson.worldId}`}
-      theme="elementary"
+      theme={isElementary ? 'elementary' : undefined}
     />
   )
 }
