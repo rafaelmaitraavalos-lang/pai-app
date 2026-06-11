@@ -166,18 +166,17 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     return () => clearTimeout(t)
   }, [phase, countdown])
 
-  // Arrow key support
+  // Arrow key support — track held keys, apply movement in game loop
+  const keysRef = useRef<Set<string>>(new Set())
   useEffect(() => {
     if (phase !== 'playing') return
-    const cv = canvasRef.current
-    const step = 18
-    const onKey = (e: KeyboardEvent) => {
-      if (!gs.current || !cv) return
-      if (e.key === 'ArrowUp')   gs.current.playerY = Math.max(PADDLE_H/2, gs.current.playerY - step)
-      if (e.key === 'ArrowDown') gs.current.playerY = Math.min(cv.clientHeight - PADDLE_H/2, gs.current.playerY + step)
+    const onDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); keysRef.current.add(e.key) }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    const onUp = (e: KeyboardEvent) => keysRef.current.delete(e.key)
+    window.addEventListener('keydown', onDown)
+    window.addEventListener('keyup',   onUp)
+    return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp); keysRef.current.clear() }
   }, [phase])
 
   useEffect(() => {
@@ -200,6 +199,11 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
       const PLAYER_X = W - 30
       const AI_X     = 18
       const speed    = Math.hypot(g.vx, g.vy)
+
+      // Apply held arrow keys — fast and smooth
+      const keySpeed = 9
+      if (keysRef.current.has('ArrowUp'))   g.playerY = Math.max(PADDLE_H/2, g.playerY - keySpeed)
+      if (keysRef.current.has('ArrowDown')) g.playerY = Math.min(H - PADDLE_H/2, g.playerY + keySpeed)
 
       // AI always tracks ball perfectly — guarantee it hits every time
       const targetY = g.by + (g.vx < 0 ? (g.bx / speed) * g.vy : 0)
