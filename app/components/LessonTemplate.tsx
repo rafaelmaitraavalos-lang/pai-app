@@ -32,6 +32,7 @@ interface Props {
   stops:           Stop[]
   questions:       Question[]
   completionPage?: string
+  theme?:          'elementary'
 }
 
 // Mirrors fake/module tokens exactly
@@ -44,7 +45,7 @@ const BLACK = '#0a0a0a'
 
 type Phase = 'timeline' | 'quiz' | 'complete'
 
-export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, questions: questionsEN, completionPage }: Props) {
+export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, questions: questionsEN, completionPage, theme }: Props) {
   const router = useRouter()
   const [phase,     setPhase]     = useState<Phase>('timeline')
   const [stopIndex, setStopIndex] = useState(0)
@@ -266,8 +267,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
+  const slideBg = theme === 'elementary'
+    ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
+    : '#fff'
+
   return (
-    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+    <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease' }}>
 
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>

@@ -14,6 +14,7 @@ interface Props {
   stops:           Stop[]
   questions:       Question[]
   completionPage?: string
+  theme?:          'elementary'
 }
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -26,7 +27,7 @@ const BASE  = '/mobile'
 
 type Phase = 'timeline' | 'quiz' | 'complete'
 
-export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsEN, questions: questionsEN, completionPage }: Props) {
+export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsEN, questions: questionsEN, completionPage, theme }: Props) {
   const router = useRouter()
   const [phase,     setPhase]     = useState<Phase>('timeline')
   const [stopIndex, setStopIndex] = useState(0)
@@ -182,8 +183,12 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   }
 
   // ── Slides ──────────────────────────────────────────────────────────────────
+  const slideBg = theme === 'elementary'
+    ? (stopIndex % 2 === 0 ? '#00FF88' : '#FF3DB8')
+    : '#fff'
+
   return (
-    <main style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff', maxWidth: 480, margin: '0 auto' }}>
+    <main style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: slideBg, maxWidth: 480, margin: '0 auto', transition: 'background 0.4s ease' }}>
       {header}
       <div style={{ flex: 1, padding: '0 20px 80px' }}>
 

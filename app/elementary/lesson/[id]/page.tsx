@@ -19,6 +19,7 @@ export default function ElementaryLessonPage() {
       stops={lesson.stops}
       questions={lesson.questions}
       completionPage={`/elementary/world/${lesson.worldId}`}
+      theme="elementary"
     />
   )
 }
