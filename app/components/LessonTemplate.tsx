@@ -194,9 +194,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           <div>
             <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
               <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                <span style={{ color: BLACK }}>Quiz</span>
+                <span style={{ color: BLACK }}>{isPT ? 'Questionário' : 'Quiz'}</span>
                 <span style={{ color: FAINT }}>·</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>Lesson {id}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
                 <span style={{ color: FAINT }}>·</span>
                 <span style={{ color: DIM }}>{title}</span>
               </div>
@@ -252,8 +252,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             )}
           </div>
           <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>Lesson {id} · {title} · Quiz</span>
-            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Q{qIndex + 1} of {questions.length}</span>
+            <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · {isPT ? 'Questionário' : 'Quiz'}</span>
+            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Q{qIndex + 1} {isPT ? 'de' : 'of'} {questions.length}</span>
           </div>
 
         </div>
@@ -286,7 +286,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <span style={{ color: BLACK }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
               <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
-                Lesson {id}
+                {isPT ? 'Aula' : 'Lesson'} {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
               <span style={{ color: DIM }}>{title}</span>
@@ -366,7 +366,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
         {/* Footer — same as fake */}
         <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>Lesson {id} · {title} · Slide {stopIndex + 1} of {stops.length}</span>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
         </div>
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { GAMES, TYPE_LABEL, WORLD_NAMES, type GameType } from '../data/games'
+import { GAMES, TYPE_LABEL, TYPE_LABEL_PT, WORLD_NAMES, type GameType } from '../data/games'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -21,6 +21,7 @@ const worlds = Array.from(new Set(GAMES.map(g => g.world)))
 
 export default function GamesHub() {
   const router = useRouter()
+  const isPT = typeof window !== 'undefined' && localStorage.getItem('pai_lang') === 'pt'
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY }}>
@@ -29,7 +30,7 @@ export default function GamesHub() {
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontFamily: DISP, fontSize: 22, color: GREEN, letterSpacing: '-0.02em' }}>PAI</span>
         <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
-          ← Home
+          {isPT ? '← Início' : '← Home'}
         </button>
       </div>
 
@@ -37,13 +38,13 @@ export default function GamesHub() {
 
         {/* Legend */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 28 }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>24 Games</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? '24 Jogos' : '24 Games'}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
           <div style={{ display: 'flex', gap: 12 }}>
             {(['interstitial','catcher','connections'] as GameType[]).map(t => (
               <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <div style={{ width: 8, height: 8, background: TYPE_COLOR[t], border: `1px solid ${BLACK}` }} />
-                <span style={{ fontFamily: BODY, fontSize: 10, color: DIM }}>{TYPE_LABEL[t]}</span>
+                <span style={{ fontFamily: BODY, fontSize: 10, color: DIM }}>{(isPT ? TYPE_LABEL_PT : TYPE_LABEL)[t]}</span>
               </div>
             ))}
           </div>
@@ -89,7 +90,7 @@ export default function GamesHub() {
 
                     {/* Type label */}
                     <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: game.built ? BLACK : FAINT, border: `1px solid ${game.built ? BLACK : FAINT}`, padding: '2px 6px' }}>
-                      {TYPE_LABEL[game.type]}
+                      {(isPT ? TYPE_LABEL_PT : TYPE_LABEL)[game.type]}
                     </span>
 
                     {game.built && <span style={{ fontFamily: DISP, fontSize: 12, color: DIM }}>→</span>}

@@ -57,6 +57,12 @@ export const TYPE_LABEL: Record<GameType, string> = {
   connections:  'Group',
 }
 
+export const TYPE_LABEL_PT: Record<GameType, string> = {
+  interstitial: 'Decidir',
+  catcher:      'Pegar',
+  connections:  'Agrupar',
+}
+
 export const WORLD_NAMES: Record<number, string> = {
   1: 'Meet AI',
   2: 'How AI Thinks',

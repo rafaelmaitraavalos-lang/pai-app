@@ -29,7 +29,7 @@ function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: Han
         <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontFamily: BODY, fontSize: 22, padding: 0, lineHeight: 1 }}>×</button>
       </div>
       <div style={{ padding: '14px 16px 4px', flexShrink: 0 }}>
-        <span style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM }}>Handbook</span>
+        <span style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Manual' : 'Handbook'}</span>
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '6px 16px 20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
         {allEntries.map((entry, i) => (
@@ -65,7 +65,7 @@ function IndexView({ onSelect, onClose, unlockedIds, isPT }: { onSelect: (e: Han
 
 // ── Entry view ────────────────────────────────────────────────────────────────
 
-function EntryView({ entry, onBack }: { entry: HandbookEntry; onBack: () => void }) {
+function EntryView({ entry, onBack, isPT }: { entry: HandbookEntry; onBack: () => void; isPT: boolean }) {
   return (
     <>
       <div style={{ background: BLACK, padding: '10px 18px', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -74,7 +74,7 @@ function EntryView({ entry, onBack }: { entry: HandbookEntry; onBack: () => void
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 18px 24px', display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
-          <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>Entry</div>
+          <div style={{ fontFamily: BODY, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 6 }}>{entry.unlocksAt ? (isPT ? 'Entrada' : 'Entry') : (isPT ? 'Entrada' : 'Entry')}</div>
           <h2 style={{ fontFamily: DISP, fontSize: 18, color: BLACK, margin: '0 0 14px', lineHeight: 1.15 }}>{entry.title}</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {entry.body.split('\n\n').map((p, i) => (
@@ -83,7 +83,7 @@ function EntryView({ entry, onBack }: { entry: HandbookEntry; onBack: () => void
           </div>
         </div>
         <div style={{ background: GREEN, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 16px' }}>
-          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: BLACK, marginBottom: 6 }}>DO</div>
+          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: BLACK, marginBottom: 6 }}>{isPT ? 'FAÇA' : 'DO'}</div>
           <p style={{ fontFamily: BODY, fontSize: 13, fontWeight: 600, color: BLACK, margin: 0, lineHeight: 1.55 }}>{entry.doLine}</p>
         </div>
       </div>
@@ -236,7 +236,7 @@ export default function HandbookProvider() {
             transition: 'opacity 220ms ease, transform 220ms ease',
           }}>
             {selectedEntry
-              ? <EntryView entry={selectedEntry} onBack={backToIndex} />
+              ? <EntryView entry={selectedEntry} onBack={backToIndex} isPT={isPT} />
               : <IndexView onSelect={selectEntry} onClose={closePopup} unlockedIds={unlockedIds} isPT={isPT} />
             }
           </div>
