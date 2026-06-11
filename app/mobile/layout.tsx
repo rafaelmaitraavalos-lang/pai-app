@@ -56,7 +56,7 @@ export default function MobileLayout({ children }: { children: React.ReactNode }
             borderRadius: 46,
             background: '#fff',
             overflow: 'hidden',
-            contain: 'layout' as React.CSSProperties['contain'],
+            contain: 'paint' as React.CSSProperties['contain'],
           }}
         >
           {/* Dynamic Island */}
