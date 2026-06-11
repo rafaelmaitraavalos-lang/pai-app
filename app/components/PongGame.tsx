@@ -45,7 +45,7 @@ const FACTS = [
   "When data is collected without consent, the privacy violation happens before the model even exists.",
 ]
 
-const TOTAL    = ITEMS.length
+const TOTAL    = ITEMS.length  // items per cycle — game loops until lives run out
 const PADDLE_H = 78
 const PADDLE_W = 12
 const BALL_R   = 12
@@ -63,7 +63,7 @@ function shuffle<T>(a: T[]): T[] {
 interface GS {
   bx: number; by: number; vx: number; vy: number
   aiY: number; playerY: number
-  lives: number; score: number; idx: number
+  lives: number; score: number; idx: number; total: number
   rallies: number                           // total AI hits — drives speed
   ballCatch: boolean                        // true = GREEN (hit), false = RED (let past)
   decided: boolean                          // player already judged this pass
@@ -107,7 +107,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     gs.current = {
       bx: 0, by: 0, vx: 0, vy: 0,
       aiY: 0, playerY: 0,
-      lives: LIVES, score: 0, idx: 0, rallies: 0,
+      lives: LIVES, score: 0, idx: 0, total: 0, rallies: 0,
       ballCatch: true, decided: false,
       flash: null, label: null,
       items: shuffle(ITEMS), spawned: false,
@@ -166,8 +166,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           spawnBall(g, W, H, true)   // new random color + item
         } else if (g.bx < AI_X - 4) {
           // AI missed — respawn
-          g.idx++; if (gs.current) { gs.current.idx = g.idx }
-          if (g.idx >= TOTAL) { setPhase('facts'); onComplete?.(); return }
+          g.idx++; g.total++
+          if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
           spawnBall(g, W, H)
         }
       }
@@ -186,10 +186,9 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           g.flash = { text: inPaddle ? '✗ That was bad data' : '✗ That was clean data', good: false, t: now }
         }
 
-        g.idx++; setScore(g.score)
-        if (g.lives <= 0 || g.idx >= TOTAL) {
-          setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return
-        }
+        g.idx++; g.total++; setScore(g.score)
+        if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
+        if (g.lives <= 0) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return }
 
         if (inPaddle) {
           g.bx = PLAYER_X - BALL_R
@@ -210,8 +209,9 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         const correct = !g.ballCatch
         if (correct) { g.score++; setScore(g.score); g.flash = { text: '✓ Bad data — out', good: true, t: now } }
         else          { g.lives--; setLives(g.lives); g.flash = { text: '✗ That was clean data', good: false, t: now } }
-        g.idx++
-        if (g.lives <= 0 || g.idx >= TOTAL) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return }
+        g.idx++; g.total++
+        if (g.idx >= TOTAL) { g.idx = 0; g.items = shuffle(g.items) }
+        if (g.lives <= 0) { setTimeout(() => { setPhase('facts'); onComplete?.() }, 700); return }
         setTimeout(() => { if (gs.current) spawnBall(gs.current, W, H) }, 450)
       }
 
@@ -277,11 +277,9 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         ctx.fill(); ctx.shadowBlur = 0
       }
 
-      // Progress bar (right edge)
-      ctx.fillStyle = '#1a1a1a'; ctx.fillRect(W - 5, 0, 5, H)
-      ctx.fillStyle = GREEN; ctx.shadowColor = GREEN; ctx.shadowBlur = 4
-      ctx.fillRect(W - 5, H * (1 - g.idx / TOTAL), 5, H * (g.idx / TOTAL))
-      ctx.shadowBlur = 0
+      // Score display (replacing progress bar)
+      ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.font = `700 11px ${BODY}`; ctx.textAlign = 'right'
+      ctx.fillText(`${g.score}/${g.total || 1}`, W - 10, H - 10)
 
       // Speed indicator (top right)
       ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.font = `600 10px ${BODY}`; ctx.textAlign = 'right'
@@ -300,7 +298,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     gs.current.playerY = Math.max(PADDLE_H / 2, Math.min(rect.height - PADDLE_H / 2, e.clientY - rect.top))
   }
 
-  const pct     = score / TOTAL
+  const total   = gs.current?.total || TOTAL
+  const pct     = score / Math.max(1, total)
   const verdict = VERDICTS.find(v => pct >= v.min) ?? VERDICTS[VERDICTS.length - 1]
 
   if (phase === 'intro') return (
@@ -365,7 +364,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 28, background: BLACK, overflowY: 'auto' }}>
       <div style={{ maxWidth: 380, width: '100%', display: 'flex', flexDirection: 'column', gap: 22, textAlign: 'center' }}>
         <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', textShadow: `0 0 40px ${GREEN}66` }}>
-          {score}<span style={{ fontSize: 36, color: '#333' }}>/{TOTAL}</span>
+          {score}<span style={{ fontSize: 36, color: '#333' }}>/{total}</span>
         </div>
         <div style={{ border: '1px solid #1e1e1e', padding: '22px', background: '#0d0d0d' }}>
           <p style={{ fontFamily: DISP, fontSize: 20, color: pct >= 0.7 ? GREEN : RED, margin: '0 0 8px', lineHeight: 1.2 }}>{verdict.verdict}</p>
