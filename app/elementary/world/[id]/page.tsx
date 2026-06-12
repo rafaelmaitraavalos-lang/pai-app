@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { ELEMENTARY_WORLDS } from '../../../data/elementary'
+import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../../../data/elementary'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -29,7 +29,11 @@ export default function ElementaryWorldPage() {
 
   if (!world) return <div style={{ padding: 40, fontFamily: BODY }}>World not found.</div>
 
-  const activeId = world.modules.find(m => !done[m.id])?.id ?? null
+  const activeId     = world.modules.find(m => !done[m.id])?.id ?? null
+  const worldComplete = world.modules.every(m => done[m.id])
+  const worldIds      = isPT ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
+  const worldIdx      = worldIds.indexOf(worldId)
+  const nextWorldId   = worldIdx >= 0 && worldIdx < worldIds.length - 1 ? worldIds[worldIdx + 1] : null
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
@@ -42,6 +46,31 @@ export default function ElementaryWorldPage() {
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 24 }}>
           <h1 style={{ fontFamily: DISP, fontSize: 32, letterSpacing: '-0.02em', margin: 0, fontWeight: 400, color: BLACK }}>{world.title}</h1>
         </div>
+
+        {/* World complete banner */}
+        {worldComplete && (
+          <div style={{ background: BLACK, border: `1.5px solid ${GREEN}`, boxShadow: `6px 6px 0 0 ${GREEN}`, padding: '20px 24px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+            <div>
+              <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN, marginBottom: 4 }}>
+                {isPT ? 'Mundo Concluído ✓' : 'World Complete ✓'}
+              </div>
+              <div style={{ fontFamily: DISP, fontSize: 16, color: '#fff', letterSpacing: '-0.01em' }}>
+                {isPT ? 'Você completou todos os módulos!' : 'You finished every module!'}
+              </div>
+            </div>
+            {nextWorldId ? (
+              <button onClick={() => router.push(`/elementary/world/${nextWorldId}`)}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '12px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, flexShrink: 0 }}>
+                {isPT ? 'Próximo Mundo →' : 'Next World →'}
+              </button>
+            ) : (
+              <button onClick={() => router.push('/elementary/home')}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '12px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, flexShrink: 0 }}>
+                {isPT ? '← Início' : '← Home'}
+              </button>
+            )}
+          </div>
+        )}
 
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {world.modules.map((m, i) => {

@@ -34,8 +34,16 @@ export default function ElementaryHome() {
   }
 
   const worldIds = isPT ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
-  const label    = isPT ? 'Seus Mundos' : 'Your Worlds'
+  const label     = isPT ? 'Seus Mundos' : 'Your Worlds'
   const startHere = isPT ? 'Começar aqui' : 'Start here'
+
+  // Compute which worlds are fully complete
+  const worldDone: Record<number, boolean> = {}
+  worldIds.forEach(wid => {
+    const w = ELEMENTARY_WORLDS[wid]
+    worldDone[wid] = !!w && w.modules.every(m => done[m.id])
+  })
+  const firstIncomplete = worldIds.find(wid => !worldDone[wid])
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
@@ -60,21 +68,30 @@ export default function ElementaryHome() {
 
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {worldIds.map((wid, idx) => {
-            const world    = ELEMENTARY_WORLDS[wid]
-            const isActive = idx === 0
+            const world      = ELEMENTARY_WORLDS[wid]
+            const isComplete = worldDone[wid]
+            const isActive   = wid === firstIncomplete
 
             return (
               <div key={wid} onClick={() => router.push(`/elementary/world/${wid}`)}
-                style={{ display: 'flex', alignItems: 'center', padding: '15px 16px', background: '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none' }}>
-                <span style={{ fontFamily: BODY, fontSize: 12, color: DIM, width: 36, flexShrink: 0 }}>W{String(idx + 1).padStart(2, '0')}</span>
-                <span style={{ fontFamily: DISP, fontSize: 17, letterSpacing: '-0.01em', flex: 1, color: BLACK }}>{world.title}</span>
-                {isActive && (
+                style={{ display: 'flex', alignItems: 'center', padding: '15px 16px',
+                  background: isComplete ? BLACK : '#EBEBEB',
+                  border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`,
+                  cursor: 'pointer', userSelect: 'none' }}>
+                <span style={{ fontFamily: BODY, fontSize: 12, color: isComplete ? GREEN : DIM, width: 36, flexShrink: 0 }}>W{String(idx + 1).padStart(2, '0')}</span>
+                <span style={{ fontFamily: DISP, fontSize: 17, letterSpacing: '-0.01em', flex: 1, color: isComplete ? GREEN : BLACK }}>{world.title}</span>
+                {isComplete && (
+                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>
+                    {isPT ? 'Concluído ✓' : 'Done ✓'}
+                  </span>
+                )}
+                {isActive && !isComplete && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                     <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
                     {startHere}
                   </span>
                 )}
-                <span style={{ fontFamily: DISP, fontSize: 14, color: DIM }}>→</span>
+                <span style={{ fontFamily: DISP, fontSize: 14, color: isComplete ? GREEN : DIM }}>→</span>
               </div>
             )
           })}
