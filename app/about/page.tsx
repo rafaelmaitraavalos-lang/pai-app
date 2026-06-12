@@ -120,7 +120,7 @@ export default function AboutPage() {
                 <img
                   src={(person as any).portrait}
                   alt={person.name}
-                  style={{ width: 160, height: 160, objectFit: 'cover', objectPosition: 'top', marginBottom: 24, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }}
+                  style={{ width: 240, height: 280, objectFit: 'cover', objectPosition: 'top', marginBottom: 24, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }}
                 />
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, borderLeft: `2px solid ${BLACK}`, paddingLeft: 24 }}>
