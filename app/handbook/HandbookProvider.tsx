@@ -241,9 +241,11 @@ function HBButton({ onClick, showWelcome, username, spotlight }: {
           borderBottom: 'none', borderLeft: 'none', borderRight: 'none',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          padding: '12px 0',
+          paddingTop: 12,
+          paddingBottom: 'max(12px, calc(12px + env(safe-area-inset-bottom, 0px)))',
           animation: (showWelcome || spotlight) ? 'handbookPulse 2s ease-in-out infinite' : undefined,
           transition: 'all 0.3s',
+          touchAction: 'manipulation',
         }}
       >
         <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: spotlight ? BLACK : GREEN, userSelect: 'none' }}>
@@ -376,7 +378,7 @@ export default function HandbookProvider() {
       {/* Spotlight overlay — dims everything except the HB button */}
       {spotlight && !open && (
         <div style={{
-          position: 'fixed', inset: 0,
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 48,
           background: 'rgba(0,0,0,0.82)',
           zIndex: 46,
           pointerEvents: 'all',
