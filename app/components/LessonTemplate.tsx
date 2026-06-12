@@ -270,7 +270,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
   const slideText = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
-    : BLACK
+    : GREEN
 
   return (
     <main className="lesson-slide-main" style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
