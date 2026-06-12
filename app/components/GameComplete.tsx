@@ -1,8 +1,10 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { GAMES } from '../data/games'
-import { WORLDS, WORLD_IDS } from '../data'
+import { GAMES, GAME_TITLES_PT } from '../data/games'
+import { WORLDS, WORLD_IDS, WORLD_TITLES_PT } from '../data'
+import TRANSLATIONS from '../data/lessonTranslations'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -14,26 +16,36 @@ interface Props { slug: string }
 
 export default function GameComplete({ slug }: Props) {
   const router = useRouter()
+  const [isPT, setIsPT] = useState(false)
+  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+
   const game = GAMES.find(g => g.slug === slug)
   if (!game) return null
 
   const world        = WORLDS[game.world]
-  const nextMod      = world?.modules[game.module] // game.module is 1-indexed → modules[game.module] is the next
+  const nextMod      = world?.modules[game.module]
   const worldRoute   = game.world === 1 ? '/lessons' : `/world/${game.world}`
   const nextWorldIdx = WORLD_IDS.indexOf(game.world) + 1
   const nextWorldId  = !nextMod && nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
+
+  const gameTitle    = (isPT && GAME_TITLES_PT[game.slug]) || game.title
+  const worldTitle   = (isPT && WORLD_TITLES_PT[game.world]) || world?.title || (isPT ? 'Mundo' : 'World')
+  const nextModTitle = nextMod ? ((isPT && TRANSLATIONS['pt']?.[nextMod.id]?.title) || nextMod.title) : ''
+  const nextWorldTitle = nextWorldId
+    ? ((isPT && WORLD_TITLES_PT[nextWorldId]) || WORLDS[nextWorldId]?.title)
+    : ''
 
   return (
     <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
       <div style={{ width: '100%', maxWidth: 480, padding: '0 7vw', textAlign: 'center' }}>
         <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>
-          Game complete
+          {isPT ? 'Jogo concluído' : 'Game complete'}
         </div>
         <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
           <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
           <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>
         </div>
-        <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 8px', fontWeight: 400 }}>{game.title}</h1>
+        <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 8px', fontWeight: 400 }}>{gameTitle}</h1>
         <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {nextMod && (
@@ -41,7 +53,7 @@ export default function GameComplete({ slug }: Props) {
               onClick={() => router.push(`/lesson/${nextMod.id}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
-              Next: {nextMod.title} →
+              {isPT ? 'Próximo:' : 'Next:'} {nextModTitle} →
             </button>
           )}
           {!nextMod && nextWorldId && (
@@ -49,14 +61,14 @@ export default function GameComplete({ slug }: Props) {
               onClick={() => router.push(`/world/${nextWorldId}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
-              Next World: {WORLDS[nextWorldId]?.title} →
+              {isPT ? 'Próximo Mundo:' : 'Next World:'} {nextWorldTitle} →
             </button>
           )}
           <button
             onClick={() => router.push(worldRoute)}
             style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
           >
-            Back to {world?.title ?? 'World'}
+            {isPT ? 'Voltar para' : 'Back to'} {worldTitle}
           </button>
         </div>
       </div>
