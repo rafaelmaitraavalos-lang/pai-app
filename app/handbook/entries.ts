@@ -250,6 +250,168 @@ export const MIDDLE_UNLOCKABLE_ENTRIES: HandbookEntry[] = [
   },
 ]
 
+// ── Elementary PT-BR versions (idades 6–12) ───────────────────────────────────
+
+export const ELEMENTARY_STARTER_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'what-ai-is',
+    title: 'O que é IA',
+    body: 'IA significa Inteligência Artificial. É um programa de computador que aprendeu lendo milhões de livros, sites e histórias. Ele pode responder perguntas, escrever frases e conversar com você — mas não está vivo. É um programa muito inteligente.\n\nChatGPT, Claude e Gemini são ferramentas de IA diferentes, assim como YouTube e TikTok são apps de vídeo diferentes, mas não a mesma coisa.',
+    doLine: 'Quando alguém falar "a IA", pergunte qual delas.',
+  },
+  {
+    id: 'prompting-basics',
+    title: 'Conversando com a IA',
+    body: 'Quanto melhor você explica o que quer, melhor é a resposta. Em vez de "explique dinossauros", tente: "Explique por que os dinossauros se extinguiram em 3 frases para um aluno do 4º ano."\n\nDiga para quem é a resposta, qual o tamanho e qualquer detalhe extra. Se a primeira resposta não ficou boa, continue conversando. Diga "deixa mais curto" ou "use palavras mais simples".',
+    doLine: 'Tente: "Explique [assunto] em 3 frases para um aluno do [série]º ano."',
+  },
+  {
+    id: 'verification-basics',
+    title: 'Como saber se a IA está inventando',
+    body: 'A IA pode dizer coisas erradas com uma voz muito confiante — essa é a parte difícil. Se ela te disser um fato, um número ou uma citação, não acredite só porque parece certo.\n\nPergunte para um adulto ou cheque em um site confiável. A IA nem sempre está certa — ela só parece que está.',
+    doLine: 'Pergunte a um adulto ou cheque em um site confiável antes de acreditar em fatos importantes.',
+  },
+  {
+    id: 'academic-integrity',
+    title: 'Usando a IA para a escola sem trapacear',
+    body: 'Aqui está um teste simples: se a sua professora pedisse para você explicar a tarefa em voz alta, você conseguiria? Se sim, você provavelmente aprendeu algo. Se não, a IA pode ter feito o trabalho por você.\n\nUse a IA como um colega de estudo — ela pode fazer um quiz com você, explicar as coisas de um jeito diferente e ajudar você a entender. Mas VOCÊ deve fazer o verdadeiro pensamento.',
+    doLine: 'Tente: "Faça um quiz comigo sobre [assunto] e diga quais respostas errei."',
+  },
+]
+
+export const ELEMENTARY_UNLOCKABLE_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'choosing-the-right-tool',
+    title: 'Escolhendo a ferramenta certa',
+    unlocksAt: 4,
+    body: 'Ferramentas de IA diferentes são como apps diferentes — fazem coisas parecidas, mas não são iguais. ChatGPT e Claude são ótimos para escrever e explicar coisas. Perplexity é bom para pesquisar e mostra de onde veio a informação.\n\nVocê não precisa pagar por nenhuma delas — as versões gratuitas funcionam bem. Quando algo for realmente importante, experimente duas ferramentas e compare as respostas.',
+    doLine: 'Use a versão gratuita primeiro. Se duas ferramentas derem respostas diferentes, verifique.',
+  },
+  {
+    id: 'prompting-leveled-up',
+    title: 'Prompts ainda melhores',
+    unlocksAt: 5,
+    body: 'Adicionar mais detalhes melhora muito as respostas da IA. Tente três coisas:\n\n1. Dê a ela um papel — "Aja como um professor e me explique isso."\n2. Mostre um exemplo — cole algo que você gostou e diga "escreva o meu assim."\n3. Diga o formato — "faça uma lista", "dê 5 pontos" ou "escreva como uma historinha curta".',
+    doLine: 'Tente: "Aja como um [papel] e explique [assunto] no formato [formato]."',
+  },
+  {
+    id: 'catch-the-hallucination',
+    title: 'Detecte a alucinação',
+    unlocksAt: 6,
+    body: 'Às vezes a IA inventa citações e fatos que parecem completamente reais — mas não são. Isso se chama "alucinação".\n\nAntes de usar uma citação num trabalho, pesquise as palavras exatas no Google. Se não encontrar em nenhum site real, não use. O mesmo vale para títulos de livros e nomes de autores — sempre verifique.',
+    doLine: 'Pesquise no Google qualquer citação que a IA te der antes de usá-la.',
+  },
+  {
+    id: 'make-it-show-its-work',
+    title: 'Peça para ela mostrar o que fez',
+    unlocksAt: 11,
+    body: 'Quando precisar confiar na resposta, peça para a IA explicar passo a passo. Assim você consegue acompanhar e perceber os erros.\n\nVocê também pode perguntar "você tem certeza disso?" Uma boa IA vai dizer "não tenho certeza" quando não tiver. Nunca confie nos cálculos da IA sem verificar — peça para ela escrever cada passo.',
+    doLine: 'Tente: "Explique isso passo a passo para eu conseguir acompanhar."',
+  },
+  {
+    id: 'making-things-with-ai',
+    title: 'Criando coisas com IA',
+    unlocksAt: 13,
+    body: 'A IA pode ajudar a criar imagens, histórias, poemas e muito mais. O segredo é ser específico. "Um robô cartoon jogando futebol na chuva" funciona muito melhor do que "um robô".\n\nPara histórias, diga quem são os personagens, o que acontece e como você quer que termine. Sempre confira o que a IA fez antes de compartilhar — ela nem sempre acerta.',
+    doLine: 'Seja específico! Quanto mais detalhes você der, melhor será o resultado.',
+  },
+  {
+    id: 'privacy-and-safety',
+    title: 'Privacidade e segurança',
+    unlocksAt: 18,
+    body: 'Trate um chatbot como um estranho — não diga a ele o seu nome completo, endereço, nome da escola, número de telefone ou senhas.\n\nMesmo que o chatbot pareça simpático, você não sabe para onde vai a sua informação. Mantenha as coisas privadas em segredo. Se algo parecer estranho ao conversar com a IA, pare e fale com um adulto.',
+    doLine: 'Nunca escreva o seu endereço, escola ou número de telefone num chatbot.',
+  },
+  {
+    id: 'build-good-ai-habits',
+    title: 'Crie bons hábitos com a IA',
+    unlocksAt: 39,
+    body: 'Aqui está uma lista simples para cada vez que você abrir um chatbot:\n\nEscolha a ferramenta certa para o que você precisa. Diga para quem é a resposta e como você a quer. Verifique fatos importantes em uma segunda fonte. Use-a para aprender — não para pular o aprendizado. Mantenha suas informações pessoais em segredo. E sempre tome a decisão final você mesmo.',
+    doLine: 'Siga a lista toda vez e você vai usar a IA melhor do que a maioria dos adultos.',
+  },
+]
+
+// ── Middle school PT-BR versions (idades 11–14) ───────────────────────────────
+
+export const MIDDLE_STARTER_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'what-ai-is',
+    title: 'O que é Inteligência Artificial',
+    body: 'IA significa inteligência artificial. É chamada de "artificial" porque foi criada por pessoas, e de "inteligente" porque consegue fazer coisas que antes exigiam uma mente humana — escrever, traduzir ou responder perguntas. Mas a maior parte do que a IA faz é, na verdade, reconhecimento avançado de padrões, não raciocínio de verdade.\n\nChatGPT, Claude e Gemini são ferramentas de IA diferentes. Elas podem dar respostas diferentes para a mesma pergunta. Quando alguém disser "a IA disse", vale perguntar qual delas.',
+    doLine: 'Quando alguém disser "a IA disse", pergunte qual delas.',
+  },
+  {
+    id: 'prompting-basics',
+    title: 'Conversando com a IA',
+    body: 'Um pedido vago recebe uma resposta vaga. Em vez de "explique o aquecimento global", tente: "Explique o aquecimento global para um aluno do 7º ano em 4 frases com um exemplo."\n\nTrês coisas que sempre ajudam: diga para quem é a resposta, diga qual o tamanho e adicione uma instrução específica. Se a primeira resposta não ficou certa, continue conversando — diga "deixa mais curto", "dê um exemplo" ou "use palavras mais simples". Trate como uma conversa, não como uma pesquisa.',
+    doLine: 'Tente: "Explique [assunto] para um aluno do [série]º ano em [tamanho] com um exemplo."',
+  },
+  {
+    id: 'verification-basics',
+    title: 'Como saber se a IA está inventando',
+    body: 'A IA pode dar respostas erradas com um tom muito confiante — esse é o principal perigo. Quando ela fornecer um fato, uma citação ou uma fonte, não confie só porque parece certo.\n\nCopie a afirmação e pesquise. Se não encontrar nada confiável, trate como incerto. Citações inventadas pela IA são especialmente arriscadas porque citações falsas muitas vezes parecem completamente reais. Sempre verifique antes de usar qualquer coisa importante.',
+    doLine: 'Pesquise qualquer fato ou citação que a IA der antes de usar no seu trabalho.',
+  },
+  {
+    id: 'academic-integrity',
+    title: 'Usando a IA para a escola sem trapacear',
+    body: 'Um teste simples: se o professor te chamasse para explicar seu trabalho em voz alta, você conseguiria? Se sim, a IA provavelmente ajudou você a aprender. Se não, a IA provavelmente fez o trabalho por você.\n\nBoas formas de usar a IA: "Faça um quiz comigo sobre este capítulo", "Explique de um jeito diferente", "O que está errado no meu parágrafo?" Má forma: "Escreva minha redação." Além disso, verifique as regras da sua escola — cada aula é diferente.',
+    doLine: 'Entregue apenas trabalhos que você conseguiria explicar em voz alta se pedissem.',
+  },
+]
+
+export const MIDDLE_UNLOCKABLE_ENTRIES_PT: HandbookEntry[] = [
+  {
+    id: 'choosing-the-right-tool',
+    title: 'Escolhendo a ferramenta certa',
+    unlocksAt: 4,
+    body: 'Não existe uma IA "melhor" — ferramentas diferentes funcionam melhor para tarefas diferentes. Claude é forte para redação e textos longos. Perplexity é ótimo para pesquisa porque mostra fontes clicáveis. Gemini funciona bem com apps Google. ChatGPT é uma ferramenta geral sólida.\n\nAs versões gratuitas são boas o suficiente para a maioria dos trabalhos escolares — você não precisa pagar. Quando a resposta realmente importa, pergunte para duas ferramentas e compare. Se elas discordarem, é seu sinal para verificar você mesmo.',
+    doLine: 'Escolha a ferramenta que se adapta à tarefa. Compare respostas quando algo for importante.',
+  },
+  {
+    id: 'prompting-leveled-up',
+    title: 'Prompts de próximo nível',
+    unlocksAt: 5,
+    body: 'Três melhorias fáceis para respostas melhores:\n\n1. Dê um papel a ela — "Aja como um professor de história e explique as causas da 1ª Guerra Mundial."\n2. Mostre um exemplo — cole um parágrafo que você gostou e diga "escreva o meu neste estilo."\n3. Peça o formato que você quer — "faça uma lista com pontos", "coloque em uma tabela" ou "dê um plano numerado."\n\nPara tarefas grandes, peça para a IA planejar primeiro para que você possa corrigir o plano antes que ela escreva tudo.',
+    doLine: 'Tente: "Aja como [papel], explique [assunto] no formato [formato]."',
+  },
+  {
+    id: 'catch-the-hallucination',
+    title: 'Detecte a alucinação',
+    unlocksAt: 6,
+    body: 'A coisa mais perigosa que a IA pode te dar é uma citação falsa — porque elas parecem completamente reais. Antes de usar qualquer citação no seu trabalho, pesquise as palavras exatas no Google. Confirme se é real, palavra por palavra, e se foi dita pela pessoa nomeada.\n\nFaça o mesmo com as fontes. Um título que soa real não significa nada até você abrir o artigo de verdade. Quanto maior for o risco, com mais cuidado você verifica.',
+    doLine: 'Pesquise toda citação entre aspas no Google antes de usá-la.',
+  },
+  {
+    id: 'make-it-show-its-work',
+    title: 'Peça para ela mostrar o trabalho',
+    unlocksAt: 11,
+    body: 'Quando uma resposta importa, não aceite de imediato. Peça para a IA detalhar seu raciocínio passo a passo — isso torna muito mais fácil perceber erros.\n\nVocê também pode perguntar "qual é o seu grau de certeza?" ou "o que poderia te fazer mudar de resposta?" Um honesto "não tenho certeza" é um bom sinal. Para matemática, sempre peça para ela mostrar cada passo, ou verifique os números você mesmo.',
+    doLine: 'Tente: "Explique seu raciocínio passo a passo e diga o seu grau de certeza."',
+  },
+  {
+    id: 'making-things-with-ai',
+    title: 'Criando coisas com IA',
+    unlocksAt: 13,
+    body: 'Use a ferramenta certa para o que você está criando — uma ferramenta de imagem para imagens, de escrita para texto, de código para código.\n\nPara imagens, os detalhes importam: "uma raposa em aquarela em uma floresta nevada ao entardecer com luz suave" dá um resultado muito melhor do que "uma raposa". Para código, peça para ela explicar cada parte para que você possa entender e corrigir depois. Sempre revise o que a IA criou antes de compartilhar — parecer pronto não é a mesma coisa que estar certo.',
+    doLine: 'Seja específico e revise o resultado antes de compartilhar.',
+  },
+  {
+    id: 'privacy-and-safety',
+    title: 'Privacidade e segurança',
+    unlocksAt: 18,
+    body: 'Trate um chatbot como uma conversa que pode estar sendo gravada. Nunca escreva suas senhas, endereço, números de documentos ou informações privadas de outras pessoas.\n\nSe disponível, abra as Configurações e desative "treinar com meus dados". Use um chat temporário quando quiser que algo não seja salvo. Excluir um chat nem sempre apaga no servidor da empresa. A regra simples: não escreva nada que você ficaria mal se alguém visse.',
+    doLine: 'Verifique suas configurações e nunca escreva nada que você se arrependeria de compartilhar.',
+  },
+  {
+    id: 'build-good-ai-habits',
+    title: 'Crie bons hábitos com a IA',
+    unlocksAt: 39,
+    body: 'Aqui está o manual inteiro como uma rotina para toda vez que você abrir um chatbot:\n\nEscolha a ferramenta certa. Diga para quem é a resposta e qual formato você quer. Verifique qualquer coisa importante em uma segunda fonte. Use-a para aprender, não para pular o aprendizado. Mantenha suas informações pessoais de fora. Tome a decisão final você mesmo.\n\nFaça isso automaticamente e você estará usando a IA melhor do que a maioria dos adultos.',
+    doLine: 'Siga a lista toda vez que abrir um chatbot.',
+  },
+]
+
 // ── PT-BR versions ────────────────────────────────────────────────────────────
 
 export const STARTER_ENTRIES_PT: HandbookEntry[] = [

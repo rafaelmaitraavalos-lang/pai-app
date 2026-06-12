@@ -5,7 +5,9 @@ import { usePathname } from 'next/navigation'
 import {
   STARTER_ENTRIES, UNLOCKABLE_ENTRIES,
   ELEMENTARY_STARTER_ENTRIES, ELEMENTARY_UNLOCKABLE_ENTRIES,
+  ELEMENTARY_STARTER_ENTRIES_PT, ELEMENTARY_UNLOCKABLE_ENTRIES_PT,
   MIDDLE_STARTER_ENTRIES, MIDDLE_UNLOCKABLE_ENTRIES,
+  MIDDLE_STARTER_ENTRIES_PT, MIDDLE_UNLOCKABLE_ENTRIES_PT,
   STARTER_ENTRIES_PT, UNLOCKABLE_ENTRIES_PT,
   LOCKED_COUNT, type HandbookEntry,
 } from './entries'
@@ -28,8 +30,14 @@ function getLevel(pathname: string): Level {
 }
 
 function getEntries(level: Level, isPT: boolean) {
-  if (level === 'elementary') return { starters: ELEMENTARY_STARTER_ENTRIES, unlockPool: ELEMENTARY_UNLOCKABLE_ENTRIES }
-  if (level === 'middle')     return { starters: MIDDLE_STARTER_ENTRIES,     unlockPool: MIDDLE_UNLOCKABLE_ENTRIES }
+  if (level === 'elementary') return {
+    starters:   isPT ? ELEMENTARY_STARTER_ENTRIES_PT   : ELEMENTARY_STARTER_ENTRIES,
+    unlockPool: isPT ? ELEMENTARY_UNLOCKABLE_ENTRIES_PT : ELEMENTARY_UNLOCKABLE_ENTRIES,
+  }
+  if (level === 'middle') return {
+    starters:   isPT ? MIDDLE_STARTER_ENTRIES_PT   : MIDDLE_STARTER_ENTRIES,
+    unlockPool: isPT ? MIDDLE_UNLOCKABLE_ENTRIES_PT : MIDDLE_UNLOCKABLE_ENTRIES,
+  }
   return {
     starters:   isPT ? STARTER_ENTRIES_PT   : STARTER_ENTRIES,
     unlockPool: isPT ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES,
