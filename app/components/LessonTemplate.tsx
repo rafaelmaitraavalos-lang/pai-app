@@ -281,7 +281,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const highlightBg = isElem ? slideAccent : 'transparent'  // title span + tag badge
 
   return (
-    <main className="lesson-slide-main" style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
+    <main className="lesson-slide-main" style={{ minHeight: '100vh', overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
 
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -291,11 +291,11 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         </button>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
-        style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0, transform: 'scale(1.06)', transformOrigin: 'center center', transition: 'transform 0.28s ease' }}
+        style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0 }}
       >
 
         {/* Kicker — same as fake */}

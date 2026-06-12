@@ -216,13 +216,6 @@
   to   { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* ── Disable slide zoom when window height is too short ─────────────────────── */
-@media (max-height: 780px) {
-  .lesson-slide-scaler {
-    transform: none !important;
-  }
-}
-
 /* ── Lesson slide: desktop grid ─────────────────────────────────────────────── */
 .lesson-slide-grid {
   display: grid;
