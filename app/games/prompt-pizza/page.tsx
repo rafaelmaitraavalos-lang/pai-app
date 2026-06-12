@@ -302,6 +302,65 @@ const ROUNDS: Round[] = [
   },
 ]
 
+const ROUNDS_PT: Round[] = [
+  {
+    type:     'margherita',
+    label:    'Margherita Clássica',
+    hint:     'Vejo: molho de tomate, mussarela derretida, folhas de manjericão fresco',
+    required: [['queijo','mussarela'],['tomate','molho de tomate'],['manjericão']],
+    forbidden:[],
+    time: 65,
+  },
+  {
+    type:     'pepperoni',
+    label:    'Pepperoni',
+    hint:     'Vejo: fatias de pepperoni, queijo dourado, molho de tomate',
+    required: [['pepperoni'],['queijo','mussarela'],['tomate','molho']],
+    forbidden:[],
+    time: 60,
+  },
+  {
+    type:     'veggie',
+    label:    'Supremo Vegetariano',
+    hint:     'Vejo: pimentões verdes, vermelhos e amarelos, cogumelos, cebola — sem carne',
+    required: [['vegetariano','vegano','pimentão','legume','verdura'],['cogumelo'],['cebola']],
+    forbidden:['carne','pepperoni','frango','linguiça'],
+    time: 60,
+  },
+  {
+    type:     'bbq',
+    label:    'Frango BBQ',
+    hint:     'Vejo: molho BBQ escuro, pedaços de frango dourados, anéis de cebola',
+    required: [['frango'],['bbq','churrasco'],['cebola']],
+    forbidden:['molho de tomate','marinara'],
+    time: 55,
+  },
+  {
+    type:     'hawaiian',
+    label:    'Havaiana',
+    hint:     'Vejo: pedaços de abacaxi, fatias de presunto rosado, queijo, molho de tomate',
+    required: [['abacaxi'],['presunto'],['queijo','mussarela']],
+    forbidden:[],
+    time: 55,
+  },
+  {
+    type:     'mushroom',
+    label:    'Cogumelo e Alho',
+    hint:     'Vejo: molho branco cremoso, muitos cogumelos, pedaços de alho',
+    required: [['cogumelo'],['alho'],['creme','molho branco','nata']],
+    forbidden:[],
+    time: 50,
+  },
+  {
+    type:     'supreme',
+    label:    'Suprema',
+    hint:     'Vejo: pepperoni, linguiça, azeitonas verdes, pimentão verde, cebola',
+    required: [['pepperoni'],['linguiça','salsicha'],['azeitona'],['pimentão'],['cebola']],
+    forbidden:[],
+    time: 45,
+  },
+]
+
 // ── helpers ─────────────────────────────────────────────────────────────────
 function evaluate(text: string, round: Round) {
   const t = text.toLowerCase()
@@ -351,11 +410,15 @@ export default function PromptPizzaGame() {
   const [timeLeft, setTimeLeft] = useState(ROUNDS[0].time)
   const [result,   setResult]   = useState<Result | null>(null)
   const [shake,    setShake]    = useState(false)
+  const [isPT,     setIsPT]     = useState(false)
 
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  const round = ROUNDS[idx]
+  const rounds = isPT ? ROUNDS_PT : ROUNDS
+  const round  = rounds[idx]
+
+  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
   useEffect(() => {
     if (screen !== 'play') return
@@ -390,7 +453,7 @@ export default function PromptPizzaGame() {
 
   function next() {
     setPrompt(''); setResult(null)
-    if (idx + 1 >= ROUNDS.length) { setScreen('gameover') }
+    if (idx + 1 >= rounds.length) { setScreen('gameover') }
     else { setIdx(i => i + 1); setScreen('play') }
   }
 
@@ -406,23 +469,22 @@ export default function PromptPizzaGame() {
   // ── title ──────────────────────────────────────────────────────────────────
   if (screen === 'title') return (
     <div style={S.root}>
-      <button onClick={() => router.back()} style={S.backBtn}>← back</button>
+      <button onClick={() => router.back()} style={S.backBtn}>{isPT ? '← voltar' : '← back'}</button>
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
         <PizzaSVG mood="happy" />
         <h1 style={{ ...S.neon(PINK), fontSize:44, letterSpacing:4, textAlign:'center', margin:0 }}>
-          PROMPT<br />PIZZA
+          {isPT ? <>PIZZA<br />COM<br />PROMPT</> : <>PROMPT<br />PIZZA</>}
         </h1>
         <p style={{ color:'#aaa', fontFamily:'monospace', fontSize:13, textAlign:'center', maxWidth:280, lineHeight:1.6, margin:0 }}>
-          Look at the pizza illustration.<br />
-          Write the AI prompt that made it.<br />
-          Describe every topping you see!
+          {isPT
+            ? <>Veja a ilustração da pizza.<br />Escreva o prompt de IA que a criou.<br />Descreva cada ingrediente que vê!</>
+            : <>Look at the pizza illustration.<br />Write the AI prompt that made it.<br />Describe every topping you see!</>}
         </p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, width:260 }}>
-          {[
-            ['Describe', 'Name every topping and ingredient you see'],
-            ['Be specific','The more detail in your prompt, the better'],
-            ['Speed','Faster answers earn more bonus points'],
-          ].map(([t,d]) => (
+          {(isPT
+            ? [['Descreva','Nomeie cada ingrediente que você vê'],['Seja específico','Quanto mais detalhe, melhor'],['Velocidade','Respostas rápidas ganham pontos bônus']]
+            : [['Describe','Name every topping and ingredient you see'],['Be specific','The more detail in your prompt, the better'],['Speed','Faster answers earn more bonus points']]
+          ).map(([t,d]) => (
             <div key={t} style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
               <span style={{ color:GREEN, fontFamily:'monospace', fontSize:12, flexShrink:0 }}>▸</span>
               <span style={{ color:'#ccc', fontFamily:'monospace', fontSize:12 }}>
@@ -431,7 +493,7 @@ export default function PromptPizzaGame() {
             </div>
           ))}
         </div>
-        <button style={S.bigBtn(PINK)} onClick={() => setScreen('play')}>START →</button>
+        <button style={S.bigBtn(PINK)} onClick={() => setScreen('play')}>{isPT ? 'COMEÇAR →' : 'START →'}</button>
       </div>
     </div>
   )
@@ -442,13 +504,15 @@ export default function PromptPizzaGame() {
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:16, width:'100%', maxWidth:460 }}>
         <PizzaSVG mood={result.ok ? 'happy' : 'sad'} />
         <div style={{ ...S.neon(result.ok ? GREEN : PINK), fontSize:26, letterSpacing:3 }}>
-          {result.ok ? '✓ GREAT PROMPT!' : '✗ MISSING DETAILS'}
+          {result.ok
+            ? (isPT ? '✓ ÓTIMO PROMPT!' : '✓ GREAT PROMPT!')
+            : (isPT ? '✗ DETALHES FALTANDO' : '✗ MISSING DETAILS')}
         </div>
         {!result.ok && (
           <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:8 }}>
             {result.missing.length > 0 && (
               <div style={S.feedbackBox(PINK)}>
-                <span style={{ color:PINK, fontFamily:'monospace', fontSize:11 }}>SHOULD HAVE MENTIONED</span>
+                <span style={{ color:PINK, fontFamily:'monospace', fontSize:11 }}>{isPT ? 'DEVERIA TER MENCIONADO' : 'SHOULD HAVE MENTIONED'}</span>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginTop:4 }}>
                   {result.missing.map(m => <Tag key={m} label={m} color={PINK} />)}
                 </div>
@@ -456,7 +520,7 @@ export default function PromptPizzaGame() {
             )}
             {result.violated.length > 0 && (
               <div style={S.feedbackBox('#ff8800')}>
-                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>THAT PIZZA DOESN&apos;T HAVE</span>
+                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>{isPT ? 'ESSA PIZZA NÃO TEM' : "THAT PIZZA DOESN'T HAVE"}</span>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginTop:4 }}>
                   {result.violated.map(v => <Tag key={v} label={v} color="#ff8800" />)}
                 </div>
@@ -469,7 +533,9 @@ export default function PromptPizzaGame() {
         </div>
         <div style={{ color:'#555', fontFamily:'monospace', fontSize:12 }}>Total: {score} pts</div>
         <button style={S.bigBtn(GREEN)} onClick={next}>
-          {idx + 1 >= ROUNDS.length ? 'SEE SCORE →' : 'NEXT PIZZA →'}
+          {idx + 1 >= rounds.length
+            ? (isPT ? 'VER PONTUAÇÃO →' : 'SEE SCORE →')
+            : (isPT ? 'PRÓXIMA PIZZA →' : 'NEXT PIZZA →')}
         </button>
       </div>
     </div>
@@ -477,7 +543,7 @@ export default function PromptPizzaGame() {
 
   // ── game over ──────────────────────────────────────────────────────────────
   if (screen === 'gameover') {
-    const max = ROUNDS.length * 200 + ROUNDS.reduce((a,r) => a+r.time*3, 0)
+    const max = rounds.length * 200 + rounds.reduce((a,r) => a+r.time*3, 0)
     const pct = Math.round((score / max) * 100)
     const grade = pct>=90?'S':pct>=75?'A':pct>=55?'B':pct>=35?'C':'D'
     const gc    = pct>=75?GREEN:pct>=55?'#ffdd00':PINK
@@ -485,13 +551,13 @@ export default function PromptPizzaGame() {
       <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
           <PizzaSVG mood="happy" />
-          <div style={{ ...S.neon(GREEN), fontSize:28, letterSpacing:4 }}>RESTAURANT CLOSED</div>
+          <div style={{ ...S.neon(GREEN), fontSize:28, letterSpacing:4 }}>{isPT ? 'RESTAURANTE FECHADO' : 'RESTAURANT CLOSED'}</div>
           <div style={{ ...S.neon(gc), fontSize:72, letterSpacing:8 }}>{grade}</div>
           <div style={{ color:GREEN, fontFamily:'monospace', fontSize:24, letterSpacing:2 }}>{score} pts</div>
-          <div style={{ color:'#555', fontFamily:'monospace', fontSize:11 }}>{ROUNDS.length} pizzas · max {max} pts</div>
-          <button style={S.bigBtn(PINK)} onClick={restart}>PLAY AGAIN →</button>
+          <div style={{ color:'#555', fontFamily:'monospace', fontSize:11 }}>{rounds.length} {isPT ? 'pizzas · máx' : 'pizzas · max'} {max} pts</div>
+          <button style={S.bigBtn(PINK)} onClick={restart}>{isPT ? 'JOGAR DE NOVO →' : 'PLAY AGAIN →'}</button>
           <button onClick={() => router.back()} style={{ background:'none', border:'none', color:'#444', fontFamily:'monospace', fontSize:12, cursor:'pointer' }}>
-            ← back
+            {isPT ? '← voltar' : '← back'}
           </button>
         </div>
       </div>
@@ -504,7 +570,7 @@ export default function PromptPizzaGame() {
       {/* HUD */}
       <div style={{ width:'100%', maxWidth:520, display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
         <span style={{ color:'#444', fontFamily:'monospace', fontSize:11 }}>
-          PIZZA {idx+1} / {ROUNDS.length}
+          {isPT ? 'PIZZA' : 'PIZZA'} {idx+1} / {rounds.length}
         </span>
         <span style={{ color:GREEN, fontFamily:'monospace', fontSize:13, letterSpacing:1 }}>
           {score} pts
@@ -531,7 +597,7 @@ export default function PromptPizzaGame() {
 
         {/* Instruction */}
         <div style={{ color:'#555', fontFamily:'monospace', fontSize:11, textAlign:'center', letterSpacing:1 }}>
-          WRITE THE AI PROMPT THAT MADE THIS PIZZA ↓
+          {isPT ? 'ESCREVA O PROMPT DE IA QUE CRIOU ESSA PIZZA ↓' : 'WRITE THE AI PROMPT THAT MADE THIS PIZZA ↓'}
         </div>
 
         {/* Prompt input */}
@@ -547,7 +613,7 @@ export default function PromptPizzaGame() {
               onChange={e => setPrompt(e.target.value)}
               onKeyDown={e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); submit() } }}
               rows={3}
-              placeholder="Describe the pizza you see... (Enter to submit)"
+              placeholder={isPT ? 'Descreva a pizza que você vê... (Enter para enviar)' : 'Describe the pizza you see... (Enter to submit)'}
               style={{
                 width:'100%', boxSizing:'border-box' as const,
                 background:'#0a0a0a', color:'#fff',
@@ -566,12 +632,12 @@ export default function PromptPizzaGame() {
         </div>
 
         <button style={S.bigBtn(GREEN)} onClick={submit}>
-          SUBMIT PROMPT →
+          {isPT ? 'ENVIAR PROMPT →' : 'SUBMIT PROMPT →'}
         </button>
 
         <div style={{ textAlign:'center', color:timerColor, fontFamily:'monospace', fontSize:11,
           textShadow:`0 0 6px ${timerColor}`, letterSpacing:2 }}>
-          {timeLeft}s remaining
+          {isPT ? `${timeLeft}s restantes` : `${timeLeft}s remaining`}
         </div>
       </div>
 
