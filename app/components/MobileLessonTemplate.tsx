@@ -183,10 +183,11 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   }
 
   // ── Slides ──────────────────────────────────────────────────────────────────
-  const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
-  const slideText = theme === 'elementary'
-    ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
-    : GREEN
+  const isElem    = theme === 'elementary'
+  const slideBg   = isElem ? '#FAFAFA' : '#fff'
+  const slideAccent = isElem ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88') : GREEN
+  const slideText   = slideAccent
+  const highlightBg = isElem ? slideAccent : 'transparent'
 
   return (
     <main style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: slideBg, maxWidth: 480, margin: '0 auto', transition: 'background 0.4s ease' }}>
@@ -196,7 +197,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
         {/* Kicker */}
         <div style={{ paddingTop: 20, paddingBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <span style={{ color: BLACK, background: slideText, padding: '1px 5px' }}>{stop.tag}</span>
+            <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
             <span style={{ color: FAINT }}>·</span>
             <span style={{ color: DIM }}>{title}</span>
           </div>
@@ -223,7 +224,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             lineHeight: 1.2, letterSpacing: '-0.03em',
             margin: '0 0 16px', color: BLACK,
           }}>
-            <span style={{ background: slideText, padding: '2px 5px', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' } as React.CSSProperties}>
+            <span style={{ background: highlightBg, padding: highlightBg === 'transparent' ? '2px 0' : '2px 5px', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' } as React.CSSProperties}>
               {stop.title}
             </span>
           </h1>

@@ -267,10 +267,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
-  const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
-  const slideText = theme === 'elementary'
-    ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
-    : GREEN
+  const isElem    = theme === 'elementary'
+  const slideBg   = isElem ? '#FAFAFA' : '#fff'
+  const slideAccent = isElem ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88') : GREEN
+  // For regular lessons: no background highlight on title/tag; green only for interactive elements
+  const slideText   = slideAccent          // buttons, dots, image shadow
+  const highlightBg = isElem ? slideAccent : 'transparent'  // title span + tag badge
 
   return (
     <main className="lesson-slide-main" style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
@@ -294,7 +296,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         <div>
           <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <span style={{ color: BLACK, background: slideText, padding: '1px 5px' }}>{stop.tag}</span>
+              <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
               <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}
@@ -340,7 +342,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               lineHeight: 1.15, letterSpacing: '-0.03em',
               margin: '0 0 28px', color: BLACK,
             }}>
-              <span style={{ background: slideText, padding: '2px 6px', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' } as React.CSSProperties}>
+              <span style={{ background: highlightBg, padding: highlightBg === 'transparent' ? '2px 0' : '2px 6px', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' } as React.CSSProperties}>
                 {stop.title}
               </span>
             </h1>
