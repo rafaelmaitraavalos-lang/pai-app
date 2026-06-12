@@ -32,6 +32,15 @@ const people = {
         'Outside of her academic and extracurricular work, Ryan enjoys running, spending time outdoors, and exploring the connections between science, storytelling, and community.',
       ],
     },
+    {
+      name: 'Taj Maitra Avalos',
+      age:  'Age 10',
+      bio: [
+        'Taj Maitra Avalos is a curious and creative ten-year-old with a love of both numbers and music. Her favorite subject is math, and she enjoys running, sailing, soccer, and listening to audiobooks whenever she can.',
+        'An accomplished pianist and composer, Taj has received statewide recognition for her original musical work.',
+        'Whether she is solving a math problem, writing music, or heading out on the water, she brings focus, imagination, and enthusiasm to everything she does.',
+      ],
+    },
   ],
   pt: [
     {
@@ -52,6 +61,15 @@ const people = {
         'Ryan é integrante do Marin Search and Rescue. Está envolvida em diversas iniciativas comunitárias voltadas à ampliação do acesso a oportunidades educacionais e criativas para jovens. É fundadora e editora da Lost & Found, uma revista literária sazonal que abre espaço para a autoexpressão honesta por meio da linguagem.',
         'Como escritora, é Medalhista Nacional do Scholastic Art & Writing Awards e recebeu o prêmio First Class do NCTE Promising Young Writers Award. Seus textos foram publicados na Curieux Journal e na Stone Soup.',
         'Além de seu trabalho acadêmico e extracurricular, Ryan gosta de correr, passar tempo ao ar livre e explorar as conexões entre ciência, narrativa e comunidade.',
+      ],
+    },
+    {
+      name: 'Taj Maitra Avalos',
+      age:  '10 anos',
+      bio: [
+        'Taj Maitra Avalos tem dez anos e é uma criança curiosa e criativa, com amor tanto pelos números quanto pela música. Sua matéria favorita é matemática, e ela gosta de correr, velejar, jogar futebol e ouvir audiobooks sempre que pode.',
+        'Pianista e compositora talentosa, Taj já recebeu reconhecimento estadual por suas composições originais.',
+        'Seja resolvendo um problema de matemática, escrevendo música ou saindo para o mar, ela traz foco, imaginação e entusiasmo a tudo o que faz.',
       ],
     },
   ],
