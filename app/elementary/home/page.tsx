@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -88,6 +89,9 @@ export default function ElementaryHome() {
           {username && (
             <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{username}</span>
           )}
+          <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>
+            {isPT ? 'Sobre' : 'About'}
+          </Link>
           <button onClick={signOut} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
             {isPT ? 'Sair' : 'Sign out'}
           </button>

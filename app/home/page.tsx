@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { WORLDS, WORLD_IDS, getWorldTitle } from '../data'
 import { isElementaryGrade, isMiddleSchoolGrade } from '../data/elementary'
 import { loadProgress } from '@/lib/progress'
@@ -66,6 +67,9 @@ export default function Home() {
               {username}
             </span>
           )}
+          <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>
+            {isPT ? 'Sobre' : 'About'}
+          </Link>
           <button
             onClick={signOut}
             style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}

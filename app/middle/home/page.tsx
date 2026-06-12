@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_LESSONS } from '../../data/elementary'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -45,6 +46,7 @@ export default function MiddleSchoolHome() {
           {username && (
             <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{username}</span>
           )}
+          <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>About</Link>
           <button onClick={signOut} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
             Sign out
           </button>
