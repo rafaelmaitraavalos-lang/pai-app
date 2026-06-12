@@ -111,25 +111,31 @@ export default function AboutPage() {
           {isPT ? (
             <>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
-                Ryan, Taj e Rafa são estudantes com ensino domiciliar que compartilham uma curiosidade sobre como a tecnologia está transformando a forma como os jovens aprendem, criam e entendem o mundo ao redor. Ao perceber como a IA estava rapidamente se tornando parte do cotidiano, perceberam que muitos estudantes da sua idade a usavam sem nunca ter recebido uma explicação clara sobre como ela funciona, onde pode falhar ou como usá-la com responsabilidade.
+                Olá! Somos três irmãos — Ryan, Taj e Rafa — e criamos o PAI. Como estudantes com ensino domiciliar, compartilhamos uma curiosidade sobre como a tecnologia está transformando a forma como os jovens aprendem, criam e entendem o mundo ao redor.
               </p>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
-                Juntos, criaram o aplicativo para tornar a alfabetização em IA mais acessível por meio de uma experiência envolvente e adequada à idade. O objetivo é ajudar os jovens a entender a tecnologia por trás da IA, reconhecer suas limitações, proteger sua privacidade e utilizá-la como ferramenta de aprendizagem — e não como um atalho para evitar o aprendizado.
+                À medida que a IA foi se tornando cada vez mais presente no cotidiano, percebemos que muitas crianças a estavam usando sem nunca ter recebido uma explicação clara sobre como ela realmente funciona, onde pode falhar ou como usá-la com responsabilidade. Criamos o PAI para tornar essas ideias mais fáceis de entender por meio de uma experiência envolvente.
+              </p>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
+                Nosso objetivo é ajudar os jovens a entender a tecnologia por trás da IA, reconhecer suas limitações, proteger sua privacidade e usá-la como ferramenta de aprendizagem — e não como um atalho para evitar o aprendizado.
               </p>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: 0 }}>
-                Em sua essência, o projeto reflete a crença deles de que as crianças não devem ser apenas usuárias passivas das novas tecnologias: elas devem se sentir preparadas para questioná-las, compreendê-las e tomar decisões conscientes sobre como essas tecnologias se encaixam em suas vidas.
+                Acreditamos que as crianças não devem ser simplesmente usuárias passivas das novas tecnologias. Elas devem se sentir confiantes para fazer perguntas, pensar de forma crítica e tomar decisões conscientes sobre como a IA se encaixa em suas vidas.
               </p>
             </>
           ) : (
             <>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
-                As homeschooled students, Ryan, Taj, and Rafa share a curiosity about how technology is changing the way young people learn, create, and understand the world around them. After seeing how quickly AI was becoming part of everyday life, they realized that many students their age were using it without being given a clear explanation of how it works, where it can go wrong, or how to use it responsibly.
+                Hi there! We are three siblings, Ryan, Taj, and Rafa, and we built PAI AI. As homeschooled students, we share a curiosity about how technology is changing the way young people learn, create, and understand the world around them.
               </p>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
-                Together, they built the app to make AI literacy more accessible through an engaging, age-appropriate experience. Their goal is to help young people understand the technology behind AI, recognize its limitations, protect their privacy, and use it as a tool for learning rather than a shortcut around it.
+                As AI became a bigger part of everyday life, we noticed that many kids were using it without being given a clear explanation of how it actually works, where it can go wrong, or how to use it responsibly. We built PAI AI to make those ideas easier to understand through an engaging experience.
+              </p>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
+                Our goal is to help young people understand the technology behind AI, recognize its limitations, protect their privacy, and use it as a tool for learning rather than a shortcut around it.
               </p>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: 0 }}>
-                At its core, the project reflects their belief that kids should not simply be passive users of new technology: they should feel equipped to question it, understand it, and make thoughtful decisions about how it fits into their lives.
+                We believe kids should not simply be passive users of new technology. They should feel confident asking questions, thinking critically, and making thoughtful choices about how AI fits into their lives.
               </p>
             </>
           )}
