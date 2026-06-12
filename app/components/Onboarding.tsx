@@ -285,10 +285,18 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
           {/* 0: Welcome */}
           {screen === 0 && (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28, textAlign: 'center' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
+              <video
+                src="/pig.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', maxWidth: 340, borderRadius: 12, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }}
+              />
               <div>
-                <div style={{ fontFamily: DISP, fontSize: 72, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em', }}>PAI</div>
-                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 10, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
+                <div style={{ fontFamily: DISP, fontSize: 64, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em' }}>PAI</div>
+                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 8, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
               </div>
               <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 260 }}>
                 <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>Quick setup — 6 questions, about 2 minutes.</p>
