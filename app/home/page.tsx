@@ -37,9 +37,7 @@ export default function Home() {
 
   const signOut = async () => {
     await fetch('/api/auth', { method: 'DELETE' })
-    localStorage.removeItem('pai_onboarding_done')
-    localStorage.removeItem('pai_username')
-    localStorage.removeItem('pai_handbook_seen')
+    Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
     router.replace('/')
   }
 

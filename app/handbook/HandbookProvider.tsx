@@ -67,7 +67,7 @@ function IndexView({ onSelect, onClose, unlockedIds, isPT, tourIdx }: {
             >
               <span style={{ fontFamily: BODY, fontSize: 10, color: isHighlighted ? GREEN : DIM, width: 20, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
               <span style={{ fontFamily: DISP, fontSize: 12, lineHeight: 1.2, flex: 1, color: isHighlighted ? GREEN : BLACK }}>{entry.title}</span>
-              <span style={{ fontFamily: BODY, fontSize: 12, color: isHighlighted ? GREEN : DIM }}>{isHighlighted ? '→ read' : '→'}</span>
+              <span style={{ fontFamily: BODY, fontSize: 12, color: isHighlighted ? GREEN : DIM }}>{isHighlighted ? (isPT ? '→ ler' : '→ read') : '→'}</span>
             </button>
           )
         })}

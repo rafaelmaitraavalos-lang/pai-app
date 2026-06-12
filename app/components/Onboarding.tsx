@@ -162,10 +162,16 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       }
 
       const { user, isNew } = data
-      localStorage.setItem('pai_username', user.username)
 
-      // Returning user (login mode, or signup found existing) — load profile and go home
+      // Always wipe every pai_* key first — clean slate regardless of who was here before
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('pai_'))
+        .forEach(k => localStorage.removeItem(k))
+
+      // Returning user (login) — restore full profile from DB and go straight home
       if (!isNew || authMode === 'login') {
+        localStorage.setItem('pai_username',        user.username)
+        localStorage.setItem('pai_onboarding_done', 'true')
         if (user.lang)      localStorage.setItem('pai_lang',      user.lang)
         if (user.grade)     localStorage.setItem('pai_grade',     user.grade)
         if (user.goal)      localStorage.setItem('pai_goal',      user.goal)
@@ -177,11 +183,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         return
       }
 
-      // Brand new signup — clear any stale state from a previous user on this device
-      localStorage.removeItem('pai_handbook_seen')
-      Object.keys(localStorage)
-        .filter(k => k.startsWith('pai_lesson_'))
-        .forEach(k => localStorage.removeItem(k))
+      // New signup — restore only what they've already chosen, let onboarding finish the rest
+      localStorage.setItem('pai_username', user.username)
+      if (country?.lang) localStorage.setItem('pai_lang', country.lang)
 
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)

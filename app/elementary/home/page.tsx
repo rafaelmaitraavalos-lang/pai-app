@@ -29,9 +29,7 @@ export default function ElementaryHome() {
 
   const signOut = async () => {
     await fetch('/api/auth', { method: 'DELETE' })
-    localStorage.removeItem('pai_onboarding_done')
-    localStorage.removeItem('pai_username')
-    localStorage.removeItem('pai_handbook_seen')
+    Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
     router.replace('/')
   }
 
