@@ -163,10 +163,20 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
       const { user, isNew } = data
 
-      // Always wipe every pai_* key first — clean slate regardless of who was here before
-      Object.keys(localStorage)
-        .filter(k => k.startsWith('pai_'))
-        .forEach(k => localStorage.removeItem(k))
+      // Only do a full wipe when switching to a different account.
+      // For same-user re-login, keep lesson progress so locally-done
+      // lessons survive even if a prior syncProgress() call had a network failure.
+      const previousUser = localStorage.getItem('pai_username')
+      const isSwitchingUser = !!previousUser && previousUser !== user.username
+      if (isSwitchingUser) {
+        // Different account — wipe everything including progress
+        Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
+      } else {
+        // Same user or first-ever login — only clear profile/session keys, keep lesson completion
+        const PROFILE_KEYS = ['pai_onboarding_done', 'pai_handbook_seen', 'pai_show_welcome',
+          'pai_lang', 'pai_grade', 'pai_goal', 'pai_level', 'pai_frequency', 'pai_usage', 'pai_country']
+        PROFILE_KEYS.forEach(k => localStorage.removeItem(k))
+      }
 
       // Returning user (login) — restore full profile from DB and go straight home
       if (!isNew || authMode === 'login') {
@@ -178,6 +188,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         if (user.level)     localStorage.setItem('pai_level',     user.level)
         if (user.frequency) localStorage.setItem('pai_frequency', user.frequency)
         if (user.usage)     localStorage.setItem('pai_usage',     JSON.stringify(user.usage))
+        // Merge DB progress over local (DB wins, but locally-done lessons that
+        // weren't synced yet are preserved because we didn't wipe them above)
         applyProgress(user.progress ?? {})
         goHome(user.grade)
         return
