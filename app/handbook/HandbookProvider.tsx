@@ -185,7 +185,7 @@ function EntryView({ entry, onBack, isPT, tourIdx, totalStarters, onTourAdvance 
   )
 }
 
-// ── HB button + spotlight ─────────────────────────────────────────────────────
+// ── Handbook bar + spotlight ──────────────────────────────────────────────────
 
 function HBButton({ onClick, showWelcome, username, spotlight }: {
   onClick:     () => void
@@ -195,55 +195,61 @@ function HBButton({ onClick, showWelcome, username, spotlight }: {
 }) {
   const [isPT, setIsPT] = useState(false)
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+
   return (
-    <div style={{ position: 'fixed', bottom: 24, left: 20, zIndex: 48 }}>
-      {/* PAI welcome / spotlight tooltip */}
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 48 }}>
+      {/* Welcome / spotlight tooltip above the bar */}
       {(showWelcome || spotlight) && (
         <div style={{
-          position: 'absolute', bottom: 54, left: 0,
+          position: 'absolute', bottom: '100%', left: '50%',
+          transform: 'translateX(-50%)',
           background: BLACK, color: GREEN,
           border: `1.5px solid ${GREEN}`,
           boxShadow: `3px 3px 0 0 ${GREEN}`,
-          padding: '10px 14px',
-          width: 210,
+          padding: '10px 16px',
+          marginBottom: 8,
+          whiteSpace: 'nowrap',
           pointerEvents: 'none',
         }}>
           <div style={{
-            position: 'absolute', bottom: -8, left: 14,
+            position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
             width: 0, height: 0,
             borderLeft: '7px solid transparent',
             borderRight: '7px solid transparent',
             borderTop: `8px solid ${GREEN}`,
           }} />
-          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 4, opacity: 0.6 }}>PAI</div>
+          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 3, opacity: 0.6 }}>PAI</div>
           <div style={{ fontFamily: DISP, fontSize: 13, lineHeight: 1.3 }}>
             {isPT ? `Bem-vindo, ${username}!` : `Welcome, ${username}!`}
           </div>
-          <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 6, lineHeight: 1.4, opacity: 0.85 }}>
+          <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 5, lineHeight: 1.4, opacity: 0.85 }}>
             {spotlight
-              ? (isPT ? 'Abra seu manual para começar ↓' : 'Open your handbook to get started ↓')
-              : (isPT ? 'Toque aqui para abrir seu manual ↓' : 'Tap here to open your handbook ↓')}
+              ? (isPT ? 'Abra seu manual para começar →' : 'Open your handbook to get started →')
+              : (isPT ? 'Toque aqui para abrir seu manual →' : 'Tap here to open your handbook →')}
           </div>
         </div>
       )}
 
+      {/* Full-width bottom bar */}
       <button
         onClick={onClick}
         aria-label="Open handbook"
         style={{
-          width: 44, height: 44,
+          width: '100%',
           background: spotlight ? GREEN : BLACK,
-          border: `1.5px solid ${GREEN}`,
-          boxShadow: spotlight
-            ? `0 0 0 6px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}`
-            : ((showWelcome) ? `0 0 0 4px rgba(61,245,66,0.25), 4px 4px 0 0 ${GREEN}` : `4px 4px 0 0 ${GREEN}`),
+          borderTop: `1.5px solid ${GREEN}`,
+          borderBottom: 'none', borderLeft: 'none', borderRight: 'none',
           cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          animation: 'handbookPulse 2s ease-in-out infinite',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          padding: '12px 0',
+          animation: (showWelcome || spotlight) ? 'handbookPulse 2s ease-in-out infinite' : undefined,
           transition: 'all 0.3s',
         }}
       >
-        <span style={{ fontFamily: DISP, fontSize: 9, color: spotlight ? BLACK : GREEN, letterSpacing: '0.06em', userSelect: 'none' }}>HB</span>
+        <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: spotlight ? BLACK : GREEN, userSelect: 'none' }}>
+          {isPT ? 'Manual de IA' : 'AI Handbook'}
+        </span>
+        <span style={{ fontFamily: DISP, fontSize: 9, color: spotlight ? BLACK : GREEN, opacity: 0.6 }}>↑</span>
       </button>
     </div>
   )
