@@ -15,7 +15,7 @@ const people = {
     {
       name:     'Rafa Avalos',
       age:      'Age 14',
-      portrait: '/images/rafa-portrait.png',
+      portrait: '/images/rafa-portrait-v2.png',
       bio: [
         'Rafa Avalos is a fourteen-year-old student from Marin County in Northern California. He is Guatemalan and Indian and has lived in several different countries and communities, including two years in Madrid. His interests span software development, music, and the design of tools that make complex ideas accessible.',
         'He is a student at Stanford Online High School and has been building software, apps, and tools since he was young.',
@@ -47,7 +47,7 @@ const people = {
     {
       name:     'Rafa Avalos',
       age:      '14 anos',
-      portrait: '/images/rafa-portrait.png',
+      portrait: '/images/rafa-portrait-v2.png',
       bio: [
         'Rafa Avalos tem quatorze anos e é estudante de Marin County, no norte da Califórnia. É guatemalteco e indiano e já viveu em diferentes países e comunidades, incluindo dois anos em Madri. Seus interesses abrangem desenvolvimento de software, música e o design de ferramentas que tornam ideias complexas acessíveis.',
         'É aluno da Stanford Online High School e vem criando softwares, aplicativos e ferramentas desde pequeno.',
