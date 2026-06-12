@@ -109,7 +109,7 @@ const RF0: RFState = {
   score:0,combo:0,comboTimer:0,lives:3,timeLeft:60,wallCooldown:0,started:false
 }
 
-export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
+export function RocketFly({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
   const [gs,setGs] = useState<RFState>(RF0)
   const gsRef = useRef(gs)
   useEffect(()=>{gsRef.current=gs},[gs])
@@ -300,7 +300,7 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       <div style={{width:W,height:6,background:'#111',borderRadius:3,overflow:'hidden',position:'relative'}}>
         <div style={{height:'100%',width:`${fuel}%`,background:fuelC,borderRadius:3,transition:'width .05s,background .3s',boxShadow:`0 0 8px ${fuelC}`}}/>
         <div style={{position:'absolute',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',paddingLeft:6}}>
-          <span style={{color:'#ffffff44',fontSize:9,fontFamily:'monospace',letterSpacing:1}}>FUEL</span>
+          <span style={{color:'#ffffff44',fontSize:9,fontFamily:'monospace',letterSpacing:1}}>{isPT?'COMBUSTÍVEL':'FUEL'}</span>
         </div>
       </div>
       {/* Game area */}
@@ -354,8 +354,8 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
         {!started&&(
           <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.7)',gap:12}}>
             <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>TAP TO FLY!</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>Collect ⭐💎⛽🛡️ — dodge 🪨☄️ — fly through laser gaps!</div>
+            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>{isPT?'TOQUE PARA VOAR!':'TAP TO FLY!'}</div>
+            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Colete ⭐💎⛽🛡️ — desvie de 🪨☄️ — voe pelos buracos!':'Collect ⭐💎⛽🛡️ — dodge 🪨☄️ — fly through laser gaps!'}</div>
           </div>
         )}
       </div>
@@ -363,9 +363,9 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       <button
         onPointerDown={startBoost} onPointerUp={stopBoost} onPointerLeave={stopBoost}
         style={{...S.btn(cfg.color),width:W,fontSize:20,padding:'16px 0',userSelect:'none',opacity:fuel<5?.5:1,boxShadow:`0 0 ${fuel>0?20:4}px ${cfg.color}66`}}>
-        🚀 BOOST {fuel<5?'(charging…)':''}
+        🚀 {isPT?'IMPULSIONAR':'BOOST'} {fuel<5?(isPT?'(carregando…)':'(charging…)'):''}
       </button>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>Hold BOOST or SPACE / ↑ to fly!</div>
+      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Segure IMPULSIONAR ou ESPAÇO / ↑ para voar!':'Hold BOOST or SPACE / ↑ to fly!'}</div>
     </div>
   )
 }
@@ -380,7 +380,7 @@ interface SCState {
 }
 const SC0: SCState = {robotX:50,vx:0,items:[],particles:[],magnetTimer:0,comboCount:0,comboTimer:0,score:0,lives:3,timeLeft:60,started:false,shake:0}
 
-export function StarCatch({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
+export function StarCatch({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
   const [gs,setGs] = useState<SCState>(SC0)
   const gsRef = useRef(gs)
   useEffect(()=>{gsRef.current=gs},[gs])
@@ -513,8 +513,8 @@ export function StarCatch({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
         {!started&&(
           <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.7)',gap:12}}>
             <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.eye}`}}>TAP TO START!</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>Catch ⭐🌟💎🧲 — dodge 💣 bombs!</div>
+            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.eye}`}}>{isPT?'TOQUE PARA COMEÇAR!':'TAP TO START!'}</div>
+            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Pegue ⭐🌟💎🧲 — desvie das 💣 bombas!':'Catch ⭐🌟💎🧲 — dodge 💣 bombs!'}</div>
           </div>
         )}
       </div>
@@ -528,7 +528,7 @@ export function StarCatch({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
           onPointerUp={()=>{rightRef.current=false}} onPointerLeave={()=>{rightRef.current=false}}
           style={{...S.btn(cfg.eye),flex:1,fontSize:28,padding:'18px 0',userSelect:'none'}}>▶</button>
       </div>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>Hold ◀ ▶ or arrow keys — catch stars, dodge bombs!</div>
+      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Segure ◀ ▶ — pegue estrelas, desvie das bombas!':'Hold ◀ ▶ or arrow keys — catch stars, dodge bombs!'}</div>
     </div>
   )
 }
@@ -545,7 +545,7 @@ interface SRState {
 }
 const SR0: SRState = {robotY:GROUND_Y,vy:0,jumps:0,obstacles:[],coins:[],particles:[],boostTimer:0,score:0,lives:3,timeLeft:60,bgOff:0,groundOff:0,started:false,shake:0,frame:0}
 
-export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
+export function SpeedRace({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
   const [gs,setGs]=useState<SRState>(SR0)
   const gsRef=useRef(gs)
   useEffect(()=>{gsRef.current=gs},[gs])
@@ -706,22 +706,22 @@ export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
         {!started&&(
           <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.75)',gap:12}}>
             <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>TAP TO RACE!</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>Double-jump walls! Collect 🪙 coins and ⚡ boosts!</div>
+            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>{isPT?'TOQUE PARA CORRER!':'TAP TO RACE!'}</div>
+            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Salto duplo sobre muros! Colete 🪙 moedas e ⚡ turbos!':'Double-jump walls! Collect 🪙 coins and ⚡ boosts!'}</div>
           </div>
         )}
       </div>
       <button onPointerDown={doJump}
         style={{...S.btn(cfg.color),width:W,fontSize:20,padding:'16px 0',userSelect:'none',background:jumps>=2?'rgba(255,255,255,.05)':'none'}}>
-        {jumps===0?'🏃 JUMP!':jumps===1?'✨ DOUBLE JUMP!':'⏳ (landing…)'}
+        {jumps===0?(isPT?'🏃 PULAR!':'🏃 JUMP!'):jumps===1?(isPT?'✨ SALTO DUPLO!':'✨ DOUBLE JUMP!'):(isPT?'⏳ (pousando…)':'⏳ (landing…)')}
       </button>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>Tap JUMP or SPACE / ↑ · Double jump in mid-air!</div>
+      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Toque PULAR ou ESPAÇO / ↑ · Salto duplo no ar!':'Tap JUMP or SPACE / ↑ · Double jump in mid-air!'}</div>
     </div>
   )
 }
 
 // ─── BUILD PHASE ──────────────────────────────────────────────────────────────
-function BuildPhase({cfg,setCfg,next}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void}) {
+function BuildPhase({cfg,setCfg,next,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void;isPT?:boolean}) {
   const set=(k:keyof Cfg)=>(v:string)=>setCfg({...cfg,[k]:v as never})
   const Chip=({val,cur,setVal,label,sub}:{val:string;cur:string;setVal:(v:string)=>void;label:string;sub:string})=>(
     <button onClick={()=>setVal(val)} style={{padding:'10px 14px',borderRadius:8,cursor:'pointer',textAlign:'left',background:cur===val?cfg.color:'#111',border:`2px solid ${cur===val?cfg.color:'#2a2a2a'}`,color:cur===val?'#000':'#aaa',fontFamily:'monospace',transition:'all .15s',flex:'1 1 120px'}}>
@@ -737,30 +737,30 @@ function BuildPhase({cfg,setCfg,next}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>voi
   )
   return(
     <div style={S.page}>
-      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>BUILD YOUR ROBOT</h1>
-      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>PICK YOUR PARTS, THEN PAINT IT!</p>
+      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>{isPT?'MONTE SEU ROBÔ':'BUILD YOUR ROBOT'}</h1>
+      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>{isPT?'ESCOLHA AS PEÇAS, DEPOIS PINTE!':'PICK YOUR PARTS, THEN PAINT IT!'}</p>
       <div style={{display:'flex',gap:20,width:'100%',maxWidth:560,flexWrap:'wrap',justifyContent:'center'}}>
         <div style={{flex:1,minWidth:220}}>
-          <Sec label="Head">
-            <Chip val="round"   cur={cfg.head} setVal={set('head')} label="🔵 Round"   sub="Classic friendly face"/>
-            <Chip val="square"  cur={cfg.head} setVal={set('head')} label="🟦 Square"  sub="Strong & tough"/>
-            <Chip val="antenna" cur={cfg.head} setVal={set('head')} label="📡 Antenna" sub="Super brain boost"/>
+          <Sec label={isPT?'Cabeça':'Head'}>
+            <Chip val="round"   cur={cfg.head} setVal={set('head')} label={isPT?'🔵 Redonda':'🔵 Round'}   sub={isPT?'Cara simpática clássica':'Classic friendly face'}/>
+            <Chip val="square"  cur={cfg.head} setVal={set('head')} label={isPT?'🟦 Quadrada':'🟦 Square'}  sub={isPT?'Forte e resistente':'Strong & tough'}/>
+            <Chip val="antenna" cur={cfg.head} setVal={set('head')} label={isPT?'📡 Antena':'📡 Antenna'} sub={isPT?'Superaumento cerebral':'Super brain boost'}/>
           </Sec>
-          <Sec label="Legs">
-            <Chip val="basic"   cur={cfg.legs} setVal={set('legs')} label="🦿 Walker"  sub="Go anywhere"/>
-            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label="🛞 Wheels"  sub="Unlocks Speed Race!"/>
-            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label="🚀 Rockets" sub="Unlocks Rocket Fly!"/>
+          <Sec label={isPT?'Pernas':'Legs'}>
+            <Chip val="basic"   cur={cfg.legs} setVal={set('legs')} label={isPT?'🦿 Andador':'🦿 Walker'}  sub={isPT?'Vai a qualquer lugar':'Go anywhere'}/>
+            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label={isPT?'🛞 Rodas':'🛞 Wheels'}  sub={isPT?'Libera Corrida Veloz!':'Unlocks Speed Race!'}/>
+            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label={isPT?'🚀 Foguetes':'🚀 Rockets'} sub={isPT?'Libera Voar de Foguete!':'Unlocks Rocket Fly!'}/>
           </Sec>
-          <Sec label="Extra Gear">
-            <Chip val="none"      cur={cfg.extra} setVal={set('extra')} label="— None"       sub="Keep it clean"/>
-            <Chip val="rockets"   cur={cfg.extra} setVal={set('extra')} label="🚀 Boosters"  sub="Side rockets!"/>
-            <Chip val="propeller" cur={cfg.extra} setVal={set('extra')} label="🌀 Propeller" sub="Spin on top"/>
-            <Chip val="magnet"    cur={cfg.extra} setVal={set('extra')} label="🧲 Magnet"    sub="Wider catch range"/>
+          <Sec label={isPT?'Acessórios':'Extra Gear'}>
+            <Chip val="none"      cur={cfg.extra} setVal={set('extra')} label={isPT?'— Nenhum':'— None'}       sub={isPT?'Simples e direto':'Keep it clean'}/>
+            <Chip val="rockets"   cur={cfg.extra} setVal={set('extra')} label={isPT?'🚀 Propulsores':'🚀 Boosters'}  sub={isPT?'Foguetes laterais!':'Side rockets!'}/>
+            <Chip val="propeller" cur={cfg.extra} setVal={set('extra')} label={isPT?'🌀 Hélice':'🌀 Propeller'} sub={isPT?'Gira no topo':'Spin on top'}/>
+            <Chip val="magnet"    cur={cfg.extra} setVal={set('extra')} label={isPT?'🧲 Ímã':'🧲 Magnet'}    sub={isPT?'Alcance de captura maior':'Wider catch range'}/>
           </Sec>
         </div>
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:16,paddingTop:8}}>
           <Robot cfg={cfg} size={120} mood="happy"/>
-          <button style={S.btn(cfg.color)} onClick={next}>PAINT IT →</button>
+          <button style={S.btn(cfg.color)} onClick={next}>{isPT?'PINTAR →':'PAINT IT →'}</button>
         </div>
       </div>
     </div>
@@ -768,16 +768,16 @@ function BuildPhase({cfg,setCfg,next}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>voi
 }
 
 // ─── PAINT PHASE ─────────────────────────────────────────────────────────────
-function PaintPhase({cfg,setCfg,next,back}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void;back:()=>void}) {
+function PaintPhase({cfg,setCfg,next,back,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void;back:()=>void;isPT?:boolean}) {
   return(
     <div style={S.page}>
-      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>PAINT YOUR ROBOT</h1>
-      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>CHOOSE YOUR COLORS!</p>
+      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>{isPT?'PINTE SEU ROBÔ':'PAINT YOUR ROBOT'}</h1>
+      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>{isPT?'ESCOLHA SUAS CORES!':'CHOOSE YOUR COLORS!'}</p>
       <div style={{display:'flex',gap:28,flexWrap:'wrap',justifyContent:'center',alignItems:'flex-start'}}>
         <div style={{display:'flex',flexDirection:'column',gap:20}}>
           {(['color','eye'] as const).map(key=>(
             <div key={key}>
-              <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>{key==='color'?'Body Color':'Eye & Detail Color'}</div>
+              <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>{key==='color'?(isPT?'Cor do Corpo':'Body Color'):(isPT?'Cor dos Olhos e Detalhes':'Eye & Detail Color')}</div>
               <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
                 {COLORS.map(c=>(
                   <button key={c} onClick={()=>setCfg({...cfg,[key]:c})} style={{width:46,height:46,borderRadius:8,background:c,cursor:'pointer',border:`3px solid ${cfg[key]===c?'#fff':'transparent'}`,boxShadow:cfg[key]===c?`0 0 14px ${c}`:'none',transition:'all .15s'}}/>
@@ -786,8 +786,8 @@ function PaintPhase({cfg,setCfg,next,back}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()
             </div>
           ))}
           <div style={{display:'flex',gap:10}}>
-            <button style={S.outline} onClick={back}>← back</button>
-            <button style={S.btn(cfg.color)} onClick={next}>LET'S PLAY →</button>
+            <button style={S.outline} onClick={back}>{isPT?'← voltar':'← back'}</button>
+            <button style={S.btn(cfg.color)} onClick={next}>{isPT?'VAMOS JOGAR →':"LET'S PLAY →"}</button>
           </div>
         </div>
         <Robot cfg={cfg} size={150} mood="happy"/>
@@ -797,7 +797,7 @@ function PaintPhase({cfg,setCfg,next,back}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()
 }
 
 // ─── CHOOSE PHASE ─────────────────────────────────────────────────────────────
-function ChoosePhase({cfg,play,back}:{cfg:Cfg;play:(g:MiniGame)=>void;back:()=>void}) {
+function ChoosePhase({cfg,play,back,isPT=false}:{cfg:Cfg;play:(g:MiniGame)=>void;back:()=>void;isPT?:boolean}) {
   const canRocket=cfg.legs==='rockets'||cfg.extra==='rockets'
   const canRace=cfg.legs==='wheels'
   const Card=({emoji,name,color,desc,tag,onClick}:{emoji:string;name:string;color:string;desc:string;tag?:string;onClick:()=>void})=>(
@@ -814,34 +814,38 @@ function ChoosePhase({cfg,play,back}:{cfg:Cfg;play:(g:MiniGame)=>void;back:()=>v
   return(
     <div style={S.page}>
       <Robot cfg={cfg} size={110} mood="happy"/>
-      <h2 style={{...S.title(cfg.color),fontSize:24,margin:'10px 0 4px'}}>CHOOSE YOUR GAME!</h2>
+      <h2 style={{...S.title(cfg.color),fontSize:24,margin:'10px 0 4px'}}>{isPT?'ESCOLHA SEU JOGO!':'CHOOSE YOUR GAME!'}</h2>
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:340,marginTop:16}}>
-        {canRocket&&<Card emoji="🚀" name="Rocket Fly" color={cfg.color} tag="ROCKETS" desc="Boost in short bursts! Dodge asteroids ☄️, fly through laser walls, and collect stars & gems. Combo for big points!" onClick={()=>play('rocket')}/>}
-        <Card emoji="⭐" name="Star Catch" color={cfg.eye} desc="Slide left and right to catch falling stars! Avoid 💣 bombs — catch 🧲 magnets for auto-collect power!" onClick={()=>play('stars')}/>
-        {canRace&&<Card emoji="🏁" name="Speed Race" color={cfg.color} tag="WHEELS" desc="You're rolling fast! Jump and DOUBLE JUMP over walls. Catch ⚡ boosts to go turbo!" onClick={()=>play('race')}/>}
-        {!canRocket&&!canRace&&<p style={{color:'#333',fontFamily:'monospace',fontSize:11,textAlign:'center',lineHeight:1.8}}>Tip: add Rocket Legs or Wheels to unlock 2 more games!</p>}
+        {canRocket&&<Card emoji="🚀" name={isPT?'Voar de Foguete':'Rocket Fly'} color={cfg.color} tag={isPT?'FOGUETES':'ROCKETS'} desc={isPT?'Impulsos curtos! Desvie de asteroides ☄️, voe pelos muros laser, colete estrelas e gemas. Combo = pontos!':'Boost in short bursts! Dodge asteroids ☄️, fly through laser walls, and collect stars & gems. Combo for big points!'} onClick={()=>play('rocket')}/>}
+        <Card emoji="⭐" name={isPT?'Pegar Estrelas':'Star Catch'} color={cfg.eye} desc={isPT?'Deslize para pegar estrelas caindo! Evite 💣 bombas — pegue 🧲 ímãs para coleta automática!':'Slide left and right to catch falling stars! Avoid 💣 bombs — catch 🧲 magnets for auto-collect power!'} onClick={()=>play('stars')}/>
+        {canRace&&<Card emoji="🏁" name={isPT?'Corrida Veloz':'Speed Race'} color={cfg.color} tag={isPT?'RODAS':'WHEELS'} desc={isPT?'Você vai rápido! Salte e SALTO DUPLO sobre muros. Pegue ⚡ turbos!':'You\'re rolling fast! Jump and DOUBLE JUMP over walls. Catch ⚡ boosts to go turbo!'} onClick={()=>play('race')}/>}
+        {!canRocket&&!canRace&&<p style={{color:'#333',fontFamily:'monospace',fontSize:11,textAlign:'center',lineHeight:1.8}}>{isPT?'Dica: adicione Pernas de Foguete ou Rodas para desbloquear mais 2 jogos!':'Tip: add Rocket Legs or Wheels to unlock 2 more games!'}</p>}
       </div>
-      <button style={{...S.outline,marginTop:20}} onClick={back}>← rebuild</button>
+      <button style={{...S.outline,marginTop:20}} onClick={back}>{isPT?'← remontar':'← rebuild'}</button>
     </div>
   )
 }
 
 // ─── GAME OVER ────────────────────────────────────────────────────────────────
-function GameOver({cfg,score,game,again,choose,rebuild}:{cfg:Cfg;score:number;game:MiniGame;again:()=>void;choose:()=>void;rebuild:()=>void}) {
+function GameOver({cfg,score,game,again,choose,rebuild,isPT=false}:{cfg:Cfg;score:number;game:MiniGame;again:()=>void;choose:()=>void;rebuild:()=>void;isPT?:boolean}) {
   const grade=score>=60?'S':score>=35?'A':score>=18?'B':score>=7?'C':'D'
   const gc=score>=35?'#44ff88':score>=18?'#ffdd00':'#ff4466'
-  const msg=score>=60?'INCREDIBLE!':score>=35?'AMAZING!':score>=18?'GREAT JOB!':score>=7?'GOOD TRY!':'KEEP GOING!'
+  const msg=isPT
+    ?(score>=60?'INCRÍVEL!':score>=35?'INCRÍVEL!':score>=18?'MUITO BEM!':score>=7?'BOA TENTATIVA!':'CONTINUE TENTANDO!')
+    :(score>=60?'INCREDIBLE!':score>=35?'AMAZING!':score>=18?'GREAT JOB!':score>=7?'GOOD TRY!':'KEEP GOING!')
   return(
     <div style={S.page}>
       <Robot cfg={cfg} size={100} mood={score>=18?'happy':'oops'}/>
       <div style={{...S.title(gc),fontSize:56,margin:'8px 0 0',letterSpacing:4}}>{grade}</div>
       <div style={{color:gc,fontFamily:'monospace',fontSize:22,letterSpacing:2,margin:'4px 0'}}>{score} pts</div>
       <div style={{color:gc,fontFamily:'monospace',fontSize:13,marginBottom:4}}>{msg}</div>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10,marginBottom:24}}>{game==='rocket'?'stars & gems collected':game==='stars'?'stars caught':'coins collected'}</div>
+      <div style={{color:'#333',fontFamily:'monospace',fontSize:10,marginBottom:24}}>
+        {game==='rocket'?(isPT?'estrelas e gemas coletadas':'stars & gems collected'):game==='stars'?(isPT?'estrelas capturadas':'stars caught'):(isPT?'moedas coletadas':'coins collected')}
+      </div>
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:280}}>
-        <button style={S.btn(cfg.color)} onClick={again}>PLAY AGAIN →</button>
-        <button style={S.btn(cfg.eye)}   onClick={choose}>TRY ANOTHER GAME →</button>
-        <button style={S.outline}        onClick={rebuild}>← REBUILD ROBOT</button>
+        <button style={S.btn(cfg.color)} onClick={again}>{isPT?'JOGAR DE NOVO →':'PLAY AGAIN →'}</button>
+        <button style={S.btn(cfg.eye)}   onClick={choose}>{isPT?'TENTAR OUTRO JOGO →':'TRY ANOTHER GAME →'}</button>
+        <button style={S.outline}        onClick={rebuild}>{isPT?'← REMONTAR ROBÔ':'← REBUILD ROBOT'}</button>
       </div>
     </div>
   )
@@ -854,21 +858,24 @@ export default function BuildARobot() {
   const [game,setGame]=useState<MiniGame>('stars')
   const [score,setScore]=useState(0)
   const [done,setDone]=useState(false)
+  const [isPT,setIsPT]=useState(false)
+
+  useEffect(()=>{setIsPT(localStorage.getItem('pai_lang')==='pt')},[])
 
   const playGame=(g:MiniGame)=>{setGame(g);setDone(false);setScore(0);setPhase('game')}
   const handleDone=(s:number)=>{setScore(s);setDone(true)}
 
-  if(phase==='build') return <BuildPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('paint')}/>
-  if(phase==='paint') return <PaintPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('choose')} back={()=>setPhase('build')}/>
-  if(phase==='choose') return <ChoosePhase cfg={cfg} play={playGame} back={()=>setPhase('paint')}/>
-  if(phase==='game'&&done) return <GameOver cfg={cfg} score={score} game={game} again={()=>playGame(game)} choose={()=>setPhase('choose')} rebuild={()=>setPhase('build')}/>
+  if(phase==='build') return <BuildPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('paint')} isPT={isPT}/>
+  if(phase==='paint') return <PaintPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('choose')} back={()=>setPhase('build')} isPT={isPT}/>
+  if(phase==='choose') return <ChoosePhase cfg={cfg} play={playGame} back={()=>setPhase('paint')} isPT={isPT}/>
+  if(phase==='game'&&done) return <GameOver cfg={cfg} score={score} game={game} again={()=>playGame(game)} choose={()=>setPhase('choose')} rebuild={()=>setPhase('build')} isPT={isPT}/>
 
   return(
     <div style={{minHeight:'100vh',background:'#000',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'12px 16px',gap:0}}>
-      <button onClick={()=>setPhase('choose')} style={{position:'fixed',top:14,left:16,background:'none',border:'none',color:'#333',fontFamily:'monospace',fontSize:12,cursor:'pointer',letterSpacing:1}}>← back</button>
-      {phase==='game'&&game==='rocket'&&<RocketFly cfg={cfg} onDone={handleDone}/>}
-      {phase==='game'&&game==='stars'&&<StarCatch cfg={cfg} onDone={handleDone}/>}
-      {phase==='game'&&game==='race'&&<SpeedRace cfg={cfg} onDone={handleDone}/>}
+      <button onClick={()=>setPhase('choose')} style={{position:'fixed',top:14,left:16,background:'none',border:'none',color:'#333',fontFamily:'monospace',fontSize:12,cursor:'pointer',letterSpacing:1}}>{isPT?'← voltar':'← back'}</button>
+      {phase==='game'&&game==='rocket'&&<RocketFly cfg={cfg} onDone={handleDone} isPT={isPT}/>}
+      {phase==='game'&&game==='stars'&&<StarCatch cfg={cfg} onDone={handleDone} isPT={isPT}/>}
+      {phase==='game'&&game==='race'&&<SpeedRace cfg={cfg} onDone={handleDone} isPT={isPT}/>}
     </div>
   )
 }
