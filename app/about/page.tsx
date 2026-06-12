@@ -13,8 +13,9 @@ const FAINT = '#d8d8d8'
 const people = {
   en: [
     {
-      name: 'Rafa Avalos',
-      age:  'Age 14',
+      name:     'Rafa Avalos',
+      age:      'Age 14',
+      portrait: '/images/rafa-portrait.png',
       bio: [
         'Rafa Avalos is a fourteen-year-old student from Marin County in Northern California. He is Guatemalan and Indian and has lived in several different countries and communities, including two years in Madrid. His interests span software development, music, and the design of tools that make complex ideas accessible.',
         'He is a student at Stanford Online High School and has been building software, apps, and tools since he was young.',
@@ -34,8 +35,9 @@ const people = {
   ],
   pt: [
     {
-      name: 'Rafa Avalos',
-      age:  '14 anos',
+      name:     'Rafa Avalos',
+      age:      '14 anos',
+      portrait: '/images/rafa-portrait.png',
       bio: [
         'Rafa Avalos tem quatorze anos e é estudante de Marin County, no norte da Califórnia. É guatemalteco e indiano e já viveu em diferentes países e comunidades, incluindo dois anos em Madri. Seus interesses abrangem desenvolvimento de software, música e o design de ferramentas que tornam ideias complexas acessíveis.',
         'É aluno da Stanford Online High School e vem criando softwares, aplicativos e ferramentas desde pequeno.',
@@ -96,6 +98,13 @@ export default function AboutPage() {
                 </h2>
                 <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN }}>{person.age}</span>
               </div>
+              {'portrait' in person && person.portrait && (
+                <img
+                  src={(person as any).portrait}
+                  alt={person.name}
+                  style={{ width: 160, height: 160, objectFit: 'cover', objectPosition: 'top', marginBottom: 24, border: `1.5px solid ${BLACK}`, boxShadow: `4px 4px 0 0 ${BLACK}` }}
+                />
+              )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, borderLeft: `2px solid ${BLACK}`, paddingLeft: 24 }}>
                 {person.bio.map((p, j) => (
                   <p key={j} style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: BLACK, margin: 0 }}>{p}</p>
