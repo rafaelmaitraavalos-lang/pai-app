@@ -12,9 +12,8 @@ export const metadata: Metadata = {
   title: 'PAI — Learn AI',
   description: 'Your personal AI learning buddy',
   icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
   },
 }
 
