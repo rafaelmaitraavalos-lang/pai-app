@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
-import { STARTER_ENTRIES, UNLOCKABLE_ENTRIES, STARTER_ENTRIES_PT, UNLOCKABLE_ENTRIES_PT, LOCKED_COUNT, type HandbookEntry } from './entries'
+import {
+  STARTER_ENTRIES, UNLOCKABLE_ENTRIES,
+  ELEMENTARY_STARTER_ENTRIES, ELEMENTARY_UNLOCKABLE_ENTRIES,
+  MIDDLE_STARTER_ENTRIES, MIDDLE_UNLOCKABLE_ENTRIES,
+  STARTER_ENTRIES_PT, UNLOCKABLE_ENTRIES_PT,
+  LOCKED_COUNT, type HandbookEntry,
+} from './entries'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -13,19 +19,36 @@ const GREY  = '#EBEBEB'
 const CREAM = '#FAFAF8'
 const FAINT = '#d8d8d8'
 
+type Level = 'elementary' | 'middle' | 'default'
+
+function getLevel(pathname: string): Level {
+  if (pathname.startsWith('/elementary') || pathname.startsWith('/mobile/elementary')) return 'elementary'
+  if (pathname.startsWith('/middle') || pathname.startsWith('/mobile/middle')) return 'middle'
+  return 'default'
+}
+
+function getEntries(level: Level, isPT: boolean) {
+  if (level === 'elementary') return { starters: ELEMENTARY_STARTER_ENTRIES, unlockPool: ELEMENTARY_UNLOCKABLE_ENTRIES }
+  if (level === 'middle')     return { starters: MIDDLE_STARTER_ENTRIES,     unlockPool: MIDDLE_UNLOCKABLE_ENTRIES }
+  return {
+    starters:   isPT ? STARTER_ENTRIES_PT   : STARTER_ENTRIES,
+    unlockPool: isPT ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES,
+  }
+}
+
 // ── Index view ────────────────────────────────────────────────────────────────
 
-function IndexView({ onSelect, onClose, unlockedIds, isPT, tourIdx }: {
+function IndexView({ onSelect, onClose, unlockedIds, isPT, tourIdx, level }: {
   onSelect: (e: HandbookEntry, idx: number) => void
   onClose:  () => void
   unlockedIds: Set<string>
   isPT:     boolean
   tourIdx:  number   // -1 = no tour; 0..N = highlight this entry
+  level:    Level
 }) {
-  const starters   = isPT ? STARTER_ENTRIES_PT   : STARTER_ENTRIES
-  const unlockPool = isPT ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
+  const { starters, unlockPool } = getEntries(level, isPT)
   const unlocked   = unlockPool.filter(e => unlockedIds.has(e.id))
-  const stillLocked = (isPT ? UNLOCKABLE_ENTRIES_PT.length : LOCKED_COUNT) - unlocked.length
+  const stillLocked = unlockPool.length - unlocked.length
   const allEntries = [...starters, ...unlocked]
   const inTour = tourIdx >= 0
 
@@ -234,8 +257,10 @@ export default function HandbookProvider() {
   const [isPT, setIsPT]                   = useState(false)
   const [tourIdx, setTourIdx]             = useState(-1)
 
+  const level = getLevel(pathname)
+
   const advanceTour = useCallback(() => {
-    const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
+    const { starters } = getEntries(level, isPT)
     setTourIdx(prev => {
       const next = prev + 1
       if (next >= starters.length) {
@@ -244,7 +269,7 @@ export default function HandbookProvider() {
       }
       return next
     })
-  }, [isPT])
+  }, [level, isPT])
 
   useEffect(() => {
     setMounted(true)
@@ -268,10 +293,11 @@ export default function HandbookProvider() {
       setTimeout(() => setShowWelcome(true), 800)
     }
 
-    // Compute unlocked entries
-    const unlockables = lang === 'pt' ? UNLOCKABLE_ENTRIES_PT : UNLOCKABLE_ENTRIES
+    // Compute unlocked entries based on current level
+    const currentLevel = getLevel(pathname)
+    const { unlockPool } = getEntries(currentLevel, lang === 'pt')
     const ids = new Set<string>()
-    for (const entry of unlockables) {
+    for (const entry of unlockPool) {
       if (entry.unlocksAt && localStorage.getItem(`pai_lesson_${entry.unlocksAt}_done`)) {
         ids.add(entry.id)
       }
@@ -329,7 +355,7 @@ export default function HandbookProvider() {
     }
   }
 
-  const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
+  const { starters } = getEntries(level, isPT)
 
   return (
     <>
@@ -386,6 +412,7 @@ export default function HandbookProvider() {
                   unlockedIds={unlockedIds}
                   isPT={isPT}
                   tourIdx={tourIdx}
+                  level={level}
                 />
             }
           </div>
