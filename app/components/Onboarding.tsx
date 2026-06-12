@@ -301,7 +301,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 8, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
               </div>
               <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 260 }}>
-                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>Quick setup — 6 questions, about 2 minutes.</p>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>{country?.lang === 'pt' ? 'Configuração rápida — menos de um minuto.' : 'Quick setup — less than a minute.'}</p>
               </div>
             </div>
           )}
@@ -310,7 +310,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>Step 01 / 06</p>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>What language do you speak?</h2>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
@@ -412,7 +411,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div>
-                  <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step} 02 / 02</p>
+                  <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step}</p>
                   <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
