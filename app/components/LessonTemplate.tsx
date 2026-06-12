@@ -293,7 +293,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const highlightBg = isElem ? slideAccent : 'transparent'  // title span + tag badge
 
   return (
-    <main className="lesson-slide-main" style={{ minHeight: '100vh', overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease' }}>
+    <main className="lesson-slide-main" style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease', overflow: 'hidden' }}>
 
       {/* Black PAI header — workshopped design */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -303,7 +303,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         </button>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+      {/* Scrollable content area — flex:1 with overflow so nav never gets cut off */}
+      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
@@ -391,9 +392,18 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           )}
         </div>
 
-        {/* Navigation — same as fake */}
-        <div style={{ borderTop: `2px solid ${BLACK}` }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingBottom: 20, gap: 20 }}>
+        {/* Footer inside scroller */}
+        <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 14, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
+        </div>
+
+      </div>
+      </div>
+
+      {/* Navigation — fixed at bottom, never clipped */}
+      <div style={{ flexShrink: 0, background: slideBg, borderTop: `2px solid ${BLACK}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 7vw', gap: 20 }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
             {ui.backSlide}
           </button>
@@ -404,14 +414,6 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {stopIndex === stops.length - 1 ? ui.takeQuiz : ui.nextSlide}
           </button>
         </div>
-
-        {/* Footer — same as fake */}
-        <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
-        </div>
-
-      </div>
       </div>
 
     </main>
