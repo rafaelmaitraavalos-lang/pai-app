@@ -71,6 +71,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     backSlide:       isPT ? '← Voltar'              : '← Back',
     nextSlide:       isPT ? 'Próximo slide →'        : 'Next slide →',
     takeQuiz:        isPT ? 'Fazer o questionário →' : 'Take the quiz →',
+    skip:            isPT ? 'Pular'                  : 'Skip',
   }
   const tx      = TRANSLATIONS[lang]?.[id]
   const title     = tx?.title     ?? titleEN
@@ -91,8 +92,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       if (questions.length === 0) {
         localStorage.setItem(`pai_lesson_${id}_done`, 'true')
         import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
-        if (completionPage) router.push(completionPage)
-        else setPhase('complete')
+        setPhase('complete')
         return
       }
       setPhase('quiz'); return
@@ -107,10 +107,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) {
       localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-      // Sync progress to server (fire-and-forget)
       import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
-      if (completionPage) router.push(completionPage)
-      else setPhase('complete')
+      setPhase('complete')
       return
     }
     setSelected(null)
@@ -132,12 +130,19 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
   // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
-    const modIdx       = world?.modules.findIndex(m => m.id === id) ?? -1
-    const nextModule   = world?.modules[modIdx + 1]
+    const modIdx     = world?.modules.findIndex(m => m.id === id) ?? -1
+    // Skip game-type modules when looking for next lesson
+    const nextModule = world?.modules.slice(modIdx + 1).find(m => m.type !== 'game')
     const nextWorldIdx = isMidElem ? -1 : WORLD_IDS.indexOf(rawWorldId) + 1
     const nextWorldId  = (!isMidElem && nextWorldIdx < WORLD_IDS.length) ? WORLD_IDS[nextWorldIdx] : null
     const nextWorldRoute = nextWorldId ? `/world/${nextWorldId}` : null
-    const isLastInWorld = !nextModule
+    const isLastInWorld  = !nextModule
+    // For elementary, route next lesson to /elementary/lesson/; otherwise /lesson/
+    const nextLessonRoute = nextModule
+      ? (isMidElem ? `/elementary/lesson/${nextModule.id}` : `/lesson/${nextModule.id}`)
+      : null
+    // Use completionPage as back destination when provided
+    const backDest = completionPage ?? currentWorldRoute
 
     return (
       <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
@@ -158,10 +163,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           <div style={{ borderTop: `1px solid ${FAINT}`, marginBottom: 24 }} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* Mid-world: next lesson */}
-            {nextModule && (
+            {nextLessonRoute && nextModule && (
               <button
-                onClick={() => router.push(`/lesson/${nextModule.id}`)}
+                onClick={() => router.push(nextLessonRoute)}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
               >
                 {ui.nextLesson} {nextModule.title} →
@@ -175,9 +179,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 {ui.nextWorld} {(WORLDS[nextWorldId] ?? ELEMENTARY_WORLDS[nextWorldId])?.title} →
               </button>
             )}
-            {/* Secondary: back to current world (not main home) */}
             <button
-              onClick={() => router.push(isLastInWorld ? currentWorldRoute : currentWorldRoute)}
+              onClick={() => router.push(backDest)}
               style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
             >
               {ui.backTo} {world?.title ?? (isPT ? 'Mundo' : 'World')}
@@ -213,7 +216,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
                 <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
               </div>
             </div>
             <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -313,7 +316,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
               {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
               <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
