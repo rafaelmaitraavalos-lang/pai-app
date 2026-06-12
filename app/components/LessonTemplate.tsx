@@ -7,6 +7,7 @@ import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
 import { WORLDS, WORLD_IDS, getLessonWorldId } from '../data'
+import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_LESSONS } from '../data/elementary'
 
 export interface Stop {
   tag:    string
@@ -115,8 +116,14 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     setSelected(null)
     setQIndex(i => i + 1)
   }
-  const worldId          = getLessonWorldId(id)
-  const currentWorldRoute = worldId === 1 ? '/lessons' : `/world/${worldId}`
+  // Detect middle/elementary lesson by checking lesson data
+  const msLesson = MIDDLE_SCHOOL_LESSONS[id]
+  const rawWorldId = msLesson ? msLesson.worldId : getLessonWorldId(id)
+  const isMidElem  = rawWorldId >= 100
+  const world      = isMidElem ? ELEMENTARY_WORLDS[rawWorldId] : WORLDS[rawWorldId]
+  const currentWorldRoute = isMidElem
+    ? (rawWorldId >= 200 ? `/middle/world/${rawWorldId}` : `/elementary/home`)
+    : (rawWorldId === 1 ? '/lessons' : `/world/${rawWorldId}`)
 
   const skip = () => {
     localStorage.setItem(`pai_lesson_${id}_done`, 'true')
@@ -125,11 +132,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
   // ── Complete ────────────────────────────────────────────────────────────────
   if (phase === 'complete') {
-    const world        = WORLDS[worldId]
     const modIdx       = world?.modules.findIndex(m => m.id === id) ?? -1
     const nextModule   = world?.modules[modIdx + 1]
-    const nextWorldIdx = WORLD_IDS.indexOf(worldId) + 1
-    const nextWorldId  = nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
+    const nextWorldIdx = isMidElem ? -1 : WORLD_IDS.indexOf(rawWorldId) + 1
+    const nextWorldId  = (!isMidElem && nextWorldIdx < WORLD_IDS.length) ? WORLD_IDS[nextWorldIdx] : null
     const nextWorldRoute = nextWorldId ? `/world/${nextWorldId}` : null
     const isLastInWorld = !nextModule
 
@@ -166,7 +172,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 onClick={() => router.push(nextWorldRoute)}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: `4px 4px 0 0 #555` }}
               >
-                {ui.nextWorld} {WORLDS[nextWorldId]?.title} →
+                {ui.nextWorld} {(WORLDS[nextWorldId] ?? ELEMENTARY_WORLDS[nextWorldId])?.title} →
               </button>
             )}
             {/* Secondary: back to current world (not main home) */}
@@ -174,7 +180,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               onClick={() => router.push(isLastInWorld ? currentWorldRoute : currentWorldRoute)}
               style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
             >
-              {ui.backTo} {world?.title ?? 'World'}
+              {ui.backTo} {world?.title ?? (isPT ? 'Mundo' : 'World')}
             </button>
           </div>
         </div>
