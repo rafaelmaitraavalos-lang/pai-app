@@ -106,7 +106,7 @@ interface RFState {
 const RF0: RFState = {
   robotY:50,vy:0,tilt:0,fuel:100,shield:0,
   items:[],hazards:[],walls:[],particles:[],bgOff:0,shake:0,
-  score:0,combo:0,comboTimer:0,lives:3,timeLeft:38,wallCooldown:0,started:false
+  score:0,combo:0,comboTimer:0,lives:3,timeLeft:60,wallCooldown:0,started:false
 }
 
 export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
@@ -116,14 +116,17 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
   const boostRef = useRef(false)
   const doneRef  = useRef(false)
 
-  // tap to boost (each press = upward impulse)
+  // tap to boost — first tap starts AND boosts simultaneously
   const doBoost = useCallback(()=>{
     const s=gsRef.current
-    if(!s.started){setGs(p=>({...p,started:true}));return}
+    if(!s.started){
+      setGs(p=>({...p,started:true,vy:-8,fuel:Math.max(0,p.fuel-18)}))
+      boostRef.current=true; setTimeout(()=>{boostRef.current=false},120)
+      return
+    }
     if(s.fuel<10) return
     setGs(p=>({...p,vy:Math.max(p.vy-5,-9),fuel:Math.max(0,p.fuel-18)}))
-    boostRef.current=true
-    setTimeout(()=>{boostRef.current=false},120)
+    boostRef.current=true; setTimeout(()=>{boostRef.current=false},120)
   },[])
 
   useEffect(()=>{
@@ -137,7 +140,8 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
     const loop=setInterval(()=>{
       const s=gsRef.current
       if(!s.started||doneRef.current) return
-      const spd = 1.3 + (38-s.timeLeft)*0.025 // speed increases over time
+      const elapsed = 60-s.timeLeft
+      const spd = 1.0 + elapsed*0.022 // speed increases over time
 
       // physics
       const newVy   = Math.min(s.vy+1.4, 9)
@@ -171,17 +175,17 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       if(Math.random()<.008) newItems.push({id:uid(),x:102,y:15+Math.random()*65,type:'fuel'})
       if(Math.random()<.003) newItems.push({id:uid(),x:102,y:15+Math.random()*65,type:'shield'})
 
-      // spawn hazards
-      if(Math.random()<.022) newHaz.push({id:uid(),x:102,y:5+Math.random()*85,type:'asteroid'})
-      if(Math.random()<.008) newHaz.push({id:uid(),x:105+Math.random()*10,y:Math.random()<.5?-5:95,type:'comet'})
+      // spawn hazards — ramp up over time
+      if(Math.random()<(.010+elapsed*.0007)) newHaz.push({id:uid(),x:102,y:5+Math.random()*85,type:'asteroid'})
+      if(Math.random()<(.003+elapsed*.0002)) newHaz.push({id:uid(),x:105+Math.random()*10,y:Math.random()<.5?-5:95,type:'comet'})
 
-      // spawn laser wall
+      // spawn laser wall — gap shrinks over time
       let newWallCD=s.wallCooldown-1
       if(newWallCD<=0&&Math.random()<.012){
-        const gapH=22+Math.random()*20
+        const gapH=Math.max(14, 32-elapsed*0.24+Math.random()*10)
         const gapTop=5+Math.random()*(85-gapH)
         newWalls.push({id:uid(),x:100,gapTop,gapH})
-        newWallCD=90
+        newWallCD=Math.max(50,90-elapsed*0.5)|0
       }
 
       // collect items
@@ -362,7 +366,7 @@ interface SCState {
   magnetTimer:number; comboCount:number; comboTimer:number
   score:number; lives:number; timeLeft:number; started:boolean; shake:number
 }
-const SC0: SCState = {robotX:50,vx:0,items:[],particles:[],magnetTimer:0,comboCount:0,comboTimer:0,score:0,lives:3,timeLeft:38,started:false,shake:0}
+const SC0: SCState = {robotX:50,vx:0,items:[],particles:[],magnetTimer:0,comboCount:0,comboTimer:0,score:0,lives:3,timeLeft:60,started:false,shake:0}
 
 export function StarCatch({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
   const [gs,setGs] = useState<SCState>(SC0)
@@ -383,14 +387,16 @@ export function StarCatch({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       const newVx  = (s.vx+accel)*.82  // friction
       const newX   = Math.max(6,Math.min(94,s.robotX+newVx))
 
-      const spd = 1.0+(38-s.timeLeft)*.025
+      const elapsed = 60-s.timeLeft
+      const spd = 1.0+elapsed*.02
       const catchR = s.magnetTimer>0 ? baseRadius+20 : baseRadius
+      const fallSpd = (vy: number) => vy + elapsed*.012
 
       let newItems=s.items.map(o=>({...o,y:o.y+o.vy*spd})).filter(o=>o.y<102)
-      if(Math.random()<.05) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:.7+Math.random()*.8,type:'small'})
-      if(Math.random()<.02) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:1+Math.random()*1,type:'big'})
-      if(Math.random()<.006) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:.6+Math.random()*.5,type:'gem'})
-      if(Math.random()<.018) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:.9+Math.random()*.7,type:'bomb'})
+      if(Math.random()<(.030+elapsed*.0009)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.7+Math.random()*.8),type:'small'})
+      if(Math.random()<(.010+elapsed*.0005)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(1+Math.random()*1),type:'big'})
+      if(Math.random()<.006) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.6+Math.random()*.5),type:'gem'})
+      if(Math.random()<(.008+elapsed*.0006)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.9+Math.random()*.7),type:'bomb'})
       if(Math.random()<.004) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:.5,type:'magnet'})
 
       // catch check (robot at y=84%)
@@ -525,7 +531,7 @@ interface SRState {
   boostTimer:number; score:number; lives:number; timeLeft:number
   bgOff:number; groundOff:number; started:boolean; shake:number; frame:number
 }
-const SR0: SRState = {robotY:GROUND_Y,vy:0,jumps:0,obstacles:[],coins:[],particles:[],boostTimer:0,score:0,lives:3,timeLeft:38,bgOff:0,groundOff:0,started:false,shake:0,frame:0}
+const SR0: SRState = {robotY:GROUND_Y,vy:0,jumps:0,obstacles:[],coins:[],particles:[],boostTimer:0,score:0,lives:3,timeLeft:60,bgOff:0,groundOff:0,started:false,shake:0,frame:0}
 
 export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
   const [gs,setGs]=useState<SRState>(SR0)
@@ -533,15 +539,13 @@ export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
   useEffect(()=>{gsRef.current=gs},[gs])
   const doneRef=useRef(false)
 
+  // first tap starts AND jumps simultaneously
   const doJump=useCallback(()=>{
     const s=gsRef.current
-    if(!s.started){setGs(p=>({...p,started:true}));return}
+    if(!s.started){setGs(p=>({...p,started:true,vy:-9,jumps:1}));return}
     if(s.jumps>=2) return
-    const newVy=-7.5-(s.jumps===1?1:0)  // second jump slightly weaker
+    const newVy = s.jumps===0 ? -9 : -7   // first jump strong, double jump keeps momentum
     setGs(p=>({...p,vy:newVy,jumps:p.jumps+1}))
-    // jump particle burst
-    const rx=18/100*W, ry=GROUND_Y/100*H_SR
-    gsRef.current.particles  // just trigger visual
   },[])
 
   useEffect(()=>{
@@ -554,7 +558,8 @@ export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
     const loop=setInterval(()=>{
       const s=gsRef.current
       if(!s.started||doneRef.current) return
-      const spd=(1.4+(38-s.timeLeft)*.03)*(s.boostTimer>0?1.8:1)
+      const elapsed=60-s.timeLeft
+      const spd=(1.0+elapsed*.027)*(s.boostTimer>0?1.8:1)
       const newFrame=s.frame+1
 
       // physics
@@ -571,8 +576,9 @@ export function SpeedRace({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       let coins=s.coins.map(o=>({...o,x:o.x-spd})).filter(o=>o.x>-5)
       let ps=[...s.particles]
 
-      // spawn
-      if(Math.random()<.02) obs.push({id:uid(),x:102,h:s.timeLeft<20?30+Math.random()*20:20+Math.random()*15,type:Math.random()<.3?'tall':'low'})
+      // spawn — obstacles start tiny (8px) and grow to 48px over 60 seconds
+      const obstH = Math.min(8 + elapsed*0.66 + Math.random()*(4+elapsed*0.28), 50)
+      if(Math.random()<(.010+elapsed*.00025)) obs.push({id:uid(),x:102,h:obstH,type:Math.random()<.3?'tall':'low'})
       if(Math.random()<.035) coins.push({id:uid(),x:102,y:GROUND_Y-8-Math.random()*20,type:'coin'})
       if(Math.random()<.003) coins.push({id:uid(),x:102,y:GROUND_Y-12,type:'boost'})
 

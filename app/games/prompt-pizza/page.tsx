@@ -7,70 +7,296 @@ import { useRouter } from 'next/navigation'
 const PINK  = '#ff2d78'
 const GREEN = '#39ff14'
 
+// ── shared pizza base elements ─────────────────────────────────────────────
+function PizzaBase({ sauce }: { sauce: string }) {
+  return (
+    <>
+      <rect width="340" height="240" fill="#180800"/>
+      <circle cx={170} cy={115} r={108} fill="#c47a1e"/>
+      <circle cx={170} cy={115} r={97}  fill="#9e5a0a"/>
+      <circle cx={170} cy={115} r={90}  fill={sauce}/>
+    </>
+  )
+}
+
+// Mozzarella blobs given as [dx,dy,rx,ry] offsets from center
+type Blob = [number,number,number,number]
+function Mozz({ blobs, cx=170, cy=115 }: { blobs: Blob[]; cx?: number; cy?: number }) {
+  return <>
+    {blobs.map(([dx,dy,rx,ry],i) =>
+      <ellipse key={i} cx={cx+dx} cy={cy+dy} rx={rx} ry={ry} fill="#f0e898" opacity="0.90"/>
+    )}
+  </>
+}
+
+// ── pizza illustrations ────────────────────────────────────────────────────
+function PizzaIllustration({ type }: { type: string }) {
+  const cx = 170, cy = 115
+
+  if (type === 'margherita') {
+    const blobs: Blob[] = [[-18,-28,30,21],[22,-38,24,18],[-38,8,26,19],[20,22,30,21],[-14,34,23,16],[34,-6,19,14],[0,2,16,14]]
+    const basil: [number,number,number][] = [[-22,-38,-30],[30,18,20],[-30,22,160],[14,-52,45]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#cc2020"/>
+        <Mozz blobs={blobs}/>
+        {basil.map(([dx,dy,rot],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={15} ry={9} fill="#157a15" opacity="0.95"
+              transform={`rotate(${rot} ${cx+dx} ${cy+dy})`}/>
+            <line x1={cx+dx-6} y1={cy+dy} x2={cx+dx+6} y2={cy+dy} stroke="#0f5a0f" strokeWidth="1.5"
+              transform={`rotate(${rot} ${cx+dx} ${cy+dy})`}/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">Classic Margherita</text>
+      </svg>
+    )
+  }
+
+  if (type === 'pepperoni') {
+    const pepPos: [number,number][] = [
+      [0,0],[52,0],[-52,0],[0,52],[0,-52],
+      [38,34],[38,-34],[-38,34],[-38,-34]
+    ]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#d4a020"/>
+        <circle cx={cx} cy={cy} r={88} fill="#f2da78" opacity="0.55"/>
+        {pepPos.map(([dx,dy],i)=>(
+          <g key={i}>
+            <circle cx={cx+dx} cy={cy+dy} r={14} fill="#8a0c0c"/>
+            <circle cx={cx+dx} cy={cy+dy} r={10} fill="#c01212"/>
+            <circle cx={cx+dx+3} cy={cy+dy-3} r={3} fill="#6a0808" opacity="0.75"/>
+            <circle cx={cx+dx-4} cy={cy+dy+3} r={2} fill="#6a0808" opacity="0.55"/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">Pepperoni</text>
+      </svg>
+    )
+  }
+
+  if (type === 'veggie') {
+    const blobs: Blob[] = [[-16,-26,28,20],[24,-34,22,17],[-36,8,24,18],[22,20,28,20],[-12,34,22,16],[32,-4,18,14]]
+    const greenPepper: [number,number,number,number][] = [[-40,-20,8,26],[-45,15,8,20],[-20,-50,8,22]]
+    const redPepper: [number,number,number,number][]   = [[30,-40,8,22],[38,10,8,20]]
+    const yellowPepper: [number,number,number,number][]= [[10,40,8,18],[-30,35,8,16]]
+    const mushrooms: [number,number][] = [[-8,-8],[28,-28],[-32,-30],[10,28]]
+    const onions: [number,number][]   = [[40,-15],[-10,45]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#c82020"/>
+        <Mozz blobs={blobs}/>
+        {greenPepper.map(([dx,dy,w,h],i)=>
+          <rect key={i} x={cx+dx} y={cy+dy} width={w} height={h} rx={3} fill="#1e9a1e" opacity="0.92"/>
+        )}
+        {redPepper.map(([dx,dy,w,h],i)=>
+          <rect key={i} x={cx+dx} y={cy+dy} width={w} height={h} rx={3} fill="#cc1818" opacity="0.92"/>
+        )}
+        {yellowPepper.map(([dx,dy,w,h],i)=>
+          <rect key={i} x={cx+dx} y={cy+dy} width={w} height={h} rx={3} fill="#d4c010" opacity="0.92"/>
+        )}
+        {mushrooms.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={14} ry={9} fill="#7a4010"/>
+            <ellipse cx={cx+dx} cy={cy+dy+3} rx={12} ry={5} fill="#5a2c08"/>
+          </g>
+        ))}
+        {onions.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={13} ry={9} fill="none" stroke="#d0b0e0" strokeWidth="3"/>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={8}  ry={5} fill="none" stroke="#d0b0e0" strokeWidth="1.5"/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">Veggie Supreme</text>
+      </svg>
+    )
+  }
+
+  if (type === 'bbq') {
+    const blobs: Blob[] = [[-16,-26,26,19],[22,-32,22,17],[-34,10,24,18],[22,22,26,20],[-14,34,20,15],[32,-6,18,13]]
+    const chicken: Blob[] = [[0,0,18,14],[40,-25,16,12],[-40,10,17,12],[10,38,15,11],[-20,-42,16,12],[38,28,14,11],[-8,-10,12,9]]
+    const onions: [number,number][] = [[-38,-30],[-10,44],[36,12]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#4a1e08"/>
+        <Mozz blobs={blobs}/>
+        {chicken.map(([dx,dy,rx,ry],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={rx} ry={ry} fill="#c8901a"/>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={rx-4} ry={ry-3} fill="#d8a030" opacity="0.65"/>
+          </g>
+        ))}
+        {onions.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={12} ry={8} fill="none" stroke="#ffffffaa" strokeWidth="2.5"/>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={7}  ry={4} fill="none" stroke="#ffffff88" strokeWidth="1.5"/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">BBQ Chicken</text>
+      </svg>
+    )
+  }
+
+  if (type === 'hawaiian') {
+    const blobs: Blob[] = [[-16,-26,28,20],[22,-34,22,18],[-36,8,24,18],[20,22,28,20],[-12,34,22,16],[32,-6,18,13]]
+    const pineapple: [number,number,number,number][] = [[0,-46,18,14],[42,10,16,12],[-42,10,16,12],[12,40,14,12],[-20,-22,14,11],[30,-26,14,11]]
+    const ham: [number,number,number,number][] = [[-28,10,20,12],[-10,-38,18,12],[34,-18,16,12],[28,32,18,12],[-38,-18,16,11]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#c82020"/>
+        <Mozz blobs={blobs}/>
+        {pineapple.map(([dx,dy,w,h],i)=>(
+          <g key={i}>
+            <rect x={cx+dx-w/2} y={cy+dy-h/2} width={w} height={h} rx={3} fill="#e0c010"/>
+            <line x1={cx+dx-w/4} y1={cy+dy-h/2+2} x2={cx+dx-w/4} y2={cy+dy+h/2-2} stroke="#c0a000" strokeWidth="1"/>
+            <line x1={cx+dx+w/4} y1={cy+dy-h/2+2} x2={cx+dx+w/4} y2={cy+dy+h/2-2} stroke="#c0a000" strokeWidth="1"/>
+          </g>
+        ))}
+        {ham.map(([dx,dy,w,h],i)=>(
+          <rect key={i} x={cx+dx-w/2} y={cy+dy-h/2} width={w} height={h} rx={4} fill="#e87090" opacity="0.92"/>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">Hawaiian</text>
+      </svg>
+    )
+  }
+
+  if (type === 'mushroom') {
+    const mushrooms: [number,number][] = [[0,-40],[38,-20],[52,14],[-52,14],[-38,-20],[20,40],[-20,40],[0,8],[30,-6],[-30,-6]]
+    const garlic: [number,number][] = [[-28,24],[44,-32],[-44,-32],[16,-50],[-16,-50],[44,32]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#f0e8c0"/>
+        {/* Cream cheese layer */}
+        <circle cx={cx} cy={cy} r={88} fill="#f8f0c0" opacity="0.55"/>
+        {mushrooms.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy}   rx={15} ry={10} fill="#8b5a20"/>
+            <ellipse cx={cx+dx-2} cy={cy+dy-2} rx={7}  ry={4}  fill="#a07030" opacity="0.65"/>
+            <rect    x={cx+dx-3}  y={cy+dy+7}  width={6} height={8} rx={2} fill="#c8a060"/>
+          </g>
+        ))}
+        {garlic.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={8} ry={6} fill="#f8f0d8" opacity="0.92"/>
+            <line x1={cx+dx} y1={cy+dy-4} x2={cx+dx} y2={cy+dy+4} stroke="#d8c880" strokeWidth="1.2"/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#22222299">Mushroom &amp; Garlic</text>
+      </svg>
+    )
+  }
+
+  if (type === 'supreme') {
+    const blobs: Blob[] = [[-16,-24,24,18],[20,-32,20,16],[-32,10,22,16],[20,20,24,18],[-12,32,20,14]]
+    const pep: [number,number][] = [[-42,-14],[42,-14],[0,-48],[36,30],[-36,30]]
+    const sausage: Blob[] = [[10,10,11,9],[-10,-14,12,9],[8,-36,10,8],[-38,22,10,8],[40,14,9,8]]
+    const greenPep: [number,number,number,number][] = [[-28,-40,6,18],[46,0,6,18]]
+    const olives: [number,number][] = [[-10,20],[28,-10],[-34,-14]]
+    const onions: [number,number][] = [[20,42],[-20,-50]]
+    return (
+      <svg width="100%" height="240" viewBox="0 0 340 240">
+        <PizzaBase sauce="#c02020"/>
+        <Mozz blobs={blobs}/>
+        {sausage.map(([dx,dy,rx,ry],i)=>(
+          <ellipse key={i} cx={cx+dx} cy={cy+dy} rx={rx} ry={ry} fill="#7a3808"/>
+        ))}
+        {pep.map(([dx,dy],i)=>(
+          <g key={i}>
+            <circle cx={cx+dx} cy={cy+dy} r={13} fill="#8a0c0c"/>
+            <circle cx={cx+dx} cy={cy+dy} r={9}  fill="#c01212"/>
+          </g>
+        ))}
+        {greenPep.map(([dx,dy,w,h],i)=>(
+          <rect key={i} x={cx+dx} y={cy+dy} width={w} height={h} rx={2} fill="#1a8a1a" opacity="0.92"/>
+        ))}
+        {olives.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={9} ry={7} fill="#1a1a1a"/>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={5} ry={3} fill="#2a8a2a"/>
+          </g>
+        ))}
+        {onions.map(([dx,dy],i)=>(
+          <g key={i}>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={12} ry={8} fill="none" stroke="#d0c0e8" strokeWidth="2.5"/>
+            <ellipse cx={cx+dx} cy={cy+dy} rx={7}  ry={4} fill="none" stroke="#d0c0e8" strokeWidth="1.5"/>
+          </g>
+        ))}
+        <text x={cx} y={232} textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ffffff99">Supreme</text>
+      </svg>
+    )
+  }
+
+  return (
+    <svg width="100%" height="240" viewBox="0 0 340 240">
+      <PizzaBase sauce="#cc2020"/>
+    </svg>
+  )
+}
+
 // ── rounds ─────────────────────────────────────────────────────────────────
 interface Round {
-  image:    string      // Pexels photo URL
-  label:    string      // short pizza name shown under image
-  hint:     string      // "I can see: ..."
-  required: string[][]  // one synonym per group must appear
+  type:      string
+  label:     string
+  hint:      string
+  required:  string[][]
   forbidden: string[]
-  time:     number
+  time:      number
 }
 
 const ROUNDS: Round[] = [
   {
-    image:    'https://images.pexels.com/photos/2619970/pexels-photo-2619970.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'margherita',
     label:    'Classic Margherita',
-    hint:     'I can see: cheese, tomato, basil',
+    hint:     'I can see: tomato sauce, melted mozzarella, fresh basil leaves',
     required: [['cheese','cheesy','mozzarella'],['tomato','tomato sauce','marinara'],['basil']],
+    forbidden:[],
+    time: 65,
+  },
+  {
+    type:     'pepperoni',
+    label:    'Pepperoni',
+    hint:     'I can see: pepperoni slices, golden cheese, tomato sauce',
+    required: [['pepperoni'],['cheese','mozzarella'],['tomato','sauce']],
     forbidden:[],
     time: 60,
   },
   {
-    image:    'https://images.pexels.com/photos/803290/pexels-photo-803290.jpeg?auto=compress&cs=tinysrgb&w=800',
-    label:    'Pepperoni',
-    hint:     'I can see: pepperoni, cheese, pizza',
-    required: [['pepperoni'],['cheese','mozzarella'],['pizza']],
-    forbidden:[],
-    time: 55,
-  },
-  {
-    image:    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'veggie',
     label:    'Veggie Supreme',
-    hint:     'I can see: vegetables, bell pepper, mushroom, onion',
-    required: [['vegetable','veggie','vegetarian'],['bell pepper','pepper'],['mushroom'],['onion']],
+    hint:     'I can see: green, red, yellow bell peppers, mushrooms, onion — no meat',
+    required: [['vegetable','veggie','vegetarian','bell pepper','pepper'],['mushroom'],['onion']],
     forbidden:['meat','pepperoni','chicken','sausage'],
-    time: 55,
+    time: 60,
   },
   {
-    image:    'https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'bbq',
     label:    'BBQ Chicken',
-    hint:     'I can see: chicken, BBQ sauce, onion',
+    hint:     'I can see: dark brown BBQ sauce, golden chicken pieces, onion rings',
     required: [['chicken'],['bbq','barbecue','barbeque'],['onion']],
     forbidden:['tomato sauce','marinara','red sauce'],
-    time: 50,
+    time: 55,
   },
   {
-    image:    'https://images.pexels.com/photos/4109111/pexels-photo-4109111.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'hawaiian',
     label:    'Hawaiian',
-    hint:     'I can see: pineapple, ham, cheese',
+    hint:     'I can see: pineapple chunks, pink ham slices, cheese, tomato sauce',
     required: [['pineapple'],['ham'],['cheese','mozzarella']],
     forbidden:[],
-    time: 50,
+    time: 55,
   },
   {
-    image:    'https://images.pexels.com/photos/3682837/pexels-photo-3682837.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'mushroom',
     label:    'Mushroom & Garlic',
-    hint:     'I can see: mushroom, garlic, cheese, thin crust',
-    required: [['mushroom'],['garlic'],['cheese','mozzarella'],['thin crust','thin']],
+    hint:     'I can see: cream/white sauce, lots of mushrooms, garlic pieces',
+    required: [['mushroom'],['garlic'],['cream','white sauce','cream sauce']],
     forbidden:[],
     time: 50,
   },
   {
-    image:    'https://images.pexels.com/photos/1049627/pexels-photo-1049627.jpeg?auto=compress&cs=tinysrgb&w=800',
+    type:     'supreme',
     label:    'Supreme',
-    hint:     'I can see: pepperoni, sausage, olive, bell pepper, onion',
-    required: [['pepperoni'],['sausage'],['olive'],['bell pepper','pepper'],['onion']],
+    hint:     'I can see: pepperoni, sausage crumbles, green olives, green pepper, onion',
+    required: [['pepperoni'],['sausage'],['olive'],['pepper','green pepper','bell pepper'],['onion']],
     forbidden:[],
     time: 45,
   },
@@ -84,7 +310,7 @@ function evaluate(text: string, round: Round) {
   return { ok: missing.length === 0 && violated.length === 0, missing, violated }
 }
 
-// ── pizza SVG (used only on title / result / gameover) ─────────────────────
+// ── pizza face SVG (title / result / gameover) ─────────────────────────────
 function PizzaSVG({ mood }: { mood: 'wait' | 'happy' | 'sad' }) {
   const face =
     mood === 'happy' ? 'M 36 56 Q 50 68 64 56' :
@@ -187,13 +413,13 @@ export default function PromptPizzaGame() {
           PROMPT<br />PIZZA
         </h1>
         <p style={{ color:'#aaa', fontFamily:'monospace', fontSize:13, textAlign:'center', maxWidth:280, lineHeight:1.6, margin:0 }}>
-          Look at the pizza photo.<br />
+          Look at the pizza illustration.<br />
           Write the AI prompt that made it.<br />
           Describe every topping you see!
         </p>
         <div style={{ display:'flex', flexDirection:'column', gap:8, width:260 }}>
           {[
-            ['Describe', 'Name every topping and ingredient you can see'],
+            ['Describe', 'Name every topping and ingredient you see'],
             ['Be specific','The more detail in your prompt, the better'],
             ['Speed','Faster answers earn more bonus points'],
           ].map(([t,d]) => (
@@ -230,7 +456,7 @@ export default function PromptPizzaGame() {
             )}
             {result.violated.length > 0 && (
               <div style={S.feedbackBox('#ff8800')}>
-                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>THAT PIZZA DOESN'T HAVE</span>
+                <span style={{ color:'#ff8800', fontFamily:'monospace', fontSize:11 }}>THAT PIZZA DOESN&apos;T HAVE</span>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginTop:4 }}>
                   {result.violated.map(v => <Tag key={v} label={v} color="#ff8800" />)}
                 </div>
@@ -298,22 +524,9 @@ export default function PromptPizzaGame() {
 
       <div style={{ width:'100%', maxWidth:520, display:'flex', flexDirection:'column', gap:14 }}>
 
-        {/* Pizza photo */}
+        {/* Pizza illustration */}
         <div style={{ position:'relative', borderRadius:8, overflow:'hidden', border:`1px solid #222` }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={round.image}
-            alt={round.label}
-            style={{ width:'100%', height:240, objectFit:'cover', display:'block' }}
-          />
-          <div style={{
-            position:'absolute', bottom:0, left:0, right:0,
-            padding:'8px 12px',
-            background:'linear-gradient(transparent, #000c)',
-            fontFamily:'monospace', fontSize:12, color:'#fff', letterSpacing:1,
-          }}>
-            {round.label}
-          </div>
+          <PizzaIllustration type={round.type} />
         </div>
 
         {/* Instruction */}
