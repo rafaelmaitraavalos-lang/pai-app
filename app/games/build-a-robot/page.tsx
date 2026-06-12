@@ -113,10 +113,11 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
   const [gs,setGs] = useState<RFState>(RF0)
   const gsRef = useRef(gs)
   useEffect(()=>{gsRef.current=gs},[gs])
-  const boostRef = useRef(false)
-  const doneRef  = useRef(false)
+  const boostRef         = useRef(false)
+  const doneRef          = useRef(false)
+  const boostIntervalRef = useRef<NodeJS.Timeout|null>(null)
 
-  // tap to boost — first tap starts AND boosts simultaneously
+  // each boost gives a reliable upward kick (clamped so rapid taps can stack)
   const doBoost = useCallback(()=>{
     const s=gsRef.current
     if(!s.started){
@@ -125,8 +126,18 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
       return
     }
     if(s.fuel<10) return
-    setGs(p=>({...p,vy:Math.max(p.vy-5,-9),fuel:Math.max(0,p.fuel-18)}))
+    // stronger impulse: always subtracts 7 so even max-fall (vy=9) becomes vy=2 in one tap
+    setGs(p=>({...p,vy:Math.max(p.vy-7,-9),fuel:Math.max(0,p.fuel-18)}))
     boostRef.current=true; setTimeout(()=>{boostRef.current=false},120)
+  },[])
+
+  // hold-to-boost: fire on press, then every 150ms while held
+  const startBoost = useCallback(()=>{
+    doBoost()
+    boostIntervalRef.current = setInterval(doBoost, 150)
+  },[doBoost])
+  const stopBoost = useCallback(()=>{
+    if(boostIntervalRef.current){ clearInterval(boostIntervalRef.current); boostIntervalRef.current=null }
   },[])
 
   useEffect(()=>{
@@ -349,11 +360,12 @@ export function RocketFly({cfg,onDone}:{cfg:Cfg;onDone:(s:number)=>void}) {
         )}
       </div>
       {/* Controls */}
-      <button onPointerDown={doBoost}
+      <button
+        onPointerDown={startBoost} onPointerUp={stopBoost} onPointerLeave={stopBoost}
         style={{...S.btn(cfg.color),width:W,fontSize:20,padding:'16px 0',userSelect:'none',opacity:fuel<5?.5:1,boxShadow:`0 0 ${fuel>0?20:4}px ${cfg.color}66`}}>
         🚀 BOOST {fuel<5?'(charging…)':''}
       </button>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>Tap BOOST or SPACE / ↑ to fly in bursts</div>
+      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>Hold BOOST or SPACE / ↑ to fly!</div>
     </div>
   )
 }

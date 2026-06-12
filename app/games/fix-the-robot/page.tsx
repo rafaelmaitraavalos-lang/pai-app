@@ -55,6 +55,7 @@ interface Round {
   difficulty: 'easy' | 'medium' | 'hard'
   time: number
   segs: Seg[]
+  options: string[]   // correct fix is first; will be shuffled at runtime
   explanation: string
 }
 
@@ -66,114 +67,169 @@ const ROUNDS: Round[] = [
   {
     difficulty: 'easy', time: 25,
     segs: [t('AI stands for '), c('Artificial'), t(' '), w('Pizza', 'Intelligence')],
+    options: ['Intelligence', 'Memory', 'Processing', 'Vision'],
     explanation: '🤖 AI stands for Artificial INTELLIGENCE — the ability of computers to think and learn.',
   },
   {
     difficulty: 'easy', time: 25,
     segs: [t('Siri and Alexa are '), w('robot dogs', 'voice assistants'), t(' that use AI')],
+    options: ['voice assistants', 'search engines', 'game controllers', 'smart cameras'],
     explanation: '🔊 Siri and Alexa are VOICE ASSISTANTS — AI that listens and responds to what you say.',
   },
   {
     difficulty: 'easy', time: 25,
     segs: [t('AI '), c('learns'), t(' by studying '), w('millions of pizzas', 'lots of data')],
+    options: ['lots of data', 'real brains', 'movies and songs', 'math problems'],
     explanation: '📊 AI learns from DATA — billions of examples like photos, sentences, and numbers.',
   },
   {
-    difficulty: 'medium', time: 18,
+    difficulty: 'medium', time: 20,
     segs: [t('AI finds '), w('rhymes', 'patterns'), t(' in '), c('data'), t(' to get smarter')],
+    options: ['patterns', 'songs', 'pictures', 'music'],
     explanation: '🔍 AI finds PATTERNS in data — like noticing that "furry + four legs + meows = cat."',
   },
   {
-    difficulty: 'medium', time: 18,
+    difficulty: 'medium', time: 20,
     segs: [t('ChatGPT is a large '), w('painting', 'language'), t(' model that '), c('generates text')],
+    options: ['language', 'picture', 'video', 'sound'],
     explanation: '💬 ChatGPT is a LANGUAGE model — trained on text to read, write, and answer questions.',
   },
   {
-    difficulty: 'medium', time: 18,
+    difficulty: 'medium', time: 20,
     segs: [t('AI that only does one task, like play chess, is called '), w('general', 'narrow'), t(' AI')],
+    options: ['narrow', 'basic', 'beginner', 'limited'],
     explanation: '♟️ That\'s NARROW AI — expert at one job. GENERAL AI could do anything, and doesn\'t exist yet.',
   },
   {
-    difficulty: 'medium', time: 18,
+    difficulty: 'medium', time: 20,
     segs: [t('When AI learns '), c('unfair ideas'), t(' from bad data, it\'s called '), w('a glitch', 'bias')],
+    options: ['bias', 'a bug', 'a crash', 'an error'],
     explanation: '⚖️ That\'s BIAS — when bad training data makes AI act unfairly toward certain groups of people.',
   },
   {
-    difficulty: 'hard', time: 12,
+    difficulty: 'hard', time: 14,
     segs: [t('Fake AI '), c('videos'), t(' of real people saying things they never said are called '), w('cartoons', 'deepfakes')],
+    options: ['deepfakes', 'memes', 'filters', 'animations'],
     explanation: '🎭 Those are DEEPFAKES — AI-made fake videos that look very real and can spread misinformation.',
   },
   {
-    difficulty: 'hard', time: 12,
+    difficulty: 'hard', time: 14,
     segs: [t('The challenge of making AI do what '), c('humans'), t(' actually want is called the '), w('debugging', 'alignment'), t(' problem')],
+    options: ['alignment', 'training', 'programming', 'testing'],
     explanation: '🎯 The ALIGNMENT problem — making sure AI\'s goals perfectly match what humans actually care about.',
   },
   {
-    difficulty: 'hard', time: 12,
+    difficulty: 'hard', time: 14,
     segs: [t('AI that could do any intellectual task a '), c('human'), t(' can do would be called '), w('narrow', 'general'), t(' AI')],
+    options: ['general', 'universal', 'human-level', 'super'],
     explanation: '🌐 That\'s GENERAL AI (AGI) — it doesn\'t exist yet. All current AI is narrow, not general.',
   },
 ]
 
+// ── shuffle helper ─────────────────────────────────────────────────────────
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 type Screen = 'title' | 'play' | 'result' | 'gameover'
+type Phase  = 'find' | 'replace'   // find the wrong word, then pick the replacement
 
 // ── Component ──────────────────────────────────────────────────────────────
 
 export default function FixTheRobot() {
   const router = useRouter()
-  const [screen,   setScreen]   = useState<Screen>('title')
-  const [idx,      setIdx]      = useState(0)
-  const [score,    setScore]    = useState(0)
-  const [streak,   setStreak]   = useState(0)
-  const [timeLeft, setTimeLeft] = useState(ROUNDS[0].time)
-  const [picked,   setPicked]   = useState<Seg | null>(null)
-  const [correct,  setCorrect]  = useState<boolean | null>(null)
+  const [screen,       setScreen]       = useState<Screen>('title')
+  const [phase,        setPhase]        = useState<Phase>('find')
+  const [idx,          setIdx]          = useState(0)
+  const [score,        setScore]        = useState(0)
+  const [streak,       setStreak]       = useState(0)
+  const [timeLeft,     setTimeLeft]     = useState(ROUNDS[0].time)
+  const [foundCorrect, setFoundCorrect] = useState(false)   // clicked the right chip in 'find'
+  const [fixedCorrect, setFixedCorrect] = useState<boolean | null>(null)   // picked right option
+  const [shuffled,     setShuffled]     = useState<string[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const round = ROUNDS[idx]
 
+  // shuffle options whenever round changes
   useEffect(() => {
-    if (screen !== 'play') return
+    setShuffled(shuffle(round.options))
+  }, [idx, round.options])
+
+  // timer only runs during 'find' phase
+  useEffect(() => {
+    if (screen !== 'play' || phase !== 'find') return
     setTimeLeft(round.time)
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) { clearInterval(timerRef.current!); handlePick(null); return 0 }
+        if (t <= 1) { clearInterval(timerRef.current!); handleTimeout(); return 0 }
         return t - 1
       })
     }, 1000)
     return () => clearInterval(timerRef.current!)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen, idx])
+  }, [screen, idx, phase])
 
-  function handlePick(seg: Seg | null) {
+  function handleTimeout() {
+    // ran out of time — didn't find the wrong word
+    setFoundCorrect(false)
+    setFixedCorrect(false)
+    setScreen('result')
+  }
+
+  function handleChipClick(seg: Seg) {
     clearInterval(timerRef.current!)
-    const isRight = seg?.wrong === true
-    const pts = isRight ? 100 + timeLeft * 10 : 0
-    setPicked(seg)
-    setCorrect(isRight)
+    if (seg.wrong) {
+      // Found the right chip! Now ask them to replace it
+      setFoundCorrect(true)
+      setPhase('replace')
+    } else {
+      // Clicked a correct word — wrong!
+      setFoundCorrect(false)
+      setFixedCorrect(false)
+      setStreak(0)
+      setScreen('result')
+    }
+  }
+
+  function handleOptionPick(option: string) {
+    const fix = round.segs.find(s => s.wrong)?.fix ?? ''
+    const isRight = option === fix
+    setFixedCorrect(isRight)
+    const pts = isRight ? 100 + timeLeft * 10 : 40   // partial credit for finding but wrong replacement
     setScore(s => s + pts)
     setStreak(st => isRight ? st + 1 : 0)
     setScreen('result')
   }
 
   function next() {
-    setPicked(null); setCorrect(null)
+    setFoundCorrect(false); setFixedCorrect(null); setPhase('find')
     if (idx + 1 >= ROUNDS.length) { setScreen('gameover'); return }
     setIdx(i => i + 1)
     setScreen('play')
   }
 
   function restart() {
-    setIdx(0); setScore(0); setStreak(0); setPicked(null); setCorrect(null); setScreen('title')
+    setIdx(0); setScore(0); setStreak(0)
+    setFoundCorrect(false); setFixedCorrect(null); setPhase('find')
+    setScreen('title')
   }
 
   const timerPct   = (timeLeft / round.time) * 100
   const timerColor = timerPct > 50 ? GREEN : timerPct > 25 ? YELLOW : PINK
   const diffColor  = round.difficulty === 'easy' ? GREEN : round.difficulty === 'medium' ? YELLOW : PINK
-  const mood: Mood = screen === 'play' ? 'thinking' : correct ? 'happy' : correct === false ? 'sad' : 'idle'
   const wrongSeg   = round.segs.find(s => s.wrong)
+
+  // mood during play depends on phase
+  const playMood: Mood = phase === 'find' ? 'thinking' : 'happy'
+  const resultMood: Mood = fixedCorrect ? 'happy' : 'sad'
 
   // ── title ────────────────────────────────────────────────────────────────
   if (screen === 'title') return (
@@ -184,15 +240,19 @@ export default function FixTheRobot() {
         <h1 style={{ ...S.neon(PINK), fontSize: 36, letterSpacing: 4, textAlign:'center', lineHeight: 1.2 }}>
           FIX THE ROBOT
         </h1>
-        <p style={{ color:'#666', fontFamily:'monospace', fontSize: 13, textAlign:'center', maxWidth: 300, lineHeight: 1.7 }}>
-          The robot says something wrong.<br/>
-          Tap the broken word to fix it!
-        </p>
+        <div style={{ background:'#0d0d0d', border:'1px solid #222', borderRadius:10, padding:'14px 18px', maxWidth:300 }}>
+          <p style={{ color:'#aaa', fontFamily:'monospace', fontSize: 13, textAlign:'center', lineHeight: 1.8, margin:0 }}>
+            <span style={{color:YELLOW,fontWeight:900}}>Step 1:</span> The robot says something wrong.<br/>
+            <span style={{color:GREEN,fontWeight:900}}>Find</span> the wrong word and tap it.<br/><br/>
+            <span style={{color:YELLOW,fontWeight:900}}>Step 2:</span> Tap the <span style={{color:GREEN,fontWeight:900}}>correct</span> replacement<br/>
+            from the options shown.
+          </p>
+        </div>
         <div style={{ display:'flex', flexDirection:'column', gap: 8, width: 280 }}>
           {([
-            [GREEN,  'Easy',   '3 rounds · obvious mistakes · 25s each'],
-            [YELLOW, 'Medium', '4 rounds · sneaky mistakes  · 18s each'],
-            [PINK,   'Hard',   '3 rounds · tricky mistakes  · 12s each'],
+            [GREEN,  'Easy',   '3 rounds · obvious mistakes · 25s'],
+            [YELLOW, 'Medium', '4 rounds · sneaky mistakes  · 20s'],
+            [PINK,   'Hard',   '3 rounds · tricky mistakes  · 14s'],
           ] as const).map(([c,label,desc]) => (
             <div key={label} style={{ display:'flex', gap: 10 }}>
               <span style={{ color: c, fontFamily:'monospace', fontSize: 11, flexShrink: 0, marginTop: 1 }}>■</span>
@@ -209,29 +269,38 @@ export default function FixTheRobot() {
 
   // ── result ───────────────────────────────────────────────────────────────
   if (screen === 'result') {
-    const pts = correct ? 100 + timeLeft * 10 : 0
+    const pts = fixedCorrect ? 100 + timeLeft * 10 : fixedCorrect === false && foundCorrect ? 40 : 0
+    const headline =
+      !foundCorrect   ? (timeLeft <= 0 ? '⏱ TIME UP' : '✗ WRONG WORD') :
+      fixedCorrect    ? '✓ FIXED!' :
+                        '✗ WRONG REPLACEMENT'
+    const headlineColor = fixedCorrect ? GREEN : PINK
+
     return (
       <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 14, width:'100%', maxWidth: 460 }}>
-          <Robot mood={mood}/>
+          <Robot mood={resultMood}/>
 
-          <div style={{ ...S.neon(correct ? GREEN : PINK), fontSize: 22, letterSpacing: 3 }}>
-            {picked === null ? '⏱ TIME UP' : correct ? '✓ FIXED IT!' : '✗ WRONG WORD'}
+          <div style={{ ...S.neon(headlineColor), fontSize: 22, letterSpacing: 3 }}>
+            {headline}
           </div>
 
           {/* Show corrected sentence */}
-          <div style={{ background:'#0d0d0d', border:`1px solid ${correct ? GREEN : PINK}33`,
+          <div style={{ background:'#0d0d0d', border:`1px solid ${fixedCorrect ? GREEN : PINK}33`,
             borderRadius: 10, padding:'14px 16px', width:'100%',
-            boxShadow:`0 0 18px ${correct ? GREEN : PINK}22` }}>
-            <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 8 }}>CORRECTED SENTENCE:</div>
-            <div style={{ fontFamily:'monospace', fontSize: 14, color:'#ccc', lineHeight: 1.7 }}>
+            boxShadow:`0 0 18px ${fixedCorrect ? GREEN : PINK}22` }}>
+            <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 8, letterSpacing:1 }}>CORRECTED SENTENCE:</div>
+            <div style={{ fontFamily:'monospace', fontSize: 14, color:'#ccc', lineHeight: 1.8 }}>
               {round.segs.map((seg, i) => {
                 if (seg.wrong) return (
                   <span key={i}>
-                    <span style={{ textDecoration:'line-through', color: PINK }}>{seg.text}</span>
+                    <span style={{ textDecoration:'line-through', color: PINK, opacity:0.7 }}>{seg.text}</span>
                     {' '}
-                    <span style={{ color: GREEN, fontWeight: 900 }}>{seg.fix}</span>
+                    <span style={{ color: GREEN, fontWeight: 900, background:'#002200', padding:'1px 6px', borderRadius:4 }}>{seg.fix}</span>
                   </span>
+                )
+                if (seg.chip) return (
+                  <span key={i} style={{ color:'#88cc44', background:'#0d1a0d', padding:'1px 8px', borderRadius:4, margin:'0 2px' }}>{seg.text}</span>
                 )
                 return <span key={i}>{seg.text}</span>
               })}
@@ -250,12 +319,12 @@ export default function FixTheRobot() {
             </div>
           )}
 
-          <div style={{ color: correct ? GREEN : '#333', fontFamily:'monospace', fontSize: 20, letterSpacing: 2 }}>
-            {correct ? `+${pts} pts` : '+0 pts'}
+          <div style={{ color: pts > 0 ? GREEN : '#333', fontFamily:'monospace', fontSize: 20, letterSpacing: 2 }}>
+            {pts > 0 ? `+${pts} pts` : '+0 pts'}
           </div>
           <div style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>Total: {score} pts</div>
 
-          <button style={S.bigBtn(correct ? GREEN : PINK)} onClick={next}>
+          <button style={S.bigBtn(fixedCorrect ? GREEN : PINK)} onClick={next}>
             {idx + 1 >= ROUNDS.length ? 'SEE RESULTS →' : 'NEXT →'}
           </button>
         </div>
@@ -292,8 +361,8 @@ export default function FixTheRobot() {
     )
   }
 
-  // ── play ─────────────────────────────────────────────────────────────────
-  return (
+  // ── play: FIND phase ──────────────────────────────────────────────────────
+  if (phase === 'find') return (
     <div style={S.root}>
       {/* HUD */}
       <div style={{ width:'100%', maxWidth: 460, display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 6 }}>
@@ -314,11 +383,18 @@ export default function FixTheRobot() {
           boxShadow:`0 0 8px ${timerColor}` }}/>
       </div>
 
-      <Robot mood="thinking"/>
+      <Robot mood={playMood}/>
+
+      {/* Step label */}
+      <div style={{ marginTop:10, marginBottom:4, fontFamily:'monospace', fontSize:11, color:'#555', letterSpacing:2 }}>
+        STEP 1 OF 2
+      </div>
+      <div style={{ ...S.neon(PINK), fontSize:22, letterSpacing:3, marginBottom:10 }}>
+        FIND THE WRONG WORD
+      </div>
 
       {/* Speech bubble */}
-      <div style={{ width:'100%', maxWidth: 420, marginTop: 8 }}>
-        {/* Bubble tail */}
+      <div style={{ width:'100%', maxWidth: 420 }}>
         <div style={{ width: 0, height: 0, marginLeft: 48,
           borderLeft:'10px solid transparent',
           borderRight:'10px solid transparent',
@@ -327,31 +403,31 @@ export default function FixTheRobot() {
           padding:'16px 18px', boxShadow:'0 4px 24px rgba(0,0,0,0.8)' }}>
 
           <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 10, letterSpacing: 1 }}>
-            I THINK...
+            THE ROBOT SAYS...
           </div>
 
-          {/* Sentence */}
-          <div style={{ fontSize: 16, lineHeight: 2, color:'#ccc', fontFamily:'monospace' }}>
+          {/* Sentence — chips are clickable */}
+          <div style={{ fontSize: 16, lineHeight: 2.2, color:'#ccc', fontFamily:'monospace' }}>
             {round.segs.map((seg, i) => {
               if (!seg.chip) return <span key={i}>{seg.text}</span>
               return (
                 <button
                   key={i}
-                  onClick={() => handlePick(seg)}
+                  onClick={() => handleChipClick(seg)}
                   style={{
                     display:'inline',
-                    padding:'3px 10px',
+                    padding:'4px 12px',
                     margin:'0 3px',
-                    background: '#0d1a0d',
-                    border:`1.5px solid ${GREEN}44`,
+                    background: '#100018',
+                    border:`2px solid ${PINK}88`,
                     borderRadius: 6,
-                    color: '#88cc44',
+                    color: '#ff88bb',
                     fontFamily:'monospace',
                     fontSize: 15,
                     cursor:'pointer',
                     verticalAlign:'middle',
                     transition:'all 0.1s',
-                    boxShadow:`0 0 8px ${GREEN}18`,
+                    boxShadow:`0 0 10px ${PINK}22`,
                   }}
                 >
                   {seg.text}
@@ -360,16 +436,94 @@ export default function FixTheRobot() {
             })}
           </div>
 
-          <div style={{ marginTop: 12, fontFamily:'monospace', fontSize: 11, color:'#333' }}>
-            TAP THE WRONG WORD ↑
+          <div style={{ marginTop: 14, fontFamily:'monospace', fontSize: 12, color: PINK,
+            letterSpacing:1, display:'flex', alignItems:'center', gap:6 }}>
+            <span style={{fontSize:16}}>☝️</span> TAP THE WRONG WORD ABOVE
           </div>
         </div>
       </div>
 
-      {/* Timer display */}
       <div style={{ marginTop: 12, color: timerColor, fontFamily:'monospace', fontSize: 13,
         textShadow:`0 0 8px ${timerColor}`, letterSpacing: 1 }}>
         {timeLeft}s
+      </div>
+    </div>
+  )
+
+  // ── play: REPLACE phase ───────────────────────────────────────────────────
+  return (
+    <div style={S.root}>
+      {/* HUD */}
+      <div style={{ width:'100%', maxWidth: 460, display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 14 }}>
+        <span style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>
+          {idx + 1} / {ROUNDS.length}
+        </span>
+        <span style={{ color: GREEN, fontFamily:'monospace', fontSize: 12 }}>{score} pts</span>
+      </div>
+
+      <Robot mood="happy"/>
+
+      {/* Step label */}
+      <div style={{ marginTop:10, marginBottom:4, fontFamily:'monospace', fontSize:11, color:'#555', letterSpacing:2 }}>
+        STEP 2 OF 2
+      </div>
+      <div style={{ ...S.neon(GREEN), fontSize:20, letterSpacing:2, marginBottom:10, textAlign:'center' }}>
+        ✓ FOUND IT! NOW FIX IT.
+      </div>
+
+      {/* Sentence with wrong word shown crossed out */}
+      <div style={{ width:'100%', maxWidth: 420, background:'#0d0d0d', border:`1px solid ${PINK}44`,
+        borderRadius:12, padding:'14px 18px', marginBottom:18 }}>
+        <div style={{ fontFamily:'monospace', fontSize:11, color:'#444', marginBottom:8, letterSpacing:1 }}>
+          THE WRONG WORD WAS:
+        </div>
+        <div style={{ fontSize: 15, lineHeight: 2, color:'#ccc', fontFamily:'monospace' }}>
+          {round.segs.map((seg, i) => {
+            if (seg.wrong) return (
+              <span key={i} style={{
+                background:`${PINK}22`, border:`2px solid ${PINK}88`,
+                borderRadius:6, padding:'3px 10px', color: PINK,
+                textDecoration:'line-through', textDecorationColor: PINK,
+                fontWeight:900,
+              }}>{seg.text}</span>
+            )
+            if (seg.chip) return (
+              <span key={i} style={{ color:'#88cc44', background:'#0d1a0d',
+                padding:'2px 8px', borderRadius:4, margin:'0 2px' }}>{seg.text}</span>
+            )
+            return <span key={i}>{seg.text}</span>
+          })}
+        </div>
+      </div>
+
+      {/* Replacement options */}
+      <div style={{ width:'100%', maxWidth: 420 }}>
+        <div style={{ fontFamily:'monospace', fontSize:12, color:'#555', letterSpacing:2, marginBottom:12, textAlign:'center' }}>
+          TAP THE CORRECT REPLACEMENT ↓
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+          {shuffled.map((opt, i) => (
+            <button key={i} onClick={() => handleOptionPick(opt)}
+              style={{
+                padding:'14px 10px',
+                background:'#060606',
+                border:`2px solid ${GREEN}55`,
+                borderRadius:8,
+                color: GREEN,
+                fontFamily:'monospace',
+                fontSize:14,
+                fontWeight:900,
+                cursor:'pointer',
+                boxShadow:`0 0 10px ${GREEN}18`,
+                transition:'all 0.1s',
+              }}
+              onMouseEnter={e=>{(e.currentTarget as HTMLButtonElement).style.background=`${GREEN}18`}}
+              onMouseLeave={e=>{(e.currentTarget as HTMLButtonElement).style.background='#060606'}}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -381,7 +535,7 @@ const S = {
     minHeight: '100vh', background: '#000',
     display: 'flex' as const, flexDirection: 'column' as const,
     alignItems: 'center' as const, justifyContent: 'center' as const,
-    padding: '24px 16px',
+    padding: '24px 16px', gap: 0,
   },
   neon: (c: string) => ({
     color: c, fontFamily: 'monospace', fontWeight: 900,
