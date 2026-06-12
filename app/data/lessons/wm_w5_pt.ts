@@ -3,7 +3,7 @@ import { LessonData } from '../index'
 const wm_w5_pt: Record<number, LessonData> = {
   351: {
     id: 351, worldId: 265,
-    title: "Ia E Empregos (Longo Prazo)",
+    title: "IA E Empregos (Longo Prazo)",
     stops: [
       { tag: "Fact", title: "Não Se, Mas Com Que Velocidade", body: "É improvável que a IA afete todos os empregos da mesma maneira. A questão mais importante não é se a IA afetará o trabalho, mas como, em que ritmo e quem estará posicionado para se adaptar." },
       { tag: "Example", title: "O Que É Fácil de Automatizar", body: "Algumas tarefas são mais fáceis de automatizar do que outras — especialmente aquelas que são repetitivas, estruturadas ou baseadas em padrões de dados. Outros trabalhos são mais difíceis de automatizar quando exigem habilidade física, confiança, discernimento ou experiência em situações imprevisíveis." },
@@ -19,7 +19,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   352: {
     id: 352, worldId: 265,
-    title: "Ia E Criatividade (Longo Prazo)",
+    title: "IA E Criatividade (Longo Prazo)",
     stops: [
       { tag: "Fact", title: "Geração Sem Experiência", body: "Os sistemas de IA agora podem gerar imagens, música, textos e vídeos. Isso levanta questões difíceis sobre a criatividade que se tornam mais urgentes à medida que esses sistemas melhoram." },
       { tag: "Example", title: "Experiência Vivida vs. Padrão", body: "Obras geradas por IA são construídas a partir de padrões aprendidos de materiais criados por humanos. O sistema pode criar algo novo, mas faz isso de maneira diferente de uma pessoa. Um artista humano pode criar a partir da memória, da emoção, da frustração, da curiosidade ou de experiências vividas. Um sistema de IA não possui essas experiências." },
@@ -35,7 +35,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   353: {
     id: 353, worldId: 265,
-    title: "Segurança Da Ia",
+    title: "Segurança Da IA",
     stops: [
       { tag: "Fact", title: "Manter a IA Sob Controle", body: "Alguns dos pesquisadores mais sérios que trabalham com IA estão focados em um campo chamado segurança da IA — garantir que os sistemas de IA façam o que seus criadores pretendem e não causem danos não intencionais, inclusive à medida que se tornam mais capazes." },
       { tag: "Example", title: "Não Malvada—Só Desalinhada", body: "A preocupação não é que a IA vá \"se tornar malvada\". É que sistemas poderosos que perseguem objetivos aparentemente razoáveis podem persegui-los de maneiras inesperadas. À medida que os sistemas ganham mais autonomia, os erros podem ser mais difíceis de corrigir. A pressão competitiva para implantar rapidamente pode levar a testes insuficientes." },
@@ -51,7 +51,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   354: {
     id: 354, worldId: 265,
-    title: "Ia E Desigualdade",
+    title: "IA E Desigualdade",
     stops: [
       { tag: "Fact", title: "IA Pode Ir para Qualquer Lado", body: "A IA tem o potencial de reduzir a desigualdade. Também tem o potencial de piorá-la significativamente. Qual resultado se concretiza depende de decisões — sobre acesso, propriedade e políticas — que ainda não foram finalizadas." },
       { tag: "Example", title: "Como a IA Aprofunda a Brecha", body: "Formas como a IA pode aumentar a desigualdade: • Trabalhadores em empregos rotineiros enfrentam deslocamento enquanto os donos dos sistemas de IA capturam os ganhos de produtividade • Ferramentas de IA avançadas estão disponíveis principalmente para indivíduos e instituições ricas • Sistemas de IA com desempenho inferior para grupos sub-representados reforçam as desvantagens existentes" },
@@ -67,7 +67,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   355: {
     id: 355, worldId: 265,
-    title: "Ia E Poder Global",
+    title: "IA E Poder Global",
     stops: [
       { tag: "Fact", title: "IA É Geopolítica", body: "A IA não é apenas uma história de tecnologia. É uma história geopolítica. As nações estão competindo por vantagem em IA — em capacidade militar, produtividade econômica e influência global — e essa competição tem consequências reais." },
       { tag: "Example", title: "Duas Potências, Uma Corrida", body: "Os EUA e a China são atualmente as principais potências em IA pela maioria das métricas: produção de pesquisa, patentes de IA, investimento e número de empresas de IA de ponta. Essa concentração tem implicações políticas para o resto do mundo." },
@@ -83,7 +83,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   356: {
     id: 356, worldId: 265,
-    title: "Ia E Clima",
+    title: "IA E Clima",
     stops: [
       { tag: "Fact", title: "Problema e Solução ao Mesmo Tempo", body: "A IA tem uma relação complicada com as mudanças climáticas. É ao mesmo tempo parte do problema e potencialmente parte da solução. O treinamento de grandes modelos de IA consome quantidades significativas de energia. Executar sistemas de IA em escala exige grandes data centers que usam enormes quantidades de eletricidade e água para resfriamento. À medida que o uso da IA se expande, o mesmo acontece com a sua demanda de energia." },
       { tag: "Example", title: "IA Ajuda no Combate ao Clima", body: "Por outro lado, as ferramentas de IA estão sendo aplicadas a desafios climáticos: otimizando redes de energia, melhorando a modelagem climática, acelerando a ciência dos materiais para baterias melhores, analisando dados de satélite para rastrear o desmatamento e as emissões." },
@@ -99,7 +99,7 @@ const wm_w5_pt: Record<number, LessonData> = {
   },
   357: {
     id: 357, worldId: 265,
-    title: "Vivendo Com A Ia",
+    title: "Vivendo Com A IA",
     stops: [
       { tag: "Fact", title: "Você Já Está Nela", body: "A IA já faz parte do seu mundo. A questão relevante não é se engajar com ela, mas como fazê-lo de forma crítica e mantendo seus próprios interesses e valores." },
       { tag: "Example", title: "Verifique Antes de Confiar", body: "Usar a IA bem significa conhecer seus limites. A IA pode estar errada. Ela pode afirmar inverdades com confiança. Ela reflete os vieses em seus dados de treinamento. Tratar os resultados da IA como um ponto de partida a ser verificado — especialmente para decisões importantes — é uma postura melhor do que tratá-los como autoritativos." },

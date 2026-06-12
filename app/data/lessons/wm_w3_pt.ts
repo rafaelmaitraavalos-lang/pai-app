@@ -3,7 +3,7 @@ import { LessonData } from '../index'
 const wm_w3_pt: Record<number, LessonData> = {
   331: {
     id: 331, worldId: 263,
-    title: "Ia E Empregos",
+    title: "IA E Empregos",
     stops: [
       { tag: "Fact", title: "Nem Todo Emprego É Igual", body: "É improvável que a IA afete todos os empregos da mesma maneira. Algumas tarefas são mais fáceis de automatizar do que outras, especialmente aquelas que são repetitivas, estruturadas ou baseadas em padrões de dados. Exemplos podem incluir: entrada de dados, respostas básicas de atendimento ao cliente, triagem de documentos, algumas tarefas de contabilidade, algumas formas de pesquisa ou triagem." },
       { tag: "Example", title: "Julgamento É Difícil de Automatizar", body: "Outros trabalhos são mais difíceis de automatizar, especialmente quando exigem habilidade física, confiança, discernimento ou experiência em situações imprevisíveis. Um encanador trabalhando em uma casa desconhecida precisa se adaptar constantemente. Um professor precisa responder às necessidades de diferentes alunos. Um enfermeiro pode notar mudanças sutis em um paciente que são difíceis de reduzir a uma lista de verificação." },
@@ -19,7 +19,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   332: {
     id: 332, worldId: 263,
-    title: "Ia E Criatividade",
+    title: "IA E Criatividade",
     stops: [
       { tag: "Fact", title: "IA Gera, Humanos Criam", body: "Os sistemas de IA agora podem gerar imagens, música, textos e vídeos. Isso levanta questões difíceis sobre a criatividade. Obras geradas por IA são construídas a partir de padrões aprendidos de materiais criados por humanos. Um modelo de linguagem teve contato com quantidades enormes de textos escritos por muitos humanos. Um gerador de imagens aprendeu a partir de grandes coleções de imagens, também de autoria de muitos humanos. O sistema pode criar algo novo, mas faz isso de maneira diferente de uma pessoa." },
       { tag: "Example", title: "Experiência Não Se Aprende", body: "Um artista humano pode criar a partir da memória, da emoção, da frustração, da curiosidade ou de experiências vividas. Um sistema de IA não possui essas experiências. Ele gera padrões com base em treinamento. Isso não torna toda imagem ou parágrafo gerado por IA inútil. Mas muda a conversa." },
@@ -35,7 +35,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   333: {
     id: 333, worldId: 263,
-    title: "Ia E Privacidade",
+    title: "IA E Privacidade",
     stops: [
       { tag: "Fact", title: "Seus Dados São o Produto", body: "Os sistemas de IA frequentemente dependem de dados. Esses dados podem incluir: histórico de localização, atividade de pesquisa, hábitos de navegação, compras, fotos, gravações de voz, informações de saúde, comportamento em redes sociais. As empresas podem usar essas informações para personalizar serviços, recomendar produtos, detectar fraudes ou treinar novos sistemas. Alguns usos são úteis. Outros levantam sérias preocupações." },
       { tag: "Example", title: "Vigilância Em Todo Lugar", body: "Ferramentas de reconhecimento facial podem identificar pessoas a partir de imagens de câmeras. Corretores de dados (data brokers) podem coletar e vender informações sobre indivíduos. Aplicativos podem reunir muito mais dados do que os usuários percebem." },
@@ -51,7 +51,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   334: {
     id: 334, worldId: 263,
-    title: "Ia E Saúde",
+    title: "IA E Saúde",
     stops: [
       { tag: "Fact", title: "Grande Promessa, Alto Risco", body: "A saúde é um dos usos mais promissores da IA. É também um dos que envolvem os maiores riscos. Os sistemas de IA podem ajudar a analisar imagens médicas, identificar padrões, organizar registros e apoiar os médicos na tomada de decisões. Alguns sistemas tiveram um desempenho muito bom em tarefas específicas, como na detecção de sinais de doenças em exames de imagem." },
       { tag: "Example", title: "AlphaFold e 50 Anos de Espera", body: "A IA também pode apoiar a pesquisa científica. O AlphaFold, um sistema desenvolvido pela DeepMind, fez grandes progressos na previsão de estruturas de proteínas. Esse foi um avanço importante porque a forma de uma proteína afeta o seu funcionamento. Prever essas formas havia sido um problema não resolvido por cinquenta anos." },
@@ -67,7 +67,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   335: {
     id: 335, worldId: 263,
-    title: "Ia E Educação",
+    title: "IA E Educação",
     stops: [
       { tag: "Fact", title: "IA Já Está nas Salas de Aula", body: "Os alunos já estão usando ferramentas de IA para fazer brainstorming, resumir, explicar ideias difíceis, escrever códigos e redigir redações. As escolas também estão usando a IA para tutoria, apoio na correção de avaliações, agendamento e aprendizado personalizado." },
       { tag: "Example", title: "Aprendizado Personalizado Funciona", body: "Essas ferramentas podem ser úteis. Um aluno que está confuso com um conceito pode pedir outra explicação. Um sistema personalizado pode desacelerar quando um aluno está com dificuldades e avançar mais rápido quando ele estiver pronto." },
@@ -83,7 +83,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   336: {
     id: 336, worldId: 263,
-    title: "Ia E Democracia",
+    title: "IA E Democracia",
     stops: [
       { tag: "Fact", title: "Deepfakes Corroem a Verdade", body: "A democracia depende da capacidade das pessoas de debaterem sobre fatos compartilhados. A IA torna isso mais difícil. Deepfakes são imagens, áudios ou vídeos gerados por IA que fazem parecer que uma pessoa real disse ou fez algo que nunca disse ou fez. Um vídeo falso convincente pode se espalhar rapidamente on-line. Mesmo depois de ser corrigido, alguns espectadores podem continuar acreditando nele." },
       { tag: "Example", title: "Desinformação em Escala", body: "A IA também pode tornar a desinformação mais fácil de ser produzida em escala. Uma única pessoa pode ser capaz de gerar muitas versões da mesma alegação falsa e adaptá-las para públicos diferentes." },
@@ -99,7 +99,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   337: {
     id: 337, worldId: 263,
-    title: "Ia E Ciência",
+    title: "IA E Ciência",
     stops: [
       { tag: "Fact", title: "Ciência Depende de Dados", body: "A ciência frequentemente envolve enormes quantidades de informação. A IA pode ajudar os pesquisadores a processar dados, identificar padrões e testar ideias mais rapidamente. Ela está sendo usada em áreas como: modelagem climática, pesquisa de proteínas, genética, astronomia, ciência dos materiais e física de partículas." },
       { tag: "Example", title: "IA Escaneia o Que Humanos Não Conseguem", body: "Os sistemas de IA podem ajudar a analisar grandes conjuntos de dados que levariam muito mais tempo para os humanos revisarem. Na astronomia, por exemplo, a IA consegue verificar dados de telescópios em busca de anomalias — sinais incomuns, possíveis novos objetos — que pesquisadores humanos levariam anos para encontrar manualmente." },
@@ -115,7 +115,7 @@ const wm_w3_pt: Record<number, LessonData> = {
   },
   338: {
     id: 338, worldId: 263,
-    title: "Ia E O Dia A Dia",
+    title: "IA E O Dia A Dia",
     stops: [
       { tag: "Fact", title: "A IA Já Está em Todo Lugar", body: "A maioria das pessoas não se depara com a IA por meio de laboratórios de pesquisa ou de debates sobre políticas. Elas a encontram de maneiras pequenas e rotineiras: aplicativos de navegação redirecionando o trânsito, filtros de e-mail bloqueando spam, celulares sendo desbloqueados com reconhecimento facial, aplicativos de música recomendando canções, bancos detectando compras incomuns, mecanismos de busca classificando resultados, chatbots de atendimento ao cliente respondendo a perguntas." },
       { tag: "Example", title: "Decisões Invisíveis", body: "A maior parte disso é útil. Mas vale a pena notar o quanto a tomada de decisões foi transferida para sistemas que as pessoas raramente veem ou entendem." },

@@ -3,7 +3,7 @@ import { LessonData } from '../index'
 const wm_w1_pt: Record<number, LessonData> = {
   311: {
     id: 311, worldId: 261,
-    title: "Definindo A Ia",
+    title: "Definindo A IA",
     stops: [
       { tag: "Fact", title: "IA: Definição Essencial", body: "A inteligência artificial é um software projetado para executar tarefas que normalmente exigem habilidades humanas, como entender a linguagem, reconhecer imagens, fazer previsões ou encontrar padrões em grandes volumes de informações." },
       { tag: "Example", title: "Não É Uma Só Tecnologia", body: "A IA não é uma tecnologia única. Um chatbot, um sistema de reconhecimento facial e um algoritmo de recomendação podem usar a IA, mas foram construídos para propósitos diferentes e não funcionam necessariamente da mesma maneira." },
@@ -19,7 +19,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   312: {
     id: 312, worldId: 261,
-    title: "Como A Ia Aprende",
+    title: "Como A IA Aprende",
     stops: [
       { tag: "Fact", title: "Aprender pelo Exemplo", body: "A maioria dos sistemas modernos de IA aprende por meio de um processo chamado machine learning. Imagine ensinar um computador a reconhecer gatos. Você poderia mostrar a ele milhares de imagens rotuladas como \"gato\" e \"não é gato\". No início, o sistema cometeria muitos erros. Com o tempo, ele ajustaria suas configurações internas e se tornaria melhor em prever a resposta correta." },
       { tag: "Example", title: "Serve para Muitas Tarefas", body: "A mesma ideia básica pode ser usada para muitas tarefas: • Identificar e-mails de spam • Traduzir idiomas • Recomendar músicas • Reconhecer objetos em fotos • Identificar padrões em exames médicos" },
@@ -51,7 +51,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   314: {
     id: 314, worldId: 261,
-    title: "O Que A Ia Consegue E Não Consegue Fazer",
+    title: "O Que A IA Consegue E Não Consegue Fazer",
     stops: [
       { tag: "Fact", title: "Poderosa e Frágil", body: "A IA não é automaticamente mais inteligente que um humano. Ela simplesmente processou muito mais exemplos do que uma pessoa conseguiria analisar durante toda a vida. Isso a torna poderosa em algumas áreas e surpreendentemente frágil em outras." },
       { tag: "Example", title: "Onde o Senso Comum Falha", body: "Os sistemas de IA podem ter dificuldades com tarefas que exigem raciocínio genuíno sobre situações novas, conhecimento de senso comum ou compreensão de contexto da maneira que os humanos fazem — mesmo quando têm um desempenho impressionante em tarefas estruturadas e bem definidas." },
@@ -67,7 +67,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   315: {
     id: 315, worldId: 261,
-    title: "A Ia No Dia A Dia",
+    title: "A IA No Dia A Dia",
     stops: [
       { tag: "Fact", title: "A IA Já Está em Todo Lugar", body: "A maioria das pessoas não se depara com a IA por meio de laboratórios de pesquisa ou de debates sobre políticas. Elas a encontram de maneiras pequenas e rotineiras: • Aplicativos de navegação redirecionando o trânsito • Filtros de e-mail bloqueando spam • Celulares sendo desbloqueados com reconhecimento facial • Aplicativos de música recomendando canções • Bancos detectando compras incomuns • Mecanismos de busca classificando resultados • Chatbots de atendimento ao cliente respondendo a perguntas" },
       { tag: "Example", title: "Decisões Invisíveis", body: "A maior parte disso é útil. Mas vale a pena notar o quanto a tomada de decisões foi transferida para sistemas que as pessoas raramente veem ou entendem." },
@@ -83,7 +83,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   316: {
     id: 316, worldId: 261,
-    title: "Uma Breve História Da Ia",
+    title: "Uma Breve História Da IA",
     stops: [
       { tag: "Fact", title: "Onde Tudo Começou", body: "A IA moderna remonta a um artigo de Alan Turing de 1950. Em 1956, o termo \"Inteligência Artificial\" foi cunhado na Conferência de Dartmouth — amplamente considerada o nascimento da IA como campo formal de pesquisa." },
       { tag: "Example", title: "Entusiasmo, Depois Colapso", body: "As primeiras décadas trouxeram entusiasmo seguido de colapso. Pesquisadores dos anos 1960 previam IA no nível humano em 20 anos. Quando esse progresso estagnou, o financiamento secou. Esses períodos de colapso são conhecidos como Invernos da IA." },
@@ -99,7 +99,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   317: {
     id: 317, worldId: 261,
-    title: "Quem Constrói A Ia E Por Quê",
+    title: "Quem Constrói A IA E Por Quê",
     stops: [
       { tag: "Fact", title: "Poucos Decidem por Todos", body: "A IA não se constrói sozinha. Um pequeno número de grandes empresas de tecnologia, laboratórios de pesquisa governamentais e universidades toma a maioria das decisões fundamentais sobre como os poderosos sistemas de IA funcionam. Essas decisões afetam todos." },
       { tag: "Example", title: "Incentivos Nem Sempre Alinham", body: "As empresas constroem IA por diversas razões: produtos comerciais, vantagem competitiva, crença genuína no seu benefício para a sociedade e a capacidade de substituir mão de obra humana cara. Esses incentivos nem sempre estão alinhados com os interesses dos usuários ou do público em geral." },
@@ -115,7 +115,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   318: {
     id: 318, worldId: 261,
-    title: "Tipos De Ia",
+    title: "Tipos De IA",
     stops: [
       { tag: "Fact", title: "Toda IA Atual É Estreita", body: "A IA Estreita — também chamada de IA Fraca — é projetada para uma tarefa específica. É toda a IA que existe atualmente. Exemplos: reconhecimento facial, filtros de spam, motores de xadrez, assistentes de voz. Uma IA de xadrez não consegue dirigir um carro; um modelo de linguagem não consegue realizar cirurgias." },
       { tag: "Example", title: "IAG Ainda É Hipótese", body: "A Inteligência Artificial Geral (IAG) se refere a uma IA hipotética capaz de realizar qualquer tarefa intelectual que um humano possa. Ela não existe ainda. Se e quando poderia surgir é assunto de discordância genuína entre pesquisadores sérios." },
