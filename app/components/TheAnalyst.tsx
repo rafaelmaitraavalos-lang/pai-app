@@ -232,8 +232,7 @@ export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
     if (firstTest) {
       setEraShiftDone(true)
     }
-    timers.push(setTimeout(() => setShowCase(true), 300))
-    timers.push(setTimeout(() => { setPhase('choosing'); setShowChoices(true) }, 1200))
+    timers.push(setTimeout(() => { setShowCase(true); setPhase('choosing'); setShowChoices(true) }, 120))
     return () => timers.forEach(clearTimeout)
   }, [phase, round, firstTest]) // eslint-disable-line
 
