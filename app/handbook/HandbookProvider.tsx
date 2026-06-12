@@ -234,6 +234,18 @@ export default function HandbookProvider() {
   const [isPT, setIsPT]                   = useState(false)
   const [tourIdx, setTourIdx]             = useState(-1)
 
+  const advanceTour = useCallback(() => {
+    const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
+    setTourIdx(prev => {
+      const next = prev + 1
+      if (next >= starters.length) {
+        localStorage.setItem('pai_handbook_seen', 'true')
+        return -1
+      }
+      return next
+    })
+  }, [isPT])
+
   useEffect(() => {
     setMounted(true)
     const onboardingDone = localStorage.getItem('pai_onboarding_done')
@@ -306,19 +318,6 @@ export default function HandbookProvider() {
     setVisible(false)
     setTimeout(() => { setSelectedEntry(null); setSelectedIdx(-1); setVisible(true) }, 180)
   }
-
-  const advanceTour = useCallback(() => {
-    const starters = isPT ? STARTER_ENTRIES_PT : STARTER_ENTRIES
-    setTourIdx(prev => {
-      const next = prev + 1
-      if (next >= starters.length) {
-        // Tour complete
-        localStorage.setItem('pai_handbook_seen', 'true')
-        return -1
-      }
-      return next
-    })
-  }, [isPT])
 
   const handleHBClick = () => {
     if (open) {
