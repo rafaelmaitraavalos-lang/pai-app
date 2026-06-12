@@ -90,14 +90,14 @@ export default function ElementaryWorldPage() {
                   {isGame ? '🎮' : String(i + 1).padStart(2, '0')}
                 </span>
                 <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: isGame ? GREEN : BLACK }}>{m.title}</span>
-                {!isGame && isDone && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>Done</span>}
+                {!isGame && isDone && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Feito' : 'Done'}</span>}
                 {!isGame && isCurrent && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                     <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                    Current
+                    {isPT ? 'Atual' : 'Current'}
                   </span>
                 )}
-                {isGame && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>Play</span>}
+                {isGame && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : 'Play'}</span>}
                 <span style={{ fontFamily: DISP, fontSize: 14, color: isGame ? GREEN : DIM }}>→</span>
               </div>
             )

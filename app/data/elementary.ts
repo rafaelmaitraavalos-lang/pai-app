@@ -78,6 +78,13 @@ const GAMES = [
   { id: 9004, title: 'Build-a-Robot',  type: 'game' as const, gameUrl: '/games/build-a-robot' },
 ]
 
+const GAMES_PT = [
+  { id: 9001, title: 'Queda de Sinal',    type: 'game' as const, gameUrl: '/games/signal-drop' },
+  { id: 9002, title: 'Pizza com Prompt',  type: 'game' as const, gameUrl: '/games/prompt-pizza' },
+  { id: 9003, title: 'Conserte o Robô',   type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+  { id: 9004, title: 'Monte um Robô',     type: 'game' as const, gameUrl: '/games/build-a-robot' },
+]
+
 // ── Elementary world definitions ──────────────────────────────────────────────
 
 export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
@@ -103,19 +110,19 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     id: 104,
     title: 'Conheça a IA',
     level: 'Elementary',
-    modules: [...Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
+    modules: [...Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
   105: {
     id: 105,
     title: 'Como a PAI Pensa',
     level: 'Elementary',
-    modules: [...Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
+    modules: [...Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
   106: {
     id: 106,
     title: 'Como a PAI Pensa (Avançado)',
     level: 'Elementary',
-    modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
+    modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
   107: { id: 107, title: 'O que é a IA?',              level: 'Intermediate', modules: Object.values(W107_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })) },
