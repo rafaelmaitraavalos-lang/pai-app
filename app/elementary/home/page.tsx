@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../../data/elementary'
+import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -16,10 +16,13 @@ export default function ElementaryHome() {
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [isPT, setIsPT]         = useState(false)
   const [username, setUsername] = useState('')
+  const [grade, setGrade]       = useState<string | null>(null)
+  const [levelingUp, setLevelingUp] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
     setUsername(localStorage.getItem('pai_username') ?? '')
+    setGrade(localStorage.getItem('pai_grade'))
     const map: Record<number, boolean> = {}
     Object.values(ELEMENTARY_WORLDS).forEach(w =>
       w.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
@@ -44,6 +47,37 @@ export default function ElementaryHome() {
     worldDone[wid] = !!w && w.modules.every(m => done[m.id])
   })
   const firstIncomplete = worldIds.find(wid => !worldDone[wid])
+  const allWorldsDone   = worldIds.length > 0 && worldIds.every(wid => worldDone[wid])
+
+  // Determine next level grade + route
+  // PT: fund1 → fund2 (middle-pt) → medio (high/home)
+  // EN: elem → middle → home
+  const isPTGrade     = MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') || (isPT && grade === 'fund1')
+  const nextGrade     = isPT ? (grade === 'fund1' ? 'fund2' : 'medio') : (grade === 'elem' ? 'middle' : null)
+  const nextRoute     = isPT
+    ? (grade === 'fund1' ? '/elementary/middle-pt' : '/home')
+    : (nextGrade === 'middle' ? '/middle/home' : '/home')
+  const nextLevelName = isPT
+    ? (grade === 'fund1' ? 'Ensino Fundamental II' : 'Ensino Médio')
+    : (nextGrade === 'middle' ? 'Middle School' : 'High School')
+
+  const levelUp = async () => {
+    if (!nextGrade) { router.push('/home'); return }
+    setLevelingUp(true)
+    const newGrade = nextGrade
+    localStorage.setItem('pai_grade', newGrade)
+    setGrade(newGrade)
+    // Persist to DB
+    const username = localStorage.getItem('pai_username')
+    if (username) {
+      await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, grade: newGrade }),
+      }).catch(() => {})
+    }
+    router.push(nextRoute)
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
@@ -61,6 +95,38 @@ export default function ElementaryHome() {
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
+        {/* All done — level up prompt */}
+        {allWorldsDone && (
+          <div style={{ background: BLACK, border: `1.5px solid ${GREEN}`, boxShadow: `8px 8px 0 0 ${GREEN}`, padding: '24px 28px', marginBottom: 32, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+              <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, marginBottom: 8 }}>
+                {isPT ? '🎉 Você terminou tudo!' : '🎉 You finished everything!'}
+              </div>
+              <div style={{ fontFamily: DISP, fontSize: 22, color: '#fff', lineHeight: 1.2, letterSpacing: '-0.01em', marginBottom: 8 }}>
+                {isPT ? `Pronto para o próximo nível?` : `Ready to level up?`}
+              </div>
+              <div style={{ fontFamily: BODY, fontSize: 14, color: '#aaa', lineHeight: 1.55 }}>
+                {isPT
+                  ? `Você completou todos os mundos deste nível. Quer passar para o ${nextLevelName}?`
+                  : `You've completed every world at this level. Want to move up to ${nextLevelName}?`}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button
+                onClick={levelUp}
+                disabled={levelingUp}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '13px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, opacity: levelingUp ? 0.6 : 1 }}>
+                {levelingUp ? '...' : (isPT ? `Ir para ${nextLevelName} →` : `Move to ${nextLevelName} →`)}
+              </button>
+              <button
+                onClick={() => router.push('/elementary/home')}
+                style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', color: '#666', padding: '13px 20px', border: `1px solid #333`, cursor: 'pointer' }}>
+                {isPT ? 'Ficar aqui' : 'Stay here'}
+              </button>
+            </div>
+          </div>
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{label}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
