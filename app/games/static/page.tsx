@@ -31,7 +31,7 @@ export default function StaticPage() {
         </button>
       </div>
       <div style={{ flex: 1, overflow: 'auto', padding: '24px 16px 80px' }}>
-        <ConnectionsGame puzzle={isPT ? puzzlePT : puzzle} onComplete={() => setDone(true)} isPT={isPT} />
+        <ConnectionsGame key={isPT ? 'pt' : 'en'} puzzle={isPT ? puzzlePT : puzzle} onComplete={() => setDone(true)} isPT={isPT} />
       </div>
     </div>
   )
