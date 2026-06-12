@@ -252,7 +252,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     minHeight: 640, display: 'flex', flexDirection: 'column',
   }
   const page: React.CSSProperties = {
-    minHeight: '100vh', background: '#F5F5F5', fontFamily: BODY,
+    minHeight: '100vh', background: '#fff', fontFamily: BODY,
     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 20px',
   }
   const header = (
