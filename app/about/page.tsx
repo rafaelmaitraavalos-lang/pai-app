@@ -99,7 +99,7 @@ export default function AboutPage() {
         {/* Title */}
         <div style={{ marginBottom: 48 }}>
           <p style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: DIM, margin: '0 0 14px' }}>
-            {isPT ? 'Sobre' : 'About'}
+            {isPT ? 'Sobre nós' : 'About us'}
           </p>
           <h1 style={{ fontFamily: DISP, fontSize: 'clamp(2.4rem, 7vw, 4rem)', letterSpacing: '-0.03em', color: BLACK, margin: 0, fontWeight: 400, lineHeight: 1.1 }}>
             {isPT ? <>Feito por estudantes,<br />para estudantes.</> : <>Built by students,<br />for students.</>}
