@@ -7,7 +7,7 @@ import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
 import { WORLDS, WORLD_IDS, getLessonWorldId } from '../data'
-import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_LESSONS } from '../data/elementary'
+import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
 
 export interface Stop {
   tag:    string
@@ -88,13 +88,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
   const timelineNext = () => {
     if (stopIndex === stops.length - 1) {
-      // Skip quiz phase if no questions (e.g. elementary lessons)
-      if (questions.length === 0) {
-        localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-        import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
-        setPhase('complete')
-        return
-      }
+      if (questions.length === 0) { finish(); return }
       setPhase('quiz'); return
     }
     setCardDir('right')
@@ -105,12 +99,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     setStopIndex(i => i - 1)
   }
   const nextQuestion = () => {
-    if (qIndex === questions.length - 1) {
-      localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-      import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
-      setPhase('complete')
-      return
-    }
+    if (qIndex === questions.length - 1) { finish(); return }
     setSelected(null)
     setQIndex(i => i + 1)
   }
@@ -122,6 +111,26 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const currentWorldRoute = isMidElem
     ? (rawWorldId >= 200 ? `/middle/world/${rawWorldId}` : `/elementary/home`)
     : (rawWorldId === 1 ? '/lessons' : `/world/${rawWorldId}`)
+
+  // Determine if this is the very last lesson of the student's entire curriculum
+  const modIdx         = world?.modules.findIndex(m => m.id === id) ?? -1
+  const nextLesson     = world?.modules.slice(modIdx + 1).find(m => m.type !== 'game')
+  const isLastLesson   = !nextLesson
+  const allElemIds     = [...ELEMENTARY_WORLD_IDS, ...ELEMENTARY_WORLD_IDS_PT,
+                          ...MIDDLE_SCHOOL_WORLD_IDS, ...MIDDLE_SCHOOL_WORLD_IDS_PT]
+  const nextHSWorldIdx = WORLD_IDS.indexOf(rawWorldId) + 1
+  const hasNextWorld   = isMidElem
+    ? allElemIds.indexOf(rawWorldId) < allElemIds.length - 1 && allElemIds.indexOf(rawWorldId) !== -1
+    : nextHSWorldIdx < WORLD_IDS.length
+  const isEndOfCurriculum = isLastLesson && !hasNextWorld
+
+  const finish = () => {
+    localStorage.setItem(`pai_lesson_${id}_done`, 'true')
+    import('@/lib/progress').then(m => m.syncProgress()).catch(() => {})
+    if (isEndOfCurriculum) { setPhase('complete'); return }
+    if (completionPage) { router.push(completionPage); return }
+    setPhase('complete')
+  }
 
   const skip = () => {
     localStorage.setItem(`pai_lesson_${id}_done`, 'true')
