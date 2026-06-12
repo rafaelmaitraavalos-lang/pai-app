@@ -128,7 +128,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
               <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{lang === 'pt' ? 'Pular' : 'Skip'}</button>
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -150,7 +150,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
                 return (
                   <button key={String(val)} onClick={() => selected === null && setSelected(val)} disabled={selected !== null}
                     style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '22px 16px', background: bg, color: clr, border: 'none', cursor: selected === null ? 'pointer' : 'default', boxShadow: state === 'default' ? `4px 4px 0 0 ${BLACK}` : 'none', transition: 'all 0.12s', width: '100%' }}>
-                    {val ? 'True' : 'False'}
+                    {lang === 'pt' ? (val ? 'Verdadeiro' : 'Falso') : (val ? 'True' : 'False')}
                   </button>
                 )
               })}
@@ -173,7 +173,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             </div>
             {selected !== null && (
               <button onClick={nextQuestion} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: '#EBEBEB', color: BLACK, padding: '12px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}`, flexShrink: 0 }}>
-                {qIndex === questions.length - 1 ? 'Finish →' : 'Next →'}
+                {qIndex === questions.length - 1 ? (lang === 'pt' ? 'Finalizar →' : 'Finish →') : (lang === 'pt' ? 'Próximo →' : 'Next →')}
               </button>
             )}
           </div>
@@ -186,7 +186,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   const slideBg   = theme === 'elementary' ? '#FAFAFA' : '#fff'
   const slideText = theme === 'elementary'
     ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88')
-    : BLACK
+    : GREEN
 
   return (
     <main style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: slideBg, maxWidth: 480, margin: '0 auto', transition: 'background 0.4s ease' }}>
@@ -203,7 +203,7 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
             {stop.year && <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>{stop.year}</span>}
             <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-            <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>Skip</button>
+            <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{lang === 'pt' ? 'Pular' : 'Skip'}</button>
           </div>
         </div>
         <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -254,19 +254,21 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, paddingBottom: 16, gap: 16 }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined}
             style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '12px 18px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1, flexShrink: 0 }}>
-            ← Back
+            {lang === 'pt' ? '← Voltar' : '← Back'}
           </button>
           <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
             {stops.map((_, i) => <div key={i} style={{ width: i === stopIndex ? 18 : 5, height: 5, borderRadius: 3, background: i < stopIndex ? slideText : i === stopIndex ? slideText : FAINT, transition: 'width 0.9s cubic-bezier(0.34,1.1,0.64,1), background 0.7s ease' }} />)}
           </div>
           <button onClick={timelineNext}
             style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: slideText, color: BLACK, padding: '12px 18px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${BLACK}`, flexShrink: 0 }}>
-            {stopIndex === stops.length - 1 ? 'Quiz →' : 'Next →'}
+            {stopIndex === stops.length - 1 ? (lang === 'pt' ? 'Quiz →' : 'Quiz →') : (lang === 'pt' ? 'Próximo →' : 'Next →')}
           </button>
         </div>
 
         <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 12 }}>
-          <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>Lesson {id} · {title} · Slide {stopIndex + 1} of {stops.length}</span>
+          <span style={{ fontFamily: BODY, fontSize: 12, color: DIM }}>
+            {lang === 'pt' ? `Aula ${id} · ${title} · Slide ${stopIndex + 1} de ${stops.length}` : `Lesson ${id} · ${title} · Slide ${stopIndex + 1} of ${stops.length}`}
+          </span>
         </div>
       </div>
     </main>
