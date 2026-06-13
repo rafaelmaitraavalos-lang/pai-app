@@ -1,9 +1,15 @@
+export interface HandbookLink {
+  label: string
+  url:   string
+}
+
 export interface HandbookEntry {
   id: string
   title: string
   body: string
   doLine: string
   unlocksAt?: number  // lesson ID that must be completed to unlock
+  links?: HandbookLink[]
 }
 
 export const STARTER_ENTRIES: HandbookEntry[] = [
@@ -16,12 +22,19 @@ export const STARTER_ENTRIES: HandbookEntry[] = [
   {
     id: 'prompting-basics',
     title: 'When Talking to AI',
+    links: [
+      { label: 'Try it on ChatGPT', url: 'https://chatgpt.com' },
+      { label: 'Try it on Claude',  url: 'https://claude.ai' },
+    ],
     body: 'Do not just type, "Explain photosynthesis." That will usually give you a generic wall of text. Instead, include three things: who the answer is for, how long it should be, and one extra instruction.\n\nFor example, type: "Explain photosynthesis to a 9th grader in five sentences, using one analogy."\n\nYou do not need to write the perfect prompt on your first try. Treat it like a conversation. If the answer is not quite right, keep giving directions: "Make it shorter," "Give me a real-life example," or "Say it like you are talking to a friend."',
     doLine: 'Try typing: "Rewrite that in three sentences a 7th grader would understand."',
   },
   {
     id: 'verification-basics',
     title: 'How to Tell If AI Is Making Things Up',
+    links: [
+      { label: 'Search on Perplexity', url: 'https://perplexity.ai' },
+    ],
     body: 'AI can give wrong answers in a confident voice, and that is the trap. When it gives you a fact, number, quote, or source, do not assume it is accurate. Check it.\n\nCopy the claim, paste it into a search engine, and see whether a reliable source backs it up. If the AI gives you a quote, search the exact words with quotation marks around them. If you cannot find the quote or fact anywhere outside the chatbot, treat it as unreliable.',
     doLine: 'Try typing: "Give me links to your sources so I can check them." Then actually open the links.',
   },
@@ -38,6 +51,13 @@ export const UNLOCKABLE_ENTRIES: HandbookEntry[] = [
     id: 'choosing-the-right-tool',
     title: 'Choosing the Right Tool',
     unlocksAt: 4,  // World 1, Module 4
+    links: [
+      { label: 'Claude',      url: 'https://claude.ai' },
+      { label: 'ChatGPT',     url: 'https://chatgpt.com' },
+      { label: 'Perplexity',  url: 'https://perplexity.ai' },
+      { label: 'Gemini',      url: 'https://gemini.google.com' },
+      { label: 'Meta AI',     url: 'https://meta.ai' },
+    ],
     body: 'There is no single "best" AI. Different tools are useful for different jobs.\n\nUse Claude when you are working with a long reading or revising a piece of writing. Use Perplexity when you are starting research or checking a claim, because it shows clickable sources alongside its answers. Use Gemini when your schoolwork is already in Google Docs or other Google apps. Use ChatGPT when you want a strong all-purpose tool for explaining, brainstorming, or studying. Use Meta AI when you want a free, easy-to-access option for simple questions.\n\nThis list will change. AI tools improve quickly, so check again at the start of each school year.\n\nWhen an answer really matters, ask more than one tool and compare what they say. If they disagree, you have found something that needs to be checked. Even if they agree, verify important facts using a reliable source.\n\nYou probably do not need to pay for an AI subscription yet. Free versions are already useful for most student tasks.',
     doLine: 'Choose the tool that fits the task. Keep two that you trust, compare their answers when something matters, and verify important claims yourself.',
   },
@@ -52,6 +72,9 @@ export const UNLOCKABLE_ENTRIES: HandbookEntry[] = [
     id: 'catch-the-hallucination',
     title: 'Catch the Hallucination',
     unlocksAt: 6,  // World 1, Module 6
+    links: [
+      { label: 'Verify on Perplexity', url: 'https://perplexity.ai' },
+    ],
     body: 'The riskiest thing an AI can give you is a quote, because fake quotes often look completely believable. Before you use one, copy it into a search engine with quotation marks around it. Make sure the quote is real, word-for-word accurate, and actually said by the person the AI named.\n\nDo the same thing with sources. A convincing title means nothing until you find the real article, page, or document and open it yourself.\n\nThe higher the stakes, the more carefully you check. Anything about health, money, or the law should be verified every single time. When you need reliable sources, use the research tool from Choosing the Right Tool.',
     doLine: 'Try typing: "Where exactly did this come from? Give me a link I can open."',
   },

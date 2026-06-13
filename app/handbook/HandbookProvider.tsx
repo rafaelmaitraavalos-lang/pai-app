@@ -166,6 +166,32 @@ function EntryView({ entry, onBack, isPT, tourIdx, totalStarters, onTourAdvance 
           <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: BLACK, marginBottom: 6 }}>{isPT ? 'FAÇA' : 'DO'}</div>
           <p style={{ fontFamily: BODY, fontSize: 13, fontWeight: 600, color: BLACK, margin: 0, lineHeight: 1.55 }}>{entry.doLine}</p>
         </div>
+        {entry.links && entry.links.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'EXPERIMENTE' : 'TRY IT'}</div>
+            {entry.links.map(link => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '10px 14px',
+                  background: '#fff',
+                  border: `1.5px solid ${BLACK}`,
+                  boxShadow: `3px 3px 0 0 ${BLACK}`,
+                  fontFamily: DISP, fontSize: 12, color: BLACK,
+                  textDecoration: 'none',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {link.label}
+                <span style={{ opacity: 0.4, fontSize: 14 }}>↗</span>
+              </a>
+            ))}
+          </div>
+        )}
         {inTour && (
           <button
             onClick={handleBack}
