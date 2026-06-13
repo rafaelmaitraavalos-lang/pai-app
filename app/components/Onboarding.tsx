@@ -286,16 +286,14 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {/* 0: Welcome */}
           {screen === 0 && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
-              <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', width: '100%', maxWidth: 340 }}>
-                <video
-                  src="/pig.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{ width: '100%', display: 'block', mixBlendMode: 'multiply' }}
-                />
-              </div>
+              <video
+                src="/pig.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', maxWidth: 340, display: 'block' }}
+              />
               <div>
                 <div style={{ fontFamily: DISP, fontSize: 64, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em' }}>PAI</div>
                 <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 8, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
