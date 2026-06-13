@@ -227,6 +227,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       return
     }
     if (screen === 3) { submitUsername(); return }
+    if (screen === 0) { setVisible(false); setScreen(1); return }
     setVisible(false)
     setTimeout(() => setScreen(s => s + 1), 220)
   }
