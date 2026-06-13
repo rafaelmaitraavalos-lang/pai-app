@@ -327,18 +327,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>What language do you speak?</h2>
               </div>
 
-              {/* PAI pointing at the language options */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <video
-                  src="/pai-lang.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{ width: 220, height: 220, objectFit: 'contain' }}
-                />
-              </div>
-
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
                 {COUNTRIES.map(c => (
                   <button key={c.name} onClick={() => selectCountry(c)} style={{
@@ -355,6 +343,18 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                     <span style={{ fontFamily: DISP, fontSize: 15, fontWeight: 700, lineHeight: 1.3, textAlign: 'center' }}>{c.name}</span>
                   </button>
                 ))}
+              </div>
+
+              {/* PAI below the language buttons */}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <video
+                  src="/pai-lang.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: 220, height: 220, objectFit: 'contain' }}
+                />
               </div>
             </div>
           )}
