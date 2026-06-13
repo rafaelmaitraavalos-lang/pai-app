@@ -252,7 +252,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     minHeight: 640, display: 'flex', flexDirection: 'column',
   }
   const page: React.CSSProperties = {
-    minHeight: '100vh', background: '#0a0a0a', fontFamily: BODY,
+    minHeight: '100vh', background: '#F5F5F5', fontFamily: BODY,
     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 20px',
     position: 'relative', overflow: 'hidden',
   }
@@ -264,20 +264,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   return (
     <div style={page}>
-      {/* PAI background pattern */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
-        display: 'flex', flexWrap: 'wrap', gap: '28px 20px',
-        padding: '20px', alignContent: 'flex-start',
-        transform: 'rotate(-15deg) scale(1.4)',
-        transformOrigin: 'center center',
-        opacity: 0.08,
-      }}>
-        {Array.from({ length: 120 }).map((_, i) => (
-          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: GREEN, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
-        ))}
-      </div>
-      <div style={{ ...card, position: 'relative', zIndex: 1 }}>
+      <div style={card}>
         {header}
 
         {screen > 0 && (
