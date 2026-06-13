@@ -5,10 +5,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 211, worldId: 201,
     title: "Defining AI",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "Artificial intelligence is software designed to perform tasks that usually require human abilities, such as understanding language, recognizing images, making predictions, or finding patterns in large amounts of information." },
-      { tag: "Example", title: "Slide 2", body: "AI is not one single technology. A chatbot, a facial-recognition system, and a recommendation algorithm may all use AI, but they were built for different purposes and do not necessarily work in the same way." },
-      { tag: "Big idea", title: "Slide 3", body: "The main difference between traditional software and machine learning is how the system gets its rules.\nA traditional program follows instructions written by a programmer. A machine-learning system learns patterns from examples. Instead of writing a separate rule for every possible situation, developers train the system on data and allow it to improve through experience." },
-      { tag: "Hot take", title: "Slide 4", body: "That does not mean the system thinks like a person. It means it can become very good at recognizing patterns.\nAI is not automatically smarter than a human. It has simply processed far more examples than a person could review in a lifetime. That makes it powerful in some areas and surprisingly fragile in others." },
+      { tag: "Fact", title: "What AI actually does", body: "Artificial intelligence is software designed to perform tasks that usually require human abilities, such as understanding language, recognizing images, making predictions, or finding patterns in large amounts of information." },
+      { tag: "Example", title: "AI is not one thing", body: "AI is not one single technology. A chatbot, a facial-recognition system, and a recommendation algorithm may all use AI, but they were built for different purposes and do not necessarily work in the same way." },
+      { tag: "Big idea", title: "Rules vs. learned patterns", body: "The main difference between traditional software and machine learning is how the system gets its rules.\nA traditional program follows instructions written by a programmer. A machine-learning system learns patterns from examples. Instead of writing a separate rule for every possible situation, developers train the system on data and allow it to improve through experience." },
+      { tag: "Hot take", title: "Powerful but surprisingly fragile", body: "That does not mean the system thinks like a person. It means it can become very good at recognizing patterns.\nAI is not automatically smarter than a human. It has simply processed far more examples than a person could review in a lifetime. That makes it powerful in some areas and surprisingly fragile in others." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"Machine learning learns patterns from data instead of following fixed programmed rules\"", answer: true, verdict: "Correct.", explanation: "What is the key difference between traditional software and machine learning? \u2014 Machine learning learns patterns from data instead of following fixed programmed rules" },
@@ -21,10 +21,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 212, worldId: 201,
     title: "How AI Learns",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "Most modern AI systems learn through a process called machine learning.\nImagine teaching a computer to recognize cats. You could show it thousands of images labeled \"cat\" and \"not cat.\" At first, the system would make a lot of mistakes. Over time, it would adjust its internal settings and become better at predicting the correct answer." },
-      { tag: "Example", title: "Slide 2", body: "The same basic idea applies to many tasks:\n\u2022 Identifying spam emails\n\u2022 Translating languages\n\u2022 Recommending music\n\u2022 Recognizing objects in photos\n\u2022 Spotting patterns in medical images" },
-      { tag: "Big idea", title: "Slide 3", body: "The system improves by seeing examples, making predictions, measuring its mistakes, and adjusting. This process can be repeated millions or billions of times." },
-      { tag: "Hot take", title: "Slide 4", body: "No single adjustment changes very much. The improvement comes from repetition across an enormous number of examples." },
+      { tag: "Fact", title: "Learning from labeled examples", body: "Most modern AI systems learn through a process called machine learning.\nImagine teaching a computer to recognize cats. You could show it thousands of images labeled \"cat\" and \"not cat.\" At first, the system would make a lot of mistakes. Over time, it would adjust its internal settings and become better at predicting the correct answer." },
+      { tag: "Example", title: "One idea, many applications", body: "The same basic idea applies to many tasks:\n\u2022 Identifying spam emails\n\u2022 Translating languages\n\u2022 Recommending music\n\u2022 Recognizing objects in photos\n\u2022 Spotting patterns in medical images" },
+      { tag: "Big idea", title: "Predict, measure, adjust, repeat", body: "The system improves by seeing examples, making predictions, measuring its mistakes, and adjusting. This process can be repeated millions or billions of times." },
+      { tag: "Hot take", title: "Small steps, enormous scale", body: "No single adjustment changes very much. The improvement comes from repetition across an enormous number of examples." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"A system that learns patterns from examples rather than fixed rules\"", answer: true, verdict: "Correct.", explanation: "What is machine learning? \u2014 A system that learns patterns from examples rather than fixed rules" },
@@ -37,10 +37,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 213, worldId: 201,
     title: "Alan Turing And The Turing Test",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "In 1950, British mathematician Alan Turing published a paper titled \"Computing Machinery and Intelligence.\" It opened with a question that still matters today: Can machines think?" },
-      { tag: "Example", title: "Slide 2", body: "Turing did not try to settle the question directly. Instead, he proposed a test.\nImagine a human judge having two text conversations simultaneously \u2014 one with a person, one with a machine. If the judge cannot reliably tell which is which, the machine has passed what later became known as the Turing Test." },
-      { tag: "Big idea", title: "Slide 3", body: "Turing shifted the debate. Instead of asking whether a machine truly thinks, he asked whether its behavior could look intelligent from the outside. That reframing \u2014 focused on observable behavior rather than internal experience \u2014 helped shape the entire field of AI." },
-      { tag: "Hot take", title: "Slide 4", body: "The test is still debated. A machine can sound convincing without understanding what it is saying. But Turing's question helped shape the field of AI and remains relevant today." },
+      { tag: "Fact", title: "Can machines think?", body: "In 1950, British mathematician Alan Turing published a paper titled \"Computing Machinery and Intelligence.\" It opened with a question that still matters today: Can machines think?" },
+      { tag: "Example", title: "A judge, a person, a machine", body: "Turing did not try to settle the question directly. Instead, he proposed a test.\nImagine a human judge having two text conversations simultaneously \u2014 one with a person, one with a machine. If the judge cannot reliably tell which is which, the machine has passed what later became known as the Turing Test." },
+      { tag: "Big idea", title: "Behavior over inner experience", body: "Turing shifted the debate. Instead of asking whether a machine truly thinks, he asked whether its behavior could look intelligent from the outside. That reframing \u2014 focused on observable behavior rather than internal experience \u2014 helped shape the entire field of AI." },
+      { tag: "Hot take", title: "Convincing is not understanding", body: "The test is still debated. A machine can sound convincing without understanding what it is saying. But Turing's question helped shape the field of AI and remains relevant today." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"Can machines think?\"", answer: true, verdict: "Correct.", explanation: "What question opened Turing's 1950 paper? \u2014 Can machines think?" },
@@ -53,10 +53,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 214, worldId: 201,
     title: "What AI Can And Cannot Do",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "AI is not automatically smarter than a human. It has simply processed far more examples than a person could review in a lifetime. That makes it powerful in some areas and surprisingly fragile in others." },
-      { tag: "Example", title: "Slide 2", body: "AI systems can struggle with tasks that require genuine reasoning about novel situations, common-sense knowledge, or understanding context in the way humans do \u2014 even when they perform impressively on structured, well-defined tasks." },
-      { tag: "Big idea", title: "Slide 3", body: "A language model can write a convincing essay without understanding a word of it. It generates statistically likely continuations of text based on patterns in training data \u2014 not meaning, intent, or comprehension." },
-      { tag: "Hot take", title: "Slide 4", body: "AI systems also do not have goals of their own. They do not want anything. The objectives they appear to pursue are objectives their designers gave them. That distinction matters when evaluating AI behavior." },
+      { tag: "Fact", title: "Strength through scale, not smarts", body: "AI is not automatically smarter than a human. It has simply processed far more examples than a person could review in a lifetime. That makes it powerful in some areas and surprisingly fragile in others." },
+      { tag: "Example", title: "Where common sense breaks down", body: "AI systems can struggle with tasks that require genuine reasoning about novel situations, common-sense knowledge, or understanding context in the way humans do \u2014 even when they perform impressively on structured, well-defined tasks." },
+      { tag: "Big idea", title: "Fluent without understanding", body: "A language model can write a convincing essay without understanding a word of it. It generates statistically likely continuations of text based on patterns in training data \u2014 not meaning, intent, or comprehension." },
+      { tag: "Hot take", title: "No goals of its own", body: "AI systems also do not have goals of their own. They do not want anything. The objectives they appear to pursue are objectives their designers gave them. That distinction matters when evaluating AI behavior." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"AI is strong at pattern-matching but brittle outside those patterns\"", answer: true, verdict: "Correct.", explanation: "Why can AI outperform humans on specific tasks while failing at others? \u2014 AI is strong at pattern-matching but brittle outside those patterns" },
@@ -69,10 +69,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 215, worldId: 201,
     title: "AI In Daily Life",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "Most people do not encounter AI through research labs or policy debates. They encounter it in small, ordinary ways:\n\u2022 Navigation apps rerouting traffic\n\u2022 Email filters blocking spam\n\u2022 Phones unlocking with facial recognition\n\u2022 Music apps recommending songs\n\u2022 Banks detecting unusual purchases\n\u2022 Search engines ranking results\n\u2022 Customer-service chatbots answering questions" },
-      { tag: "Example", title: "Slide 2", body: "Most of this is useful. But it is worth noticing how much decision-making has moved into systems people rarely see or understand." },
-      { tag: "Big idea", title: "Slide 3", body: "When an algorithm decides what news appears in your feed, what products you see, or what opportunities are recommended to you, those decisions are not neutral. They reflect the priorities of the people and companies who built the system." },
-      { tag: "Hot take", title: "Slide 4", body: "Understanding that gives you more control." },
+      { tag: "Fact", title: "AI in ordinary moments", body: "Most people do not encounter AI through research labs or policy debates. They encounter it in small, ordinary ways:\n\u2022 Navigation apps rerouting traffic\n\u2022 Email filters blocking spam\n\u2022 Phones unlocking with facial recognition\n\u2022 Music apps recommending songs\n\u2022 Banks detecting unusual purchases\n\u2022 Search engines ranking results\n\u2022 Customer-service chatbots answering questions" },
+      { tag: "Example", title: "Invisible decision-making", body: "Most of this is useful. But it is worth noticing how much decision-making has moved into systems people rarely see or understand." },
+      { tag: "Big idea", title: "Algorithms reflect priorities", body: "When an algorithm decides what news appears in your feed, what products you see, or what opportunities are recommended to you, those decisions are not neutral. They reflect the priorities of the people and companies who built the system." },
+      { tag: "Hot take", title: "Awareness gives you control", body: "Understanding that gives you more control." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"A search engine ranking results\"", answer: true, verdict: "Correct.", explanation: "Which is an example of AI operating invisibly in daily life? \u2014 A search engine ranking results" },
@@ -85,10 +85,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 216, worldId: 201,
     title: "A Brief History Of AI",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "Modern AI traces back to a 1950 paper by Alan Turing. In 1956, the term \"Artificial Intelligence\" was coined at the Dartmouth Conference \u2014 widely considered the birth of AI as a formal field of research." },
-      { tag: "Example", title: "Slide 2", body: "Early decades brought enthusiasm followed by collapse. Researchers in the 1960s predicted human-level AI within 20 years. When that progress stalled, funding dried up. These periods of collapse are known as AI Winters." },
-      { tag: "Big idea", title: "Slide 3", body: "AI came back in the 1980s with expert systems \u2014 programs that encoded human expertise as explicit rules. These too proved expensive and brittle, and interest collapsed again." },
-      { tag: "Hot take", title: "Slide 4", body: "The modern era began with two key moments: IBM's Deep Blue defeating chess champion Garry Kasparov in 1997, and the 2012 AlexNet breakthrough, when deep learning dramatically outperformed previous approaches to image recognition. The current wave \u2014 large language models, generative AI \u2014 grew from that turning point." },
+      { tag: "Fact", title: "Turing to Dartmouth", body: "Modern AI traces back to a 1950 paper by Alan Turing. In 1956, the term \"Artificial Intelligence\" was coined at the Dartmouth Conference \u2014 widely considered the birth of AI as a formal field of research." },
+      { tag: "Example", title: "Hype, collapse, AI winters", body: "Early decades brought enthusiasm followed by collapse. Researchers in the 1960s predicted human-level AI within 20 years. When that progress stalled, funding dried up. These periods of collapse are known as AI Winters." },
+      { tag: "Big idea", title: "Expert systems rise and fall", body: "AI came back in the 1980s with expert systems \u2014 programs that encoded human expertise as explicit rules. These too proved expensive and brittle, and interest collapsed again." },
+      { tag: "Hot take", title: "Deep Blue to AlexNet", body: "The modern era began with two key moments: IBM's Deep Blue defeating chess champion Garry Kasparov in 1997, and the 2012 AlexNet breakthrough, when deep learning dramatically outperformed previous approaches to image recognition. The current wave \u2014 large language models, generative AI \u2014 grew from that turning point." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"A period when AI progress stalled and funding collapsed after overhyped promises\"", answer: true, verdict: "Correct.", explanation: "What is an \"AI Winter\"? \u2014 A period when AI progress stalled and funding collapsed after overhyped promises" },
@@ -101,10 +101,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 217, worldId: 201,
     title: "Who Builds AI And Why",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "AI doesn't build itself. A small number of large technology companies, government research labs, and universities make most of the foundational decisions about how powerful AI systems work. Those decisions affect everyone." },
-      { tag: "Example", title: "Slide 2", body: "Companies build AI for a range of reasons: commercial products, competitive advantage, genuine belief in its societal benefit, and the ability to replace expensive human labor. These incentives are not always aligned with the interests of users or the broader public." },
-      { tag: "Big idea", title: "Slide 3", body: "The concentration of AI development matters. Researchers and engineers who build AI have their own values, blind spots, and access to data. A system built mostly by people from wealthy, English-speaking contexts may perform less reliably for people outside those contexts." },
-      { tag: "Hot take", title: "Slide 4", body: "This doesn't mean AI is always biased or harmful. It means asking who builds AI, why, and with what data is a reasonable and important question \u2014 not a conspiratorial one." },
+      { tag: "Fact", title: "A few decide for everyone", body: "AI doesn't build itself. A small number of large technology companies, government research labs, and universities make most of the foundational decisions about how powerful AI systems work. Those decisions affect everyone." },
+      { tag: "Example", title: "Incentives shape the technology", body: "Companies build AI for a range of reasons: commercial products, competitive advantage, genuine belief in its societal benefit, and the ability to replace expensive human labor. These incentives are not always aligned with the interests of users or the broader public." },
+      { tag: "Big idea", title: "Who builds it matters", body: "The concentration of AI development matters. Researchers and engineers who build AI have their own values, blind spots, and access to data. A system built mostly by people from wealthy, English-speaking contexts may perform less reliably for people outside those contexts." },
+      { tag: "Hot take", title: "A fair question, not a conspiracy", body: "This doesn't mean AI is always biased or harmful. It means asking who builds AI, why, and with what data is a reasonable and important question \u2014 not a conspiratorial one." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"A small number of large tech companies, government labs, and universities\"", answer: true, verdict: "Correct.", explanation: "Who currently makes most foundational decisions about powerful AI systems? \u2014 A small number of large tech companies, government labs, and universities" },
@@ -117,10 +117,10 @@ const wm_w1: Record<number, LessonData> = {
     id: 218, worldId: 201,
     title: "Types Of AI",
     stops: [
-      { tag: "Fact", title: "Slide 1", body: "Narrow AI \u2014 also called Weak AI \u2014 is designed for one specific task. This is all the AI that currently exists. Examples: facial recognition, spam filters, chess engines, voice assistants. A chess AI cannot drive a car; a language model cannot perform surgery." },
-      { tag: "Example", title: "Slide 2", body: "Artificial General Intelligence (AGI) refers to a hypothetical AI capable of performing any intellectual task a human can. It does not exist yet. Whether and when it might is a subject of genuine disagreement among serious researchers." },
-      { tag: "Big idea", title: "Slide 3", body: "Superintelligent AI \u2014 AI that surpasses human intelligence across all domains \u2014 exists only in theory. Some researchers consider it a plausible long-term outcome; others think it will never be achieved." },
-      { tag: "Hot take", title: "Slide 4", body: "Most public concern about AI \u2014 job displacement, dangerous autonomous decisions, existential risk \u2014 relates to general or superintelligent AI. Understanding what we actually have (narrow AI) versus what is speculative helps frame those debates more accurately." },
+      { tag: "Fact", title: "Narrow AI: what exists now", body: "Narrow AI \u2014 also called Weak AI \u2014 is designed for one specific task. This is all the AI that currently exists. Examples: facial recognition, spam filters, chess engines, voice assistants. A chess AI cannot drive a car; a language model cannot perform surgery." },
+      { tag: "Example", title: "AGI is still hypothetical", body: "Artificial General Intelligence (AGI) refers to a hypothetical AI capable of performing any intellectual task a human can. It does not exist yet. Whether and when it might is a subject of genuine disagreement among serious researchers." },
+      { tag: "Big idea", title: "Superintelligence is only theory", body: "Superintelligent AI \u2014 AI that surpasses human intelligence across all domains \u2014 exists only in theory. Some researchers consider it a plausible long-term outcome; others think it will never be achieved." },
+      { tag: "Hot take", title: "Fears outpace current reality", body: "Most public concern about AI \u2014 job displacement, dangerous autonomous decisions, existential risk \u2014 relates to general or superintelligent AI. Understanding what we actually have (narrow AI) versus what is speculative helps frame those debates more accurately." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: "\"Narrow AI\"", answer: true, verdict: "Correct.", explanation: "What type of AI currently exists? \u2014 Narrow AI" },
