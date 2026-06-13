@@ -86,21 +86,30 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const slideImage = stop?.image ?? SLIDE_IMAGES[id]?.[stopIndex] ?? LESSON_IMAGES[id]
   const hasImage   = !!slideImage
 
+  const scrollTop = () => {
+    const el = document.getElementById('lesson-scroll-area')
+    if (el) el.scrollTop = 0
+    else window.scrollTo(0, 0)
+  }
+
   const timelineNext = () => {
     if (stopIndex === stops.length - 1) {
       if (questions.length === 0) { finish(); return }
-      setPhase('quiz'); return
+      setPhase('quiz'); scrollTop(); return
     }
     setCardDir('right')
     setStopIndex(i => i + 1)
+    scrollTop()
   }
   const timelineBack = () => {
     setCardDir('left')
     setStopIndex(i => i - 1)
+    scrollTop()
   }
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) { finish(); return }
     setSelected(null)
+    scrollTop()
     setQIndex(i => i + 1)
   }
   // Detect middle/elementary lesson by checking lesson data
@@ -313,7 +322,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       </div>
 
       {/* Scrollable content area — centers when content fits, scrolls when it doesn't */}
-      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}>
+      <div id="lesson-scroll-area" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}>
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
@@ -418,9 +427,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Right: lesson image OR (elementary only) PAI animation column */}
           {hasImage ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ flex: 1, overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}`, minHeight: 200 }}>
-                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
-              </div>
+              <img src={slideImage} alt={stop.title} style={{ width: '100%', height: 'auto', objectFit: 'cover', objectPosition: 'center top', display: 'block', boxShadow: `10px 10px 0 0 ${slideText}` }} />
             </div>
           ) : isElem ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
