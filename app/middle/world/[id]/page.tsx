@@ -44,13 +44,16 @@ export default function MiddleWorldPage() {
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
 
-        <div style={{ marginBottom: 24 }}>
-          <p style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 6px' }}>
-            W{String(worldId - 200).padStart(2, '0')} · Intermediate
-          </p>
-          <h1 style={{ fontFamily: DISP, fontSize: 28, letterSpacing: '-0.02em', color: BLACK, margin: 0, fontWeight: 400 }}>
-            {world.title}
-          </h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 56, height: 56, objectFit: 'contain', flexShrink: 0 }} />
+          <div>
+            <p style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 6px' }}>
+              W{String(worldId - 200).padStart(2, '0')} · Intermediate
+            </p>
+            <h1 style={{ fontFamily: DISP, fontSize: 28, letterSpacing: '-0.02em', color: BLACK, margin: 0, fontWeight: 400 }}>
+              {world.title}
+            </h1>
+          </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
