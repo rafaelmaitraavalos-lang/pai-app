@@ -308,12 +308,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
-        style={{ width: '100%', padding: '0 7vw', display: 'flex', flexDirection: 'column', gap: 0 }}
+        style={{ width: '100%', padding: '32px 7vw 0', display: 'flex', flexDirection: 'column', gap: 0 }}
       >
 
         {/* Kicker — same as fake */}
         <div>
-          <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+          <div style={{ paddingBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
