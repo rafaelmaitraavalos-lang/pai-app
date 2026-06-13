@@ -303,12 +303,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         </button>
       </div>
 
-      {/* Scrollable content area — flex:1 with overflow so nav never gets cut off */}
-      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+      {/* Scrollable content area — centers when content fits, scrolls when it doesn't */}
+      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}>
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
-        style={{ width: '100%', padding: '32px 7vw 0', display: 'flex', flexDirection: 'column', gap: 0 }}
+        style={{ width: '100%', padding: '40px 7vw', display: 'flex', flexDirection: 'column', gap: 0 }}
       >
 
         {/* Kicker — same as fake */}
