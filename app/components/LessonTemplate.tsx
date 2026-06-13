@@ -234,6 +234,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
           {/* Question */}
           <div key={qIndex} style={{ paddingTop: 36, paddingBottom: 20, animation: 'slideInFromRight 0.28s ease-out' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0 }} />
+            </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
               {question.tag} · {question.difficulty}
             </div>
@@ -377,6 +380,16 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                 text={stop.body}
                 style={{ fontFamily: BODY, fontSize: 18, lineHeight: 1.65, color: BLACK, margin: 0, fontWeight: 400, maxWidth: '54ch' }}
               />
+            </div>
+
+            {/* PAI on every slide */}
+            <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <video
+                src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4', '/pai-lang.mp4'][stopIndex % 4]}
+                autoPlay loop muted playsInline
+                style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }}
+              />
+              <img src="/pai-mascot.png" alt="PAI" style={{ width: 52, height: 52, objectFit: 'contain', flexShrink: 0, opacity: 0.7 }} />
             </div>
 
             {!hasImage && stop.year && (
