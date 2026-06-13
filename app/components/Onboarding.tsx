@@ -264,7 +264,20 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   return (
     <div style={page}>
-      <div style={card}>
+      {/* PAI background pattern */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
+        display: 'flex', flexWrap: 'wrap', gap: '28px 20px',
+        padding: '20px', alignContent: 'flex-start',
+        transform: 'rotate(-15deg) scale(1.4)',
+        transformOrigin: 'center center',
+        opacity: 0.06,
+      }}>
+        {Array.from({ length: 120 }).map((_, i) => (
+          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: BLACK, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
+        ))}
+      </div>
+      <div style={{ ...card, position: 'relative', zIndex: 1 }}>
         {header}
 
         {screen > 0 && (
