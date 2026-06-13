@@ -328,17 +328,15 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
               </div>
 
               {/* PAI pointing at the language options */}
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 0, marginBottom: -8 }}>
-                {/* left arrow toward English */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                  <div style={{ fontFamily: DISP, fontSize: 10, color: DIM, letterSpacing: '0.08em' }}>👈</div>
-                </div>
-                {/* PAI mascot in the middle */}
-                <img src="/pai-mascot.png" alt="PAI" style={{ width: 90, height: 90, objectFit: 'contain', flexShrink: 0 }} />
-                {/* right arrow toward Português */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                  <div style={{ fontFamily: DISP, fontSize: 10, color: DIM, letterSpacing: '0.08em' }}>👉</div>
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <video
+                  src="/pai-lang.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: 220, height: 220, objectFit: 'contain' }}
+                />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
