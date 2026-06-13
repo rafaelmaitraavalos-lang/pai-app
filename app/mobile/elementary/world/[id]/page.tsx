@@ -37,7 +37,8 @@ export default function MobileElementaryWorldPage() {
       </div>
 
       <main style={{ width: '100%', padding: '20px 20px 80px' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 44, height: 44, objectFit: 'contain', flexShrink: 0 }} />
           <h1 style={{ fontFamily: DISP, fontSize: 26, letterSpacing: '-0.02em', margin: 0, fontWeight: 400, color: BLACK, lineHeight: 1.1 }}>{world.title}</h1>
         </div>
 

@@ -471,6 +471,7 @@ export default function PromptPizzaGame() {
     <div style={S.root}>
       <button onClick={() => router.back()} style={S.backBtn}>{isPT ? '← voltar' : '← back'}</button>
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
+        <img src="/pai-mascot.png" alt="PAI" style={{ width: 70, height: 70, objectFit: 'contain' }} />
         <PizzaSVG mood="happy" />
         <h1 style={{ ...S.neon(PINK), fontSize:44, letterSpacing:4, textAlign:'center', margin:0 }}>
           {isPT ? <>PIZZA<br />COM<br />PROMPT</> : <>PROMPT<br />PIZZA</>}
@@ -550,6 +551,7 @@ export default function PromptPizzaGame() {
     return (
       <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:20 }}>
+          <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 90, height: 90, objectFit: 'contain' }} />
           <PizzaSVG mood="happy" />
           <div style={{ ...S.neon(GREEN), fontSize:28, letterSpacing:4 }}>{isPT ? 'RESTAURANTE FECHADO' : 'RESTAURANT CLOSED'}</div>
           <div style={{ ...S.neon(gc), fontSize:72, letterSpacing:8 }}>{grade}</div>

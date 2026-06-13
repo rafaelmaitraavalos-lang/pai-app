@@ -363,6 +363,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {/* 2: Auth mode */}
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain' }} />
+              </div>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>{L.authTitle ?? 'Welcome to PAI'}</h2>
                 <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: 0 }}>{L.authSub ?? 'First time here, or coming back?'}</p>
@@ -392,6 +395,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {/* 3: Username */}
           {screen === 3 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 90, height: 90, objectFit: 'contain' }} />
+              </div>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>
                   {authMode === 'login' ? (L.usernameEnter ?? 'Enter your username') : (L.usernameChoose ?? 'Choose a username')}
@@ -438,6 +444,9 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             const keys = country?.lang === 'pt' ? GRADES_PT : GRADES
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain' }} />
+                </div>
                 <div>
                   <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step}</p>
                   <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: 0 }}>{L.gradeQ}</h2>

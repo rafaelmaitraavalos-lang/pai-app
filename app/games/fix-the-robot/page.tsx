@@ -303,6 +303,7 @@ export default function FixTheRobot() {
     <div style={S.root}>
       <button onClick={() => router.back()} style={S.backBtn}>{isPT ? '← voltar' : '← back'}</button>
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 18 }}>
+        <img src="/pai-mascot.png" alt="PAI" style={{ width: 70, height: 70, objectFit: 'contain' }} />
         <Robot mood="idle"/>
         <h1 style={{ ...S.neon(PINK), fontSize: 36, letterSpacing: 4, textAlign:'center', lineHeight: 1.2 }}>
           {isPT ? 'CONSERTE O ROBÔ' : 'FIX THE ROBOT'}
@@ -426,6 +427,7 @@ export default function FixTheRobot() {
     return (
       <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
+          <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 90, height: 90, objectFit: 'contain' }} />
           <Robot mood="happy"/>
           <div style={{ ...S.neon(GREEN), fontSize: 26, letterSpacing: 3 }}>{isPT ? 'ROBÔ CONSERTADO!' : 'ROBOT FIXED!'}</div>
           <div style={{ ...S.neon(gc), fontSize: 80, letterSpacing: 8 }}>{grade}</div>

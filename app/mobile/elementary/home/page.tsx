@@ -37,6 +37,12 @@ export default function MobileElementaryHome() {
       </div>
 
       <main style={{ width: '100%', padding: '20px 20px 80px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+          <video src="/pig.mp4" autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }} />
+          <div style={{ fontFamily: DISP, fontSize: 20, color: BLACK, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+            {isPT ? 'Olá! Vamos aprender?' : 'Hey! Ready to learn?'}
+          </div>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{label}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
