@@ -131,6 +131,19 @@ export default function ElementaryHome() {
           </div>
         )}
 
+        {/* PAI mascot greeting */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
+          <div>
+            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+              {username ? (isPT ? `Olá, ${username}!` : `Hey, ${username}!`) : (isPT ? 'Olá!' : 'Hey there!')}
+            </div>
+            <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>
+              {isPT ? 'Pronto para aprender sobre IA?' : 'Ready to learn about AI?'}
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{label}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />

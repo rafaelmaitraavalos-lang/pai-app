@@ -161,7 +161,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
             <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>
           </div>
-          <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '28px 0 8px', fontWeight: 400 }}>{title}</h1>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 90, height: 90, objectFit: 'contain', margin: '16px 0 0' }} />
+          <h1 style={{ fontFamily: DISP, fontSize: 36, letterSpacing: '-0.02em', color: BLACK, margin: '12px 0 8px', fontWeight: 400 }}>{title}</h1>
 
           {isLastInWorld && world && (
             <p style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN, margin: '0 0 20px' }}>
@@ -296,8 +297,11 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     <main className="lesson-slide-main" style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: slideBg, transition: 'background 0.4s ease, color 0.4s ease', overflow: 'hidden' }}>
 
       {/* Black PAI header — workshopped design */}
-      <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-        <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+      <div style={{ background: BLACK, padding: '6px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 32, height: 32, objectFit: 'contain' }} />
+          <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+        </div>
         <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
           {ui.backWorld}
         </button>

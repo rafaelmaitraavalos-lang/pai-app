@@ -43,7 +43,8 @@ export default function ElementaryWorldPage() {
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 52, height: 52, objectFit: 'contain', flexShrink: 0 }} />
           <h1 style={{ fontFamily: DISP, fontSize: 32, letterSpacing: '-0.02em', margin: 0, fontWeight: 400, color: BLACK }}>{world.title}</h1>
         </div>
 
