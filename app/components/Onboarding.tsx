@@ -252,7 +252,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
     minHeight: 640, display: 'flex', flexDirection: 'column',
   }
   const page: React.CSSProperties = {
-    minHeight: '100vh', background: '#fff', fontFamily: BODY,
+    minHeight: '100vh', background: '#0a0a0a', fontFamily: BODY,
     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 20px',
     position: 'relative', overflow: 'hidden',
   }
@@ -271,10 +271,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         padding: '20px', alignContent: 'flex-start',
         transform: 'rotate(-15deg) scale(1.4)',
         transformOrigin: 'center center',
-        opacity: 0.055,
+        opacity: 0.08,
       }}>
         {Array.from({ length: 120 }).map((_, i) => (
-          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: BLACK, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
+          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: GREEN, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
         ))}
       </div>
       <div style={{ ...card, position: 'relative', zIndex: 1 }}>
