@@ -235,7 +235,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Question */}
           <div key={qIndex} style={{ paddingTop: 36, paddingBottom: 20, animation: 'slideInFromRight 0.28s ease-out' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0 }} />
+              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', flexShrink: 0 }} />
+              {isElem && <img src="/pai-mascot.png" alt="PAI" style={{ width: 64, height: 64, objectFit: 'contain', flexShrink: 0 }} />}
+              {isElem && <img src="/pai-mascot.png" alt="PAI" style={{ width: 44, height: 44, objectFit: 'contain', flexShrink: 0, opacity: 0.5 }} />}
             </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
               {question.tag} · {question.difficulty}
@@ -339,13 +341,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
         </div>
 
-        {/* Two-column grid — same as fake */}
+        {/* Two-column grid */}
         <div
           key={stopIndex}
-          className={hasImage ? 'lesson-slide-grid' : undefined}
+          className={hasImage || isElem ? 'lesson-slide-grid' : undefined}
           style={{
-            display: hasImage ? undefined : 'grid',
-            gridTemplateColumns: hasImage ? undefined : '1fr',
+            display: hasImage || isElem ? undefined : 'grid',
+            gridTemplateColumns: hasImage || isElem ? undefined : '1fr',
             gap: 0,
             paddingTop: 44,
             paddingBottom: 32,
@@ -353,12 +355,21 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           }}
         >
           {/* Left: headline + body */}
-          <div className={hasImage ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage ? 52 : 0, borderRight: hasImage ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
+          <div className={hasImage || isElem ? 'lesson-slide-text' : undefined} style={{ paddingRight: hasImage || isElem ? 52 : 0, borderRight: hasImage || isElem ? `1px solid ${FAINT}` : 'none', display: 'flex', flexDirection: 'column' }}>
 
             {/* Image stacked above title — only shown on mobile via CSS */}
             {hasImage && (
               <div className="lesson-slide-image-top" style={{ display: 'none', marginBottom: 18, aspectRatio: '4/3', overflow: 'hidden', boxShadow: `6px 6px 0 0 ${slideText}` }}>
                 <img src={slideImage!} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+              </div>
+            )}
+
+            {/* Elementary: PAI above title on every slide */}
+            {isElem && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
+                <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4', '/pai-lang.mp4'][stopIndex % 4]} autoPlay loop muted playsInline style={{ width: 64, height: 64, objectFit: 'contain', flexShrink: 0 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 36, height: 36, objectFit: 'contain', flexShrink: 0, opacity: 0.5 }} />
               </div>
             )}
 
@@ -382,15 +393,20 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               />
             </div>
 
-            {/* PAI on every slide */}
-            <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <video
-                src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4', '/pai-lang.mp4'][stopIndex % 4]}
-                autoPlay loop muted playsInline
-                style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }}
-              />
-              <img src="/pai-mascot.png" alt="PAI" style={{ width: 52, height: 52, objectFit: 'contain', flexShrink: 0, opacity: 0.7 }} />
-            </div>
+            {/* PAI below body text — bigger for elementary */}
+            {isElem ? (
+              <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 96, height: 96, objectFit: 'contain', flexShrink: 0 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0, opacity: 0.55 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 44, height: 44, objectFit: 'contain', flexShrink: 0, opacity: 0.3 }} />
+              </div>
+            ) : (
+              <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4', '/pai-lang.mp4'][stopIndex % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }} />
+                <img src="/pai-mascot.png" alt="PAI" style={{ width: 52, height: 52, objectFit: 'contain', flexShrink: 0, opacity: 0.7 }} />
+              </div>
+            )}
 
             {!hasImage && stop.year && (
               <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
@@ -399,14 +415,20 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             )}
           </div>
 
-          {/* Right: image */}
-          {hasImage && (
+          {/* Right: lesson image OR (elementary only) PAI animation column */}
+          {hasImage ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column' }}>
               <div style={{ flex: 1, overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}`, minHeight: 200 }}>
                 <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </div>
-          )}
+          ) : isElem ? (
+            <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+              <video src={['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]} autoPlay loop muted playsInline style={{ width: 160, height: 160, objectFit: 'contain' }} />
+              <img src="/pai-mascot.png" alt="PAI" style={{ width: 110, height: 110, objectFit: 'contain' }} />
+              <video src={['/pai-lang.mp4', '/pig.mp4', '/pai3.mp4', '/pai0.mp4'][(stopIndex + 3) % 4]} autoPlay loop muted playsInline style={{ width: 90, height: 90, objectFit: 'contain', opacity: 0.75 }} />
+            </div>
+          ) : null}
         </div>
 
         {/* Footer inside scroller */}
