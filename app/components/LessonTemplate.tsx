@@ -389,8 +389,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Right: image — same as fake */}
           {hasImage && (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ background: '#f0edea', aspectRatio: '3/4', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}` }}>
-                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+              <div style={{ background: '#f0edea', overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}`, minHeight: 180, maxHeight: '60vh' }}>
+                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', maxHeight: '60vh' }} />
               </div>
             </div>
           )}
