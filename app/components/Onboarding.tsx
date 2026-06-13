@@ -271,7 +271,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         padding: '20px', alignContent: 'flex-start',
         transform: 'rotate(-15deg) scale(1.4)',
         transformOrigin: 'center center',
-        opacity: 0.06,
+        opacity: 0.18,
       }}>
         {Array.from({ length: 120 }).map((_, i) => (
           <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: GREEN, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
