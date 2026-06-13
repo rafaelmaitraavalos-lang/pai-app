@@ -300,7 +300,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {/* 0: Welcome */}
           {screen === 0 && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
-              <div style={{ background: '#FFF0F5', borderRadius: 16, overflow: 'hidden', width: '100%' }}>
+              <div style={{ background: '#0a0a0a', borderRadius: 16, overflow: 'hidden', width: '100%' }}>
                 <video
                   src="/pig.mp4"
                   autoPlay
