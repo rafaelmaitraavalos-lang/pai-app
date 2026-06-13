@@ -274,7 +274,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         opacity: 0.06,
       }}>
         {Array.from({ length: 120 }).map((_, i) => (
-          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: BLACK, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
+          <span key={i} style={{ fontFamily: DISP, fontSize: 22, fontWeight: 900, color: GREEN, letterSpacing: '-0.02em', userSelect: 'none', whiteSpace: 'nowrap' }}>PAI</span>
         ))}
       </div>
       <div style={{ ...card, position: 'relative', zIndex: 1 }}>
