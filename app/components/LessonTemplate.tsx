@@ -324,11 +324,11 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       </div>
 
       {/* Scrollable content area — centers when content fits, scrolls when it doesn't */}
-      <div id="lesson-scroll-area" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', display: 'flex', alignItems: 'center' }}>
+      <div id="lesson-scroll-area" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
       <div
         id="lesson-content-wrapper"
         className="lesson-slide-scaler"
-        style={{ width: '100%', padding: '40px 7vw', display: 'flex', flexDirection: 'column', gap: 0 }}
+        style={{ width: '100%', padding: '40px 7vw', display: 'flex', flexDirection: 'column', gap: 0, marginTop: 'auto', marginBottom: 'auto' }}
       >
 
         {/* Kicker — same as fake */}
