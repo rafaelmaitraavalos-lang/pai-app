@@ -88,30 +88,28 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
   const isElem = theme === 'elementary'
 
-  const scrollTop = () => {
+  // Scroll to top after every slide/question change (runs after React re-renders)
+  useEffect(() => {
     const el = document.getElementById('lesson-scroll-area')
     if (el) el.scrollTop = 0
-    else window.scrollTo(0, 0)
-  }
+    else window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [stopIndex, qIndex, phase])
 
   const timelineNext = () => {
     if (stopIndex === stops.length - 1) {
       if (questions.length === 0) { finish(); return }
-      setPhase('quiz'); scrollTop(); return
+      setPhase('quiz'); return
     }
     setCardDir('right')
     setStopIndex(i => i + 1)
-    scrollTop()
   }
   const timelineBack = () => {
     setCardDir('left')
     setStopIndex(i => i - 1)
-    scrollTop()
   }
   const nextQuestion = () => {
     if (qIndex === questions.length - 1) { finish(); return }
     setSelected(null)
-    scrollTop()
     setQIndex(i => i + 1)
   }
   // Detect middle/elementary lesson by checking lesson data

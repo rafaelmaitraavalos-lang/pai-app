@@ -38,6 +38,11 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
 
   useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
 
+  // Scroll to top after every slide/question change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [stopIndex, qIndex, phase])
+
   const tx        = TRANSLATIONS[lang]?.[id]
   const title     = tx?.title     ?? titleEN
   const stops     = tx ? stopsEN.map((s, i)     => ({ ...s, title: tx.stops[i]?.title     ?? s.title,     body: tx.stops[i]?.body         ?? s.body         })) : stopsEN
