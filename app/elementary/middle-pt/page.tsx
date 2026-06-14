@@ -6,34 +6,9 @@ import Link from 'next/link'
 import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../../data/elementary'
 
 const GAMES = [
-  { title: 'Signal Drop',        gameUrl: '/games/signal-drop' },
-  { title: 'Fix the Robot',      gameUrl: '/games/fix-the-robot' },
-  { title: 'Build-a-Robot',      gameUrl: '/games/build-a-robot' },
-  { title: 'The Analyst',        gameUrl: '/games/analyst' },
-  { title: 'Static',             gameUrl: '/games/static' },
-  { title: 'Weight Room',        gameUrl: '/games/weight-room' },
-  { title: 'The Feed',           gameUrl: '/games/the-feed' },
-  { title: 'Failure Modes',      gameUrl: '/games/failure-modes' },
-  { title: 'Data Trails',        gameUrl: '/games/data-trails' },
-  { title: 'The Call',           gameUrl: '/games/the-call' },
-  { title: 'Daily Scan',         gameUrl: '/games/daily-scan' },
-  { title: 'The Framework',      gameUrl: '/games/the-framework' },
-  { title: 'Bias Sources',       gameUrl: '/games/bias-sources' },
-  { title: 'Transparency Types', gameUrl: '/games/transparency' },
-  { title: "Can or Can't",       gameUrl: '/games/can-or-cant' },
-  { title: 'What Is AGI',        gameUrl: '/games/what-is-agi' },
-  { title: 'The Resource',       gameUrl: '/games/the-resource' },
-  { title: 'Signal Flow',        gameUrl: '/games/signal-flow' },
-  { title: 'The Gradient',       gameUrl: '/games/the-gradient' },
-  { title: 'Transformer Parts',  gameUrl: '/games/transformer' },
-  { title: 'Prompt Drop',        gameUrl: '/games/prompt-drop' },
-  { title: 'Agent Parts',        gameUrl: '/games/agent-parts' },
-  { title: 'Ship It',            gameUrl: '/games/ship-it' },
-  { title: 'Multimodal',         gameUrl: '/games/multimodal' },
-  { title: 'Frontier Concepts',  gameUrl: '/games/frontier' },
-  { title: 'Dispatch',           gameUrl: '/games/dispatch' },
-  { title: 'Connections',        gameUrl: '/games/connections' },
-  { title: 'Timeline',           gameUrl: '/games/timeline' },
+  { title: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
+  { title: 'Conserte o Robô', gameUrl: '/games/fix-the-robot' },
+  { title: 'Monte um Robô',   gameUrl: '/games/build-a-robot' },
 ]
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
