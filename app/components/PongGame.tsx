@@ -151,6 +151,10 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
 
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
+  // When skipIntro is true the phase starts at 'countdown' but startGame()
+  // (which initialises gs.current) is never called — fix that here.
+  useEffect(() => { if (skipIntro) startGame() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const ITEMS    = isPT ? ITEMS_PT    : ITEMS_EN
   const VERDICTS = isPT ? VERDICTS_PT : VERDICTS_EN
   const FACTS    = isPT ? FACTS_PT    : FACTS_EN
