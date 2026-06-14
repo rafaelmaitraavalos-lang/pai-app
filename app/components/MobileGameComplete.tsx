@@ -18,7 +18,8 @@ export default function MobileGameComplete({ slug }: Props) {
   if (!game) return null
 
   const world        = WORLDS[game.world]
-  const nextMod      = world?.modules[game.module]
+  const gameIdx      = world?.modules.findIndex(m => m.type === 'game' && m.gameUrl?.includes(game.slug)) ?? -1
+  const nextMod      = gameIdx >= 0 ? world?.modules.slice(gameIdx + 1).find(m => m.type !== 'game') : undefined
   const worldRoute   = `/mobile/world/${game.world}`
   const nextWorldIdx = WORLD_IDS.indexOf(game.world) + 1
   const nextWorldId  = !nextMod && nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
