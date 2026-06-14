@@ -145,8 +145,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   const skip = () => {
-    localStorage.setItem(`pai_lesson_${id}_done`, 'true')
-    router.push(currentWorldRoute)
+    if (phase === 'timeline') {
+      // On slides → jump to quiz (scroll handled by useEffect)
+      setPhase('quiz')
+    } else {
+      // On quiz → finish (go to game intro or completion)
+      finish()
+    }
   }
 
   // ── Complete ────────────────────────────────────────────────────────────────
