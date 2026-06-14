@@ -139,7 +139,7 @@ export default function ElementaryHome() {
 
         {/* PAI mascot greeting */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, padding: '0 4px' }}>
-          <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
+          <video src="/pig.mp4" autoPlay loop muted playsInline style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
           <div>
             <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
               {username ? (isPT ? `Olá, ${username}!` : `Hey, ${username}!`) : (isPT ? 'Olá!' : 'Hey there!')}
