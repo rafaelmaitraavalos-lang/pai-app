@@ -392,8 +392,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               />
             </div>
 
-            {/* PAI below body text — only on non-elementary slides (elementary uses the right column) */}
-            {!isElem && (
+            {/* PAI below body text — shown unless the right column is already showing a PAI (elem + no image) */}
+            {(!isElem || hasImage) && (
               <div style={{ marginTop: 28 }}>
                 <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain' }} />
               </div>
