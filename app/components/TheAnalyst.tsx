@@ -259,12 +259,6 @@ export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
   return (
     <div style={{ maxWidth: 560, margin: '0 auto', position: 'relative', paddingBottom: 90 }}>
 
-      <div style={{ background: '#f5f5f5', border: '1px solid #e0e0e0', padding: '10px 14px', marginBottom: 16, fontFamily: BODY, fontSize: 12, color: DIM, lineHeight: 1.55 }}>
-        {isPT
-          ? 'Você é um investidor em IA. Cada caso mostra uma afirmação real sobre IA na época. Com base nessa afirmação, você investiria em pesquisa de IA naquele momento?'
-          : 'You\'re an AI investor. Each case shows a real claim about AI at the time. Based on that claim — would you have invested in AI research at that moment?'}
-      </div>
-
       <CredMeter value={credibility} isPT={isPT} />
 
       {/* Round dots */}
