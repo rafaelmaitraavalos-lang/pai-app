@@ -7,7 +7,7 @@ import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
 import { WORLDS, WORLD_IDS, getLessonWorldId, WORLD_TITLES_PT } from '../data'
-import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
+import { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
 
 export interface Stop {
   tag:    string
@@ -113,8 +113,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     setQIndex(i => i + 1)
   }
   // Detect middle/elementary lesson by checking lesson data
-  const msLesson = MIDDLE_SCHOOL_LESSONS[id]
-  const rawWorldId = msLesson ? msLesson.worldId : getLessonWorldId(id)
+  const msLesson   = MIDDLE_SCHOOL_LESSONS[id]
+  const elemLesson = ELEMENTARY_LESSONS[id]
+  const rawWorldId = msLesson?.worldId ?? elemLesson?.worldId ?? getLessonWorldId(id)
   const isMidElem  = rawWorldId >= 100
   const world      = isMidElem ? ELEMENTARY_WORLDS[rawWorldId] : WORLDS[rawWorldId]
   const currentWorldRoute = isMidElem
