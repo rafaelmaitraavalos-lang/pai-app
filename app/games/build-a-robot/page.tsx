@@ -748,8 +748,8 @@ function BuildPhase({cfg,setCfg,next,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;n
           </Sec>
           <Sec label={isPT?'Pernas':'Legs'}>
             <Chip val="basic"   cur={cfg.legs} setVal={set('legs')} label={isPT?'🦿 Andador':'🦿 Walker'}  sub={isPT?'Vai a qualquer lugar':'Go anywhere'}/>
-            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label={isPT?'🛞 Rodas':'🛞 Wheels'}  sub={isPT?'Libera Corrida Veloz!':'Unlocks Speed Race!'}/>
-            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label={isPT?'🚀 Foguetes':'🚀 Rockets'} sub={isPT?'Libera Voar de Foguete!':'Unlocks Rocket Fly!'}/>
+            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label={isPT?'🛞 Rodas':'🛞 Wheels'}  sub={isPT?'Ótimo para corrida!':'Great for racing!'}/>
+            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label={isPT?'🚀 Foguetes':'🚀 Rockets'} sub={isPT?'Perfeito para voar!':'Perfect for flying!'}/>
           </Sec>
           <Sec label={isPT?'Acessórios':'Extra Gear'}>
             <Chip val="none"      cur={cfg.extra} setVal={set('extra')} label={isPT?'— Nenhum':'— None'}       sub={isPT?'Simples e direto':'Keep it clean'}/>
@@ -798,15 +798,12 @@ function PaintPhase({cfg,setCfg,next,back,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>v
 
 // ─── CHOOSE PHASE ─────────────────────────────────────────────────────────────
 function ChoosePhase({cfg,play,back,isPT=false}:{cfg:Cfg;play:(g:MiniGame)=>void;back:()=>void;isPT?:boolean}) {
-  const canRocket=cfg.legs==='rockets'||cfg.extra==='rockets'
-  const canRace=cfg.legs==='wheels'
-  const Card=({emoji,name,color,desc,tag,onClick}:{emoji:string;name:string;color:string;desc:string;tag?:string;onClick:()=>void})=>(
+  const Card=({emoji,name,color,desc,onClick}:{emoji:string;name:string;color:string;desc:string;onClick:()=>void})=>(
     <button onClick={onClick} style={{background:'#080808',border:`2px solid ${color}44`,borderRadius:12,padding:'14px 16px',cursor:'pointer',textAlign:'left',transition:'all .15s',width:'100%'}}
       onMouseEnter={e=>{e.currentTarget.style.borderColor=color;e.currentTarget.style.background='#111'}}
       onMouseLeave={e=>{e.currentTarget.style.borderColor=`${color}44`;e.currentTarget.style.background='#080808'}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
         <span style={{fontFamily:'monospace',fontWeight:900,fontSize:15,color}}>{emoji} {name}</span>
-        {tag&&<span style={{fontFamily:'monospace',fontSize:9,color,background:`${color}22`,padding:'2px 6px',borderRadius:4}}>{tag}</span>}
       </div>
       <div style={{fontFamily:'monospace',fontSize:11,color:'#555',lineHeight:1.6}}>{desc}</div>
     </button>
@@ -816,10 +813,9 @@ function ChoosePhase({cfg,play,back,isPT=false}:{cfg:Cfg;play:(g:MiniGame)=>void
       <Robot cfg={cfg} size={110} mood="happy"/>
       <h2 style={{...S.title(cfg.color),fontSize:24,margin:'10px 0 4px'}}>{isPT?'ESCOLHA SEU JOGO!':'CHOOSE YOUR GAME!'}</h2>
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:340,marginTop:16}}>
-        {canRocket&&<Card emoji="🚀" name={isPT?'Voar de Foguete':'Rocket Fly'} color={cfg.color} tag={isPT?'FOGUETES':'ROCKETS'} desc={isPT?'Impulsos curtos! Desvie de asteroides ☄️, voe pelos muros laser, colete estrelas e gemas. Combo = pontos!':'Boost in short bursts! Dodge asteroids ☄️, fly through laser walls, and collect stars & gems. Combo for big points!'} onClick={()=>play('rocket')}/>}
+        <Card emoji="🚀" name={isPT?'Voar de Foguete':'Rocket Fly'} color={cfg.color} desc={isPT?'Impulsos curtos! Desvie de asteroides ☄️, voe pelos muros laser, colete estrelas e gemas. Combo = pontos!':'Boost in short bursts! Dodge asteroids ☄️, fly through laser walls, and collect stars & gems. Combo for big points!'} onClick={()=>play('rocket')}/>
         <Card emoji="⭐" name={isPT?'Pegar Estrelas':'Star Catch'} color={cfg.eye} desc={isPT?'Deslize para pegar estrelas caindo! Evite 💣 bombas — pegue 🧲 ímãs para coleta automática!':'Slide left and right to catch falling stars! Avoid 💣 bombs — catch 🧲 magnets for auto-collect power!'} onClick={()=>play('stars')}/>
-        {canRace&&<Card emoji="🏁" name={isPT?'Corrida Veloz':'Speed Race'} color={cfg.color} tag={isPT?'RODAS':'WHEELS'} desc={isPT?'Você vai rápido! Salte e SALTO DUPLO sobre muros. Pegue ⚡ turbos!':'You\'re rolling fast! Jump and DOUBLE JUMP over walls. Catch ⚡ boosts to go turbo!'} onClick={()=>play('race')}/>}
-        {!canRocket&&!canRace&&<p style={{color:'#333',fontFamily:'monospace',fontSize:11,textAlign:'center',lineHeight:1.8}}>{isPT?'Dica: adicione Pernas de Foguete ou Rodas para desbloquear mais 2 jogos!':'Tip: add Rocket Legs or Wheels to unlock 2 more games!'}</p>}
+        <Card emoji="🏁" name={isPT?'Corrida Veloz':'Speed Race'} color={cfg.color} desc={isPT?'Você vai rápido! Salte e SALTO DUPLO sobre muros. Pegue ⚡ turbos!':'You\'re rolling fast! Jump and DOUBLE JUMP over walls. Catch ⚡ boosts to go turbo!'} onClick={()=>play('race')}/>
       </div>
       <button style={{...S.outline,marginTop:20}} onClick={back}>{isPT?'← remontar':'← rebuild'}</button>
     </div>
