@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function PromptDropPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="prompt-drop" />
+  if (phase === 'done') return <GameComplete slug="prompt-drop" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Queda de Prompt' : 'Prompt Drop'}
+      type="catch"
+      description={
+        isPT
+          ? 'Bons prompts geram ótimos resultados. Prompts ruins desperdiçam seu tempo. Pegue os elementos que fazem os prompts funcionarem.'
+          : 'Good prompts get great results. Bad prompts waste your time. Catch the elements that make prompts work.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE elementos de prompts eficazes.',
+        'ESQUIVE de maus hábitos de prompting.',
+        'Sua pontuação mede a força dos seus instintos de prompting.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH elements of effective prompting.',
+        'DODGE bad prompting habits.',
+        'Your score tracks how strong your prompting instincts are.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   const game = isPT ? CATCHER_GAMES_PT['prompt-drop'] : CATCHER_GAMES['prompt-drop']
 
@@ -33,7 +60,7 @@ export default function PromptDropPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setDone(true)} isPT={isPT} />
+        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

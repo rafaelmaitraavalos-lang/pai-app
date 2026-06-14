@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/the-resource'
 import roundsPT from '../../data/rounds/the-resource_pt'
@@ -13,14 +14,38 @@ const GREEN = '#3DF542'
 
 export default function TheResourcePage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="the-resource" />
+  if (phase === 'done') return <GameComplete slug="the-resource" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'O Recurso' : 'The Resource'}
+      type="decide"
+      description={
+        isPT
+          ? 'Você é um pesquisador de segurança de IA decidindo como alocar recursos escassos. Afirmações reais sobre risco de IA chegam à sua mesa.'
+          : "You're an AI safety researcher deciding how to allocate scarce resources. Real claims about AI risk are landing on your desk."
+      }
+      howToPlay={isPT ? [
+        'Leia cada caso — uma afirmação real sobre risco de IA.',
+        'Decida se merece recursos significativos, menores ou ceticismo.',
+        'Sua credibilidade sobe quando você interpreta os sinais corretamente.',
+      ] : [
+        'Read each case — a real claim about AI risk.',
+        'Decide whether it warrants major resources, minor resources, or skepticism.',
+        'Your credibility rises when you read the signals correctly.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/home')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -32,7 +57,7 @@ export default function TheResourcePage() {
       </div>
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640, height: '100%', overflowY: 'auto', padding: '32px 7vw 80px' }}>
-          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setDone(true)} isPT={isPT} />
+          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setPhase('done')} isPT={isPT} />
         </div>
       </div>
     </div>

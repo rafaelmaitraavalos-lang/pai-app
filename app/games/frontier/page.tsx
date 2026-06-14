@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import ConnectionsGame from '../../components/ConnectionsGame'
 import puzzle from '../../data/puzzles/frontier'
 import puzzlePT from '../../data/puzzles/frontier_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function FrontierPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="frontier" />
+  if (phase === 'done') return <GameComplete slug="frontier" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Conceitos de Fronteira' : 'Frontier Concepts'}
+      type="group"
+      description={
+        isPT
+          ? 'Os modelos de fronteira estão mudando rapidamente. Agrupe estes 16 conceitos sobre IA de ponta em 4 categorias.'
+          : 'Frontier models are changing fast. Group these 16 concepts about cutting-edge AI into 4 categories.'
+      }
+      howToPlay={isPT ? [
+        '16 cartas, 4 categorias ocultas.',
+        'Selecione 4 cartas que você acha que pertencem juntas e envie.',
+        'Você tem 4 erros antes do jogo terminar.',
+        'Os grupos mais difíceis valem a pena notar — procure os complicados.',
+      ] : [
+        '16 cards, 4 hidden categories.',
+        'Select 4 cards you think belong together and submit.',
+        'You get 4 mistakes before the game ends.',
+        'Harder groups are worth noticing — look for the tricky ones.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#f9f6f0', display: 'flex', flexDirection: 'column' }}>
@@ -31,7 +58,7 @@ export default function FrontierPage() {
         </button>
       </div>
       <div style={{ flex: 1, overflow: 'auto', padding: '24px 16px 80px' }}>
-        <ConnectionsGame key={isPT ? 'pt' : 'en'} puzzle={isPT ? puzzlePT : puzzle} onComplete={() => setDone(true)} isPT={isPT} />
+        <ConnectionsGame key={isPT ? 'pt' : 'en'} puzzle={isPT ? puzzlePT : puzzle} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

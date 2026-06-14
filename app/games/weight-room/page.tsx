@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function WeightRoomPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="weight-room" />
+  if (phase === 'done') return <GameComplete slug="weight-room" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Sala de Pesos' : 'Weight Room'}
+      type="catch"
+      description={
+        isPT
+          ? 'O treinamento da rede neural está em andamento. Pegue as práticas que fazem as redes aprenderem — esquive das que as quebram.'
+          : 'Neural network training is underway. Catch the practices that make networks learn — dodge the ones that break them.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE boas práticas de treinamento que ajudam a rede a aprender.',
+        'ESQUIVE de práticas ruins que causam falhas ou viés.',
+        'Sua pontuação acompanha quantas boas atualizações você capturou.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH good training practices that help the network learn.',
+        'DODGE bad practices that cause failure or bias.',
+        'Your score tracks how many good updates you captured.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   const game = isPT ? CATCHER_GAMES_PT['weight-room'] : CATCHER_GAMES['weight-room']
 
@@ -33,7 +60,7 @@ export default function WeightRoomPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setDone(true)} isPT={isPT} />
+        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/ship-it'
 import roundsPT from '../../data/rounds/ship-it_pt'
@@ -13,14 +14,38 @@ const GREEN = '#3DF542'
 
 export default function ShipItPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="ship-it" />
+  if (phase === 'done') return <GameComplete slug="ship-it" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Lançar' : 'Ship It'}
+      type="decide"
+      description={
+        isPT
+          ? 'Você é um líder de produto decidindo se funcionalidades de IA estão prontas para lançar. Construa rápido — mas com responsabilidade.'
+          : "You're a product lead deciding whether AI features are ready to ship. Build fast — but build responsibly."
+      }
+      howToPlay={isPT ? [
+        'Leia cada cenário de produto — uma decisão real que equipes enfrentam.',
+        'Decida: lançar, lançar com cautela, pausar ou isso é um alerta.',
+        'Sua credibilidade sobe quando suas decisões se sustentam.',
+      ] : [
+        'Read each product scenario — a real decision teams face.',
+        'Decide: ship it, ship cautiously, pause, or this is a red flag.',
+        'Your credibility rises when your calls hold up.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/home')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -32,7 +57,7 @@ export default function ShipItPage() {
       </div>
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640, height: '100%', overflowY: 'auto', padding: '32px 7vw 80px' }}>
-          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setDone(true)} isPT={isPT} />
+          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setPhase('done')} isPT={isPT} />
         </div>
       </div>
     </div>

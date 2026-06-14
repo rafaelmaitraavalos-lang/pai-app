@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function DailyScanPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="daily-scan" />
+  if (phase === 'done') return <GameComplete slug="daily-scan" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Varredura Diária' : 'Daily Scan'}
+      type="catch"
+      description={
+        isPT
+          ? 'A IA está ao seu redor todos os dias. Pegue as coisas genuinamente alimentadas por IA — esquive das que não são.'
+          : 'AI is all around you every day. Catch the things that are genuinely AI-powered — dodge the ones that aren\'t.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE apps e sistemas que genuinamente usam IA.',
+        'ESQUIVE de coisas que parecem IA mas não são.',
+        'Sua pontuação acompanha quantas interações reais de IA você identificou.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH apps and systems that genuinely use AI.',
+        'DODGE things that just look like AI but aren\'t.',
+        'Your score tracks how many real AI interactions you spotted.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   const game = isPT ? CATCHER_GAMES_PT['daily-scan'] : CATCHER_GAMES['daily-scan']
 
@@ -33,7 +60,7 @@ export default function DailyScanPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setDone(true)} isPT={isPT} />
+        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

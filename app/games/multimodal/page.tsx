@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function MultimodalPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="multimodal" />
+  if (phase === 'done') return <GameComplete slug="multimodal" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Multimodal' : 'Multimodal'}
+      type="catch"
+      description={
+        isPT
+          ? 'A IA moderna trabalha com texto, imagens, áudio e muito mais. Pegue capacidades multimodais genuínas — esquive das que não são.'
+          : 'Modern AI works with text, images, audio, and more. Catch genuine multimodal capabilities — dodge the things that aren\'t.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE capacidades multimodais genuínas de IA.',
+        'ESQUIVE de coisas de modalidade única ou que não são IA.',
+        'Sua pontuação mede o quanto você entende o que a IA moderna processa.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH genuine multimodal AI capabilities.',
+        'DODGE single-modality or non-AI things.',
+        'Your score tracks how well you understand what modern AI can process.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   const game = isPT ? CATCHER_GAMES_PT['multimodal'] : CATCHER_GAMES['multimodal']
 
@@ -33,7 +60,7 @@ export default function MultimodalPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setDone(true)} isPT={isPT} />
+        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

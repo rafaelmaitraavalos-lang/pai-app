@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import PongGame from '../../components/PongGame'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -11,7 +12,7 @@ const GREEN = '#3DF542'
 
 export default function SignalDropPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT]   = useState(false)
   const [isSlow, setIsSlow] = useState(false)
 
@@ -22,7 +23,33 @@ export default function SignalDropPage() {
     setIsSlow(['elem', 'fund1', 'fund2', 'K', '1st', '2nd', '3rd', '4th', '5th'].includes(grade))
   }, [])
 
-  if (done) return <GameComplete slug="signal-drop" />
+  if (phase === 'done') return <GameComplete slug="signal-drop" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Queda de Sinal' : 'Signal Drop'}
+      type="catch"
+      description={
+        isPT
+          ? 'Dados de treinamento estão caindo. A IA aprende com exemplos rotulados — pegue os bons, esquive dos ruins.'
+          : 'Training data is falling. AI learns from labeled examples — catch the clean ones, dodge the junk.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE dados de treinamento rotulados e verificados.',
+        'ESQUIVE de dados não rotulados, enviesados ou comprometidos.',
+        'Sua pontuação acompanha quantos dados limpos você coletou.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH labeled, verified training data.',
+        'DODGE unlabeled, biased, or compromised data.',
+        'Your score tracks how much clean data you collected.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: BLACK, display: 'flex', flexDirection: 'column' }}>
@@ -33,7 +60,7 @@ export default function SignalDropPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <PongGame onComplete={() => setDone(true)} slow={isSlow} />
+        <PongGame onComplete={() => setPhase('done')} slow={isSlow} />
       </div>
     </div>
   )

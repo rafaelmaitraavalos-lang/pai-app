@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import CatcherGame from '../../components/CatcherGame'
 import { CATCHER_GAMES } from '../../data/catcherGames'
 import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
@@ -13,14 +14,40 @@ const GREEN = '#3DF542'
 
 export default function BiasSourcesPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="bias-sources" />
+  if (phase === 'done') return <GameComplete slug="bias-sources" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Fontes de Viés' : 'Bias Sources'}
+      type="catch"
+      description={
+        isPT
+          ? 'O viés na IA começa com os dados. Pegue fontes reais de viés em sistemas de IA — esquive do que não é realmente uma fonte de viés.'
+          : 'AI bias starts with data. Catch real sources of bias in AI systems — dodge the things that aren\'t actually bias sources.'
+      }
+      howToPlay={isPT ? [
+        'Itens caem do topo.',
+        'PEGUE fontes genuínas de viés na IA.',
+        'ESQUIVE de coisas que não introduzem viés de verdade.',
+        'Sua pontuação mede o quanto você entende a origem do viés.',
+      ] : [
+        'Items fall from the top.',
+        'CATCH genuine sources of AI bias.',
+        'DODGE things that don\'t actually introduce bias.',
+        'Your score tracks how well you understand where bias comes from.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/games')}
+      isPT={isPT}
+    />
+  )
 
   const game = isPT ? CATCHER_GAMES_PT['bias-sources'] : CATCHER_GAMES['bias-sources']
 
@@ -33,7 +60,7 @@ export default function BiasSourcesPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setDone(true)} isPT={isPT} />
+        <CatcherGame key={isPT ? 'pt' : 'en'} game={game} onComplete={() => setPhase('done')} isPT={isPT} />
       </div>
     </div>
   )

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/the-gradient'
 import roundsPT from '../../data/rounds/the-gradient_pt'
@@ -13,14 +14,38 @@ const GREEN = '#3DF542'
 
 export default function TheGradientPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="the-gradient" />
+  if (phase === 'done') return <GameComplete slug="the-gradient" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'O Gradiente' : 'The Gradient'}
+      type="decide"
+      description={
+        isPT
+          ? 'Você é um líder de pesquisa avaliando afirmações técnicas sobre treinamento de redes neurais. Algumas são avanços reais — outras são exagero.'
+          : "You're a research lead evaluating technical claims about neural network training. Some are breakthroughs — some are hype."
+      }
+      howToPlay={isPT ? [
+        'Leia cada afirmação técnica sobre treinamento de IA.',
+        'Decida: é um avanço real ou exagero?',
+        'Sua credibilidade sobe quando você distingue sinal do ruído.',
+      ] : [
+        'Read each technical claim about AI training.',
+        'Decide: is this a real breakthrough or overblown?',
+        'Your credibility rises when you distinguish signal from noise.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/home')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -32,7 +57,7 @@ export default function TheGradientPage() {
       </div>
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640, height: '100%', overflowY: 'auto', padding: '32px 7vw 80px' }}>
-          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setDone(true)} isPT={isPT} />
+          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setPhase('done')} isPT={isPT} />
         </div>
       </div>
     </div>

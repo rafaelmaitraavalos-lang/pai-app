@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/dispatch'
 import roundsPT from '../../data/rounds/dispatch_pt'
@@ -13,14 +14,38 @@ const GREEN = '#3DF542'
 
 export default function DispatchPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="dispatch" />
+  if (phase === 'done') return <GameComplete slug="dispatch" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'Despacho' : 'Dispatch'}
+      type="decide"
+      description={
+        isPT
+          ? 'Você é um analista de inteligência avaliando afirmações geopolíticas sobre dominância e estratégia em IA.'
+          : "You're an intelligence analyst evaluating geopolitical claims about AI dominance and strategy."
+      }
+      howToPlay={isPT ? [
+        'Leia cada despacho — uma afirmação real sobre IA e poder global.',
+        'Decida o quanto levá-la a sério.',
+        'Sua credibilidade sobe quando você interpreta os sinais corretamente.',
+      ] : [
+        'Read each dispatch — a real claim about AI and global power.',
+        'Decide how seriously to take it.',
+        'Your credibility rises when you read the signals correctly.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/home')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -32,7 +57,7 @@ export default function DispatchPage() {
       </div>
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640, height: '100%', overflowY: 'auto', padding: '32px 7vw 80px' }}>
-          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setDone(true)} isPT={isPT} />
+          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setPhase('done')} isPT={isPT} />
         </div>
       </div>
     </div>

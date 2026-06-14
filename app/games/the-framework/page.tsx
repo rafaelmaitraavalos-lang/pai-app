@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
+import GameIntro from '../../components/GameIntro'
 import TheAnalyst from '../../components/TheAnalyst'
 import rounds from '../../data/rounds/the-framework'
 import roundsPT from '../../data/rounds/the-framework_pt'
@@ -13,14 +14,38 @@ const GREEN = '#3DF542'
 
 export default function TheFrameworkPage() {
   const router = useRouter()
-  const [done, setDone] = useState(false)
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
   const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
   }, [])
 
-  if (done) return <GameComplete slug="the-framework" />
+  if (phase === 'done') return <GameComplete slug="the-framework" />
+
+  if (phase === 'intro') return (
+    <GameIntro
+      title={isPT ? 'O Framework' : 'The Framework'}
+      type="decide"
+      description={
+        isPT
+          ? 'Você é membro de um conselho de ética avaliando dilemas reais sobre como sistemas de IA devem ser construídos e usados.'
+          : "You're an ethics board member evaluating real dilemmas about how AI systems should be built and used."
+      }
+      howToPlay={isPT ? [
+        'Leia cada dilema ético sobre IA.',
+        'Decida a resposta correta com base no que você aprendeu.',
+        'Sua credibilidade sobe quando seu raciocínio se sustenta.',
+      ] : [
+        'Read each ethical dilemma about AI.',
+        'Decide the right response based on what you\'ve learned.',
+        'Your credibility rises when your reasoning holds up.',
+      ]}
+      onStart={() => setPhase('game')}
+      onBack={() => router.push('/home')}
+      isPT={isPT}
+    />
+  )
 
   return (
     <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -32,7 +57,7 @@ export default function TheFrameworkPage() {
       </div>
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640, height: '100%', overflowY: 'auto', padding: '32px 7vw 80px' }}>
-          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setDone(true)} isPT={isPT} />
+          <TheAnalyst rounds={isPT ? roundsPT : rounds} onComplete={() => setPhase('done')} isPT={isPT} />
         </div>
       </div>
     </div>
