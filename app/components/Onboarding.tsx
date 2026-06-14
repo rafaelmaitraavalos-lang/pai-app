@@ -333,6 +333,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>What language do you speak?</h2>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: 0 }}>Qual idioma você fala?</p>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
