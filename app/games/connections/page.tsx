@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import GameIntro from '../../components/GameIntro'
 import ConnectionsGame, { type CompletionResult } from '../../components/ConnectionsGame'
 import samplePuzzle from '../../data/samplePuzzle'
+import samplePuzzlePT from '../../data/samplePuzzle_pt'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Swap `samplePuzzle` for any puzzle object that matches the Puzzle type.
@@ -67,7 +68,7 @@ export default function ConnectionsPage() {
       <div className="w-full px-4" style={{ maxWidth: 620 }}>
         <ConnectionsGame
           key={key}
-          puzzle={samplePuzzle}
+          puzzle={isPT ? samplePuzzlePT : samplePuzzle}
           onComplete={handleComplete}
         />
 
