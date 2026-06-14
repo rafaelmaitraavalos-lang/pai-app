@@ -52,13 +52,12 @@ export const UNLOCKABLE_ENTRIES: HandbookEntry[] = [
     title: 'Choosing the Right Tool',
     unlocksAt: 4,  // World 1, Module 4
     links: [
-      { label: 'Claude',      url: 'https://claude.ai' },
       { label: 'ChatGPT',     url: 'https://chatgpt.com' },
       { label: 'Perplexity',  url: 'https://perplexity.ai' },
       { label: 'Gemini',      url: 'https://gemini.google.com' },
       { label: 'Meta AI',     url: 'https://meta.ai' },
     ],
-    body: 'There is no single "best" AI. Different tools are useful for different jobs.\n\nUse Claude when you are working with a long reading or revising a piece of writing. Use Perplexity when you are starting research or checking a claim, because it shows clickable sources alongside its answers. Use Gemini when your schoolwork is already in Google Docs or other Google apps. Use ChatGPT when you want a strong all-purpose tool for explaining, brainstorming, or studying. Use Meta AI when you want a free, easy-to-access option for simple questions.\n\nThis list will change. AI tools improve quickly, so check again at the start of each school year.\n\nWhen an answer really matters, ask more than one tool and compare what they say. If they disagree, you have found something that needs to be checked. Even if they agree, verify important facts using a reliable source.\n\nYou probably do not need to pay for an AI subscription yet. Free versions are already useful for most student tasks.',
+    body: 'There is no single "best" AI. Different tools are useful for different jobs.\n\nUse Perplexity when you are starting research or checking a claim, because it shows clickable sources alongside its answers. Use Gemini when your schoolwork is already in Google Docs or other Google apps. Use ChatGPT when you want a strong all-purpose tool for explaining, brainstorming, or studying. Use Meta AI when you want a free, easy-to-access option for simple questions.\n\nThis list will change. AI tools improve quickly, so check again at the start of each school year.\n\nWhen an answer really matters, ask more than one tool and compare what they say. If they disagree, you have found something that needs to be checked. Even if they agree, verify important facts using a reliable source.\n\nYou probably do not need to pay for an AI subscription yet. Free versions are already useful for most student tasks.',
     doLine: 'Choose the tool that fits the task. Keep two that you trust, compare their answers when something matters, and verify important claims yourself.',
   },
   {
