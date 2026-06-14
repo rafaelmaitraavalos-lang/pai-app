@@ -352,7 +352,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   loop
                   muted
                   playsInline
-                  style={{ width: 220, height: 220, objectFit: 'contain' }}
+                  style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
                 />
               </div>
             </div>
@@ -362,7 +362,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain' }} />
+                <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
               </div>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>{L.authTitle ?? 'Welcome to PAI'}</h2>
@@ -443,7 +443,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain' }} />
+                  <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
                 </div>
                 <div>
                   <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step}</p>
