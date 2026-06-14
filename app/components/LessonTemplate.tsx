@@ -122,6 +122,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const currentWorldRoute = isMidElem
     ? (rawWorldId >= 200 ? `/middle/world/${rawWorldId}` : `/elementary/home`)
     : (rawWorldId === 1 ? '/lessons' : `/world/${rawWorldId}`)
+  const homeRoute = isMidElem
+    ? (rawWorldId >= 261 ? '/elementary/middle-pt' : rawWorldId >= 200 ? '/middle/home' : '/elementary/home')
+    : '/home'
 
   // Determine if this is the very last lesson of the student's entire curriculum
   const modIdx         = world?.modules.findIndex(m => m.id === id) ?? -1
@@ -313,7 +316,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ background: BLACK, padding: '6px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-          <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         </div>
         <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
           {ui.backWorld}

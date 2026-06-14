@@ -88,7 +88,7 @@ export default function AboutPage() {
 
       {/* Header */}
       <div style={{ background: BLACK, padding: '10px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</span>
+        <Link href="/home" style={{ textDecoration: 'none', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</Link>
         <Link href="/" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5, textDecoration: 'none' }}>
           {isPT ? '← Início' : '← Home'}
         </Link>
