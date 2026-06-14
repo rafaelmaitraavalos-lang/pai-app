@@ -409,8 +409,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Right: lesson image OR (elementary only) PAI animation column */}
           {hasImage ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36 }}>
-              <div style={{ overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}` }}>
-                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+              <div style={{ overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}`, maxHeight: '55vh' }}>
+                <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </div>
           ) : isElem ? (
