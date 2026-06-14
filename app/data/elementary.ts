@@ -108,19 +108,19 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     id: 104,
     title: 'Conheça a IA',
     level: 'Elementary',
-    modules: [...Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
+    modules: [...Object.values(W104_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   105: {
     id: 105,
     title: 'Como a PAI Pensa',
     level: 'Elementary',
-    modules: [...Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
+    modules: [...Object.values(W105_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   106: {
     id: 106,
     title: 'Como a PAI Pensa (Avançado)',
     level: 'Elementary',
-    modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
+    modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
   107: { id: 107, title: 'O que é a IA?',              level: 'Intermediate', modules: Object.values(W107_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })) },
@@ -133,11 +133,11 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
   204: { id: 204, title: 'AI Ethics',                level: 'Intermediate', modules: [...Object.values(W204_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
   205: { id: 205, title: 'The Future of AI',         level: 'Intermediate', modules: [...Object.values(W205_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
   // Middle School PT — 5 Worlds × 8 Modules
-  261: { id: 261, title: 'O Que É a IA?',            level: 'Intermediate', modules: [...Object.values(W261_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT] },
-  262: { id: 262, title: 'Como a IA Toma Decisões',  level: 'Intermediate', modules: [...Object.values(W262_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT] },
-  263: { id: 263, title: 'IA e Sociedade',            level: 'Intermediate', modules: [...Object.values(W263_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT] },
-  264: { id: 264, title: 'Ética na IA',              level: 'Intermediate', modules: [...Object.values(W264_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT] },
-  265: { id: 265, title: 'O Futuro da IA',           level: 'Intermediate', modules: [...Object.values(W265_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT] },
+  261: { id: 261, title: 'O Que É a IA?',            level: 'Intermediate', modules: [...Object.values(W261_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  262: { id: 262, title: 'Como a IA Toma Decisões',  level: 'Intermediate', modules: [...Object.values(W262_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  263: { id: 263, title: 'IA e Sociedade',            level: 'Intermediate', modules: [...Object.values(W263_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  264: { id: 264, title: 'Ética na IA',              level: 'Intermediate', modules: [...Object.values(W264_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
+  265: { id: 265, title: 'O Futuro da IA',           level: 'Intermediate', modules: [...Object.values(W265_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
 }
 
 export const ELEMENTARY_WORLD_IDS       = [101, 102, 103]
