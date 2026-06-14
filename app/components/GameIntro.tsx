@@ -93,11 +93,22 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
         {isPT ? 'Jogar →' : "Let's Go →"}
       </button>
 
+      <button
+        onClick={onStart}
+        style={{
+          marginTop: 12, fontFamily: BODY, fontSize: 12, color: DIM,
+          background: 'none', border: 'none', cursor: 'pointer', padding: '6px 0',
+          textDecoration: 'underline', textUnderlineOffset: 3,
+        }}
+      >
+        {isPT ? 'Pular introdução' : 'Skip intro'}
+      </button>
+
       {onBack && (
         <button
           onClick={onBack}
           style={{
-            marginTop: 16, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em',
+            marginTop: 8, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em',
             textTransform: 'uppercase', color: DIM, background: 'none', border: 'none',
             cursor: 'pointer', padding: '8px 0',
           }}
