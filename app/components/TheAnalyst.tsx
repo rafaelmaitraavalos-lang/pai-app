@@ -261,13 +261,21 @@ export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
 
       <CredMeter value={credibility} isPT={isPT} />
 
-      {/* Round dots */}
+      {/* Round dots + skip */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>
           {isPT ? `Rodada ${roundIdx + 1} de ${rounds.length}` : `Round ${roundIdx + 1} of ${rounds.length}`}
         </span>
-        <div style={{ display: 'flex', gap: 5 }}>
-          {rounds.map((r, i) => <div key={r.id} style={{ width: 8, height: 8, borderRadius: '50%', background: i < roundIdx ? BLACK : i === roundIdx ? GREEN : FAINT, transition: 'background 0.3s' }} />)}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', gap: 5 }}>
+            {rounds.map((r, i) => <div key={r.id} style={{ width: 8, height: 8, borderRadius: '50%', background: i < roundIdx ? BLACK : i === roundIdx ? GREEN : FAINT, transition: 'background 0.3s' }} />)}
+          </div>
+          <button
+            onClick={() => onComplete?.({ credibility, roundsWon })}
+            style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          >
+            {isPT ? 'Pular' : 'Skip'}
+          </button>
         </div>
       </div>
 
