@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
 import GameIntro from '../../components/GameIntro'
-import PongGame from '../../components/PongGame'
+import CatcherGame from '../../components/CatcherGame'
+import { CATCHER_GAMES } from '../../data/catcherGames'
+import { CATCHER_GAMES_PT } from '../../data/catcherGames_pt'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BLACK = '#0a0a0a'
@@ -12,22 +14,16 @@ const GREEN = '#3DF542'
 
 export default function SignalDropPage() {
   const router = useRouter()
-  const [phase, setPhase]   = useState<'intro' | 'game' | 'done'>('intro')
-  const [isPT, setIsPT]     = useState(false)
-  const [isSlow, setIsSlow] = useState(false)
-  const [backRoute, setBackRoute] = useState('/games')
+  const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
+  const [isPT, setIsPT] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
-    const grade = localStorage.getItem('pai_grade') ?? ''
-    const elemGrades = ['elem', 'fund1', 'K', '1st', '2nd', '3rd', '4th', '5th']
-    setIsSlow([...elemGrades, 'fund2'].includes(grade))
-    if (elemGrades.includes(grade))  setBackRoute('/elementary/home')
-    else if (grade === 'fund2')       setBackRoute('/elementary/middle-pt')
-    else if (grade === 'middle')      setBackRoute('/middle/home')
   }, [])
 
   if (phase === 'done') return <GameComplete slug="signal-drop" />
+
+  const game = isPT ? CATCHER_GAMES_PT['signal-drop'] : CATCHER_GAMES['signal-drop']
 
   if (phase === 'intro') return (
     <GameIntro
@@ -50,21 +46,21 @@ export default function SignalDropPage() {
         'Your score tracks how much clean data you collected.',
       ]}
       onStart={() => setPhase('game')}
-      onBack={() => router.push(backRoute)}
+      onBack={() => router.push('/games')}
       isPT={isPT}
     />
   )
 
   return (
-    <div style={{ height: '100vh', background: BLACK, display: 'flex', flexDirection: 'column' }}>
-      <div style={{ background: BLACK, borderBottom: '1px solid #111', padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+    <div style={{ height: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: BLACK, padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.02em', color: GREEN }}>PAI</span>
-        <button onClick={() => router.push(backRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444', background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation' }}>
+        <button onClick={() => router.push('/games')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.6, background: 'none', border: 'none', cursor: 'pointer' }}>
           {isPT ? '← Jogos' : '← Games'}
         </button>
       </div>
-      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <PongGame onComplete={() => setPhase('done')} slow={isSlow} skipIntro />
+      <div style={{ flex: 1, minHeight: 0 }}>
+        <CatcherGame game={game} onComplete={() => setPhase('done')} />
       </div>
     </div>
   )
