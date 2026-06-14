@@ -63,7 +63,13 @@ def parse_quiz(chunk):
         if opts:
             q_text = re.split(r'\s+[A-D]\)', part)[0].strip()
             correct = next((o.replace('✓','').strip() for o in opts if '✓' in o), None)
-            if correct:
+            opt_clean = [o.replace('✓','').strip().lower() for o in opts]
+            is_tf = set(opt_clean[:2]) <= {'true', 'false'} or 'true or false' in q_text.lower()
+            if correct and is_tf:
+                # True/False: use original question, answer = whether correct option is True
+                questions.append({'question': q_text, 'answer': correct.lower() == 'true',
+                                   'explanation': q_text})
+            elif correct:
                 questions.append({'question': correct, 'answer': True,
                                    'explanation': f'{q_text} — {correct}'})
         else:
