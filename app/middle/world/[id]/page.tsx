@@ -65,36 +65,41 @@ export default function MiddleWorldPage() {
           {world.modules.map((mod, idx) => {
             const isDone   = done[mod.id]
             const isActive = mod.id === activeId
+            const isGame   = (mod as any).type === 'game'
+            const handleClick = () => isGame && (mod as any).gameUrl
+              ? router.push((mod as any).gameUrl)
+              : router.push(`/elementary/lesson/${mod.id}`)
 
             return (
               <div
                 key={mod.id}
-                onClick={() => router.push(`/elementary/lesson/${mod.id}`)}
+                onClick={handleClick}
                 style={{
                   display: 'flex', alignItems: 'center', padding: '13px 16px',
-                  background: isDone ? '#f5f5f5' : '#EBEBEB',
-                  border: `1.5px solid ${isDone ? FAINT : BLACK}`,
-                  boxShadow: isDone ? 'none' : `4px 4px 0 0 ${BLACK}`,
+                  background: isGame ? BLACK : isDone ? '#f5f5f5' : '#EBEBEB',
+                  border: `1.5px solid ${isGame ? BLACK : isDone ? FAINT : BLACK}`,
+                  boxShadow: isGame || !isDone ? `4px 4px 0 0 ${BLACK}` : 'none',
                   cursor: 'pointer', userSelect: 'none',
-                  opacity: isDone ? 0.6 : 1,
+                  opacity: !isGame && isDone ? 0.6 : 1,
                 }}
               >
-                <span style={{ fontFamily: BODY, fontSize: 11, color: DIM, width: 36, flexShrink: 0 }}>
-                  {String(idx + 1).padStart(2, '0')}
+                <span style={{ fontFamily: BODY, fontSize: 11, color: isGame ? GREEN : DIM, width: 36, flexShrink: 0 }}>
+                  {isGame ? '🎮' : String(idx + 1).padStart(2, '0')}
                 </span>
-                <span style={{ fontFamily: DISP, fontSize: 'clamp(12px, 3.5vw, 15px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: BLACK }}>
+                <span style={{ fontFamily: DISP, fontSize: 'clamp(12px, 3.5vw, 15px)', letterSpacing: '-0.01em', flex: 1, minWidth: 0, color: isGame ? GREEN : BLACK }}>
                   {mod.title}
                 </span>
-                {isActive && !isDone && (
+                {!isGame && isActive && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 12 }}>
                     <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
                     Up next
                   </span>
                 )}
-                {isDone && (
+                {!isGame && isDone && (
                   <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, border: `1px solid ${FAINT}`, padding: '2px 6px', marginRight: 12 }}>Done</span>
                 )}
-                <span style={{ fontFamily: DISP, fontSize: 13, color: DIM }}>→</span>
+                {isGame && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 12 }}>Play</span>}
+                <span style={{ fontFamily: DISP, fontSize: 13, color: isGame ? GREEN : DIM }}>→</span>
               </div>
             )
           })}
