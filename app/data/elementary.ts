@@ -72,16 +72,37 @@ const W265_LESSONS = _wm_w5_pt  // module IDs 351-358
 // ── Shared game modules appended after lessons ────────────────────────────────
 
 const GAMES = [
-  { id: 9001, title: 'Signal Drop',   type: 'game' as const, gameUrl: '/games/signal-drop' },
-  { id: 9003, title: 'Fix the Robot', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
-  { id: 9004, title: 'Build-a-Robot', type: 'game' as const, gameUrl: '/games/build-a-robot' },
+  { id: 9001, title: 'Signal Drop',        type: 'game' as const, gameUrl: '/games/signal-drop' },
+  { id: 9002, title: 'Fix the Robot',      type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+  { id: 9003, title: 'Build-a-Robot',      type: 'game' as const, gameUrl: '/games/build-a-robot' },
+  { id: 9004, title: 'The Analyst',        type: 'game' as const, gameUrl: '/games/analyst' },
+  { id: 9005, title: 'Static',             type: 'game' as const, gameUrl: '/games/static' },
+  { id: 9006, title: 'Weight Room',        type: 'game' as const, gameUrl: '/games/weight-room' },
+  { id: 9007, title: 'The Feed',           type: 'game' as const, gameUrl: '/games/the-feed' },
+  { id: 9008, title: 'Failure Modes',      type: 'game' as const, gameUrl: '/games/failure-modes' },
+  { id: 9009, title: 'Data Trails',        type: 'game' as const, gameUrl: '/games/data-trails' },
+  { id: 9010, title: 'The Call',           type: 'game' as const, gameUrl: '/games/the-call' },
+  { id: 9011, title: 'Daily Scan',         type: 'game' as const, gameUrl: '/games/daily-scan' },
+  { id: 9012, title: 'The Framework',      type: 'game' as const, gameUrl: '/games/the-framework' },
+  { id: 9013, title: 'Bias Sources',       type: 'game' as const, gameUrl: '/games/bias-sources' },
+  { id: 9014, title: 'Transparency Types', type: 'game' as const, gameUrl: '/games/transparency' },
+  { id: 9015, title: "Can or Can't",       type: 'game' as const, gameUrl: '/games/can-or-cant' },
+  { id: 9016, title: 'What Is AGI',        type: 'game' as const, gameUrl: '/games/what-is-agi' },
+  { id: 9017, title: 'The Resource',       type: 'game' as const, gameUrl: '/games/the-resource' },
+  { id: 9018, title: 'Signal Flow',        type: 'game' as const, gameUrl: '/games/signal-flow' },
+  { id: 9019, title: 'The Gradient',       type: 'game' as const, gameUrl: '/games/the-gradient' },
+  { id: 9020, title: 'Transformer Parts',  type: 'game' as const, gameUrl: '/games/transformer' },
+  { id: 9021, title: 'Prompt Drop',        type: 'game' as const, gameUrl: '/games/prompt-drop' },
+  { id: 9022, title: 'Agent Parts',        type: 'game' as const, gameUrl: '/games/agent-parts' },
+  { id: 9023, title: 'Ship It',            type: 'game' as const, gameUrl: '/games/ship-it' },
+  { id: 9024, title: 'Multimodal',         type: 'game' as const, gameUrl: '/games/multimodal' },
+  { id: 9025, title: 'Frontier Concepts',  type: 'game' as const, gameUrl: '/games/frontier' },
+  { id: 9026, title: 'Dispatch',           type: 'game' as const, gameUrl: '/games/dispatch' },
+  { id: 9027, title: 'Connections',        type: 'game' as const, gameUrl: '/games/connections' },
+  { id: 9028, title: 'Timeline',           type: 'game' as const, gameUrl: '/games/timeline' },
 ]
 
-const GAMES_PT = [
-  { id: 9001, title: 'Queda de Sinal',  type: 'game' as const, gameUrl: '/games/signal-drop' },
-  { id: 9003, title: 'Conserte o Robô', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
-  { id: 9004, title: 'Monte um Robô',   type: 'game' as const, gameUrl: '/games/build-a-robot' },
-]
+const GAMES_PT = GAMES
 
 // ── Elementary world definitions ──────────────────────────────────────────────
 

@@ -6,14 +6,34 @@ import Link from 'next/link'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 
 const GAMES = [
-  { title: 'Signal Drop',   gameUrl: '/games/signal-drop' },
-  { title: 'Fix the Robot', gameUrl: '/games/fix-the-robot' },
-  { title: 'Build-a-Robot', gameUrl: '/games/build-a-robot' },
-]
-const GAMES_PT = [
-  { title: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
-  { title: 'Conserte o Robô', gameUrl: '/games/fix-the-robot' },
-  { title: 'Monte um Robô',   gameUrl: '/games/build-a-robot' },
+  { title: 'Signal Drop',        gameUrl: '/games/signal-drop' },
+  { title: 'Fix the Robot',      gameUrl: '/games/fix-the-robot' },
+  { title: 'Build-a-Robot',      gameUrl: '/games/build-a-robot' },
+  { title: 'The Analyst',        gameUrl: '/games/analyst' },
+  { title: 'Static',             gameUrl: '/games/static' },
+  { title: 'Weight Room',        gameUrl: '/games/weight-room' },
+  { title: 'The Feed',           gameUrl: '/games/the-feed' },
+  { title: 'Failure Modes',      gameUrl: '/games/failure-modes' },
+  { title: 'Data Trails',        gameUrl: '/games/data-trails' },
+  { title: 'The Call',           gameUrl: '/games/the-call' },
+  { title: 'Daily Scan',         gameUrl: '/games/daily-scan' },
+  { title: 'The Framework',      gameUrl: '/games/the-framework' },
+  { title: 'Bias Sources',       gameUrl: '/games/bias-sources' },
+  { title: 'Transparency Types', gameUrl: '/games/transparency' },
+  { title: "Can or Can't",       gameUrl: '/games/can-or-cant' },
+  { title: 'What Is AGI',        gameUrl: '/games/what-is-agi' },
+  { title: 'The Resource',       gameUrl: '/games/the-resource' },
+  { title: 'Signal Flow',        gameUrl: '/games/signal-flow' },
+  { title: 'The Gradient',       gameUrl: '/games/the-gradient' },
+  { title: 'Transformer Parts',  gameUrl: '/games/transformer' },
+  { title: 'Prompt Drop',        gameUrl: '/games/prompt-drop' },
+  { title: 'Agent Parts',        gameUrl: '/games/agent-parts' },
+  { title: 'Ship It',            gameUrl: '/games/ship-it' },
+  { title: 'Multimodal',         gameUrl: '/games/multimodal' },
+  { title: 'Frontier Concepts',  gameUrl: '/games/frontier' },
+  { title: 'Dispatch',           gameUrl: '/games/dispatch' },
+  { title: 'Connections',        gameUrl: '/games/connections' },
+  { title: 'Timeline',           gameUrl: '/games/timeline' },
 ]
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -197,7 +217,7 @@ export default function ElementaryHome() {
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {(isPT ? GAMES_PT : GAMES).map(g => (
+          {GAMES.map(g => (
             <div key={g.gameUrl} onClick={() => router.push(g.gameUrl)}
               style={{ display: 'flex', alignItems: 'center', padding: '14px 16px',
                 background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`,
