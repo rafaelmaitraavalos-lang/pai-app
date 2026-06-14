@@ -5,6 +5,17 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 
+const GAMES = [
+  { title: 'Signal Drop',   gameUrl: '/games/signal-drop' },
+  { title: 'Fix the Robot', gameUrl: '/games/fix-the-robot' },
+  { title: 'Build-a-Robot', gameUrl: '/games/build-a-robot' },
+]
+const GAMES_PT = [
+  { title: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
+  { title: 'Conserte o Robô', gameUrl: '/games/fix-the-robot' },
+  { title: 'Monte um Robô',   gameUrl: '/games/build-a-robot' },
+]
+
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
 const GREEN = '#3DF542'
@@ -178,6 +189,25 @@ export default function ElementaryHome() {
               </div>
             )
           })}
+        </div>
+
+        {/* Games section */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, margin: '32px 0 16px' }}>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Jogos' : 'Games'}</span>
+          <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
+        </div>
+        <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {(isPT ? GAMES_PT : GAMES).map(g => (
+            <div key={g.gameUrl} onClick={() => router.push(g.gameUrl)}
+              style={{ display: 'flex', alignItems: 'center', padding: '14px 16px',
+                background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`,
+                cursor: 'pointer', userSelect: 'none' }}>
+              <span style={{ fontFamily: BODY, fontSize: 12, color: GREEN, width: 36, flexShrink: 0 }}>🎮</span>
+              <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: GREEN }}>{g.title}</span>
+              <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : 'Play'}</span>
+              <span style={{ fontFamily: DISP, fontSize: 14, color: GREEN }}>→</span>
+            </div>
+          ))}
         </div>
       </main>
     </div>
