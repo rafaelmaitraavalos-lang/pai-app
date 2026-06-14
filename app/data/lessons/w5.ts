@@ -5,6 +5,7 @@ const w5: Record<number, LessonData> = {
     id: 32,
     worldId: 5,
     title: "Where We Are Now",
+    completionPage: '/games/can-or-cant',
     stops: [
       { tag: "Fact", title: "The Baseline", body: "In 2025 AI can write, code, reason, generate images, clone voices, diagnose diseases, discover drugs, play games better than any human, and hold conversations indistinguishable from human ones. It cannot walk reliably, feel anything, set its own goals, or operate outside its training in novel situations. This is the baseline. Everything in this world is about what comes next from here." },
       { tag: "Fact", title: "The Pace", body: "AI capabilities are improving faster than almost any technology in history. The gap between GPT-2 in 2019 and GPT-4 in 2023 is larger than the gap between the first airplane and a commercial jet. The pace is not slowing. The resources being invested, compute, talent, and capital are increasing. Whatever AI can do today is probably not what AI will be able to do in five years." },
@@ -30,6 +31,7 @@ const w5: Record<number, LessonData> = {
     id: 33,
     worldId: 5,
     title: "The Road to AGI",
+    completionPage: '/games/what-is-agi',
     stops: [
       { tag: "Fact", title: "What AGI Means", body: "Artificial General Intelligence, AGI, refers to an AI system that can perform any intellectual task that a human can perform, learn new skills without being specifically trained for them, and generalize across domains the way humans do. No such system currently exists. Whether and when one will exist is one of the most contested questions in AI research." },
       { tag: "Hot take", title: "Definitions Matter", body: "The debate about AGI timelines is partly a debate about definitions. If AGI means a system that passes a broad Turing Test, some researchers think we're close. If AGI means a system with human-level reasoning across all domains, most researchers think we're far. If AGI means a system that can do any cognitive task better than any human, some think it's decades away. If it means a system that is actually conscious and self-aware, some think it may never exist. The timeline depends heavily on what you're measuring." },
@@ -80,6 +82,7 @@ const w5: Record<number, LessonData> = {
     id: 35,
     worldId: 5,
     title: "AI and Existential Risk",
+    completionPage: '/games/the-resource',
     stops: [
       { tag: "Fact", title: "What Existential Risk Means", body: "An existential risk is a risk that could permanently curtail humanity's long-term potential. Through extinction, permanent subjugation, or locking in a global order that forecloses positive futures. AI is increasingly discussed as a potential existential risk, not because AI is malicious, but because sufficiently capable misaligned AI could pursue objectives incompatible with human flourishing at a scale no previous technology could. This is not the consensus view. It is taken seriously by a significant minority of researchers." },
       { tag: "Hot take", title: "The Spectrum of Concern", body: "Views on AI existential risk span a wide range. Some researchers, including figures at leading AI labs, consider it the most important problem of our time. Others consider it speculative distraction from present harms. Most researchers are somewhere between: concerned about the long-term trajectory without believing catastrophe is imminent or certain. The disagreement is genuine and reflects deep uncertainty about AI timelines, capability trajectories, and the difficulty of alignment." },

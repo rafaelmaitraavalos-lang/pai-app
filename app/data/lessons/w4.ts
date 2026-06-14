@@ -5,6 +5,7 @@ const w4: Record<number, LessonData> = {
     id: 24,
     worldId: 4,
     title: "What Is Ethics",
+    completionPage: '/games/the-framework',
     stops: [
       { tag: "Fact", title: "Ethics Is A Tool", body: "Ethics is not a list of rules. It's a set of tools for thinking clearly about what we should do when reasonable people disagree. It asks: what matters, why does it matter, and how do we decide when things that matter conflict? AI makes these questions urgent because AI systems make decisions that affect people's lives at massive scale. Thinking clearly about what those systems should do requires thinking clearly about what we value and why." },
       { tag: "Example", title: "Consequentialism", body: "One ethical framework: judge actions by their consequences. The right action is the one that produces the best outcome for the most people. Applied to AI: a hiring algorithm that slightly disadvantages some individuals but produces better matches overall might be justified by consequentialist reasoning. The logic is straightforward. The problems are also real. It can justify harming minorities for majority benefit, and predicting consequences is hard." },
@@ -30,6 +31,7 @@ const w4: Record<number, LessonData> = {
     id: 25,
     worldId: 4,
     title: "The Bias Problem",
+    completionPage: '/games/bias-sources',
     stops: [
       { tag: "Fact", title: "Fairness Can Mean Different Things", body: "People often agree that an AI system should be fair. The difficult part is deciding what fairness means in a particular situation. Should a system produce similar outcomes across different groups? Should it make similar mistakes at similar rates? Should people with similar qualifications receive similar treatment? Should historical inequality be taken into account? These goals may overlap, but they are not identical. Choosing a fairness goal requires judgment about what matters most." },
       { tag: "Example", title: "Demographic Parity", body: "One possible fairness goal is demographic parity. Suppose a company uses an algorithm to recommend job applicants for interviews. A demographic-parity approach asks whether applicants from different groups are selected at similar rates. This can reveal important disparities. But it may not answer every question. Differences in outcomes may reflect unequal access to opportunities, differences in the applicant pool, biased data, or problems in the way the system measures qualifications. A statistic can identify a pattern. People still have to decide what the pattern means and how to respond." },
@@ -105,6 +107,7 @@ const w4: Record<number, LessonData> = {
     id: 28,
     worldId: 4,
     title: "The Transparency Paradox",
+    completionPage: '/games/transparency',
     stops: [
       { tag: "Fact", title: "Transparency Has Multiple Meanings", body: "When people call for AI transparency they might mean several different things. Transparency about what data was used to train a system. Transparency about how the system works technically. Transparency about what decisions the system makes and why. Transparency about who owns and controls the system. Transparency about what the system got wrong. These are different requirements with different technical feasibility and different political implications. Conflating them produces policies that satisfy some meanings while ignoring others." },
       { tag: "Example", title: "The Explainability Problem", body: "Full technical transparency – explaining exactly why a neural network produced a specific output – is currently impossible for large models. The knowledge is distributed across billions of parameters. There is no single rule or logic that produced the output. Post-hoc explanations, generated after the fact to justify a decision, may not accurately reflect the actual computation. The explainability demanded by regulators and affected individuals may simply not be technically achievable for the systems currently making the most consequential decisions." },

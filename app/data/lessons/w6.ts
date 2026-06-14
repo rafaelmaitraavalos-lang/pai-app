@@ -30,6 +30,7 @@ const w6: Record<number, LessonData> = {
     id: 41,
     worldId: 6,
     title: "Forward Propagation",
+    completionPage: '/games/signal-flow',
     stops: [
       { tag: "Fact", title: "Data Flows Forward", body: "Forward propagation is what happens when you give a neural network an input and it produces an output. Data enters the first layer, gets transformed, passes to the next layer, gets transformed again, and continues until it reaches the output layer. Every transformation is the same operation — weighted sum plus bias plus activation function — applied by every neuron in every layer simultaneously. The forward pass is the network doing its job." },
       { tag: "Example", title: "The Input Layer", body: "The input layer doesn't compute anything — it just receives the raw data. For an image, each neuron in the input layer holds one pixel value. A 28×28 pixel image has 784 input neurons, one per pixel. For text, inputs are token embeddings — numerical representations of words. For audio, inputs are numerical representations of sound frequencies. The first transformation is always: turn whatever you want to process into a list of numbers." },
@@ -80,6 +81,7 @@ const w6: Record<number, LessonData> = {
     id: 43,
     worldId: 6,
     title: "Backpropagation In Detail",
+    completionPage: '/games/the-gradient',
     stops: [
       { tag: "Fact", title: "The Learning Algorithm", body: "Backpropagation is the algorithm that trains neural networks. It computes how much each weight contributed to the loss and adjusts each weight in the direction that reduces the loss. Without backpropagation — or something equivalent — there's no efficient way to train deep networks. It was known theoretically in the 1970s, demonstrated in the 1980s, and scaled to transform the field in 2012. Most of modern AI runs on this algorithm." },
       { tag: "Example", title: "Gradient Descent", body: "Backpropagation computes gradients — the direction and magnitude of how the loss changes with respect to each weight. Gradient descent uses these to update weights: new weight = old weight minus learning rate times gradient. The learning rate controls how big each update step is. Too large and training overshoots. Too small and training is slow. The gradient tells you which direction to move. The learning rate tells you how far." },
@@ -155,6 +157,7 @@ const w6: Record<number, LessonData> = {
     id: 46,
     worldId: 6,
     title: "The Transformer Architecture",
+    completionPage: '/games/transformer',
     stops: [
       { tag: "Fact", title: "The Architecture That Changed Everything", body: "The transformer architecture, introduced in 2017, is the foundation of almost every major AI system built since then. GPT, BERT, T5, PaLM, Claude, Gemini — all transformers. AlphaFold — transformer. The image models underlying DALL-E — transformer. The architecture is not the only approach to AI, but it is currently dominant across almost every domain where AI has achieved remarkable performance." },
       { tag: "Example", title: "The Encoder-Decoder Structure", body: "The original transformer had two components: an encoder that processes the input sequence and builds representations, and a decoder that generates the output sequence one token at a time while attending to the encoder's representations. This structure is natural for translation — encode the source language, decode into the target language. GPT-style models use only the decoder — generating text by predicting the next token. BERT-style models use only the encoder — building rich representations for classification tasks." },

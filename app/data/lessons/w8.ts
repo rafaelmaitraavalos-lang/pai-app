@@ -5,6 +5,7 @@ const w8: Record<number, LessonData> = {
     id: 56,
     worldId: 8,
     title: "Multimodal AI",
+    completionPage: '/games/multimodal',
     stops: [
       { tag: "Fact", title: "Beyond Text Early AI", body: "systems processed one type of data at a time. Multimodal AI processes multiple types simultaneously and reasons across them rather than just switching between them. Show a multimodal model a photo of a broken machine and ask what's wrong and it reads the image and answers in text. GPT-4V can see images and read text in the same context; Gemini was trained on text, images, audio, and video together. This is qualitatively different from systems that handle one modality at a time, not just more capable but able to do things single-modality systems structurally cannot." },
       { tag: "Example", title: "Vision Language Models Vision", body: "language models combine image understanding with language generation. You can point them at a chart and ask for analysis. Show them a screenshot and ask for code that recreates it. Show them a medical scan and ask what they observe. Show them a handwritten equation and ask for the solution. The combination of seeing and reasoning about what is seen opens applications that pure text models can't touch. Most frontier models released since 2023 are vision language models." },
@@ -55,6 +56,7 @@ const w8: Record<number, LessonData> = {
     id: 58,
     worldId: 8,
     title: "Frontier Models",
+    completionPage: '/games/frontier',
     stops: [
       { tag: "Fact", title: "What Frontier Means Frontier", body: "models are the most capable AI systems that exist at any given time. They define the boundary of what AI can currently do. They are trained at enormous scale — hundreds of billions of parameters, trillions of tokens of data, months of compute on thousands of specialized processors. The organizations building them are a small handful. The capabilities they develop cascade into every other application of AI. Understanding what's happening at the frontier is understanding what AI will be able to do in two to five years." },
       { tag: "Example", title: "GPT-4 To GPT-5 Each", body: "generation of frontier models adds capabilities that surprised people who thought the previous generation was near a ceiling. GPT-3 was astonishing. GPT-4 was significantly more capable at reasoning, instruction following, and multimodal understanding. The jump between generations has remained large. Whether the scaling curve continues to produce significant jumps with each generation — or whether diminishing returns set in — is one of the most important open questions in AI." },
@@ -155,6 +157,7 @@ const w8: Record<number, LessonData> = {
     id: 62,
     worldId: 8,
     title: "The Geopolitics Of AI",
+    completionPage: '/games/dispatch',
     stops: [
       { tag: "Fact", title: "AI As Strategic Technology Governments", body: "now treat AI as a strategic national interest — comparable to nuclear technology or semiconductor manufacturing in its geopolitical significance. The United States, China, European Union, and United Kingdom have all produced major national AI strategies. Export controls on advanced AI chips are reshaping global technology supply chains. State investment in AI research and infrastructure is growing. The development of the most powerful AI systems is no longer just a private sector story — it's a story about national power." },
       { tag: "Example", title: "The US-China Competition The US-China AI", body: "competition is the defining geopolitical AI story. China has announced ambitions to be the world leader in AI by 2030. US export controls on advanced semiconductors — the hardware that trains frontier models — are intended to limit Chinese AI capabilities. Chinese AI companies — Baidu, Alibaba, ByteDance, Huawei — are developing frontier models with varying access to the most advanced hardware. Whether these controls are effective, whether they slow Chinese AI development, and whether they damage US technology companies is actively debated." },

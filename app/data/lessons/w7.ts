@@ -30,6 +30,7 @@ const w7: Record<number, LessonData> = {
     id: 49,
     worldId: 7,
     title: "Prompt Engineering",
+    completionPage: '/games/prompt-drop',
     stops: [
       { tag: "Fact", title: "Techniques That Work", body: "Prompt engineering is not mystical. It's a small set of techniques that reliably improve outputs for specific types of tasks. Few-shot prompting. Chain of thought. Role assignment. Output formatting. Each works for different reasons and different situations. Learning them takes less than an hour. Using them well takes practice." },
       { tag: "Example", title: "Few-Shot Prompting", body: "Instead of explaining what you want in words, show the model examples of what you want. \"Here are three examples of the kind of summary I need: [example 1] [example 2] [example 3]. Now summarize this: [text].\" The model infers the pattern from the examples rather than from a description. Few-shot prompting works especially well when what you want is easier to demonstrate than to describe — formatting, tone, structure, style." },
@@ -130,6 +131,7 @@ const w7: Record<number, LessonData> = {
     id: 53,
     worldId: 7,
     title: "AI Agents",
+    completionPage: '/games/agent-parts',
     stops: [
       { tag: "Fact", title: "What An Agent Is", body: "An AI agent is a system where a language model doesn't just respond to a single prompt — it takes actions, observes the results, and takes further actions to accomplish a goal. Instead of one input and one output, the model operates in a loop: think, act, observe, think again. Agents can search the web, run code, call APIs, read and write files, and interact with external systems. The model is no longer just generating text — it's doing things in the world." },
       { tag: "Example", title: "Tool Use", body: "The foundation of agents is tool use — giving the model access to functions it can call. You define a set of tools: search the web, run Python code, query a database, send an email. You describe each tool to the model. The model decides which tools to use and when, generates the arguments, and your system executes the actual function call and returns the result. The model sees the result and decides what to do next. This loop continues until the task is complete or the model gives up." },
@@ -180,6 +182,7 @@ const w7: Record<number, LessonData> = {
     id: 55,
     worldId: 7,
     title: "Responsible Building",
+    completionPage: '/games/ship-it',
     stops: [
       { tag: "Example", title: "Failure Mode Analysis", body: "Before shipping an AI system, map its failure modes. What happens when the model is wrong? What happens when it's confidently wrong? What happens when a user tries to misuse it? What happens when it encounters input very different from what it was designed for? What happens when the underlying model changes? Systematic failure mode analysis — imagining all the ways the system could go wrong — is the foundation of responsible deployment. It's easier to prevent failures you've anticipated than to respond to ones you haven't." },
       { tag: "Hot take", title: "The Worst Case Is Not The Unlikely Case", body: "In responsible AI development, the question is not just \"what usually happens?\" but \"what happens to the people most harmed when it goes wrong?\" A hiring AI that works well for most applicants but systematically disadvantages a specific group is not \"mostly good.\" The worst-case outcome for the most affected group matters as much as average performance. Building responsibly means deliberately testing for and caring about the experience of users who are most vulnerable to the system's failures." },

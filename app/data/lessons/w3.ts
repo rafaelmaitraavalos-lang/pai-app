@@ -55,6 +55,7 @@ const w3: Record<number, LessonData> = {
     id: 18,
     worldId: 3,
     title: "AI and Privacy",
+    completionPage: '/games/data-trails',
     stops: [
       { tag: "Fact", title: "Your Data Can Reveal a Lot", body: "Digital services collect information about the way people use technology. Depending on the platform and a user’s settings, that may include searches, purchases, locations, app activity, browsing behavior, and interactions with connected devices. AI systems can analyze large amounts of this information quickly. They can identify patterns and make predictions that would be difficult to produce by reviewing each piece of data individually. The privacy question is not only what information is collected. It is also what a system can learn when many pieces of information are combined." },
       { tag: "Example", title: "Facial Recognition in Public Spaces", body: "Facial-recognition technology compares an image of a person’s face to other images in a database. It can be used for purposes such as unlocking a phone, verifying an identity, or assisting an investigation. The use of facial recognition in public spaces is controversial. Some cities have restricted government use of the technology because of concerns about accuracy, privacy, and surveillance. Other jurisdictions allow it in certain circumstances. The technology may be similar from one place to another. The rules governing its use can be very different." },
@@ -105,6 +106,7 @@ const w3: Record<number, LessonData> = {
     id: 20,
     worldId: 3,
     title: "AI and Education",
+    completionPage: '/games/the-call',
     stops: [
       { tag: "Fact", title: "Education Is Still Adapting", body: "When ChatGPT became publicly available in late 2022, schools and universities had to respond quickly. Some teachers restricted its use. Others experimented with using it in class. Many institutions began updating academic-integrity policies and reconsidering how assignments should be designed. The questions are still evolving. When an AI tool can draft an essay, explain a math problem, or summarize a reading, schools have to decide which uses support learning and which uses replace the work students are supposed to practice." },
       { tag: "Example", title: "What AI Can Do on Schoolwork", body: "AI tools can help with many kinds of schoolwork. They can generate outlines, explain concepts, suggest revisions, summarize readings, write code, and work through some math and science problems. Their output is not automatically correct. A response may sound polished while containing factual errors, weak reasoning, or invented sources. Performance can also vary depending on the subject and the way the question is asked. This makes AI useful as a tool, but risky as a substitute for understanding." },
@@ -180,6 +182,7 @@ const w3: Record<number, LessonData> = {
     id: 23,
     worldId: 3,
     title: "AI and Daily Life",
+    completionPage: '/games/daily-scan',
     stops: [
       { tag: "Fact", title: "AI Often Works in the Background", body: "Many people use AI-supported systems without thinking of them as AI. A navigation app may suggest a faster route. An email service may filter spam. A phone may unlock after recognizing a face. A bank may flag an unusual transaction. A keyboard may suggest the next word in a sentence. Not every automated feature uses AI, and different systems work in different ways. But AI has become part of the background of everyday life. People often notice these systems most clearly when they make a mistake." },
       { tag: "Example", title: "Online Shopping", body: "Online shopping platforms use algorithms to organize a huge number of products. A system may decide which results appear first, which items are recommended, which reviews are displayed prominently, and which advertisements appear after someone browses a product. Prices can also change over time based on factors such as demand, supply, or timing. Researchers and regulators are examining whether some businesses also use personal data to set individualized prices. These practices are not identical across every website, but they raise questions about transparency and fairness." },
