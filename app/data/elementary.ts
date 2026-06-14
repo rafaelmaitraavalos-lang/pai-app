@@ -100,7 +100,7 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
   },
   103: {
     id: 103,
-    title: 'How PAI Thinks (Advanced)',
+    title: 'AI Ethics',
     level: 'Elementary',
     modules: [...Object.values(W103_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES],
   },
@@ -118,7 +118,7 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
   },
   106: {
     id: 106,
-    title: 'Como a PAI Pensa (Avançado)',
+    title: 'Ética na IA',
     level: 'Elementary',
     modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
