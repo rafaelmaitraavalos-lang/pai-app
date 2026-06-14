@@ -119,5 +119,5 @@ export const QUESTIONS: Question[] = [
 ]
 
 export default function Lesson12() {
-  return <LessonTemplate id={12} title="Recommendation Algorithms" stops={STOPS} questions={QUESTIONS} />
+  return <LessonTemplate id={12} title="Recommendation Algorithms" stops={STOPS} questions={QUESTIONS} completionPage="/games/the-feed" />
 }

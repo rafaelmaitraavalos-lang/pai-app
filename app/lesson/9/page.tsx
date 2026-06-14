@@ -119,5 +119,5 @@ export const QUESTIONS: Question[] = [
 ]
 
 export default function Lesson9() {
-  return <LessonTemplate id={9} title="How Networks Train" stops={STOPS} questions={QUESTIONS} />
+  return <LessonTemplate id={9} title="How Networks Train" stops={STOPS} questions={QUESTIONS} completionPage="/games/weight-room" />
 }

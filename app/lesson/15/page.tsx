@@ -119,5 +119,5 @@ export const QUESTIONS: Question[] = [
 ]
 
 export default function Lesson15() {
-  return <LessonTemplate id={15} title="When Decisions Go Wrong" stops={STOPS} questions={QUESTIONS} />
+  return <LessonTemplate id={15} title="When Decisions Go Wrong" stops={STOPS} questions={QUESTIONS} completionPage="/games/failure-modes" />
 }

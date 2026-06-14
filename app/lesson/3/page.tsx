@@ -119,5 +119,5 @@ export const QUESTIONS: Question[] = [
 ]
 
 export default function Lesson3() {
-  return <LessonTemplate id={3} title="AI In Your Life" stops={STOPS} questions={QUESTIONS} />
+  return <LessonTemplate id={3} title="AI In Your Life" stops={STOPS} questions={QUESTIONS} completionPage="/games/signal-drop" />
 }
