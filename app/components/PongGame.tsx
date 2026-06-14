@@ -94,37 +94,10 @@ function beep(freq: number, type: OscillatorType, duration: number, gain = 0.15,
   } catch {}
 }
 
-// ── Persistent paddle slide sound ─────────────────────────────────────────────
-let _padOsc: OscillatorNode | null = null
-let _padGain: GainNode | null = null
+// Paddle slide sound removed
 let _padMoving = false
-
-function startPaddle() {
-  if (_padMoving) return; _padMoving = true
-  try {
-    const ctx = getAudio()
-    _padOsc  = ctx.createOscillator()
-    _padGain = ctx.createGain()
-    _padOsc.connect(_padGain); _padGain.connect(ctx.destination)
-    _padOsc.type = 'sine'; _padOsc.frequency.setValueAtTime(520, ctx.currentTime)
-    _padGain.gain.setValueAtTime(0, ctx.currentTime)
-    _padGain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 0.04)
-    _padOsc.start()
-  } catch {}
-}
-
-function stopPaddle() {
-  if (!_padMoving) return; _padMoving = false
-  try {
-    const ctx = getAudio()
-    if (_padGain) {
-      _padGain.gain.setValueAtTime(_padGain.gain.value, ctx.currentTime)
-      _padGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.06)
-    }
-    if (_padOsc) { _padOsc.stop(ctx.currentTime + 0.07); _padOsc = null; _padGain = null }
-    beep(380, 'sine', 0.05, 0.06)   // soft stop-click
-  } catch {}
-}
+function startPaddle() { _padMoving = true }
+function stopPaddle()  { _padMoving = false }
 
 const sfx = {
   hit:       () => beep(320, 'sine',     0.07, 0.2, 500),  // satisfying ping
