@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { GAMES, GAME_TITLES_PT } from '../data/games'
 import { WORLDS, WORLD_IDS, WORLD_TITLES_PT } from '../data'
-import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
+import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT,
+         ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../data/elementary'
 import TRANSLATIONS from '../data/lessonTranslations'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -17,38 +18,53 @@ interface Props { slug: string }
 
 export default function GameComplete({ slug }: Props) {
   const router = useRouter()
-  const [isPT,      setIsPT]      = useState(false)
-  const [isElemMid, setIsElemMid] = useState(false)
-  const [homeRoute, setHomeRoute] = useState('/home')
+  const [isPT,   setIsPT]   = useState(false)
+  const [grade,  setGrade]  = useState<string | null>(null)
   useEffect(() => {
-    const lang  = localStorage.getItem('pai_lang') ?? 'en'
-    const grade = localStorage.getItem('pai_grade')
-    setIsPT(lang === 'pt')
-    const elem = isElementaryGrade(grade)
-    const mid  = isMiddleSchoolGrade(grade) || MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')
-    setIsElemMid(elem || mid)
-    if (elem) setHomeRoute('/elementary/home')
-    else if (MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')) setHomeRoute('/elementary/middle-pt')
-    else if (mid) setHomeRoute('/middle/home')
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    setGrade(localStorage.getItem('pai_grade'))
   }, [])
 
   const game = GAMES.find(g => g.slug === slug)
   if (!game) return null
 
-  const world        = WORLDS[game.world]
-  // Find this game in the modules list, then take the first non-game module after it
-  const gameIdx      = world?.modules.findIndex(m => m.type === 'game' && m.gameUrl?.includes(game.slug)) ?? -1
-  // For elementary/middle students, don't show next HS lesson — just show home
-  const nextMod      = !isElemMid && gameIdx >= 0 ? world?.modules.slice(gameIdx + 1).find(m => m.type !== 'game') : undefined
-  const worldRoute   = isElemMid ? homeRoute : (game.world === 1 ? '/lessons' : `/world/${game.world}`)
-  const nextWorldIdx = WORLD_IDS.indexOf(game.world) + 1
-  const nextWorldId  = !nextMod && !isElemMid && nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
+  const isElem = isElementaryGrade(grade)
+  const isMid  = isMiddleSchoolGrade(grade) || MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')
+  const isPT_elem = ELEMENTARY_WORLD_IDS_PT.length > 0 && grade === 'fund1'
 
-  const gameTitle    = (isPT && GAME_TITLES_PT[game.slug]) || game.title
-  const worldTitle   = isElemMid ? (isPT ? 'Início' : 'Home') : ((isPT && WORLD_TITLES_PT[game.world]) || world?.title || (isPT ? 'Mundo' : 'World'))
-  const nextModTitle = nextMod ? ((isPT && TRANSLATIONS['pt']?.[nextMod.id]?.title) || nextMod.title) : ''
-  const nextWorldTitle = nextWorldId
-    ? ((isPT && WORLD_TITLES_PT[nextWorldId]) || WORLDS[nextWorldId]?.title)
+  // For HS: find game in WORLDS modules, get next lesson
+  const hsWorld    = WORLDS[game.world]
+  const hsGameIdx  = hsWorld?.modules.findIndex(m => m.type === 'game' && m.gameUrl?.includes(game.slug)) ?? -1
+  const hsNextMod  = hsGameIdx >= 0 ? hsWorld?.modules.slice(hsGameIdx + 1).find(m => m.type !== 'game') : undefined
+
+  // For elementary: find which elementary world has this game, get next lesson or next world
+  const elemWorldIds = isPT_elem ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
+  const elemWorld    = isElem ? Object.values(ELEMENTARY_WORLDS).find(w =>
+    elemWorldIds.includes(w.id) && w.modules.some(m => m.type === 'game' && m.gameUrl?.includes(game.slug))
+  ) : undefined
+  const elemGameIdx  = elemWorld?.modules.findIndex(m => m.type === 'game' && m.gameUrl?.includes(game.slug)) ?? -1
+  const elemNextMod  = elemGameIdx >= 0 ? elemWorld?.modules.slice(elemGameIdx + 1).find(m => m.type !== 'game') : undefined
+  const nextElemWorldId = !elemNextMod && elemWorld
+    ? elemWorldIds[elemWorldIds.indexOf(elemWorld.id) + 1]
+    : undefined
+
+  // Pick the right values based on grade
+  const nextMod   = isElem ? elemNextMod : (isMid ? undefined : hsNextMod)
+  const worldRoute = isElem
+    ? (elemWorld ? `/elementary/world/${elemWorld.id}` : '/elementary/home')
+    : isMid
+      ? (MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? '/elementary/middle-pt' : '/middle/home')
+      : (game.world === 1 ? '/lessons' : `/world/${game.world}`)
+
+  const hsNextWorldIdx = WORLD_IDS.indexOf(game.world) + 1
+  const nextWorldId    = !nextMod && !isElem && !isMid && hsNextWorldIdx < WORLD_IDS.length
+    ? WORLD_IDS[hsNextWorldIdx] : null
+
+  const gameTitle      = (isPT && GAME_TITLES_PT[game.slug]) || game.title
+  const backLabel      = isElem ? (elemWorld?.title ?? (isPT ? 'Mundo' : 'World')) : isMid ? (isPT ? 'Início' : 'Home') : ((isPT && WORLD_TITLES_PT[game.world]) || hsWorld?.title || (isPT ? 'Mundo' : 'World'))
+  const nextModTitle   = nextMod ? ((isPT && TRANSLATIONS['pt']?.[nextMod.id]?.title) || nextMod.title) : ''
+  const nextWorldTitle = nextWorldId ? ((isPT && WORLD_TITLES_PT[nextWorldId]) || WORLDS[nextWorldId]?.title)
+    : nextElemWorldId  ? (ELEMENTARY_WORLDS[nextElemWorldId]?.title ?? '')
     : ''
 
   return (
@@ -66,15 +82,15 @@ export default function GameComplete({ slug }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {nextMod && (
             <button
-              onClick={() => router.push(`/lesson/${nextMod.id}`)}
+              onClick={() => router.push(isElem ? `/elementary/lesson/${nextMod.id}` : `/lesson/${nextMod.id}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
               {isPT ? 'Próximo:' : 'Next:'} {nextModTitle} →
             </button>
           )}
-          {!nextMod && nextWorldId && (
+          {!nextMod && (nextWorldId || nextElemWorldId) && (
             <button
-              onClick={() => router.push(`/world/${nextWorldId}`)}
+              onClick={() => router.push(nextElemWorldId ? `/elementary/world/${nextElemWorldId}` : `/world/${nextWorldId}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
               {isPT ? 'Próximo Mundo:' : 'Next World:'} {nextWorldTitle} →
@@ -84,7 +100,7 @@ export default function GameComplete({ slug }: Props) {
             onClick={() => router.push(worldRoute)}
             style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
           >
-            {isPT ? 'Voltar para' : 'Back to'} {worldTitle}
+            {isPT ? 'Voltar para' : 'Back to'} {backLabel}
           </button>
         </div>
       </div>
