@@ -70,6 +70,15 @@ export default function Dev() {
     Object.values(ELEMENTARY_WORLDS).forEach(w => w.modules.forEach(m => localStorage.setItem(`pai_lesson_${m.id}_done`, 'true')))
   }
 
+  // Mark all but the last world complete so every world is unlocked but not "done"
+  const unlockAll = () => {
+    const worldsToComplete = WORLD_IDS.slice(0, -1)
+    worldsToComplete.forEach(wid => WORLDS[wid].modules.forEach(m => localStorage.setItem(`pai_lesson_${m.id}_done`, 'true')))
+    // Clear the last world so it shows as in-progress
+    const lastWorld = WORLDS[WORLD_IDS[WORLD_IDS.length - 1]]
+    lastWorld?.modules.forEach(m => localStorage.removeItem(`pai_lesson_${m.id}_done`))
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans" style={{ animation: 'pageIn 0.2s ease-out' }}>
 
@@ -81,6 +90,7 @@ export default function Dev() {
         </div>
         <div className="flex gap-2 flex-wrap justify-end">
           <button onClick={() => { clearAll(); router.push('/reset') }} className="px-3 py-1.5 rounded-lg border-2 border-gray-200 bg-white text-xs font-black text-gray-700 hover:border-red-300 hover:text-red-600 transition-colors cursor-pointer">Clear all</button>
+          <button onClick={unlockAll} className="px-3 py-1.5 rounded-lg border-2 border-green-700 bg-green-700 text-white text-xs font-black hover:bg-green-800 transition-colors cursor-pointer">Unlock all worlds</button>
           <button onClick={completeAll} className="px-3 py-1.5 rounded-lg border-2 border-gray-800 bg-gray-800 text-white text-xs font-black hover:bg-black transition-colors cursor-pointer">Complete all</button>
           <button onClick={() => router.push('/home')} className="px-3 py-1.5 rounded-lg border-2 border-gray-200 bg-white text-xs font-black text-gray-700 hover:border-gray-400 transition-colors cursor-pointer">← Home</button>
           {(['en','es','pt','fr','de','ja','zh','ko','hi','tl'] as const).map(lang => (
