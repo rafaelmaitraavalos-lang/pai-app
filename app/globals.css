@@ -225,6 +225,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 0;
+  align-items: stretch;
 }
 /* ── Lesson slide: tablet shrink ────────────────────────────────────────────── */
 @media (max-width: 640px) {
