@@ -65,6 +65,7 @@ const BALL_R    = 11
 const DOT_R     = 7
 const LIVES     = 3
 const BASE_SPD  = 4.5
+const BASE_SPD_SLOW = 2.5
 const RED       = '#FF3B3B'
 
 type Phase = 'intro' | 'countdown' | 'playing' | 'facts' | 'end'
@@ -157,7 +158,8 @@ interface GS {
   respawnPending: boolean
 }
 
-export default function PongGame({ onComplete }: { onComplete?: () => void }) {
+export default function PongGame({ onComplete, slow = false }: { onComplete?: () => void; slow?: boolean }) {
+  const BASE = slow ? BASE_SPD_SLOW : BASE_SPD
   const canvasRef   = useRef<HTMLCanvasElement>(null)
   const gs          = useRef<GS | null>(null)
   const frameRef    = useRef(0)
@@ -189,8 +191,8 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
   function spawnBall(g: GS, W: number, H: number, slowdown = false) {
     // After a miss, slow the ball down slightly then it picks back up
     const baseSpeed = slowdown
-      ? Math.max(BASE_SPD, BASE_SPD * (1 + g.rallies * 0.18) * 0.55)
-      : Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
+      ? Math.max(BASE, BASE * (1 + g.rallies * 0.18) * 0.55)
+      : Math.min(BASE * 3.5, BASE * (1 + g.rallies * 0.18))
     // Always aim ball toward player at moderate angle (not random chaos)
     const angle = (Math.random() * 0.4 - 0.2)  // -0.2 to +0.2 radians (gentle)
     g.bx = W * 0.35
@@ -324,7 +326,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
         if (Math.abs(g.by - g.aiY) < PADDLE_H / 2 + BALL_R) {
           g.bx = AI_X + PADDLE_W + BALL_R
           g.rallies++
-          const spd = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
+          const spd = Math.min(BASE * 3.5, BASE * (1 + g.rallies * 0.18))
           const rel = (g.by - g.aiY) / (PADDLE_H / 2)
           g.vx = Math.abs(spd)
           g.vy = rel * spd * 0.7
@@ -345,7 +347,7 @@ export default function PongGame({ onComplete }: { onComplete?: () => void }) {
           sfx.combo(g.combo)
           addPop(`+${pts}`, g.bx / W, g.by / H)
           g.bx = PLAYER_X - BALL_R
-          const spd = Math.min(BASE_SPD * 3.5, BASE_SPD * (1 + g.rallies * 0.18))
+          const spd = Math.min(BASE * 3.5, BASE * (1 + g.rallies * 0.18))
           const rel = (g.by - g.playerY) / (PADDLE_H / 2)
           g.vx = -Math.abs(spd)
           g.vy = rel * spd * 0.7

@@ -12,10 +12,14 @@ const GREEN = '#3DF542'
 export default function SignalDropPage() {
   const router = useRouter()
   const [done, setDone] = useState(false)
-  const [isPT, setIsPT] = useState(false)
+  const [isPT, setIsPT]   = useState(false)
+  const [isSlow, setIsSlow] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    const grade = localStorage.getItem('pai_grade') ?? ''
+    // Elementary grades: elem, fund1, fund2, K, 1st-5th
+    setIsSlow(['elem', 'fund1', 'fund2', 'K', '1st', '2nd', '3rd', '4th', '5th'].includes(grade))
   }, [])
 
   if (done) return <GameComplete slug="signal-drop" />
@@ -29,7 +33,7 @@ export default function SignalDropPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <PongGame onComplete={() => setDone(true)} />
+        <PongGame onComplete={() => setDone(true)} slow={isSlow} />
       </div>
     </div>
   )
