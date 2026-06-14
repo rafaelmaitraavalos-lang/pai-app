@@ -60,7 +60,7 @@ export default function SignalDropPage() {
         </button>
       </div>
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <PongGame onComplete={() => setPhase('done')} slow={isSlow} />
+        <PongGame onComplete={() => setPhase('done')} slow={isSlow} skipIntro />
       </div>
     </div>
   )

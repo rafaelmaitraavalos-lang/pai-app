@@ -158,7 +158,7 @@ interface GS {
   respawnPending: boolean
 }
 
-export default function PongGame({ onComplete, slow = false }: { onComplete?: () => void; slow?: boolean }) {
+export default function PongGame({ onComplete, slow = false, skipIntro = false }: { onComplete?: () => void; slow?: boolean; skipIntro?: boolean }) {
   const BASE = slow ? BASE_SPD_SLOW : BASE_SPD
   const canvasRef   = useRef<HTMLCanvasElement>(null)
   const gs          = useRef<GS | null>(null)
@@ -166,7 +166,7 @@ export default function PongGame({ onComplete, slow = false }: { onComplete?: ()
   const popIdRef    = useRef(0)
   const finalScore  = useRef(0)
 
-  const [phase,     setPhase]     = useState<Phase>('intro')
+  const [phase,     setPhase]     = useState<Phase>(skipIntro ? 'countdown' : 'intro')
   const [lives,     setLives]     = useState(LIVES)
   const [score,     setScore]     = useState(0)
   const [combo,     setCombo]     = useState(0)
