@@ -163,20 +163,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
       const { user, isNew } = data
 
-      // Only do a full wipe when switching to a different account.
-      // For same-user re-login, keep lesson progress so locally-done
-      // lessons survive even if a prior syncProgress() call had a network failure.
-      const previousUser = localStorage.getItem('pai_username')
-      const isSwitchingUser = !!previousUser && previousUser !== user.username
-      if (isSwitchingUser) {
-        // Different account — wipe everything including progress
-        Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
-      } else {
-        // Same user or first-ever login — only clear profile/session keys, keep lesson completion
-        const PROFILE_KEYS = ['pai_onboarding_done', 'pai_handbook_seen', 'pai_show_welcome',
-          'pai_lang', 'pai_grade', 'pai_goal', 'pai_level', 'pai_frequency', 'pai_usage', 'pai_country']
-        PROFILE_KEYS.forEach(k => localStorage.removeItem(k))
-      }
+      // Always wipe all pai_ keys on every sign-in so no stale progress
+      // from a previous account bleeds through. The DB restores the real
+      // progress via applyProgress() right after this.
+      Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
 
       // Returning user (login) — restore full profile from DB and go straight home
       if (!isNew || authMode === 'login') {
