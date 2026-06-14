@@ -114,10 +114,10 @@ function OutcomePanel({ round, selected, visible, isPT }: { round: AnalystRound;
 // ── Choice buttons ────────────────────────────────────────────────────────────
 
 const CHOICE_LABELS: Record<Choice, string> = {
-  big:   'Fund it big',
-  small: 'Fund it small',
-  pass:  'Pass',
-  bluff: 'Call the bluff',
+  big:   'Back it fully',
+  small: 'Back it cautiously',
+  pass:  'Walk away',
+  bluff: 'It\'s hype',
 }
 
 const CHOICE_LABELS_PT: Record<Choice, string> = {
@@ -258,6 +258,10 @@ export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
 
   return (
     <div style={{ maxWidth: 560, margin: '0 auto', position: 'relative', paddingBottom: 90 }}>
+
+      <div style={{ fontFamily: BODY, fontSize: 12, color: DIM, marginBottom: 12 }}>
+        {isPT ? 'Você é um analista avaliando afirmações de IA. Cada caso é uma citação real da história.' : 'You\'re an analyst evaluating AI claims from history. Read each case and decide how to respond.'}
+      </div>
 
       <CredMeter value={credibility} isPT={isPT} />
 
