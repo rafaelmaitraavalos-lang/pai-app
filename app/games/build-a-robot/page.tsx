@@ -1,766 +1,260 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
-// ─── types ────────────────────────────────────────────────────────────────────
-const COLORS = ['#ff4466','#ff8c00','#ffdd00','#44ff88','#00ccff','#8844ff','#ff44cc','#bbbbbb']
-type HeadStyle = 'round'|'square'|'antenna'
-type LegStyle  = 'basic'|'wheels'|'rockets'
-type Extra     = 'none'|'rockets'|'propeller'|'magnet'
-type Phase     = 'build'|'paint'|'choose'|'game'
-type MiniGame  = 'rocket'|'stars'|'race'
-interface Cfg { head:HeadStyle; legs:LegStyle; extra:Extra; color:string; eye:string }
-const DEF: Cfg = { head:'round', legs:'basic', extra:'none', color:'#00ccff', eye:'#ffdd00' }
+// ─── types ───────────────────────────────────────────────────────────────────
+const BODY_COLORS   = ['#ff4466','#ff8c00','#ffdd00','#44ff88','#00ccff','#8844ff','#ff44cc','#bbbbbb','#ffffff','#ff6644','#44ffdd','#cc44ff']
+const DETAIL_COLORS = ['#ffdd00','#00ccff','#ff4466','#44ff88','#ffffff','#ff8c00','#8844ff','#ff44cc','#aaffdd','#111111','#ffaaaa','#aaaaff']
+const BOT_NAMES = ['SPARK','BYTE','PIXEL','NOVA','ZENO','BOLT','CHIP','ECHO','FLUX','NANO']
+const BOT_SUFF  = ['BOT','TRON','DROID','MECH','PRIME','UNIT','MAX','CORE']
+const genName = () => BOT_NAMES[Math.floor(Math.random()*BOT_NAMES.length)]+'-'+BOT_SUFF[Math.floor(Math.random()*BOT_SUFF.length)]
 
-// ─── particles ────────────────────────────────────────────────────────────────
-interface P { id:number; x:number; y:number; vx:number; vy:number; life:number; ml:number; c:string; s:number; t?:string }
-let _uid=0; const uid=()=>++_uid
-const burst=(x:number,y:number,c:string,n=12,sp=2): P[] =>
-  Array.from({length:n},(_,i)=>{const a=(i/n)*Math.PI*2+Math.random()*.5,s=(.4+Math.random())*sp; return {id:uid(),x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-.6,life:30,ml:30,c,s:2+Math.random()*6}})
-const trail=(x:number,y:number,c:string): P =>
-  ({id:uid(),x,y,vx:(Math.random()-.5)*.8,vy:.8+Math.random()*2,life:14,ml:14,c,s:3+Math.random()*5})
-const floatTxt=(x:number,y:number,t:string,c:string): P =>
-  ({id:uid(),x,y,vx:(Math.random()-.5)*.4,vy:-2,life:42,ml:42,c,s:16,t})
-const tickPs=(ps:P[]):P[] =>
-  ps.map(p=>({...p,x:p.x+p.vx,y:p.y+p.vy,vy:p.vy+.13,life:p.life-1})).filter(p=>p.life>0)
+type HeadStyle  = 'round'|'square'|'antenna'|'helmet'
+type EyeStyle   = 'normal'|'big'|'visor'|'cyclops'
+type MouthStyle = 'smile'|'grill'|'speaker'|'beak'
+type ArmStyle   = 'basic'|'claws'|'laser'|'fins'
+type LegStyle   = 'basic'|'wheels'|'rockets'|'tank'
+type BackStyle  = 'none'|'jetpack'|'wings'|'cape'
+type Phase      = 'build'|'paint'|'done'
 
-// ─── static star layouts (generated once) ────────────────────────────────────
-const W=340, H_RF=400, H_SC=380, H_SR=300
-const STARS_SLOW = Array.from({length:28},()=>({x:Math.random()*W,y:Math.random()*H_RF,s:1,o:.25+Math.random()*.3,spd:.04}))
-const STARS_MED  = Array.from({length:14},()=>({x:Math.random()*W,y:Math.random()*H_RF,s:1.5,o:.4+Math.random()*.4,spd:.1}))
-const STARS_FAST = Array.from({length:7}, ()=>({x:Math.random()*W,y:Math.random()*H_RF,s:2.5,o:.6+Math.random()*.4,spd:.22}))
-const ALL_STARS  = [...STARS_SLOW,...STARS_MED,...STARS_FAST]
+interface Cfg {
+  head: HeadStyle; eyes: EyeStyle; mouth: MouthStyle
+  arms: ArmStyle;  legs: LegStyle; back: BackStyle
+  bodyColor: string; detailColor: string
+}
 
-// ─── Robot SVG ────────────────────────────────────────────────────────────────
-function Robot({cfg,size=140,mood='idle',flame=false,tilt=0,shield=false}:
-  {cfg:Cfg;size?:number;mood?:'idle'|'happy'|'oops';flame?:boolean;tilt?:number;shield?:boolean}) {
-  const {color:C,eye:E}=cfg
-  const mouth = mood==='happy'
-    ? <path d="M 85 80 Q 100 94 115 80" stroke={E} strokeWidth="4" fill="none" strokeLinecap="round"/>
-    : mood==='oops'
-    ? <ellipse cx="100" cy="82" rx="11" ry="8" fill="#333"/>
-    : <rect x="84" y="79" width="32" height="5" rx="2" fill={E} opacity=".7"/>
+const DEF: Cfg = {
+  head:'round', eyes:'normal', mouth:'smile',
+  arms:'basic', legs:'basic', back:'none',
+  bodyColor:'#00ccff', detailColor:'#ffdd00',
+}
+
+// ─── styles ───────────────────────────────────────────────────────────────────
+const S = {
+  page: { minHeight:'100vh', background:'#000', display:'flex' as const, flexDirection:'column' as const, alignItems:'center' as const, justifyContent:'center' as const, padding:'20px 16px' },
+  title: (c:string) => ({ color:c, fontFamily:'monospace', fontWeight:900, textShadow:`0 0 12px ${c},0 0 32px ${c}55` }),
+  btn: (c:string) => ({ background:'none', border:`2px solid ${c}`, borderRadius:8, color:c, fontFamily:'monospace', fontWeight:900, fontSize:14, letterSpacing:2, padding:'13px 24px', cursor:'pointer' as const, boxShadow:`0 0 12px ${c}44` }),
+  outline: { background:'none', border:'2px solid #2a2a2a', borderRadius:8, color:'#444', fontFamily:'monospace', fontWeight:900, fontSize:13, letterSpacing:1, padding:'12px 24px', cursor:'pointer' as const },
+}
+
+// ─── Robot SVG ───────────────────────────────────────────────────────────────
+function Robot({ cfg, size = 140 }: { cfg: Cfg; size?: number }) {
+  const C = cfg.bodyColor, D = cfg.detailColor
+
+  const capeEl = cfg.back === 'cape'
+    ? <path d="M 52 104 Q 100 124 148 104 L 172 245 Q 100 265 28 245 Z" fill={D} opacity=".45"/>
+    : null
+
+  const wingsEl = cfg.back === 'wings'
+    ? <>
+        <path d="M 48 118 C 8 92 -4 158 22 166 L 48 148 Z" fill={D} opacity=".75"/>
+        <path d="M 152 118 C 192 92 204 158 178 166 L 152 148 Z" fill={D} opacity=".75"/>
+      </>
+    : null
+
+  const legsEl = cfg.legs === 'wheels'
+    ? <>
+        <rect x="68" y="180" width="22" height="22" rx="4" fill={C}/><rect x="110" y="180" width="22" height="22" rx="4" fill={C}/>
+        <circle cx="79" cy="213" r="18" fill="#222"/><circle cx="79" cy="213" r="9" fill="#444"/><circle cx="79" cy="213" r="5" fill={D}/>
+        <circle cx="121" cy="213" r="18" fill="#222"/><circle cx="121" cy="213" r="9" fill="#444"/><circle cx="121" cy="213" r="5" fill={D}/>
+      </>
+    : cfg.legs === 'rockets'
+    ? <>
+        <rect x="64" y="172" width="30" height="14" rx="4" fill={C}/><rect x="106" y="172" width="30" height="14" rx="4" fill={C}/>
+        <ellipse cx="79" cy="200" rx="16" ry="24" fill={C}/><ellipse cx="121" cy="200" rx="16" ry="24" fill={C}/>
+        <polygon points="79,176 65,190 93,190" fill="#ff4400"/><polygon points="121,176 107,190 135,190" fill="#ff4400"/>
+      </>
+    : cfg.legs === 'tank'
+    ? <>
+        <rect x="50" y="180" width="100" height="14" rx="5" fill={C}/>
+        <rect x="44" y="190" width="112" height="28" rx="10" fill={C}/>
+        {[0,1,2,3,4,5,6].map(i=><rect key={i} x={48+i*14} y="189" width="10" height="29" rx="3" fill={D} opacity=".35"/>)}
+      </>
+    : <>
+        <rect x="68" y="180" width="22" height="38" rx="5" fill={C}/><rect x="110" y="180" width="22" height="38" rx="5" fill={C}/>
+        <rect x="58" y="212" width="38" height="10" rx="4" fill={D}/><rect x="104" y="212" width="38" height="10" rx="4" fill={D}/>
+      </>
+
+  const armsEl = cfg.arms === 'claws'
+    ? <>
+        <rect x="18" y="104" width="30" height="52" rx="12" fill={C}/><rect x="152" y="104" width="30" height="52" rx="12" fill={C}/>
+        <line x1="22" y1="162" x2="13" y2="178" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="33" y1="162" x2="33" y2="180" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="44" y1="162" x2="53" y2="178" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="156" y1="162" x2="147" y2="178" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="167" y1="162" x2="167" y2="180" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="178" y1="162" x2="187" y2="178" stroke={D} strokeWidth="5" strokeLinecap="round"/>
+      </>
+    : cfg.arms === 'laser'
+    ? <>
+        <rect x="18" y="104" width="30" height="52" rx="12" fill={C}/><rect x="152" y="104" width="30" height="52" rx="12" fill={C}/>
+        <rect x="6" y="152" width="32" height="11" rx="5" fill={D}/>
+        <circle cx="5" cy="157" r="5" fill={D} opacity=".55"/>
+        <rect x="162" y="152" width="32" height="11" rx="5" fill={D}/>
+        <circle cx="195" cy="157" r="5" fill={D} opacity=".55"/>
+      </>
+    : cfg.arms === 'fins'
+    ? <>
+        <polygon points="18,104 48,104 36,162 6,150" fill={C}/>
+        <polygon points="182,104 152,104 164,162 194,150" fill={C}/>
+        <line x1="28" y1="110" x2="16" y2="148" stroke={D} strokeWidth="2.5" opacity=".5"/>
+        <line x1="38" y1="107" x2="26" y2="156" stroke={D} strokeWidth="2.5" opacity=".5"/>
+        <line x1="172" y1="110" x2="184" y2="148" stroke={D} strokeWidth="2.5" opacity=".5"/>
+        <line x1="162" y1="107" x2="174" y2="156" stroke={D} strokeWidth="2.5" opacity=".5"/>
+      </>
+    : <>
+        <rect x="18" y="104" width="30" height="56" rx="12" fill={C}/><rect x="152" y="104" width="30" height="56" rx="12" fill={C}/>
+        <circle cx="33" cy="164" r="14" fill={D}/><circle cx="167" cy="164" r="14" fill={D}/>
+      </>
+
+  const headEl = cfg.head === 'square'
+    ? <rect x="58" y="20" width="84" height="84" rx="16" fill={C}/>
+    : cfg.head === 'antenna'
+    ? <><circle cx="100" cy="62" r="42" fill={C}/><line x1="100" y1="20" x2="100" y2="2" stroke={D} strokeWidth="5" strokeLinecap="round"/><circle cx="100" cy="1" r="9" fill={D}/></>
+    : cfg.head === 'helmet'
+    ? <>
+        <rect x="52" y="22" width="96" height="82" rx="22" fill={C}/>
+        <rect x="52" y="22" width="96" height="32" rx="22" fill="rgba(0,0,0,.22)"/>
+        <rect x="62" y="29" width="76" height="18" rx="9" fill={D} opacity=".28"/>
+      </>
+    : <circle cx="100" cy="62" r="42" fill={C}/>
+
+  const eyesEl = cfg.eyes === 'visor'
+    ? <rect x="62" y="48" width="76" height="24" rx="12" fill={D} opacity=".88"/>
+    : cfg.eyes === 'cyclops'
+    ? <>
+        <circle cx="100" cy="58" r="22" fill={D}/>
+        <circle cx="100" cy="58" r="11" fill="white"/>
+        <circle cx="103" cy="55" r="7" fill="#111"/>
+        <circle cx="106" cy="52" r="3" fill="white" opacity=".9"/>
+      </>
+    : cfg.eyes === 'big'
+    ? <>
+        <circle cx="80" cy="58" r="18" fill={D}/><circle cx="120" cy="58" r="18" fill={D}/>
+        <circle cx="80" cy="58" r="9" fill="white"/><circle cx="120" cy="58" r="9" fill="white"/>
+        <circle cx="83" cy="55" r="5" fill="#111"/><circle cx="123" cy="55" r="5" fill="#111"/>
+        <circle cx="85" cy="52" r="3" fill="white" opacity=".9"/><circle cx="125" cy="52" r="3" fill="white" opacity=".9"/>
+      </>
+    : <>
+        <circle cx="84" cy="58" r="14" fill={D}/><circle cx="116" cy="58" r="14" fill={D}/>
+        <circle cx="84" cy="58" r="7" fill="white"/><circle cx="116" cy="58" r="7" fill="white"/>
+        <circle cx="87" cy="55" r="4" fill="#111"/><circle cx="119" cy="55" r="4" fill="#111"/>
+        <circle cx="89" cy="53" r="2" fill="white" opacity=".9"/><circle cx="121" cy="53" r="2" fill="white" opacity=".9"/>
+      </>
+
+  const mouthEl = cfg.mouth === 'grill'
+    ? <>
+        <rect x="74" y="74" width="52" height="16" rx="5" fill="rgba(0,0,0,.28)"/>
+        {[0,1,2,3].map(i=><rect key={i} x={78+i*11} y="77" width="7" height="10" rx="2" fill={D} opacity=".8"/>)}
+      </>
+    : cfg.mouth === 'speaker'
+    ? <>
+        <circle cx="100" cy="81" r="13" fill="rgba(0,0,0,.28)"/>
+        <circle cx="100" cy="81" r="7" fill={D} opacity=".8"/>
+        <circle cx="100" cy="81" r="3" fill="rgba(0,0,0,.4)"/>
+      </>
+    : cfg.mouth === 'beak'
+    ? <polygon points="87,75 113,75 100,91" fill={D} opacity=".9"/>
+    : <path d="M 82 78 Q 100 95 118 78" stroke={D} strokeWidth="4.5" fill="none" strokeLinecap="round"/>
+
+  const jetpackEl = cfg.back === 'jetpack'
+    ? <>
+        <rect x="62" y="79" width="15" height="32" rx="6" fill="#252525" stroke={D} strokeWidth="1.5"/>
+        <rect x="123" y="79" width="15" height="32" rx="6" fill="#252525" stroke={D} strokeWidth="1.5"/>
+        <circle cx="70" cy="81" r="5" fill={D} opacity=".65"/>
+        <circle cx="131" cy="81" r="5" fill={D} opacity=".65"/>
+      </>
+    : null
+
   return (
-    <svg width={size} height={size*1.3} viewBox="0 0 200 260"
-      style={{overflow:'visible',transform:`rotate(${tilt}deg)`,transition:'transform .08s',filter:shield?`drop-shadow(0 0 8px ${E}) drop-shadow(0 0 16px ${E})`:'none'}}>
-      {/* rocket flames */}
-      {flame&&cfg.legs==='rockets'&&<>
-        <ellipse cx="74" cy="232" rx="9" ry="20" fill="#ff8800" opacity=".85"><animate attributeName="ry" values="20;12;20" dur=".25s" repeatCount="indefinite"/></ellipse>
-        <ellipse cx="74" cy="232" rx="5" ry="11" fill="#ffe000" opacity=".9"><animate attributeName="ry" values="11;6;11" dur=".25s" repeatCount="indefinite"/></ellipse>
-        <ellipse cx="126" cy="232" rx="9" ry="20" fill="#ff8800" opacity=".85"><animate attributeName="ry" values="20;12;20" dur=".25s" repeatCount="indefinite"/></ellipse>
-        <ellipse cx="126" cy="232" rx="5" ry="11" fill="#ffe000" opacity=".9"><animate attributeName="ry" values="11;6;11" dur=".25s" repeatCount="indefinite"/></ellipse>
-      </>}
-      {flame&&cfg.extra==='rockets'&&<>
-        <ellipse cx="22" cy="140" rx="7" ry="16" fill="#ff8800" opacity=".85"><animate attributeName="rx" values="7;4;7" dur=".2s" repeatCount="indefinite"/></ellipse>
-        <ellipse cx="178" cy="140" rx="7" ry="16" fill="#ff8800" opacity=".85"><animate attributeName="rx" values="7;4;7" dur=".2s" repeatCount="indefinite"/></ellipse>
-      </>}
-      {/* shield bubble */}
-      {shield&&<ellipse cx="100" cy="130" rx="85" ry="105" fill="none" stroke={E} strokeWidth="3" opacity=".6"><animate attributeName="opacity" values=".6;.2;.6" dur=".6s" repeatCount="indefinite"/></ellipse>}
-      {/* legs */}
-      {cfg.legs==='basic'&&<><rect x="68" y="180" width="22" height="38" rx="5" fill={C}/><rect x="110" y="180" width="22" height="38" rx="5" fill={C}/><rect x="58" y="212" width="38" height="10" rx="4" fill={E}/><rect x="104" y="212" width="38" height="10" rx="4" fill={E}/></>}
-      {cfg.legs==='wheels'&&<><rect x="68" y="180" width="22" height="22" rx="4" fill={C}/><rect x="110" y="180" width="22" height="22" rx="4" fill={C}/><circle cx="79" cy="213" r="18" fill="#222"/><circle cx="79" cy="213" r="9" fill="#444"/><circle cx="79" cy="213" r="5" fill={E}/><circle cx="121" cy="213" r="18" fill="#222"/><circle cx="121" cy="213" r="9" fill="#444"/><circle cx="121" cy="213" r="5" fill={E}/></>}
-      {cfg.legs==='rockets'&&<><rect x="64" y="172" width="30" height="14" rx="4" fill={C}/><rect x="106" y="172" width="30" height="14" rx="4" fill={C}/><ellipse cx="79" cy="200" rx="16" ry="24" fill={C}/><ellipse cx="121" cy="200" rx="16" ry="24" fill={C}/><polygon points="79,176 65,190 93,190" fill="#ff4400"/><polygon points="121,176 107,190 135,190" fill="#ff4400"/></>}
-      {/* body */}
+    <svg width={size} height={size*1.3} viewBox="0 0 200 260" style={{ overflow:'visible' }}>
+      {capeEl}
+      {wingsEl}
+      {legsEl}
       <rect x="48" y="98" width="104" height="84" rx="14" fill={C}/>
       <rect x="60" y="112" width="80" height="54" rx="8" fill="rgba(0,0,0,.18)"/>
-      <circle cx="80" cy="139" r="10" fill={E} opacity=".9"/>
-      <circle cx="100" cy="139" r="10" fill={E} opacity=".9"/>
-      <circle cx="120" cy="139" r="10" fill={E} opacity=".9"/>
-      <rect x="60" y="112" width="80" height="8" rx="3" fill={E} opacity=".55"/>
-      {/* side rockets */}
-      {cfg.extra==='rockets'&&<><ellipse cx="22" cy="120" rx="12" ry="28" fill={E}/><polygon points="22,92 10,110 34,110" fill="#ff4400"/><ellipse cx="178" cy="120" rx="12" ry="28" fill={E}/><polygon points="178,92 166,110 190,110" fill="#ff4400"/></>}
-      {/* arms */}
-      <rect x="18" y="104" width="30" height="56" rx="12" fill={C}/>
-      <rect x="152" y="104" width="30" height="56" rx="12" fill={C}/>
-      {cfg.extra==='magnet'
-        ?<><path d="M 22,162 Q 22,182 33,182 Q 44,182 44,162" stroke={E} strokeWidth="8" fill="none" strokeLinecap="round"/><circle cx="168" cy="164" r="14" fill={E}/></>
-        :<><circle cx="33" cy="164" r="14" fill={E}/><circle cx="167" cy="164" r="14" fill={E}/></>}
-      {/* head */}
-      {cfg.head==='round'  &&<circle cx="100" cy="62" r="42" fill={C}/>}
-      {cfg.head==='square' &&<rect x="58" y="20" width="84" height="84" rx="16" fill={C}/>}
-      {cfg.head==='antenna'&&<><circle cx="100" cy="62" r="42" fill={C}/><line x1="100" y1="20" x2="100" y2="4" stroke={E} strokeWidth="5" strokeLinecap="round"/><circle cx="100" cy="3" r="8" fill={E}/></>}
-      {cfg.extra==='propeller'&&<><rect x="56" y="18" width="88" height="9" rx="4" fill={E}><animateTransform attributeName="transform" type="rotate" from="0 100 22" to="360 100 22" dur=".4s" repeatCount="indefinite"/></rect><circle cx="100" cy="22" r="8" fill={C}/></>}
-      {/* eyes */}
-      <circle cx="84" cy="58" r="14" fill={E}/><circle cx="116" cy="58" r="14" fill={E}/>
-      <circle cx="84" cy="58" r="7" fill="white"/><circle cx="116" cy="58" r="7" fill="white"/>
-      <circle cx="87" cy="55" r="4" fill="#111"/><circle cx="119" cy="55" r="4" fill="#111"/>
-      <circle cx="89" cy="53" r="2" fill="white" opacity=".9"/><circle cx="121" cy="53" r="2" fill="white" opacity=".9"/>
-      {mouth}
+      <circle cx="80" cy="139" r="10" fill={D} opacity=".9"/>
+      <circle cx="100" cy="139" r="10" fill={D} opacity=".9"/>
+      <circle cx="120" cy="139" r="10" fill={D} opacity=".9"/>
+      <rect x="60" y="112" width="80" height="8" rx="3" fill={D} opacity=".5"/>
+      {armsEl}
+      {headEl}
+      {eyesEl}
+      {mouthEl}
+      {jetpackEl}
     </svg>
   )
 }
 
-// ─── ROCKET FLY ───────────────────────────────────────────────────────────────
-interface RObj { id:number; x:number; y:number; type:'star'|'gem'|'fuel'|'shield'|'asteroid'|'comet' }
-interface LWall { id:number; x:number; gapTop:number; gapH:number }
+// ─── BUILD PHASE ─────────────────────────────────────────────────────────────
+function BuildPhase({ cfg, setCfg, next, isPT }: { cfg: Cfg; setCfg: (c:Cfg)=>void; next: ()=>void; isPT: boolean }) {
+  const set = (k: keyof Cfg) => (v: string) => setCfg({ ...cfg, [k]: v as never })
+  const C = cfg.bodyColor
 
-interface RFState {
-  robotY:number; vy:number; tilt:number
-  fuel:number; shield:number
-  items:RObj[]; hazards:RObj[]; walls:LWall[]
-  particles:P[]; bgOff:number; shake:number
-  score:number; combo:number; comboTimer:number
-  lives:number; timeLeft:number
-  wallCooldown:number; started:boolean
-}
-
-const RF0: RFState = {
-  robotY:50,vy:0,tilt:0,fuel:100,shield:0,
-  items:[],hazards:[],walls:[],particles:[],bgOff:0,shake:0,
-  score:0,combo:0,comboTimer:0,lives:3,timeLeft:60,wallCooldown:0,started:false
-}
-
-export function RocketFly({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
-  const [gs,setGs] = useState<RFState>(RF0)
-  const gsRef = useRef(gs)
-  useEffect(()=>{gsRef.current=gs},[gs])
-  const boostRef         = useRef(false)
-  const doneRef          = useRef(false)
-  const boostIntervalRef = useRef<NodeJS.Timeout|null>(null)
-
-  // each boost gives a reliable upward kick (clamped so rapid taps can stack)
-  const doBoost = useCallback(()=>{
-    const s=gsRef.current
-    if(!s.started){
-      setGs(p=>({...p,started:true,vy:-8,fuel:Math.max(0,p.fuel-18)}))
-      boostRef.current=true; setTimeout(()=>{boostRef.current=false},120)
-      return
-    }
-    if(s.fuel<10) return
-    // stronger impulse: always subtracts 7 so even max-fall (vy=9) becomes vy=2 in one tap
-    setGs(p=>({...p,vy:Math.max(p.vy-7,-9),fuel:Math.max(0,p.fuel-18)}))
-    boostRef.current=true; setTimeout(()=>{boostRef.current=false},120)
-  },[])
-
-  // hold-to-boost: fire on press, then every 150ms while held
-  const startBoost = useCallback(()=>{
-    doBoost()
-    boostIntervalRef.current = setInterval(doBoost, 150)
-  },[doBoost])
-  const stopBoost = useCallback(()=>{
-    if(boostIntervalRef.current){ clearInterval(boostIntervalRef.current); boostIntervalRef.current=null }
-  },[])
-
-  useEffect(()=>{
-    const kd=(e:KeyboardEvent)=>{if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();doBoost()}}
-    window.addEventListener('keydown',kd)
-    return ()=>window.removeEventListener('keydown',kd)
-  },[doBoost])
-
-  // main game loop
-  useEffect(()=>{
-    const loop=setInterval(()=>{
-      const s=gsRef.current
-      if(!s.started||doneRef.current) return
-      const elapsed = 60-s.timeLeft
-      const spd = 1.0 + elapsed*0.022 // speed increases over time
-
-      // physics
-      const newVy   = Math.min(s.vy+1.4, 9)
-      const newY    = Math.max(3,Math.min(93,s.robotY - newVy*.6))
-      const newTilt = Math.max(-20,Math.min(20,newVy*2.5))
-      const newFuel = Math.min(100,s.fuel+1.6)
-      const newShield= Math.max(0,s.shield-1)
-      const newBg   = s.bgOff + spd*2
-      const newShake= Math.max(0,s.shake-1)
-
-      // robot hitbox in pixels
-      const rPxX=55, rPxY=(1-(newY/100))*H_RF, rR=22, rBot=30
-
-      let ps=[...s.particles]
-
-      // trail when recently boosted
-      if(boostRef.current){
-        const exhaustY=rPxY+rBot
-        ps.push(trail(rPxX,exhaustY,cfg.color))
-        if(cfg.extra==='rockets'){ps.push(trail(15,rPxY+10,cfg.eye));ps.push(trail(W-15,rPxY+10,cfg.eye))}
-      }
-
-      // move items & hazards
-      let newItems = s.items.map(o=>({...o,x:o.x-spd*(o.type==='comet'?1.6:1)})).filter(o=>o.x>-8)
-      let newHaz   = s.hazards.map(o=>({...o,x:o.x-spd*(o.type==='comet'?1.4:1.1),y:o.type==='comet'?o.y+.18:o.y})).filter(o=>o.x>-8)
-      const newWalls= s.walls.map(w=>({...w,x:w.x-spd*.9})).filter(w=>w.x>-4)
-
-      // spawn items
-      if(Math.random()<.018) newItems.push({id:uid(),x:102,y:8+Math.random()*80,type:'star'})
-      if(Math.random()<.005) newItems.push({id:uid(),x:102,y:10+Math.random()*76,type:'gem'})
-      if(Math.random()<.008) newItems.push({id:uid(),x:102,y:15+Math.random()*65,type:'fuel'})
-      if(Math.random()<.003) newItems.push({id:uid(),x:102,y:15+Math.random()*65,type:'shield'})
-
-      // spawn hazards — ramp up over time
-      if(Math.random()<(.010+elapsed*.0007)) newHaz.push({id:uid(),x:102,y:5+Math.random()*85,type:'asteroid'})
-      if(Math.random()<(.003+elapsed*.0002)) newHaz.push({id:uid(),x:105+Math.random()*10,y:Math.random()<.5?-5:95,type:'comet'})
-
-      // spawn laser wall — gap shrinks over time
-      let newWallCD=s.wallCooldown-1
-      if(newWallCD<=0&&Math.random()<.012){
-        const gapH=Math.max(14, 32-elapsed*0.24+Math.random()*10)
-        const gapTop=5+Math.random()*(85-gapH)
-        newWalls.push({id:uid(),x:100,gapTop,gapH})
-        newWallCD=Math.max(50,90-elapsed*0.5)|0
-      }
-
-      // collect items
-      let newScore=s.score, newCombo=s.combo, newComboTimer=s.comboTimer-1
-      if(newComboTimer<0){newComboTimer=0;newCombo=0}
-
-      newItems=newItems.filter(o=>{
-        const ox=o.x/100*W, oy=o.y/100*H_RF
-        const dist=Math.sqrt((ox-rPxX)**2+(oy-rPxY)**2)
-        if(dist>36) return true
-        // collect!
-        const pts=o.type==='gem'?5:1
-        newCombo++; newComboTimer=25
-        const mult=newCombo>=4?3:newCombo>=2?2:1
-        const earned=pts*mult
-        newScore+=earned
-        ps.push(...burst(ox,oy,o.type==='gem'?'#00ccff':'#ffdd00',10,2))
-        ps.push(floatTxt(ox,oy-20,`+${earned}${mult>1?` x${mult}`:''}`,o.type==='gem'?'#00ccff':'#ffdd00'))
-        if(o.type==='fuel') {setGs(p=>({...p,fuel:Math.min(100,p.fuel+35)})); return false}
-        if(o.type==='shield') {setGs(p=>({...p,shield:120})); return false}
-        return false
-      })
-
-      // hit hazards
-      let newLives=s.lives
-      let hitShake=newShake
-      newHaz=newHaz.filter(o=>{
-        if(newShield>0) return true // shielded
-        const ox=o.x/100*W, oy=o.y/100*H_RF
-        const dist=Math.sqrt((ox-rPxX)**2+(oy-rPxY)**2)
-        if(dist>30) return true
-        newLives=Math.max(0,newLives-1)
-        ps.push(...burst(ox,oy,'#ff4400',14,2.5))
-        ps.push(floatTxt(rPxX,rPxY-30,'OUCH!','#ff4400'))
-        hitShake=8; newCombo=0
-        return false
-      })
-
-      // hit walls
-      const robotYTop = 100-newY-8  // % from top
-      const robotYBot = 100-newY+8
-      newWalls.forEach(w=>{
-        if(newShield>0) return
-        if(w.x<28&&w.x>10){
-          const inGap = robotYTop>=w.gapTop && robotYBot<=w.gapTop+w.gapH
-          if(!inGap){
-            newLives=Math.max(0,newLives-1)
-            ps.push(...burst(rPxX,rPxY,'#ff4400',12,2.5))
-            hitShake=10; newCombo=0
-          }
-        }
-      })
-
-      // out of bounds
-      if(newY<=3||newY>=93) newLives=Math.max(0,newLives-1)
-
-      ps=tickPs(ps)
-
-      const died=newLives<=0
-      setGs(p=>({...p,
-        robotY:newY,vy:newVy,tilt:newTilt,fuel:newFuel,shield:newShield,
-        items:newItems,hazards:newHaz,walls:newWalls,
-        particles:ps,bgOff:newBg,shake:hitShake,
-        score:newScore,combo:newCombo,comboTimer:newComboTimer,
-        lives:newLives,wallCooldown:newWallCD,
-      }))
-      if(died&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(newScore),400)}
-    },50)
-    return ()=>clearInterval(loop)
-  },[cfg,onDone])
-
-  // timer
-  useEffect(()=>{
-    const t=setInterval(()=>{
-      setGs(p=>{
-        if(!p.started||doneRef.current) return p
-        if(p.timeLeft<=1&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(p.score),200);return p}
-        return{...p,timeLeft:p.timeLeft-1}
-      })
-    },1000)
-    return ()=>clearInterval(t)
-  },[onDone])
-
-  const {robotY,vy,tilt,fuel,shield,items,hazards,walls,particles,bgOff,shake,score,lives,timeLeft,started,combo}=gs
-  const robotPxY = (1-robotY/100)*H_RF
-  const fuelC = fuel>50?'#44ff88':fuel>20?'#ffdd00':'#ff4466'
-  const shakeX = gs.shake>0?(Math.random()-.5)*gs.shake*1.5:0
-
-  return(
-    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
-      {/* HUD */}
-      <div style={{width:W,display:'flex',justifyContent:'space-between',alignItems:'center',fontFamily:'monospace',fontSize:12}}>
-        <span>{[...Array(3)].map((_,i)=><span key={i} style={{fontSize:16}}>{i<lives?'❤️':'🖤'}</span>)}</span>
-        <div style={{textAlign:'center'}}>
-          <span style={{color:'#ffdd00',fontWeight:900,fontSize:15}}>⭐ {score}</span>
-          {combo>=2&&<span style={{color:'#ff8c00',fontSize:10,marginLeft:6}}>x{combo>=4?3:2} COMBO!</span>}
-        </div>
-        <span style={{color:timeLeft<=8?'#ff4466':'#888'}}>⏱ {timeLeft}s</span>
-      </div>
-      {/* Fuel bar */}
-      <div style={{width:W,height:6,background:'#111',borderRadius:3,overflow:'hidden',position:'relative'}}>
-        <div style={{height:'100%',width:`${fuel}%`,background:fuelC,borderRadius:3,transition:'width .05s,background .3s',boxShadow:`0 0 8px ${fuelC}`}}/>
-        <div style={{position:'absolute',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',paddingLeft:6}}>
-          <span style={{color:'#ffffff44',fontSize:9,fontFamily:'monospace',letterSpacing:1}}>{isPT?'COMBUSTÍVEL':'FUEL'}</span>
-        </div>
-      </div>
-      {/* Game area */}
-      <div style={{position:'relative',width:W,height:H_RF,background:'#020208',border:'1px solid #0a0a2a',borderRadius:10,overflow:'hidden',transform:`translate(${shakeX}px,${shake>0?(Math.random()-.5)*shake:0}px)`}}>
-        {/* Parallax stars */}
-        {ALL_STARS.map((star,i)=>{
-          const x=((star.x-bgOff*star.spd)%W+W)%W
-          return <div key={i} style={{position:'absolute',left:x,top:star.y,width:star.s,height:star.s,background:`rgba(255,255,255,${star.o})`,borderRadius:'50%'}}/>
-        })}
-        {/* Nebula glow */}
-        <div style={{position:'absolute',left:'30%',top:'20%',width:200,height:200,background:`radial-gradient(circle, ${cfg.color}18 0%, transparent 70%)`,borderRadius:'50%',pointerEvents:'none'}}/>
-
-        {/* Laser walls */}
-        {walls.map(w=>{
-          const wx=w.x/100*W
-          const gapTopPx=w.gapTop/100*H_RF
-          const gapBotPx=(w.gapTop+w.gapH)/100*H_RF
-          return <div key={w.id}>
-            <div style={{position:'absolute',left:wx-4,top:0,width:8,height:gapTopPx,background:'linear-gradient(180deg,#ff2200,#ff6600)',boxShadow:'0 0 12px #ff4400,0 0 24px #ff440066',borderRadius:2}}/>
-            <div style={{position:'absolute',left:wx-3,top:gapTopPx,width:6,height:gapBotPx-gapTopPx,background:`${cfg.color}11`,border:`1px dashed ${cfg.color}44`}}/>
-            <div style={{position:'absolute',left:wx-4,top:gapBotPx,width:8,height:H_RF-gapBotPx,background:'linear-gradient(0deg,#ff2200,#ff6600)',boxShadow:'0 0 12px #ff4400,0 0 24px #ff440066',borderRadius:2}}/>
-          </div>
-        })}
-
-        {/* Items */}
-        {items.map(o=>(
-          <div key={o.id} style={{position:'absolute',left:`${o.x}%`,top:`${o.y}%`,fontSize:o.type==='gem'?22:18,transform:'translate(-50%,-50%)',userSelect:'none',filter:o.type==='gem'?'drop-shadow(0 0 6px #00ccff)':o.type==='fuel'?'drop-shadow(0 0 6px #44ff88)':'none'}}>
-            {o.type==='star'?'⭐':o.type==='gem'?'💎':o.type==='fuel'?'⛽':'🛡️'}
-          </div>
-        ))}
-        {/* Hazards */}
-        {hazards.map(o=>(
-          <div key={o.id} style={{position:'absolute',left:`${o.x}%`,top:`${o.y}%`,fontSize:o.type==='comet'?26:20,transform:'translate(-50%,-50%) rotate(135deg)',userSelect:'none'}}>
-            {o.type==='comet'?'☄️':'🪨'}
-          </div>
-        ))}
-
-        {/* Robot */}
-        <div style={{position:'absolute',left:18,top:robotPxY,transform:'translateY(-50%)',zIndex:10}}>
-          <Robot cfg={cfg} size={55} mood="idle" flame={boostRef.current} tilt={tilt} shield={shield>0}/>
-        </div>
-
-        {/* Particles */}
-        {particles.map(p=>(
-          p.t
-            ?<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,color:p.c,fontFamily:'monospace',fontWeight:900,fontSize:p.s,whiteSpace:'nowrap',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)',textShadow:`0 0 8px ${p.c}`}}>{p.t}</div>
-            :<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,width:p.s,height:p.s,background:p.c,borderRadius:'50%',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)',boxShadow:`0 0 4px ${p.c}`}}/>
-        ))}
-
-        {/* Start overlay */}
-        {!started&&(
-          <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.7)',gap:12}}>
-            <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>{isPT?'TOQUE PARA VOAR!':'TAP TO FLY!'}</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Colete ⭐💎⛽🛡️ — desvie de 🪨☄️ — voe pelos buracos!':'Collect ⭐💎⛽🛡️ — dodge 🪨☄️ — fly through laser gaps!'}</div>
-          </div>
-        )}
-      </div>
-      {/* Controls */}
-      <button
-        onPointerDown={startBoost} onPointerUp={stopBoost} onPointerLeave={stopBoost}
-        style={{...S.btn(cfg.color),width:W,fontSize:20,padding:'16px 0',userSelect:'none',opacity:fuel<5?.5:1,boxShadow:`0 0 ${fuel>0?20:4}px ${cfg.color}66`}}>
-        🚀 {isPT?'IMPULSIONAR':'BOOST'} {fuel<5?(isPT?'(carregando…)':'(charging…)'):''}
-      </button>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Segure IMPULSIONAR ou ESPAÇO / ↑ para voar!':'Hold BOOST or SPACE / ↑ to fly!'}</div>
-    </div>
-  )
-}
-
-// ─── STAR CATCH ───────────────────────────────────────────────────────────────
-interface SCObj { id:number; x:number; y:number; vy:number; type:'small'|'big'|'gem'|'bomb'|'magnet' }
-interface SCState {
-  robotX:number; vx:number
-  items:SCObj[]; particles:P[]
-  magnetTimer:number; comboCount:number; comboTimer:number
-  score:number; lives:number; timeLeft:number; started:boolean; shake:number
-}
-const SC0: SCState = {robotX:50,vx:0,items:[],particles:[],magnetTimer:0,comboCount:0,comboTimer:0,score:0,lives:3,timeLeft:60,started:false,shake:0}
-
-export function StarCatch({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
-  const [gs,setGs] = useState<SCState>(SC0)
-  const gsRef = useRef(gs)
-  useEffect(()=>{gsRef.current=gs},[gs])
-  const leftRef=useRef(false), rightRef=useRef(false)
-  const doneRef=useRef(false)
-
-  const baseRadius = cfg.extra==='magnet'?26:16
-
-  useEffect(()=>{
-    const loop=setInterval(()=>{
-      const s=gsRef.current
-      if(!s.started||doneRef.current) return
-
-      // robot movement (smooth acceleration)
-      const accel = leftRef.current?-1.8:rightRef.current?1.8:0
-      const newVx  = (s.vx+accel)*.82  // friction
-      const newX   = Math.max(6,Math.min(94,s.robotX+newVx))
-
-      const elapsed = 60-s.timeLeft
-      const spd = 1.0+elapsed*.02
-      const catchR = s.magnetTimer>0 ? baseRadius+20 : baseRadius
-      const fallSpd = (vy: number) => vy + elapsed*.012
-
-      let newItems=s.items.map(o=>({...o,y:o.y+o.vy*spd})).filter(o=>o.y<102)
-      if(Math.random()<(.030+elapsed*.0009)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.7+Math.random()*.8),type:'small'})
-      if(Math.random()<(.010+elapsed*.0005)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(1+Math.random()*1),type:'big'})
-      if(Math.random()<.006) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.6+Math.random()*.5),type:'gem'})
-      if(Math.random()<(.008+elapsed*.0006)) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:fallSpd(.9+Math.random()*.7),type:'bomb'})
-      if(Math.random()<.004) newItems.push({id:uid(),x:5+Math.random()*90,y:-3,vy:.5,type:'magnet'})
-
-      // catch check (robot at y=84%)
-      let newScore=s.score, newLives=s.lives, newCombo=s.comboCount, newComboTimer=s.comboTimer-1, newMagnet=Math.max(0,s.magnetTimer-1)
-      if(newComboTimer<0){newComboTimer=0; newCombo=0}
-      let ps=[...s.particles]
-      let hitShake=Math.max(0,s.shake-1)
-
-      newItems=newItems.filter(o=>{
-        const ox=o.x/100*W, oy=o.y/100*H_SC
-        const rx=newX/100*W, ry=84/100*H_SC
-        const dist=Math.sqrt((ox-rx)**2+(oy-ry)**2)
-        if(o.y<75) return true  // not low enough yet (unless magnet)
-        if(dist>catchR*3.4) return true
-
-        if(o.type==='bomb'){
-          newLives=Math.max(0,newLives-1)
-          ps.push(...burst(ox,oy,'#ff4400',14,2.5))
-          ps.push(floatTxt(ox,oy,'💥 OUCH!','#ff4400'))
-          hitShake=10; newCombo=0
-          return false
-        }
-        const pts=o.type==='gem'?5:o.type==='big'?3:1
-        newCombo++; newComboTimer=20
-        const mult=newCombo>=6?4:newCombo>=4?3:newCombo>=2?2:1
-        const earned=pts*mult
-        newScore+=earned
-        ps.push(...burst(ox,oy,o.type==='gem'?'#00ccff':o.type==='big'?'#ff8c00':'#ffdd00',o.type==='gem'?14:8,1.8))
-        ps.push(floatTxt(ox,oy-15,`+${earned}${mult>1?` x${mult}`:''}`,o.type==='gem'?'#00ccff':'#ffdd00'))
-        if(o.type==='magnet'){newMagnet=160;ps.push(floatTxt(ox,oy-15,'🧲 MAGNET!','#ff8c00'))}
-        return false
-      })
-
-      ps=tickPs(ps)
-      const died=newLives<=0
-      setGs(p=>({...p,robotX:newX,vx:newVx,items:newItems,particles:ps,magnetTimer:newMagnet,comboCount:newCombo,comboTimer:newComboTimer,score:newScore,lives:newLives,shake:hitShake}))
-      if(died&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(newScore),400)}
-    },50)
-    return ()=>clearInterval(loop)
-  },[cfg,onDone,baseRadius])
-
-  useEffect(()=>{
-    const t=setInterval(()=>setGs(p=>{
-      if(!p.started||doneRef.current) return p
-      if(p.timeLeft<=1&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(p.score),200);return p}
-      return{...p,timeLeft:p.timeLeft-1}
-    }),1000)
-    return ()=>clearInterval(t)
-  },[onDone])
-
-  useEffect(()=>{
-    const kd=(e:KeyboardEvent)=>{if(e.code==='ArrowLeft')leftRef.current=true;if(e.code==='ArrowRight')rightRef.current=true}
-    const ku=(e:KeyboardEvent)=>{if(e.code==='ArrowLeft')leftRef.current=false;if(e.code==='ArrowRight')rightRef.current=false}
-    window.addEventListener('keydown',kd); window.addEventListener('keyup',ku)
-    return ()=>{window.removeEventListener('keydown',kd);window.removeEventListener('keyup',ku)}
-  },[])
-
-  const {robotX,items,particles,magnetTimer,comboCount,score,lives,timeLeft,started,shake}=gs
-  const shakeX=shake>0?(Math.random()-.5)*shake*1.5:0
-
-  return(
-    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
-      <div style={{width:W,display:'flex',justifyContent:'space-between',alignItems:'center',fontFamily:'monospace',fontSize:12}}>
-        <span>{[...Array(3)].map((_,i)=><span key={i} style={{fontSize:16}}>{i<lives?'❤️':'🖤'}</span>)}</span>
-        <div style={{textAlign:'center'}}>
-          <span style={{color:'#ffdd00',fontWeight:900,fontSize:15}}>⭐ {score}</span>
-          {comboCount>=2&&<span style={{color:'#ff8c00',fontSize:10,marginLeft:6}}>x{comboCount>=6?4:comboCount>=4?3:2} COMBO!</span>}
-        </div>
-        <span style={{color:timeLeft<=8?'#ff4466':'#888'}}>⏱ {timeLeft}s</span>
-      </div>
-      {magnetTimer>0&&<div style={{width:W,height:4,background:'#111',borderRadius:2,overflow:'hidden'}}><div style={{height:'100%',width:`${(magnetTimer/160)*100}%`,background:'#ff8c00',boxShadow:'0 0 6px #ff8c00'}}/></div>}
-      <div style={{position:'relative',width:W,height:H_SC,background:'linear-gradient(180deg,#000814 0%,#001a3a 60%,#000a0a 100%)',border:'1px solid #001428',borderRadius:10,overflow:'hidden',transform:`translate(${shakeX}px,0)`}}>
-        {/* City skyline silhouette */}
-        {[8,45,70,100,150,190,230,268,300,330].map((bx,i)=>{
-          const bh=20+[30,50,40,60,25,55,35,45,28,42][i]
-          return <div key={i} style={{position:'absolute',left:bx,bottom:0,width:22+i%3*8,height:bh,background:'#0a0a1a',borderRadius:'2px 2px 0 0'}}/>
-        })}
-        {/* Window lights on buildings */}
-        {[{x:12,y:H_SC-25},{x:50,y:H_SC-45},{x:75,y:H_SC-35},{x:155,y:H_SC-50},{x:235,y:H_SC-45}].map((w,i)=>(
-          <div key={i} style={{position:'absolute',left:w.x,top:w.y,width:4,height:4,background:cfg.eye,borderRadius:1,opacity:.6}}/>
-        ))}
-        {/* Falling items */}
-        {items.map(o=>(
-          <div key={o.id} style={{position:'absolute',left:`${o.x}%`,top:`${o.y}%`,fontSize:o.type==='big'?26:o.type==='bomb'?24:o.type==='gem'?22:18,transform:'translate(-50%,-50%)',userSelect:'none',filter:o.type==='gem'?'drop-shadow(0 0 8px #00ccff)':o.type==='bomb'?'drop-shadow(0 0 6px #ff4400)':'none'}}>
-            {o.type==='small'?'⭐':o.type==='big'?'🌟':o.type==='gem'?'💎':o.type==='bomb'?'💣':'🧲'}
-          </div>
-        ))}
-        {/* Magnet aura */}
-        {magnetTimer>0&&<div style={{position:'absolute',left:`${robotX}%`,top:'84%',width:baseRadius*2+40,height:baseRadius*2+40,borderRadius:'50%',background:'rgba(255,140,0,.06)',border:'1px dashed rgba(255,140,0,.3)',transform:'translate(-50%,-50%)',transition:'all .1s'}}/>}
-        {/* Ground */}
-        <div style={{position:'absolute',bottom:28,left:0,right:0,height:2,background:'rgba(255,255,255,.08)'}}/>
-        {/* Robot */}
-        <div style={{position:'absolute',left:`${robotX}%`,top:'84%',transform:'translateX(-50%) translateY(-70%)',transition:'left .02s'}}>
-          <Robot cfg={cfg} size={55} mood="idle"/>
-        </div>
-        {/* Particles */}
-        {particles.map(p=>(
-          p.t
-            ?<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,color:p.c,fontFamily:'monospace',fontWeight:900,fontSize:p.s,whiteSpace:'nowrap',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)',textShadow:`0 0 8px ${p.c}`}}>{p.t}</div>
-            :<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,width:p.s,height:p.s,background:p.c,borderRadius:'50%',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)'}}/>
-        ))}
-        {!started&&(
-          <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.7)',gap:12}}>
-            <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.eye}`}}>{isPT?'TOQUE PARA COMEÇAR!':'TAP TO START!'}</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Pegue ⭐🌟💎🧲 — desvie das 💣 bombas!':'Catch ⭐🌟💎🧲 — dodge 💣 bombs!'}</div>
-          </div>
-        )}
-      </div>
-      <div style={{display:'flex',gap:10,width:W}}>
-        <button
-          onPointerDown={()=>{if(!gs.started)setGs(p=>({...p,started:true}));leftRef.current=true}}
-          onPointerUp={()=>{leftRef.current=false}} onPointerLeave={()=>{leftRef.current=false}}
-          style={{...S.btn(cfg.eye),flex:1,fontSize:28,padding:'18px 0',userSelect:'none'}}>◀</button>
-        <button
-          onPointerDown={()=>{if(!gs.started)setGs(p=>({...p,started:true}));rightRef.current=true}}
-          onPointerUp={()=>{rightRef.current=false}} onPointerLeave={()=>{rightRef.current=false}}
-          style={{...S.btn(cfg.eye),flex:1,fontSize:28,padding:'18px 0',userSelect:'none'}}>▶</button>
-      </div>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Segure ◀ ▶ — pegue estrelas, desvie das bombas!':'Hold ◀ ▶ or arrow keys — catch stars, dodge bombs!'}</div>
-    </div>
-  )
-}
-
-// ─── SPEED RACE ───────────────────────────────────────────────────────────────
-const GROUND_Y=75  // % from top
-interface SRObj { id:number; x:number; y:number; type:'coin'|'boost' }
-interface SRObs { id:number; x:number; h:number; type:'low'|'tall' }
-interface SRState {
-  robotY:number; vy:number; jumps:number
-  obstacles:SRObs[]; coins:SRObj[]; particles:P[]
-  boostTimer:number; score:number; lives:number; timeLeft:number
-  bgOff:number; groundOff:number; started:boolean; shake:number; frame:number
-}
-const SR0: SRState = {robotY:GROUND_Y,vy:0,jumps:0,obstacles:[],coins:[],particles:[],boostTimer:0,score:0,lives:3,timeLeft:60,bgOff:0,groundOff:0,started:false,shake:0,frame:0}
-
-export function SpeedRace({cfg,onDone,isPT=false}:{cfg:Cfg;onDone:(s:number)=>void;isPT?:boolean}) {
-  const [gs,setGs]=useState<SRState>(SR0)
-  const gsRef=useRef(gs)
-  useEffect(()=>{gsRef.current=gs},[gs])
-  const doneRef=useRef(false)
-
-  // first tap starts AND jumps simultaneously
-  const doJump=useCallback(()=>{
-    const s=gsRef.current
-    if(!s.started){setGs(p=>({...p,started:true,vy:-9,jumps:1}));return}
-    if(s.jumps>=2) return
-    const newVy = s.jumps===0 ? -9 : -7   // first jump strong, double jump keeps momentum
-    setGs(p=>({...p,vy:newVy,jumps:p.jumps+1}))
-  },[])
-
-  useEffect(()=>{
-    const kd=(e:KeyboardEvent)=>{if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();doJump()}}
-    window.addEventListener('keydown',kd)
-    return ()=>window.removeEventListener('keydown',kd)
-  },[doJump])
-
-  useEffect(()=>{
-    const loop=setInterval(()=>{
-      const s=gsRef.current
-      if(!s.started||doneRef.current) return
-      const elapsed=60-s.timeLeft
-      const spd=(1.0+elapsed*.027)*(s.boostTimer>0?1.8:1)
-      const newFrame=s.frame+1
-
-      // physics
-      const onGround=s.robotY>=GROUND_Y
-      const newVy=onGround?Math.min(0,s.vy):s.vy+1.8
-      const newY=Math.min(GROUND_Y,s.robotY+newVy*.5)
-      const newJumps=newY>=GROUND_Y?0:s.jumps
-      const newBg=s.bgOff+spd*.4
-      const newGround=s.groundOff+spd*2
-      const newBoost=Math.max(0,s.boostTimer-1)
-      const newShake=Math.max(0,s.shake-1)
-
-      let obs=s.obstacles.map(o=>({...o,x:o.x-spd})).filter(o=>o.x>-10)
-      let coins=s.coins.map(o=>({...o,x:o.x-spd})).filter(o=>o.x>-5)
-      let ps=[...s.particles]
-
-      // spawn — obstacles start tiny (8px) and grow to 48px over 60 seconds
-      const obstH = Math.min(8 + elapsed*0.66 + Math.random()*(4+elapsed*0.28), 50)
-      if(Math.random()<(.010+elapsed*.00025)) obs.push({id:uid(),x:102,h:obstH,type:Math.random()<.3?'tall':'low'})
-      if(Math.random()<.035) coins.push({id:uid(),x:102,y:GROUND_Y-8-Math.random()*20,type:'coin'})
-      if(Math.random()<.003) coins.push({id:uid(),x:102,y:GROUND_Y-12,type:'boost'})
-
-      // robot hitbox
-      const rPxX=18/100*W, rPxY=newY/100*H_SR, rW=14, rH=18
-
-      // collect
-      let newScore=s.score
-      let newBoostT=newBoost
-      coins=coins.filter(o=>{
-        const ox=o.x/100*W, oy=o.y/100*H_SR
-        const hit=Math.abs(ox-rPxX)<rW+12&&Math.abs(oy-rPxY)<rH+12
-        if(!hit) return true
-        if(o.type==='boost'){newBoostT=80;ps.push(floatTxt(ox,oy,'⚡ BOOST!','#ffdd00'))}
-        else{newScore++;ps.push(floatTxt(ox,oy,'+1','#ffdd00'))}
-        ps.push(...burst(ox,oy,o.type==='boost'?'#ffdd00':'#ff8c00',6,1.5))
-        return false
-      })
-
-      // obstacles
-      let newLives=s.lives
-      let hitShk=newShake
-      if(s.boostTimer<=0){
-        obs.forEach(o=>{
-          const ox=o.x/100*W
-          const oBot=GROUND_Y/100*H_SR
-          const oTop=oBot-o.h
-          const hit=ox<rPxX+rW&&ox+10>rPxX-rW&&rPxY>oTop&&rPxY<oBot+8
-          if(hit){
-            newLives=Math.max(0,newLives-1)
-            ps.push(...burst(rPxX,rPxY,'#ff4400',10,2))
-            ps.push(floatTxt(rPxX,rPxY-20,'OUCH!','#ff4400'))
-            hitShk=8
-          }
-        })
-        // remove hit obstacles
-        obs=obs.filter(o=>{
-          const ox=o.x/100*W, oBot=GROUND_Y/100*H_SR, oTop=oBot-o.h
-          return !(ox<rPxX+rW&&ox+10>rPxX-rW&&rPxY>oTop&&rPxY<oBot+8)
-        })
-      }
-
-      ps=tickPs(ps)
-      const died=newLives<=0
-      setGs(p=>({...p,robotY:newY,vy:newVy,jumps:newJumps,obstacles:obs,coins,particles:ps,boostTimer:newBoostT,score:newScore,lives:newLives,bgOff:newBg,groundOff:newGround,shake:hitShk,frame:newFrame}))
-      if(died&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(newScore),400)}
-    },50)
-    return ()=>clearInterval(loop)
-  },[cfg,onDone])
-
-  useEffect(()=>{
-    const t=setInterval(()=>setGs(p=>{
-      if(!p.started||doneRef.current) return p
-      if(p.timeLeft<=1&&!doneRef.current){doneRef.current=true;setTimeout(()=>onDone(p.score),200);return p}
-      return{...p,timeLeft:p.timeLeft-1}
-    }),1000)
-    return ()=>clearInterval(t)
-  },[onDone])
-
-  const {robotY,obstacles,coins,particles,boostTimer,score,lives,timeLeft,bgOff,groundOff,started,shake,jumps,frame}=gs
-  const shakeX=shake>0?(Math.random()-.5)*shake*1.5:0
-  const bobY=robotY>=GROUND_Y?Math.sin(frame*.4)*1.5:0  // running bob
-
-  return(
-    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:10}}>
-      <div style={{width:W,display:'flex',justifyContent:'space-between',alignItems:'center',fontFamily:'monospace',fontSize:12}}>
-        <span>{[...Array(3)].map((_,i)=><span key={i} style={{fontSize:16}}>{i<lives?'❤️':'🖤'}</span>)}</span>
-        <span style={{color:'#ffdd00',fontWeight:900,fontSize:15}}>🪙 {score}</span>
-        <span style={{color:timeLeft<=8?'#ff4466':'#888'}}>⏱ {timeLeft}s</span>
-      </div>
-      {boostTimer>0&&<div style={{width:W,height:4,background:'#111',borderRadius:2,overflow:'hidden'}}><div style={{height:'100%',width:`${(boostTimer/80)*100}%`,background:'#ffdd00',boxShadow:'0 0 8px #ffdd00',transition:'width .05s'}}/></div>}
-      <div style={{position:'relative',width:W,height:H_SR,overflow:'hidden',borderRadius:10,border:'1px solid #1a1400',transform:`translate(${shakeX}px,0)`}}>
-        {/* Sky gradient */}
-        <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,#0a0420 0%,#1a0830 40%,#0a1428 100%)'}}/>
-        {/* Distant city silhouettes */}
-        {[0,40,80,120,160,200,240,290,320].map((bx,i)=>{
-          const bh=30+[20,40,30,50,15,45,25,35,20][i]
-          const scrolled=((bx-bgOff*.3)%W+W)%W
-          return <div key={i} style={{position:'absolute',left:scrolled,bottom:H_SR*(1-GROUND_Y/100)-2,width:28,height:bh,background:'#100820',borderRadius:'2px 2px 0 0'}}/>
-        })}
-        {/* Scrolling ground */}
-        <div style={{position:'absolute',left:0,right:0,top:`${GROUND_Y}%`,bottom:0,background:'#1a0f00'}}/>
-        {/* Ground dashes */}
-        {[0,60,120,180,240,300,360].map((_,i)=>{
-          const gx=((i*60-groundOff)%(W+60)+W+60)%W-30
-          return <div key={i} style={{position:'absolute',left:gx,top:`${GROUND_Y}%`,width:40,height:3,background:'#3a2800',borderRadius:2}}/>
-        })}
-        {/* Boost trail */}
-        {boostTimer>0&&[...Array(5)].map((_,i)=>(
-          <div key={i} style={{position:'absolute',left:`${18-i*2}%`,top:`${robotY+bobY-(i*.5)}%`,width:8-i,height:8-i,background:'#ffdd00',borderRadius:'50%',opacity:(1-i/5)*.6,transform:'translate(-50%,-50%)'}}/>
-        ))}
-        {/* Obstacles */}
-        {obstacles.map(o=>{
-          const oBot=GROUND_Y/100*H_SR, oTop=oBot-o.h
-          return <div key={o.id} style={{position:'absolute',left:`${o.x}%`,top:oTop,width:12,height:o.h,background:o.type==='tall'?'linear-gradient(180deg,#ff2200,#aa1100)':'linear-gradient(180deg,#ff6600,#cc4400)',borderRadius:'4px 4px 0 0',boxShadow:`0 0 10px ${o.type==='tall'?'#ff220066':'#ff660066'}`,border:`1px solid ${o.type==='tall'?'#ff4400':'#ff8800'}`}}/>
-        })}
-        {/* Coins & boosts */}
-        {coins.map(o=>(
-          <div key={o.id} style={{position:'absolute',left:`${o.x}%`,top:`${o.y}%`,fontSize:o.type==='boost'?22:18,transform:'translate(-50%,-50%)',userSelect:'none',filter:o.type==='boost'?'drop-shadow(0 0 8px #ffdd00)':'none'}}>
-            {o.type==='boost'?'⚡':'🪙'}
-          </div>
-        ))}
-        {/* Robot */}
-        <div style={{position:'absolute',left:'12%',top:`${robotY+bobY}%`,transform:'translateY(-80%)',transition:'top .02s'}}>
-          <Robot cfg={cfg} size={52} mood="idle" flame={boostTimer>0} tilt={jumps>0?-8:0}/>
-        </div>
-        {/* Particles */}
-        {particles.map(p=>(
-          p.t
-            ?<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,color:p.c,fontFamily:'monospace',fontWeight:900,fontSize:p.s,whiteSpace:'nowrap',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)',textShadow:`0 0 8px ${p.c}`}}>{p.t}</div>
-            :<div key={p.id} style={{position:'absolute',left:p.x,top:p.y,width:p.s,height:p.s,background:p.c,borderRadius:'50%',opacity:p.life/p.ml,pointerEvents:'none',transform:'translate(-50%,-50%)'}}/>
-        ))}
-        {!started&&(
-          <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.75)',gap:12}}>
-            <Robot cfg={cfg} size={80} mood="happy"/>
-            <div style={{color:'#fff',fontFamily:'monospace',fontWeight:900,fontSize:20,textShadow:`0 0 20px ${cfg.color}`}}>{isPT?'TOQUE PARA CORRER!':'TAP TO RACE!'}</div>
-            <div style={{color:'#666',fontFamily:'monospace',fontSize:11,textAlign:'center',padding:'0 24px'}}>{isPT?'Salto duplo sobre muros! Colete 🪙 moedas e ⚡ turbos!':'Double-jump walls! Collect 🪙 coins and ⚡ boosts!'}</div>
-          </div>
-        )}
-      </div>
-      <button onPointerDown={doJump}
-        style={{...S.btn(cfg.color),width:W,fontSize:20,padding:'16px 0',userSelect:'none',background:jumps>=2?'rgba(255,255,255,.05)':'none'}}>
-        {jumps===0?(isPT?'🏃 PULAR!':'🏃 JUMP!'):jumps===1?(isPT?'✨ SALTO DUPLO!':'✨ DOUBLE JUMP!'):(isPT?'⏳ (pousando…)':'⏳ (landing…)')}
-      </button>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10}}>{isPT?'Toque PULAR ou ESPAÇO / ↑ · Salto duplo no ar!':'Tap JUMP or SPACE / ↑ · Double jump in mid-air!'}</div>
-    </div>
-  )
-}
-
-// ─── BUILD PHASE ──────────────────────────────────────────────────────────────
-function BuildPhase({cfg,setCfg,next,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void;isPT?:boolean}) {
-  const set=(k:keyof Cfg)=>(v:string)=>setCfg({...cfg,[k]:v as never})
-  const Chip=({val,cur,setVal,label,sub}:{val:string;cur:string;setVal:(v:string)=>void;label:string;sub:string})=>(
-    <button onClick={()=>setVal(val)} style={{padding:'10px 14px',borderRadius:8,cursor:'pointer',textAlign:'left',background:cur===val?cfg.color:'#111',border:`2px solid ${cur===val?cfg.color:'#2a2a2a'}`,color:cur===val?'#000':'#aaa',fontFamily:'monospace',transition:'all .15s',flex:'1 1 120px'}}>
-      <div style={{fontWeight:900,fontSize:13}}>{label}</div>
-      <div style={{fontSize:10,opacity:.7,marginTop:2}}>{sub}</div>
+  const Chip = ({ val, cur, setVal, label, sub }: { val:string; cur:string; setVal:(v:string)=>void; label:string; sub:string }) => (
+    <button onClick={()=>setVal(val)} style={{
+      padding:'9px 12px', borderRadius:8, cursor:'pointer', textAlign:'left',
+      background: cur===val ? C : '#111', border:`2px solid ${cur===val ? C : '#2a2a2a'}`,
+      color: cur===val ? '#000' : '#aaa', fontFamily:'monospace', transition:'all .12s', flex:'1 1 110px',
+    }}>
+      <div style={{fontWeight:900,fontSize:12}}>{label}</div>
+      <div style={{fontSize:10,opacity:.65,marginTop:2}}>{sub}</div>
     </button>
   )
-  const Sec=({label,children}:{label:string;children:React.ReactNode})=>(
-    <div style={{marginBottom:18}}>
-      <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:8,textTransform:'uppercase'}}>{label}</div>
-      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>{children}</div>
+
+  const Sec = ({ label, children }: { label:string; children:React.ReactNode }) => (
+    <div style={{marginBottom:14}}>
+      <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:7,textTransform:'uppercase'}}>{label}</div>
+      <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>{children}</div>
     </div>
   )
-  return(
+
+  return (
     <div style={S.page}>
-      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>{isPT?'MONTE SEU ROBÔ':'BUILD YOUR ROBOT'}</h1>
-      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>{isPT?'ESCOLHA AS PEÇAS, DEPOIS PINTE!':'PICK YOUR PARTS, THEN PAINT IT!'}</p>
-      <div style={{display:'flex',gap:20,width:'100%',maxWidth:560,flexWrap:'wrap',justifyContent:'center'}}>
-        <div style={{flex:1,minWidth:220}}>
+      <h1 style={{...S.title(C),fontSize:24,margin:'0 0 4px'}}>{isPT?'MONTE SEU ROBÔ':'BUILD YOUR ROBOT'}</h1>
+      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 16px',letterSpacing:1}}>{isPT?'ESCOLHA AS PEÇAS!':'PICK YOUR PARTS!'}</p>
+      <div style={{display:'flex',gap:20,width:'100%',maxWidth:620,flexWrap:'wrap',justifyContent:'center'}}>
+        <div style={{flex:1,minWidth:240}}>
           <Sec label={isPT?'Cabeça':'Head'}>
-            <Chip val="round"   cur={cfg.head} setVal={set('head')} label={isPT?'🔵 Redonda':'🔵 Round'}   sub={isPT?'Cara simpática clássica':'Classic friendly face'}/>
-            <Chip val="square"  cur={cfg.head} setVal={set('head')} label={isPT?'🟦 Quadrada':'🟦 Square'}  sub={isPT?'Forte e resistente':'Strong & tough'}/>
-            <Chip val="antenna" cur={cfg.head} setVal={set('head')} label={isPT?'📡 Antena':'📡 Antenna'} sub={isPT?'Superaumento cerebral':'Super brain boost'}/>
+            <Chip val="round"   cur={cfg.head} setVal={set('head')} label={isPT?'🔵 Redonda':'🔵 Round'}    sub={isPT?'Cara amigável':'Friendly face'}/>
+            <Chip val="square"  cur={cfg.head} setVal={set('head')} label={isPT?'🟦 Quadrada':'🟦 Square'}   sub={isPT?'Forte e durão':'Strong & tough'}/>
+            <Chip val="antenna" cur={cfg.head} setVal={set('head')} label={isPT?'📡 Antena':'📡 Antenna'}   sub={isPT?'Super sinal':'Super signal'}/>
+            <Chip val="helmet"  cur={cfg.head} setVal={set('head')} label={isPT?'⛑️ Capacete':'⛑️ Helmet'}    sub={isPT?'Proteção total':'Full protection'}/>
+          </Sec>
+          <Sec label={isPT?'Olhos':'Eyes'}>
+            <Chip val="normal"  cur={cfg.eyes} setVal={set('eyes')} label={isPT?'👀 Normal':'👀 Normal'}     sub={isPT?'Dois olhos':'Two eyes'}/>
+            <Chip val="big"     cur={cfg.eyes} setVal={set('eyes')} label={isPT?'🌟 Grandes':'🌟 Big Eyes'}  sub={isPT?'Super expressivo':'Super expressive'}/>
+            <Chip val="visor"   cur={cfg.eyes} setVal={set('eyes')} label={isPT?'🕶️ Visor':'🕶️ Visor'}        sub={isPT?'Óculos robótico':'Robot shades'}/>
+            <Chip val="cyclops" cur={cfg.eyes} setVal={set('eyes')} label={isPT?'🔮 Ciclope':'🔮 Cyclops'}   sub={isPT?'Um olho poderoso':'One powerful eye'}/>
+          </Sec>
+          <Sec label={isPT?'Boca':'Mouth'}>
+            <Chip val="smile"   cur={cfg.mouth} setVal={set('mouth')} label={isPT?'😊 Sorriso':'😊 Smile'}   sub={isPT?'Sempre feliz':'Always happy'}/>
+            <Chip val="grill"   cur={cfg.mouth} setVal={set('mouth')} label={isPT?'🤖 Grade':'🤖 Grill'}     sub={isPT?'Clássico robô':'Classic robot'}/>
+            <Chip val="speaker" cur={cfg.mouth} setVal={set('mouth')} label={isPT?'🔊 Falante':'🔊 Speaker'} sub={isPT?'Música embutida':'Built-in music'}/>
+            <Chip val="beak"    cur={cfg.mouth} setVal={set('mouth')} label={isPT?'🐦 Bico':'🐦 Beak'}       sub={isPT?'Parte pássaro':'Part bird'}/>
+          </Sec>
+          <Sec label={isPT?'Braços':'Arms'}>
+            <Chip val="basic"  cur={cfg.arms} setVal={set('arms')} label={isPT?'💪 Básico':'💪 Basic'}     sub={isPT?'Mãos redondas':'Round hands'}/>
+            <Chip val="claws"  cur={cfg.arms} setVal={set('arms')} label={isPT?'🦀 Garras':'🦀 Claws'}     sub={isPT?'Garras afiadas':'Sharp claws'}/>
+            <Chip val="laser"  cur={cfg.arms} setVal={set('arms')} label={isPT?'🔫 Laser':'🔫 Laser'}      sub={isPT?'Canhões de luz':'Light cannons'}/>
+            <Chip val="fins"   cur={cfg.arms} setVal={set('arms')} label={isPT?'🐟 Aletas':'🐟 Fins'}      sub={isPT?'Aerodinâmico':'Aerodynamic'}/>
           </Sec>
           <Sec label={isPT?'Pernas':'Legs'}>
             <Chip val="basic"   cur={cfg.legs} setVal={set('legs')} label={isPT?'🦿 Andador':'🦿 Walker'}  sub={isPT?'Vai a qualquer lugar':'Go anywhere'}/>
-            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label={isPT?'🛞 Rodas':'🛞 Wheels'}  sub={isPT?'Ótimo para corrida!':'Great for racing!'}/>
-            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label={isPT?'🚀 Foguetes':'🚀 Rockets'} sub={isPT?'Perfeito para voar!':'Perfect for flying!'}/>
+            <Chip val="wheels"  cur={cfg.legs} setVal={set('legs')} label={isPT?'🛞 Rodas':'🛞 Wheels'}    sub={isPT?'Super rápido!':'Super fast!'}/>
+            <Chip val="rockets" cur={cfg.legs} setVal={set('legs')} label={isPT?'🚀 Foguetes':'🚀 Rockets'} sub={isPT?'Para voar!':'For flying!'}/>
+            <Chip val="tank"    cur={cfg.legs} setVal={set('legs')} label={isPT?'🪖 Esteira':'🪖 Tracks'}   sub={isPT?'Inquebrável!':'Unbreakable!'}/>
           </Sec>
-          <Sec label={isPT?'Acessórios':'Extra Gear'}>
-            <Chip val="none"      cur={cfg.extra} setVal={set('extra')} label={isPT?'— Nenhum':'— None'}       sub={isPT?'Simples e direto':'Keep it clean'}/>
-            <Chip val="rockets"   cur={cfg.extra} setVal={set('extra')} label={isPT?'🚀 Propulsores':'🚀 Boosters'}  sub={isPT?'Foguetes laterais!':'Side rockets!'}/>
-            <Chip val="propeller" cur={cfg.extra} setVal={set('extra')} label={isPT?'🌀 Hélice':'🌀 Propeller'} sub={isPT?'Gira no topo':'Spin on top'}/>
-            <Chip val="magnet"    cur={cfg.extra} setVal={set('extra')} label={isPT?'🧲 Ímã':'🧲 Magnet'}    sub={isPT?'Alcance de captura maior':'Wider catch range'}/>
+          <Sec label={isPT?'Costas':'Back'}>
+            <Chip val="none"    cur={cfg.back} setVal={set('back')} label={isPT?'— Nenhum':'— None'}        sub={isPT?'Simples':'Keep it clean'}/>
+            <Chip val="jetpack" cur={cfg.back} setVal={set('back')} label={isPT?'🚀 Mochila':'🚀 Jetpack'}  sub={isPT?'Voa de verdade':'Actually flies'}/>
+            <Chip val="wings"   cur={cfg.back} setVal={set('back')} label={isPT?'🪽 Asas':'🪽 Wings'}       sub={isPT?'Como um pássaro':'Like a bird'}/>
+            <Chip val="cape"    cur={cfg.back} setVal={set('back')} label={isPT?'🦸 Capa':'🦸 Cape'}        sub={isPT?'Herói total!':'Total hero!'}/>
           </Sec>
         </div>
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:16,paddingTop:8}}>
-          <Robot cfg={cfg} size={120} mood="happy"/>
-          <button style={S.btn(cfg.color)} onClick={next}>{isPT?'PINTAR →':'PAINT IT →'}</button>
+          <Robot cfg={cfg} size={140}/>
+          <button style={S.btn(C)} onClick={next}>{isPT?'PINTAR →':'PAINT IT →'}</button>
         </div>
       </div>
     </div>
@@ -768,118 +262,145 @@ function BuildPhase({cfg,setCfg,next,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;n
 }
 
 // ─── PAINT PHASE ─────────────────────────────────────────────────────────────
-function PaintPhase({cfg,setCfg,next,back,isPT=false}:{cfg:Cfg;setCfg:(c:Cfg)=>void;next:()=>void;back:()=>void;isPT?:boolean}) {
-  return(
+function PaintPhase({ cfg, setCfg, next, back, isPT }: { cfg:Cfg; setCfg:(c:Cfg)=>void; next:()=>void; back:()=>void; isPT:boolean }) {
+  return (
     <div style={S.page}>
-      <h1 style={{...S.title(cfg.color),fontSize:28,margin:'0 0 4px'}}>{isPT?'PINTE SEU ROBÔ':'PAINT YOUR ROBOT'}</h1>
-      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 20px',letterSpacing:1}}>{isPT?'ESCOLHA SUAS CORES!':'CHOOSE YOUR COLORS!'}</p>
+      <h1 style={{...S.title(cfg.bodyColor),fontSize:24,margin:'0 0 4px'}}>{isPT?'PINTE SEU ROBÔ':'PAINT YOUR ROBOT'}</h1>
+      <p style={{color:'#444',fontFamily:'monospace',fontSize:10,margin:'0 0 16px',letterSpacing:1}}>{isPT?'ESCOLHA SUAS CORES!':'CHOOSE YOUR COLORS!'}</p>
       <div style={{display:'flex',gap:28,flexWrap:'wrap',justifyContent:'center',alignItems:'flex-start'}}>
-        <div style={{display:'flex',flexDirection:'column',gap:20}}>
-          {(['color','eye'] as const).map(key=>(
+        <div style={{display:'flex',flexDirection:'column',gap:18}}>
+          {(['bodyColor','detailColor'] as const).map(key=>(
             <div key={key}>
-              <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>{key==='color'?(isPT?'Cor do Corpo':'Body Color'):(isPT?'Cor dos Olhos e Detalhes':'Eye & Detail Color')}</div>
-              <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
-                {COLORS.map(c=>(
-                  <button key={c} onClick={()=>setCfg({...cfg,[key]:c})} style={{width:46,height:46,borderRadius:8,background:c,cursor:'pointer',border:`3px solid ${cfg[key]===c?'#fff':'transparent'}`,boxShadow:cfg[key]===c?`0 0 14px ${c}`:'none',transition:'all .15s'}}/>
+              <div style={{fontFamily:'monospace',fontSize:10,color:'#555',letterSpacing:2,marginBottom:9,textTransform:'uppercase'}}>
+                {key==='bodyColor'?(isPT?'Cor do Corpo':'Body Color'):(isPT?'Cor dos Detalhes':'Detail Color')}
+              </div>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:7}}>
+                {(key==='bodyColor'?BODY_COLORS:DETAIL_COLORS).map(c=>(
+                  <button key={c} onClick={()=>setCfg({...cfg,[key]:c})}
+                    style={{width:40,height:40,borderRadius:8,background:c,cursor:'pointer',border:`3px solid ${cfg[key]===c?'#fff':'transparent'}`,boxShadow:cfg[key]===c?`0 0 14px ${c}`:'none',transition:'all .12s'}}/>
                 ))}
               </div>
             </div>
           ))}
           <div style={{display:'flex',gap:10}}>
             <button style={S.outline} onClick={back}>{isPT?'← voltar':'← back'}</button>
-            <button style={S.btn(cfg.color)} onClick={next}>{isPT?'VAMOS JOGAR →':"LET'S PLAY →"}</button>
+            <button style={S.btn(cfg.bodyColor)} onClick={next}>{isPT?'PRONTO! →':'DONE! →'}</button>
           </div>
         </div>
-        <Robot cfg={cfg} size={150} mood="happy"/>
+        <Robot cfg={cfg} size={160}/>
       </div>
     </div>
   )
 }
 
-// ─── CHOOSE PHASE ─────────────────────────────────────────────────────────────
-function ChoosePhase({cfg,play,back,isPT=false}:{cfg:Cfg;play:(g:MiniGame)=>void;back:()=>void;isPT?:boolean}) {
-  const Card=({emoji,name,color,desc,onClick}:{emoji:string;name:string;color:string;desc:string;onClick:()=>void})=>(
-    <button onClick={onClick} style={{background:'#080808',border:`2px solid ${color}44`,borderRadius:12,padding:'14px 16px',cursor:'pointer',textAlign:'left',transition:'all .15s',width:'100%'}}
-      onMouseEnter={e=>{e.currentTarget.style.borderColor=color;e.currentTarget.style.background='#111'}}
-      onMouseLeave={e=>{e.currentTarget.style.borderColor=`${color}44`;e.currentTarget.style.background='#080808'}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
-        <span style={{fontFamily:'monospace',fontWeight:900,fontSize:15,color}}>{emoji} {name}</span>
+// ─── DONE PHASE ──────────────────────────────────────────────────────────────
+function DonePhase({ cfg, rebuild, isPT, botName }: { cfg:Cfg; rebuild:()=>void; isPT:boolean; botName:string }) {
+  const router = useRouter()
+  const C = cfg.bodyColor, D = cfg.detailColor
+
+  const power = Math.min(99,
+    (cfg.arms==='claws'?28:cfg.arms==='laser'?38:cfg.arms==='fins'?12:10)
+    +(cfg.legs==='rockets'?32:cfg.legs==='tank'?26:cfg.legs==='wheels'?18:10)
+    +(cfg.back==='jetpack'?18:cfg.back==='wings'?14:cfg.back==='cape'?6:0)
+    +(cfg.head==='helmet'?14:0))
+
+  const speed = Math.min(99,
+    (cfg.legs==='wheels'?42:cfg.legs==='rockets'?36:cfg.legs==='tank'?5:14)
+    +(cfg.back==='jetpack'?24:cfg.back==='wings'?20:cfg.back==='cape'?4:0)
+    +(cfg.arms==='fins'?18:0))
+
+  const brain = Math.min(99,
+    (cfg.head==='antenna'?36:cfg.head==='helmet'?22:cfg.head==='square'?12:10)
+    +(cfg.eyes==='cyclops'?26:cfg.eyes==='visor'?18:cfg.eyes==='big'?8:5)
+    +(cfg.arms==='laser'?14:0))
+
+  const Bar = ({ label, val, color }: { label:string; val:number; color:string }) => (
+    <div style={{marginBottom:11}}>
+      <div style={{display:'flex',justifyContent:'space-between',fontFamily:'monospace',fontSize:11,marginBottom:4}}>
+        <span style={{color:'#555'}}>{label}</span>
+        <span style={{color,fontWeight:900}}>{val}</span>
       </div>
-      <div style={{fontFamily:'monospace',fontSize:11,color:'#555',lineHeight:1.6}}>{desc}</div>
-    </button>
-  )
-  return(
-    <div style={S.page}>
-      <Robot cfg={cfg} size={110} mood="happy"/>
-      <h2 style={{...S.title(cfg.color),fontSize:24,margin:'10px 0 4px'}}>{isPT?'ESCOLHA SEU JOGO!':'CHOOSE YOUR GAME!'}</h2>
-      <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:340,marginTop:16}}>
-        <Card emoji="🚀" name={isPT?'Voar de Foguete':'Rocket Fly'} color={cfg.color} desc={isPT?'Impulsos curtos! Desvie de asteroides ☄️, voe pelos muros laser, colete estrelas e gemas. Combo = pontos!':'Boost in short bursts! Dodge asteroids ☄️, fly through laser walls, and collect stars & gems. Combo for big points!'} onClick={()=>play('rocket')}/>
-        <Card emoji="⭐" name={isPT?'Pegar Estrelas':'Star Catch'} color={cfg.eye} desc={isPT?'Deslize para pegar estrelas caindo! Evite 💣 bombas — pegue 🧲 ímãs para coleta automática!':'Slide left and right to catch falling stars! Avoid 💣 bombs — catch 🧲 magnets for auto-collect power!'} onClick={()=>play('stars')}/>
-        <Card emoji="🏁" name={isPT?'Corrida Veloz':'Speed Race'} color={cfg.color} desc={isPT?'Você vai rápido! Salte e SALTO DUPLO sobre muros. Pegue ⚡ turbos!':'You\'re rolling fast! Jump and DOUBLE JUMP over walls. Catch ⚡ boosts to go turbo!'} onClick={()=>play('race')}/>
+      <div style={{height:8,background:'#111',borderRadius:4,overflow:'hidden'}}>
+        <div style={{height:'100%',width:`${val}%`,background:color,borderRadius:4,boxShadow:`0 0 8px ${color}66`}}/>
       </div>
-      <button style={{...S.outline,marginTop:20}} onClick={back}>{isPT?'← remontar':'← rebuild'}</button>
     </div>
   )
-}
 
-// ─── GAME OVER ────────────────────────────────────────────────────────────────
-function GameOver({cfg,score,game,again,choose,rebuild,isPT=false}:{cfg:Cfg;score:number;game:MiniGame;again:()=>void;choose:()=>void;rebuild:()=>void;isPT?:boolean}) {
-  const grade=score>=60?'S':score>=35?'A':score>=18?'B':score>=7?'C':'D'
-  const gc=score>=35?'#44ff88':score>=18?'#ffdd00':'#ff4466'
-  const msg=isPT
-    ?(score>=60?'INCRÍVEL!':score>=35?'INCRÍVEL!':score>=18?'MUITO BEM!':score>=7?'BOA TENTATIVA!':'CONTINUE TENTANDO!')
-    :(score>=60?'INCREDIBLE!':score>=35?'AMAZING!':score>=18?'GREAT JOB!':score>=7?'GOOD TRY!':'KEEP GOING!')
-  return(
-    <div style={S.page}>
-      <Robot cfg={cfg} size={100} mood={score>=18?'happy':'oops'}/>
-      <div style={{...S.title(gc),fontSize:56,margin:'8px 0 0',letterSpacing:4}}>{grade}</div>
-      <div style={{color:gc,fontFamily:'monospace',fontSize:22,letterSpacing:2,margin:'4px 0'}}>{score} pts</div>
-      <div style={{color:gc,fontFamily:'monospace',fontSize:13,marginBottom:4}}>{msg}</div>
-      <div style={{color:'#333',fontFamily:'monospace',fontSize:10,marginBottom:24}}>
-        {game==='rocket'?(isPT?'estrelas e gemas coletadas':'stars & gems collected'):game==='stars'?(isPT?'estrelas capturadas':'stars caught'):(isPT?'moedas coletadas':'coins collected')}
+  const partSummary = isPT
+    ? [
+        `🧠 Cabeça: ${cfg.head==='round'?'Redonda':cfg.head==='square'?'Quadrada':cfg.head==='antenna'?'Antena':'Capacete'}`,
+        `👀 Olhos: ${cfg.eyes==='normal'?'Normal':cfg.eyes==='big'?'Grandes':cfg.eyes==='visor'?'Visor':'Ciclope'}`,
+        `💬 Boca: ${cfg.mouth==='smile'?'Sorriso':cfg.mouth==='grill'?'Grade':cfg.mouth==='speaker'?'Falante':'Bico'}`,
+        `💪 Braços: ${cfg.arms==='basic'?'Básico':cfg.arms==='claws'?'Garras':cfg.arms==='laser'?'Laser':'Aletas'}`,
+        `🦵 Pernas: ${cfg.legs==='basic'?'Andador':cfg.legs==='wheels'?'Rodas':cfg.legs==='rockets'?'Foguetes':'Esteira'}`,
+        `🎒 Costas: ${cfg.back==='none'?'Nenhum':cfg.back==='jetpack'?'Mochila':cfg.back==='wings'?'Asas':'Capa'}`,
+      ]
+    : [
+        `🧠 Head: ${cfg.head==='round'?'Round':cfg.head==='square'?'Square':cfg.head==='antenna'?'Antenna':'Helmet'}`,
+        `👀 Eyes: ${cfg.eyes==='normal'?'Normal':cfg.eyes==='big'?'Big Eyes':cfg.eyes==='visor'?'Visor':'Cyclops'}`,
+        `💬 Mouth: ${cfg.mouth==='smile'?'Smile':cfg.mouth==='grill'?'Grill':cfg.mouth==='speaker'?'Speaker':'Beak'}`,
+        `💪 Arms: ${cfg.arms==='basic'?'Basic':cfg.arms==='claws'?'Claws':cfg.arms==='laser'?'Laser':'Fins'}`,
+        `🦵 Legs: ${cfg.legs==='basic'?'Walker':cfg.legs==='wheels'?'Wheels':cfg.legs==='rockets'?'Rockets':'Tracks'}`,
+        `🎒 Back: ${cfg.back==='none'?'None':cfg.back==='jetpack'?'Jetpack':cfg.back==='wings'?'Wings':'Cape'}`,
+      ]
+
+  return (
+    <div style={{...S.page,gap:0}}>
+      <div style={{fontFamily:'monospace',fontSize:10,color:C,letterSpacing:3,marginBottom:4}}>
+        {isPT?'✨ ROBÔ COMPLETO!':'✨ ROBOT COMPLETE!'}
       </div>
+      <div style={{fontFamily:'monospace',fontWeight:900,fontSize:30,color:'#fff',letterSpacing:2,marginBottom:2,textShadow:`0 0 20px ${C}`}}>
+        {botName}
+      </div>
+      <div style={{fontFamily:'monospace',fontSize:10,color:'#444',letterSpacing:2,marginBottom:18}}>
+        {isPT?'UNIDADE DE IA PERSONALIZADA':'CUSTOM AI UNIT'}
+      </div>
+
+      <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',alignItems:'flex-start',width:'100%',maxWidth:580}}>
+        <Robot cfg={cfg} size={160}/>
+
+        <div style={{flex:1,minWidth:220}}>
+          <div style={{width:'100%',marginBottom:16}}>
+            <Bar label={isPT?'⚡ PODER':'⚡ POWER'} val={power} color="#ff4466"/>
+            <Bar label={isPT?'💨 VELOCIDADE':'💨 SPEED'} val={speed} color="#44ff88"/>
+            <Bar label={isPT?'🧠 INTELIGÊNCIA':'🧠 BRAINS'} val={brain} color="#00ccff"/>
+          </div>
+
+          <div style={{fontFamily:'monospace',fontSize:9,color:'#333',lineHeight:1.9}}>
+            {partSummary.map((s,i)=><div key={i}>{s}</div>)}
+          </div>
+        </div>
+      </div>
+
+      <div style={{fontFamily:'monospace',fontSize:11,color:'#444',textAlign:'center',maxWidth:300,lineHeight:1.75,margin:'20px 0 22px'}}>
+        {isPT
+          ? `Assim como ${botName}, todo robô de IA tem partes diferentes que mudam como ele pensa, aprende e age!`
+          : `Just like ${botName}, every AI robot has different parts that change how it thinks, learns, and acts!`}
+      </div>
+
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:280}}>
-        <button style={S.btn(cfg.color)} onClick={again}>{isPT?'JOGAR DE NOVO →':'PLAY AGAIN →'}</button>
-        <button style={S.btn(cfg.eye)}   onClick={choose}>{isPT?'TENTAR OUTRO JOGO →':'TRY ANOTHER GAME →'}</button>
-        <button style={S.outline}        onClick={rebuild}>{isPT?'← REMONTAR ROBÔ':'← REBUILD ROBOT'}</button>
+        <button style={S.btn(C)} onClick={rebuild}>{isPT?'← REMONTAR':'← REBUILD'}</button>
+        <button style={S.outline} onClick={()=>router.back()}>{isPT?'VOLTAR AO INÍCIO':'BACK TO HOME'}</button>
       </div>
     </div>
   )
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
+// ─── MAIN ────────────────────────────────────────────────────────────────────
 export default function BuildARobot() {
-  const [phase,setPhase]=useState<Phase>('build')
-  const [cfg,setCfg]=useState<Cfg>(DEF)
-  const [game,setGame]=useState<MiniGame>('stars')
-  const [score,setScore]=useState(0)
-  const [done,setDone]=useState(false)
-  const [isPT,setIsPT]=useState(false)
+  const [phase,   setPhase]   = useState<Phase>('build')
+  const [cfg,     setCfg]     = useState<Cfg>(DEF)
+  const [isPT,    setIsPT]    = useState(false)
+  const [botName, setBotName] = useState('')
 
-  useEffect(()=>{setIsPT(localStorage.getItem('pai_lang')==='pt')},[])
+  useEffect(()=>{
+    setIsPT(localStorage.getItem('pai_lang')==='pt')
+    setBotName(genName())
+  },[])
 
-  const playGame=(g:MiniGame)=>{setGame(g);setDone(false);setScore(0);setPhase('game')}
-  const handleDone=(s:number)=>{setScore(s);setDone(true)}
+  const rebuild = () => { setPhase('build'); setBotName(genName()) }
 
-  if(phase==='build') return <BuildPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('paint')} isPT={isPT}/>
-  if(phase==='paint') return <PaintPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('choose')} back={()=>setPhase('build')} isPT={isPT}/>
-  if(phase==='choose') return <ChoosePhase cfg={cfg} play={playGame} back={()=>setPhase('paint')} isPT={isPT}/>
-  if(phase==='game'&&done) return <GameOver cfg={cfg} score={score} game={game} again={()=>playGame(game)} choose={()=>setPhase('choose')} rebuild={()=>setPhase('build')} isPT={isPT}/>
-
-  return(
-    <div style={{minHeight:'100vh',background:'#000',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'12px 16px',gap:0}}>
-      <button onClick={()=>setPhase('choose')} style={{position:'fixed',top:14,left:16,background:'none',border:'none',color:'#333',fontFamily:'monospace',fontSize:12,cursor:'pointer',letterSpacing:1}}>{isPT?'← voltar':'← back'}</button>
-      {phase==='game'&&game==='rocket'&&<RocketFly cfg={cfg} onDone={handleDone} isPT={isPT}/>}
-      {phase==='game'&&game==='stars'&&<StarCatch cfg={cfg} onDone={handleDone} isPT={isPT}/>}
-      {phase==='game'&&game==='race'&&<SpeedRace cfg={cfg} onDone={handleDone} isPT={isPT}/>}
-    </div>
-  )
-}
-
-// ─── styles ───────────────────────────────────────────────────────────────────
-const S={
-  page:{minHeight:'100vh',background:'#000',display:'flex' as const,flexDirection:'column' as const,alignItems:'center' as const,justifyContent:'center' as const,padding:'20px 16px'},
-  title:(c:string)=>({color:c,fontFamily:'monospace',fontWeight:900,textShadow:`0 0 12px ${c},0 0 32px ${c}55`}),
-  btn:(c:string)=>({background:'none',border:`2px solid ${c}`,borderRadius:8,color:c,fontFamily:'monospace',fontWeight:900,fontSize:14,letterSpacing:2,padding:'13px 24px',cursor:'pointer' as const,boxShadow:`0 0 12px ${c}44`,transition:'box-shadow .2s'}),
-  outline:{background:'none',border:'2px solid #2a2a2a',borderRadius:8,color:'#444',fontFamily:'monospace',fontWeight:900,fontSize:13,letterSpacing:1,padding:'12px 24px',cursor:'pointer' as const},
+  if (phase==='build') return <BuildPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('paint')} isPT={isPT}/>
+  if (phase==='paint') return <PaintPhase cfg={cfg} setCfg={setCfg} next={()=>setPhase('done')} back={()=>setPhase('build')} isPT={isPT}/>
+  return <DonePhase cfg={cfg} rebuild={rebuild} isPT={isPT} botName={botName||'ROBO-MAX'}/>
 }
