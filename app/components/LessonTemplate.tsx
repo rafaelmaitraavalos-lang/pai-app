@@ -167,8 +167,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     const nextLessonRoute = nextModule
       ? (isMidElem ? `/elementary/lesson/${nextModule.id}` : `/lesson/${nextModule.id}`)
       : null
-    // Use completionPage as back destination when provided
-    const backDest = completionPage ?? currentWorldRoute
+    const backDest = currentWorldRoute
 
     return (
       <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
