@@ -57,18 +57,24 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
           {/* Module accordion */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {world.modules.map((m, i) => {
-              // Game tile — direct link, no accordion
-              if (m.type === 'game') return (
-                <div
-                  key={`game-${m.gameUrl}-${i}`}
-                  onClick={() => router.push(m.gameUrl!)}
-                  style={{ display: 'flex', alignItems: 'center', padding: '18px 16px', background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `5px 5px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none', gap: 12 }}
-                >
-                  <span style={{ fontFamily: BODY, fontSize: 12, color: GREEN, width: 26, flexShrink: 0 }}>🎮</span>
-                  <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.01em', flex: 1, color: GREEN, lineHeight: 1.15 }}>{m.title}</span>
-                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{isPT ? 'Jogar' : 'Play'} →</span>
-                </div>
-              )
+              // Game tile — locked until the preceding lesson is done
+              if (m.type === 'game') {
+                const prevMod     = world.modules.slice(0, i).reverse().find(p => p.type !== 'game')
+                const isUnlocked  = prevMod ? !!done[prevMod.id] : false
+                return (
+                  <div
+                    key={`game-${m.gameUrl}-${i}`}
+                    onClick={isUnlocked ? () => router.push(m.gameUrl!) : undefined}
+                    style={{ display: 'flex', alignItems: 'center', padding: '18px 16px', background: isUnlocked ? BLACK : '#333', border: `1.5px solid ${isUnlocked ? BLACK : '#444'}`, boxShadow: isUnlocked ? `5px 5px 0 0 ${BLACK}` : 'none', cursor: isUnlocked ? 'pointer' : 'default', userSelect: 'none', gap: 12, opacity: isUnlocked ? 1 : 0.45 }}
+                  >
+                    <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.1em', color: isUnlocked ? GREEN : '#666', width: 26, flexShrink: 0, textTransform: 'uppercase' }}>GAME</span>
+                    <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.01em', flex: 1, color: isUnlocked ? GREEN : '#888', lineHeight: 1.15 }}>{m.title}</span>
+                    <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: isUnlocked ? GREEN : '#555', opacity: isUnlocked ? 0.7 : 1 }}>
+                      {isUnlocked ? (isPT ? 'Jogar →' : 'Play →') : (isPT ? 'Bloqueado' : 'Locked')}
+                    </span>
+                  </div>
+                )
+              }
 
               const isDone    = done[m.id]
               const isCurrent = m.id === activeId
