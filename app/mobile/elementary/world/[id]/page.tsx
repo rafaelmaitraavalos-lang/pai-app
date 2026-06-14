@@ -46,19 +46,24 @@ export default function MobileElementaryWorldPage() {
           {world.modules.map((m, i) => {
             const isCurrent = m.id === activeId
             const isDone    = done[m.id]
+            const isGame    = (m as any).type === 'game'
+            const handleClick = () => isGame && (m as any).gameUrl
+              ? router.push((m as any).gameUrl)
+              : router.push(`/mobile/elementary/lesson/${m.id}`)
             return (
-              <div key={m.id} onClick={() => router.push(`/mobile/elementary/lesson/${m.id}`)}
-                style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', background: '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `5px 5px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none', gap: 10 }}>
-                <span style={{ fontFamily: BODY, fontSize: 11, color: DIM, width: 28, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
-                <span style={{ fontFamily: DISP, fontSize: 15, letterSpacing: '-0.01em', flex: 1, color: BLACK, lineHeight: 1.2 }}>{m.title}</span>
-                {isDone && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, flexShrink: 0 }}>Done</span>}
-                {isCurrent && !isDone && (
+              <div key={m.id} onClick={handleClick}
+                style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', background: isGame ? BLACK : '#EBEBEB', border: `1.5px solid ${BLACK}`, boxShadow: `5px 5px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none', gap: 10 }}>
+                <span style={{ fontFamily: BODY, fontSize: 11, color: isGame ? GREEN : DIM, width: 28, flexShrink: 0 }}>{isGame ? '🎮' : String(i + 1).padStart(2, '0')}</span>
+                <span style={{ fontFamily: DISP, fontSize: 15, letterSpacing: '-0.01em', flex: 1, color: isGame ? GREEN : BLACK, lineHeight: 1.2 }}>{m.title}</span>
+                {!isGame && isDone && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, flexShrink: 0 }}>Done</span>}
+                {!isGame && isCurrent && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', flexShrink: 0 }}>
                     <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
                     Current
                   </span>
                 )}
-                <span style={{ fontFamily: DISP, fontSize: 14, color: DIM, flexShrink: 0 }}>→</span>
+                {isGame && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, flexShrink: 0 }}>Play</span>}
+                <span style={{ fontFamily: DISP, fontSize: 14, color: isGame ? GREEN : DIM, flexShrink: 0 }}>→</span>
               </div>
             )
           })}
