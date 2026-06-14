@@ -245,7 +245,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const showCTA     = screen !== 1 && screen !== 2
   const canContinue = ([true, true, true, !!username.trim(), !!grade][screen]) ?? true
-  const btnLabel    = screen === 0 ? L.btnStart : screen === TOTAL_STEPS ? (saving ? '...' : L.btnDone) : (usernameLoading ? '...' : L.btnContinue)
+  const btnLabel    = screen === 0 ? 'Get Started · Começar' : screen === TOTAL_STEPS ? (saving ? '...' : L.btnDone) : (usernameLoading ? '...' : L.btnContinue)
 
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
@@ -313,10 +313,17 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
               </div>
               <div>
                 <div style={{ fontFamily: DISP, fontSize: 64, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em' }}>PAI</div>
-                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 8, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Your AI Learning Buddy</div>
+                <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 8, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+                  Your AI Learning Buddy · Seu Parceiro de IA
+                </div>
               </div>
-              <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 260 }}>
-                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>{country?.lang === 'pt' ? 'Configuração rápida — menos de um minuto.' : 'Quick setup — less than a minute.'}</p>
+              <div style={{ background: GREY, border: `1.5px solid ${BLACK}`, boxShadow: `3px 3px 0 0 ${BLACK}`, padding: '12px 20px', maxWidth: 280 }}>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: BLACK, margin: 0, lineHeight: 1.6 }}>
+                  Quick setup — less than a minute.
+                </p>
+                <p style={{ fontFamily: BODY, fontSize: 13, color: DIM, margin: '4px 0 0', lineHeight: 1.6 }}>
+                  Configuração rápida — menos de um minuto.
+                </p>
               </div>
             </div>
           )}

@@ -86,6 +86,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const slideImage = stop?.image ?? SLIDE_IMAGES[id]?.[stopIndex] ?? LESSON_IMAGES[id]
   const hasImage   = !!slideImage
 
+  const isElem = theme === 'elementary'
+
   const scrollTop = () => {
     const el = document.getElementById('lesson-scroll-area')
     if (el) el.scrollTop = 0
@@ -300,7 +302,6 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Slides — mirrors fake/module/page.tsx exactly ──────────────────────────
-  const isElem    = theme === 'elementary'
   const slideBg   = isElem ? '#FAFAFA' : '#fff'
   const slideAccent = isElem ? (stopIndex % 2 === 0 ? '#FF3DB8' : '#00FF88') : GREEN
   // For regular lessons: no background highlight on title/tag; green only for interactive elements
