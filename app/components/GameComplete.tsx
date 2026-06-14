@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { GAMES, GAME_TITLES_PT } from '../data/games'
 import { WORLDS, WORLD_IDS, WORLD_TITLES_PT } from '../data'
+import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
 import TRANSLATIONS from '../data/lessonTranslations'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -16,8 +17,20 @@ interface Props { slug: string }
 
 export default function GameComplete({ slug }: Props) {
   const router = useRouter()
-  const [isPT, setIsPT] = useState(false)
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  const [isPT,      setIsPT]      = useState(false)
+  const [isElemMid, setIsElemMid] = useState(false)
+  const [homeRoute, setHomeRoute] = useState('/home')
+  useEffect(() => {
+    const lang  = localStorage.getItem('pai_lang') ?? 'en'
+    const grade = localStorage.getItem('pai_grade')
+    setIsPT(lang === 'pt')
+    const elem = isElementaryGrade(grade)
+    const mid  = isMiddleSchoolGrade(grade) || MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')
+    setIsElemMid(elem || mid)
+    if (elem) setHomeRoute('/elementary/home')
+    else if (MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')) setHomeRoute('/elementary/middle-pt')
+    else if (mid) setHomeRoute('/middle/home')
+  }, [])
 
   const game = GAMES.find(g => g.slug === slug)
   if (!game) return null
@@ -25,13 +38,14 @@ export default function GameComplete({ slug }: Props) {
   const world        = WORLDS[game.world]
   // Find this game in the modules list, then take the first non-game module after it
   const gameIdx      = world?.modules.findIndex(m => m.type === 'game' && m.gameUrl?.includes(game.slug)) ?? -1
-  const nextMod      = gameIdx >= 0 ? world?.modules.slice(gameIdx + 1).find(m => m.type !== 'game') : undefined
-  const worldRoute   = game.world === 1 ? '/lessons' : `/world/${game.world}`
+  // For elementary/middle students, don't show next HS lesson — just show home
+  const nextMod      = !isElemMid && gameIdx >= 0 ? world?.modules.slice(gameIdx + 1).find(m => m.type !== 'game') : undefined
+  const worldRoute   = isElemMid ? homeRoute : (game.world === 1 ? '/lessons' : `/world/${game.world}`)
   const nextWorldIdx = WORLD_IDS.indexOf(game.world) + 1
-  const nextWorldId  = !nextMod && nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
+  const nextWorldId  = !nextMod && !isElemMid && nextWorldIdx < WORLD_IDS.length ? WORLD_IDS[nextWorldIdx] : null
 
   const gameTitle    = (isPT && GAME_TITLES_PT[game.slug]) || game.title
-  const worldTitle   = (isPT && WORLD_TITLES_PT[game.world]) || world?.title || (isPT ? 'Mundo' : 'World')
+  const worldTitle   = isElemMid ? (isPT ? 'Início' : 'Home') : ((isPT && WORLD_TITLES_PT[game.world]) || world?.title || (isPT ? 'Mundo' : 'World'))
   const nextModTitle = nextMod ? ((isPT && TRANSLATIONS['pt']?.[nextMod.id]?.title) || nextMod.title) : ''
   const nextWorldTitle = nextWorldId
     ? ((isPT && WORLD_TITLES_PT[nextWorldId]) || WORLDS[nextWorldId]?.title)
