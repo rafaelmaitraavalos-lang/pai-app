@@ -249,7 +249,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Question */}
           <div key={qIndex} style={{ paddingTop: 36, paddingBottom: 20, animation: 'slideInFromRight 0.28s ease-out' }}>
             <div style={{ marginBottom: 16 }}>
-              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain' }} />
+              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
             </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
               {question.tag} · {question.difficulty}
@@ -398,7 +398,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {/* PAI below body text — shown unless the right column is already showing a PAI (elem + no image) */}
             {(!isElem || hasImage) && (
               <div style={{ marginTop: 28 }}>
-                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain' }} />
+                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply' }} />
               </div>
             )}
 
@@ -418,7 +418,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             </div>
           ) : isElem ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <video src={['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]} autoPlay loop muted playsInline style={{ width: 200, height: 200, objectFit: 'contain' }} />
+              <video src={['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]} autoPlay loop muted playsInline style={{ width: 200, height: 200, objectFit: 'contain', mixBlendMode: 'multiply' }} />
             </div>
           ) : null}
         </div>
