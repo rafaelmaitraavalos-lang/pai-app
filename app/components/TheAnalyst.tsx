@@ -275,7 +275,14 @@ export default function TheAnalyst({ rounds, onComplete, isPT }: Props) {
 
       {phase === 'outcome' && selected && <OutcomePanel round={round} selected={selected} visible isPT={isPT} />}
 
-      {showChoices && <ChoiceGrid selected={selected} phase={phase} round={round} onPick={handleChoice} isPT={isPT} />}
+      {showChoices && (
+        <>
+          <p style={{ fontFamily: BODY, fontSize: 12, color: DIM, margin: '14px 0 6px', fontStyle: 'italic' }}>
+            {isPT ? 'Como você responde — continua financiando pesquisa de IA?' : 'How do you respond — keep funding AI research?'}
+          </p>
+          <ChoiceGrid selected={selected} phase={phase} round={round} onPick={handleChoice} isPT={isPT} />
+        </>
+      )}
 
       {phase === 'outcome' && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 18 }}>
