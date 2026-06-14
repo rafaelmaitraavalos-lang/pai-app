@@ -253,7 +253,7 @@ function BuildPhase({ cfg, setCfg, next, isPT }: { cfg: Cfg; setCfg: (c:Cfg)=>vo
           </Sec>
         </div>
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:16,paddingTop:8}}>
-          <Robot cfg={cfg} size={140}/>
+          <Robot cfg={cfg} size={220}/>
           <button style={S.btn(C)} onClick={next}>{isPT?'PINTAR →':'PAINT IT →'}</button>
         </div>
       </div>
@@ -287,7 +287,7 @@ function PaintPhase({ cfg, setCfg, next, back, isPT }: { cfg:Cfg; setCfg:(c:Cfg)
             <button style={S.btn(cfg.bodyColor)} onClick={next}>{isPT?'PRONTO! →':'DONE! →'}</button>
           </div>
         </div>
-        <Robot cfg={cfg} size={160}/>
+        <Robot cfg={cfg} size={220}/>
       </div>
     </div>
   )
@@ -357,7 +357,7 @@ function DonePhase({ cfg, rebuild, isPT, botName }: { cfg:Cfg; rebuild:()=>void;
       </div>
 
       <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',alignItems:'flex-start',width:'100%',maxWidth:580}}>
-        <Robot cfg={cfg} size={160}/>
+        <Robot cfg={cfg} size={220}/>
 
         <div style={{flex:1,minWidth:220}}>
           <div style={{width:'100%',marginBottom:16}}>
