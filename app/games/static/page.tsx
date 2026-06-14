@@ -29,8 +29,8 @@ export default function StaticPage() {
       type="group"
       description={
         isPT
-          ? 'A IA falha em padrões. Agrupe estas 16 cartas em 4 categorias de erros e limitações da IA.'
-          : 'AI fails in patterns. Group these 16 cards into 4 categories of AI errors and limitations.'
+          ? 'A visão computacional permite que a IA veja o mundo. Agrupe estas 16 cartas em 4 categorias sobre como as CNNs funcionam, o que fazem e onde falham.'
+          : 'Computer vision lets AI see the world. Group these 16 cards into 4 categories about how CNNs work, what they do, and where they fail.'
       }
       howToPlay={isPT ? [
         '16 cartas, 4 categorias ocultas.',

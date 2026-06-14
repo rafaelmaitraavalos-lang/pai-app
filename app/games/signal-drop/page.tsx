@@ -38,13 +38,13 @@ export default function SignalDropPage() {
       type="catch"
       description={
         isPT
-          ? 'Dados de treinamento estão caindo. A IA aprende com exemplos rotulados — pegue os bons, esquive dos ruins.'
-          : 'Training data is falling. AI learns from labeled examples — catch the clean ones, dodge the junk.'
+          ? 'Você é o paddle. A bola carrega dados de treinamento. Mantenha o rally vivo para coletar dados limpos — deixe a bola cair e você perde qualidade.'
+          : "You're the paddle. The ball carries training data. Keep the rally going to collect clean data — let it drop and you lose quality."
       }
       howToPlay={isPT ? [
-        'Itens caem do topo.',
-        'PEGUE dados de treinamento rotulados e verificados.',
-        'ESQUIVE de dados não rotulados, enviesados ou comprometidos.',
+        'Mova o paddle para rebater a bola.',
+        'Combos aumentam sua pontuação — não deixe cair.',
+        'Cada rally representa dados de treinamento sendo coletados.',
         'Sua pontuação acompanha quantos dados limpos você coletou.',
       ] : [
         'Items fall from the top.',
