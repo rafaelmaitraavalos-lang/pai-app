@@ -13,13 +13,21 @@ const GREEN = '#3DF542'
 export default function SignalDropPage() {
   const router = useRouter()
   const [phase, setPhase] = useState<'intro' | 'game' | 'done'>('intro')
-  const [isPT, setIsPT] = useState(false)
+  const [isPT, setIsPT]     = useState(false)
   const [isSlow, setIsSlow] = useState(false)
+  const [backRoute, setBackRoute] = useState('/home')
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
     const grade = localStorage.getItem('pai_grade') ?? ''
-    setIsSlow(['elem', 'fund1', 'fund2', 'K', '1st', '2nd', '3rd', '4th', '5th'].includes(grade))
+    const elemGrades = ['elem', 'fund1', 'K', '1st', '2nd', '3rd', '4th', '5th']
+    const midPTGrades = ['fund2']
+    const midGrades   = ['middle']
+    setIsSlow([...elemGrades, ...midPTGrades].includes(grade))
+    if (elemGrades.includes(grade))       setBackRoute('/elementary/home')
+    else if (midPTGrades.includes(grade)) setBackRoute('/elementary/middle-pt')
+    else if (midGrades.includes(grade))   setBackRoute('/middle/home')
+    else                                  setBackRoute('/home')
   }, [])
 
   if (phase === 'done') return <GameComplete slug="signal-drop" />
@@ -45,7 +53,7 @@ export default function SignalDropPage() {
         'Your score tracks how much clean data you collected.',
       ]}
       onStart={() => setPhase('game')}
-      onBack={() => router.push('/games')}
+      onBack={() => router.push(backRoute)}
       isPT={isPT}
     />
   )
@@ -54,7 +62,7 @@ export default function SignalDropPage() {
     <div style={{ height: '100vh', background: BLACK, display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: BLACK, borderBottom: '1px solid #111', padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.02em', color: GREEN }}>PAI</span>
-        <button onClick={() => router.push('/games')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444', background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation' }}>
+        <button onClick={() => router.push(backRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444', background: 'none', border: 'none', cursor: 'pointer', touchAction: 'manipulation' }}>
           {isPT ? '← Jogos' : '← Games'}
         </button>
       </div>
