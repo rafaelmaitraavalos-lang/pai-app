@@ -59,23 +59,6 @@ const analystRounds: AnalystRound[] = [
   {
     id: 3,
     era: 'training',
-    year: '1974',
-    source: 'Lighthill Report / UK Science Research Council',
-    paiIntro: "The AI winters are starting. Consensus is forming: AI was all hype, pull everything. The crowd is going one way. You going with them?",
-    claim: "AI research has produced nothing of lasting value and is fundamentally misguided. Complete withdrawal of funding is the rational response.",
-    best: 'small',
-    good: ['pass'],
-    outcomes: {
-      big:   { delta: -130, pai: "Contrarian, but reckless. The field was genuinely broken in the 70s. Betting big against the consensus here burns capital you needed later." },
-      small: { delta: +110, pai: "Right frame. The field was overhyped, but the question was real. A small bet keeps the thread alive while the crowd overcorrects." },
-      pass:  { delta: +60,  pai: "Defensible. You didn't throw good money after bad. But a tiny stake here would have positioned you for 2012." },
-      bluff: { delta: -110, pai: "The doom consensus was partly right — the winters were real. You can't just call it a bluff when the failures were genuine." },
-    },
-  },
-
-  {
-    id: 4,
-    era: 'training',
     year: '2012',
     source: 'ImageNet Large Scale Visual Recognition Challenge',
     paiIntro: "An obscure image competition just published results. One team won by a margin that shouldn't be possible. No press release. No one's talking about it. Your job is to notice what others don't.",
@@ -93,7 +76,7 @@ const analystRounds: AnalystRound[] = [
   // ── TEST ROUNDS (new scenarios — not from the lesson) ──────────────────────
 
   {
-    id: 5,
+    id: 4,
     era: 'test',
     year: '2016',
     source: 'Major Automotive Manufacturers, Earnings Calls',
@@ -110,7 +93,7 @@ const analystRounds: AnalystRound[] = [
   },
 
   {
-    id: 6,
+    id: 5,
     era: 'test',
     year: '2017',
     source: 'NeurIPS Conference Proceedings',
@@ -127,7 +110,7 @@ const analystRounds: AnalystRound[] = [
   },
 
   {
-    id: 7,
+    id: 6,
     era: 'test',
     year: '2023',
     source: 'Tech Conference Keynote Demo',
@@ -144,7 +127,7 @@ const analystRounds: AnalystRound[] = [
   },
 
   {
-    id: 8,
+    id: 7,
     era: 'test',
     year: '2024',
     source: 'Frontier AI Laboratory',
