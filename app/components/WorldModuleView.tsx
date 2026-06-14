@@ -32,7 +32,8 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
     if (first) setExpanded(first.id)
   }, [world])
 
-  const activeId = world.modules.find(m => !done[m.id])?.id ?? null
+  // Skip game modules when finding the active lesson
+  const activeId = world.modules.find(m => m.type !== 'game' && !done[m.id])?.id ?? null
 
   // ── Mobile layout ────────────────────────────────────────────────────────────
   if (mobile) {
@@ -56,6 +57,19 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
           {/* Module accordion */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {world.modules.map((m, i) => {
+              // Game tile — direct link, no accordion
+              if (m.type === 'game') return (
+                <div
+                  key={`game-${m.gameUrl}-${i}`}
+                  onClick={() => router.push(m.gameUrl!)}
+                  style={{ display: 'flex', alignItems: 'center', padding: '18px 16px', background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `5px 5px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none', gap: 12 }}
+                >
+                  <span style={{ fontFamily: BODY, fontSize: 12, color: GREEN, width: 26, flexShrink: 0 }}>🎮</span>
+                  <span style={{ fontFamily: DISP, fontSize: 18, letterSpacing: '-0.01em', flex: 1, color: GREEN, lineHeight: 1.15 }}>{m.title}</span>
+                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{isPT ? 'Jogar' : 'Play'} →</span>
+                </div>
+              )
+
               const isDone    = done[m.id]
               const isCurrent = m.id === activeId
               const isOpen    = expanded === m.id
@@ -161,6 +175,20 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
         {/* Module accordion boxes */}
         <div style={{ paddingLeft: 24 }}>
           {world.modules.map((m, i) => {
+            // Game tile — direct link, no accordion
+            if (m.type === 'game') return (
+              <div key={`game-${m.gameUrl}-${i}`} style={{ marginBottom: 10 }}>
+                <div
+                  onClick={() => router.push(m.gameUrl!)}
+                  style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`, cursor: 'pointer', userSelect: 'none' }}
+                >
+                  <span style={{ fontFamily: BODY, fontSize: 12, color: GREEN, width: 32, flexShrink: 0 }}>🎮</span>
+                  <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: GREEN }}>{m.title}</span>
+                  <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, opacity: 0.7, marginRight: 8 }}>{isPT ? 'Jogar' : 'Play'} →</span>
+                </div>
+              </div>
+            )
+
             const isDone    = done[m.id]
             const isCurrent = m.id === activeId
             const isOpen    = expanded === m.id

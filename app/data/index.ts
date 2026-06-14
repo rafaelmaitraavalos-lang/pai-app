@@ -39,6 +39,8 @@ export interface LessonData {
 // To add a new world: add an entry here and add its lessons to LESSONS below.
 // ─────────────────────────────────────────────────────────────────────────────
 
+const G = (title: string, gameUrl: string) => ({ id: 0, title, type: 'game' as const, gameUrl })
+
 export const WORLDS: Record<number, WorldData> = {
   1: {
     id: 1,
@@ -46,11 +48,14 @@ export const WORLDS: Record<number, WorldData> = {
     level: 'Beginner',
     modules: [
       { id: 1,  title: 'History of AI' },
+      G('The Analyst',   '/games/analyst'),
       { id: 2,  title: 'What AI Does' },
       { id: 3,  title: 'AI In Your Life' },
+      G('Signal Drop',   '/games/signal-drop'),
       { id: 4,  title: 'Narrow vs General AI' },
       { id: 5,  title: 'How AI Learns' },
       { id: 6,  title: 'What AI Gets Wrong' },
+      G('Static',        '/games/static'),
       { id: 7,  title: 'What Is AI?' },
     ],
   },
@@ -61,12 +66,15 @@ export const WORLDS: Record<number, WorldData> = {
     modules: [
       { id: 8,  title: 'What Is A Neural Network' },
       { id: 9,  title: 'How Networks Train' },
+      G('Weight Room',   '/games/weight-room'),
       { id: 10, title: 'Deep Learning' },
       { id: 11, title: 'How ChatGPT Works' },
       { id: 12, title: 'Recommendation Algorithms' },
+      G('The Feed',      '/games/the-feed'),
       { id: 13, title: 'Computer Vision' },
       { id: 14, title: 'The Black Box Problem' },
       { id: 15, title: 'When Decisions Go Wrong' },
+      G('Failure Modes', '/games/failure-modes'),
     ],
   },
   3: {
@@ -77,11 +85,14 @@ export const WORLDS: Record<number, WorldData> = {
       { id: 16, title: 'AI and Jobs' },
       { id: 17, title: 'AI and Creativity' },
       { id: 18, title: 'AI and Privacy' },
+      G('Data Trails',   '/games/data-trails'),
       { id: 19, title: 'AI and Healthcare' },
       { id: 20, title: 'AI and Education' },
+      G('The Call',      '/games/the-call'),
       { id: 21, title: 'AI and Democracy' },
       { id: 22, title: 'AI and Science' },
       { id: 23, title: 'AI and Daily Life' },
+      G('Daily Scan',    '/games/daily-scan'),
     ],
   },
   4: {
@@ -90,10 +101,13 @@ export const WORLDS: Record<number, WorldData> = {
     level: 'Advanced',
     modules: [
       { id: 24, title: 'What Is Ethics' },
+      G('The Framework', '/games/the-framework'),
       { id: 25, title: 'The Bias Problem' },
+      G('Bias Sources',  '/games/bias-sources'),
       { id: 26, title: 'The Consent Problem' },
       { id: 27, title: 'The Accountability Gap' },
       { id: 28, title: 'The Transparency Paradox' },
+      G('Transparency Types', '/games/transparency'),
       { id: 29, title: 'Autonomy and Manipulation' },
       { id: 30, title: 'The Alignment Problem' },
       { id: 31, title: 'Who Decides' },
@@ -105,9 +119,12 @@ export const WORLDS: Record<number, WorldData> = {
     level: 'Advanced',
     modules: [
       { id: 32, title: 'Where We Are Now' },
+      G("Can or Can't",  '/games/can-or-cant'),
       { id: 33, title: 'The Road to AGI' },
+      G('What Is AGI',   '/games/what-is-agi'),
       { id: 34, title: 'The Alignment Crisis' },
       { id: 35, title: 'AI and Existential Risk' },
+      G('The Resource',  '/games/the-resource'),
       { id: 36, title: 'Regulation and Governance' },
       { id: 37, title: 'AI and Human Identity' },
       { id: 38, title: 'What Your Generation Inherits' },
@@ -121,11 +138,14 @@ export const WORLDS: Record<number, WorldData> = {
     modules: [
       { id: 40, title: 'The Math Behind A Neuron' },
       { id: 41, title: 'Forward Propagation' },
+      G('Signal Flow',   '/games/signal-flow'),
       { id: 42, title: 'Loss Functions' },
       { id: 43, title: 'Backpropagation In Detail' },
+      G('The Gradient',  '/games/the-gradient'),
       { id: 44, title: 'Activation Functions' },
       { id: 45, title: 'Attention Mechanisms' },
       { id: 46, title: 'The Transformer Architecture' },
+      G('Transformer Parts', '/games/transformer'),
       { id: 47, title: 'Training At Scale' },
     ],
   },
@@ -136,12 +156,15 @@ export const WORLDS: Record<number, WorldData> = {
     modules: [
       { id: 48, title: 'How To Think About Prompts' },
       { id: 49, title: 'Prompt Engineering' },
+      G('Prompt Drop',   '/games/prompt-drop'),
       { id: 50, title: 'Working With APIs' },
       { id: 51, title: 'Retrieval Augmented Generation' },
       { id: 52, title: 'Fine-Tuning' },
       { id: 53, title: 'AI Agents' },
+      G('Agent Parts',   '/games/agent-parts'),
       { id: 54, title: 'Evaluating AI Systems' },
       { id: 55, title: 'Responsible Building' },
+      G('Ship It',       '/games/ship-it'),
     ],
   },
   8: {
@@ -150,12 +173,15 @@ export const WORLDS: Record<number, WorldData> = {
     level: 'Advanced',
     modules: [
       { id: 56, title: 'Multimodal AI' },
+      G('Multimodal',    '/games/multimodal'),
       { id: 57, title: 'AI Agents At Scale' },
       { id: 58, title: 'Frontier Models' },
+      G('Frontier Concepts', '/games/frontier'),
       { id: 59, title: 'AI and Science' },
       { id: 60, title: 'Robotics and Embodied AI' },
       { id: 61, title: 'AI Safety Research' },
       { id: 62, title: 'The Geopolitics Of AI' },
+      G('Dispatch',      '/games/dispatch'),
       { id: 63, title: 'What Comes Next' },
     ],
   },

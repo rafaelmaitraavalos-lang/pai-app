@@ -42,7 +42,7 @@ export default function Home() {
     router.replace('/')
   }
 
-  const worldDone     = (id: number) => WORLDS[id].modules.every(m => done[m.id])
+  const worldDone     = (id: number) => WORLDS[id].modules.filter(m => m.type !== 'game').every(m => done[m.id])
   const worldUnlocked = (id: number) => id === 1 || worldDone(id - 1)
 
   const activeWorldId = (() => {
