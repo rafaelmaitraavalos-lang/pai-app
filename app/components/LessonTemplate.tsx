@@ -398,13 +398,6 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               />
             </div>
 
-            {/* PAI below body text — shown unless the right column is already showing a PAI (elem + no image) */}
-            {(!isElem || hasImage) && (
-              <div style={{ marginTop: 28 }}>
-                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply' }} />
-              </div>
-            )}
-
             {!hasImage && stop.year && (
               <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
                 {stop.year}
@@ -412,18 +405,24 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             )}
           </div>
 
-          {/* Right: lesson image OR (elementary only) PAI animation column */}
+          {/* Right: image / elementary PAI / or standard PAI — always in the column, never below fold */}
           {hasImage ? (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <div style={{ overflow: 'hidden', boxShadow: `10px 10px 0 0 ${slideText}`, maxHeight: '55vh' }}>
                 <img src={slideImage} alt={stop.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </div>
-          ) : isElem ? (
+          ) : (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <video src={['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]} autoPlay loop muted playsInline style={{ width: 200, height: 200, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+              <video
+                src={isElem
+                  ? ['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]
+                  : ['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]}
+                autoPlay loop muted playsInline
+                style={{ width: isElem ? 200 : 120, height: isElem ? 200 : 120, objectFit: 'contain', mixBlendMode: 'multiply' }}
+              />
             </div>
-          ) : null}
+          )}
         </div>
 
         {/* Footer inside scroller */}
