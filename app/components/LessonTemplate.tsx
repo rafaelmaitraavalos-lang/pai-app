@@ -398,6 +398,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               />
             </div>
 
+            {/* PAI below body text — only on slides that have an image in the right column */}
+            {hasImage && (
+              <div style={{ marginTop: 28 }}>
+                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+              </div>
+            )}
+
             {!hasImage && stop.year && (
               <div style={{ marginTop: 'auto', fontFamily: DISP, fontSize: 'clamp(5rem, 14vw, 12rem)', letterSpacing: '-0.04em', color: FAINT, lineHeight: 1, userSelect: 'none' }}>
                 {stop.year}
