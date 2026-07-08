@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import GlossaryText from './GlossaryText'
+import PaiChatPanel from './PaiChatPanel'
 import { LESSON_IMAGES } from '../data/lessonImages'
 import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
@@ -78,6 +79,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const stops     = tx ? stopsEN.map((s, i)     => ({ ...s, title: tx.stops[i]?.title ?? s.title, body: tx.stops[i]?.body ?? s.body }))         : stopsEN
   const questions = tx ? questionsEN.map((q, i) => ({ ...q, question: tx.questions[i]?.question ?? q.question, verdict: tx.questions[i]?.verdict ?? q.verdict, explanation: tx.questions[i]?.explanation ?? q.explanation })) : questionsEN
   const [selected,  setSelected]  = useState<boolean | null>(null)
+  const [chatOpen,  setChatOpen]  = useState(false)
 
   const stop     = stops[stopIndex]
   const question = questions[qIndex]
@@ -398,10 +400,16 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               />
             </div>
 
-            {/* PAI below body text — only on slides that have an image in the right column */}
+            {/* PAI below body text — clickable to open chat */}
             {hasImage && (
               <div style={{ marginTop: 28 }}>
-                <video src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]} autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                <video
+                  onClick={() => setChatOpen(true)}
+                  src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]}
+                  autoPlay loop muted playsInline
+                  style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply', cursor: 'pointer' }}
+                  title="Ask PAI a question"
+                />
               </div>
             )}
 
@@ -422,11 +430,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           ) : (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <video
+                onClick={() => setChatOpen(true)}
                 src={isElem
                   ? ['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]
                   : ['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]}
                 autoPlay loop muted playsInline
-                style={{ width: isElem ? 200 : 120, height: isElem ? 200 : 120, objectFit: 'contain', mixBlendMode: 'multiply' }}
+                style={{ width: isElem ? 200 : 120, height: isElem ? 200 : 120, objectFit: 'contain', mixBlendMode: 'multiply', cursor: 'pointer' }}
+                title="Ask PAI a question"
               />
             </div>
           )}
@@ -455,6 +465,16 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           </button>
         </div>
       </div>
+
+      {/* PAI Chat Panel */}
+      {chatOpen && (
+        <PaiChatPanel
+          lessonTitle={title}
+          stops={stops}
+          currentStop={stop}
+          onClose={() => setChatOpen(false)}
+        />
+      )}
 
     </main>
   )
