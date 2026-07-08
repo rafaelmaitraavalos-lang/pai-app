@@ -472,6 +472,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           lessonTitle={title}
           stops={stops}
           currentStop={stop}
+          track={isElem ? 'elementary' : isMidElem ? 'middle' : 'highschool'}
           onClose={() => setChatOpen(false)}
         />
       )}

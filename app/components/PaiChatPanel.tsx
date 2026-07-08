@@ -6,15 +6,13 @@ const DISP        = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY        = "var(--font-body, system-ui, sans-serif)"
 const GREEN       = '#3DF542'
 const BLACK       = '#0a0a0a'
-const DIM         = '#555555'
-const DAILY_LIMIT = 30
+const DAILY_LIMIT = 100
 
 function getDailyUsage(): number {
   if (typeof window === 'undefined') return 0
   const key = `pai_chat_${new Date().toISOString().slice(0, 10)}`
   return parseInt(localStorage.getItem(key) ?? '0', 10)
 }
-
 function incrementDailyUsage() {
   const key   = `pai_chat_${new Date().toISOString().slice(0, 10)}`
   const count = getDailyUsage() + 1
@@ -27,13 +25,16 @@ interface Props {
   lessonTitle: string
   stops:       Stop[]
   currentStop: Stop
+  track:       'elementary' | 'middle' | 'highschool'
   onClose:     () => void
 }
 interface Message { role: 'user' | 'assistant'; content: string }
 
-export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose }: Props) {
+export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, onClose }: Props) {
   const [messages,  setMessages]  = useState<Message[]>([
-    { role: 'assistant', content: `Hi! I'm PAI 🐷 Ask me anything about this lesson and I'll explain it — I only use what's right here on the slide.` },
+    { role: 'assistant', content: track === 'elementary'
+        ? 'Hi! Ask me anything about this slide.'
+        : 'Ask me anything about this lesson — I only use what is on the slide.' },
   ])
   const [input,     setInput]     = useState('')
   const [loading,   setLoading]   = useState(false)
@@ -51,7 +52,7 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
     const text = input.trim()
     if (!text || loading) return
     if (remaining <= 0) {
-      setMessages(m => [...m, { role: 'assistant', content: "You've used all your questions for today — come back tomorrow! Curiosity is a superpower. 🐷✨" }])
+      setMessages(m => [...m, { role: 'assistant', content: 'You have used all your questions for today. Come back tomorrow!' }])
       return
     }
     setInput('')
@@ -64,12 +65,12 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
       const res  = await fetch('/api/chat', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, lessonTitle, currentStop, allStops: stops, history: next.slice(-6) }),
+        body: JSON.stringify({ message: text, lessonTitle, currentStop, allStops: stops, history: next.slice(-6), track }),
       })
       const data = await res.json()
-      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? 'Sorry, I couldn\'t get a response.' }])
+      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? 'No response.' }])
     } catch {
-      setMessages(m => [...m, { role: 'assistant', content: 'Can\'t reach PAI right now — try again in a moment!' }])
+      setMessages(m => [...m, { role: 'assistant', content: 'Cannot reach PAI right now. Try again in a moment.' }])
     } finally {
       setLoading(false)
     }
@@ -78,82 +79,74 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
   return (
     <>
       {/* Backdrop */}
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.3)' }} />
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.25)' }} />
 
-      {/* Vertical chat panel — bottom-right */}
+      {/* Speech bubble — bottom-left, tail points down toward the pig */}
       <div style={{
         position:      'fixed',
-        bottom:        24,
-        right:         24,
+        bottom:        130,        // sits above where pig lives
+        left:          '7vw',
         zIndex:        51,
-        width:         380,
+        width:         340,
         maxWidth:      'calc(100vw - 32px)',
-        height:        560,
-        maxHeight:     'calc(100vh - 48px)',
+        height:        460,
+        maxHeight:     'calc(100vh - 160px)',
         display:       'flex',
         flexDirection: 'column',
         background:    BLACK,
         border:        `2px solid ${GREEN}`,
-        boxShadow:     `8px 8px 0 0 ${GREEN}44`,
-        animation:     'chatPopIn 0.22s cubic-bezier(0.34,1.4,0.64,1)',
+        boxShadow:     `6px 6px 0 0 ${GREEN}55`,
+        animation:     'chatPopIn 0.2s cubic-bezier(0.34,1.3,0.64,1)',
       }}>
 
-        {/* PAI dancing header */}
+        {/* Bubble tail — triangle pointing down-left toward the pig */}
         <div style={{
-          background:    '#111',
-          borderBottom:  `1px solid #1e1e1e`,
-          padding:       '16px 16px 0',
-          display:       'flex',
-          flexDirection: 'column',
-          alignItems:    'center',
-          flexShrink:    0,
-        }}>
-          <video
-            src="/pig.mp4"
-            autoPlay loop muted playsInline
-            style={{ width: 72, height: 72, objectFit: 'contain' }}
-          />
-          <div style={{ textAlign: 'center', paddingBottom: 12 }}>
-            <div style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', color: GREEN, lineHeight: 1 }}>PAI</div>
-            <div style={{ fontFamily: BODY, fontSize: 11, color: DIM, marginTop: 2 }}>{lessonTitle}</div>
-          </div>
+          position:    'absolute',
+          bottom:      -14,
+          left:        40,
+          width:       0,
+          height:      0,
+          borderLeft:  '10px solid transparent',
+          borderRight: '10px solid transparent',
+          borderTop:   `14px solid ${GREEN}`,
+        }} />
+        <div style={{
+          position:    'absolute',
+          bottom:      -10,
+          left:        42,
+          width:       0,
+          height:      0,
+          borderLeft:  '8px solid transparent',
+          borderRight: '8px solid transparent',
+          borderTop:   `12px solid ${BLACK}`,
+        }} />
 
-          {/* Close + counter row */}
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #1e1e1e', padding: '8px 0' }}>
-            <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', color: remaining > 5 ? '#333' : '#C0392B' }}>
-              {remaining} questions left today
-            </span>
-            <button
-              onClick={onClose}
-              style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: '1px solid #2a2a2a', color: '#444', padding: '4px 10px', cursor: 'pointer' }}
-            >
-              ✕ Close
-            </button>
+        {/* Header — PAI label + close */}
+        <div style={{ padding: '10px 14px 8px', borderBottom: `1px solid #1a1a1a`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <video src="/pig.mp4" autoPlay loop muted playsInline style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <span style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '-0.01em', color: GREEN }}>PAI</span>
+            <span style={{ fontFamily: BODY, fontSize: 10, color: '#444' }}>{lessonTitle}</span>
           </div>
+          <button onClick={onClose} style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'none', border: '1px solid #222', color: '#444', padding: '3px 8px', cursor: 'pointer' }}>
+            close
+          </button>
         </div>
 
         {/* Messages */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '14px 14px 8px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 14px 8px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {messages.map((m, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start', gap: 4 }}>
-              {m.role === 'assistant' && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: 2 }}>
-                  <div style={{ width: 18, height: 18, borderRadius: '50%', background: GREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>🐷</div>
-                  <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN }}>PAI</span>
-                </div>
-              )}
+            <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
               <div style={{
-                maxWidth:   '88%',
-                padding:    '10px 13px',
-                fontFamily: BODY,
-                fontSize:   13,
-                lineHeight: 1.55,
-                color:      m.role === 'user' ? BLACK : '#e0e0e0',
-                background: m.role === 'user' ? GREEN : '#161616',
-                border:     m.role === 'user' ? 'none' : '1px solid #222',
-                borderRadius: m.role === 'user'
-                  ? '12px 12px 2px 12px'
-                  : '2px 12px 12px 12px',
+                maxWidth:     '90%',
+                padding:      '8px 12px',
+                fontFamily:   BODY,
+                fontSize:     track === 'elementary' ? 14 : 13,
+                lineHeight:   1.5,
+                color:        m.role === 'user' ? BLACK : '#e0e0e0',
+                background:   m.role === 'user' ? GREEN : '#141414',
+                border:       m.role === 'user' ? 'none' : '1px solid #222',
+                borderRadius: m.role === 'user' ? '10px 10px 2px 10px' : '2px 10px 10px 10px',
               }}>
                 {m.content}
               </div>
@@ -161,17 +154,11 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
           ))}
 
           {loading && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: 2 }}>
-                <div style={{ width: 18, height: 18, borderRadius: '50%', background: GREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>🐷</div>
-                <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN }}>PAI</span>
-              </div>
-              <div style={{ padding: '10px 14px', background: '#161616', border: '1px solid #222', borderRadius: '2px 12px 12px 12px' }}>
-                <span style={{ display: 'inline-flex', gap: 3 }}>
-                  {[0,1,2].map(i => (
-                    <span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: GREEN, display: 'inline-block', animation: `dotBounce 1.2s ${i * 0.2}s infinite` }} />
-                  ))}
-                </span>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div style={{ padding: '8px 14px', background: '#141414', border: '1px solid #222', borderRadius: '2px 10px 10px 10px', display: 'flex', gap: 4, alignItems: 'center' }}>
+                {[0,1,2].map(i => (
+                  <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: GREEN, display: 'inline-block', animation: `dotBounce 1.2s ${i*0.2}s infinite` }} />
+                ))}
               </div>
             </div>
           )}
@@ -179,41 +166,25 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
         </div>
 
         {/* Input */}
-        <div style={{ padding: '10px 12px 14px', borderTop: '1px solid #1a1a1a', display: 'flex', gap: 8, flexShrink: 0 }}>
+        <div style={{ padding: '8px 10px 12px', borderTop: '1px solid #1a1a1a', display: 'flex', gap: 6, flexShrink: 0 }}>
           <input
             ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && send()}
-            placeholder="Ask PAI something..."
-            style={{
-              flex:        1,
-              fontFamily:  BODY,
-              fontSize:    13,
-              background:  '#111',
-              border:      `1px solid #2a2a2a`,
-              borderRadius: 8,
-              color:       '#fff',
-              padding:     '9px 12px',
-              outline:     'none',
-            }}
+            placeholder={track === 'elementary' ? 'Ask PAI...' : 'Ask about this slide...'}
+            style={{ flex: 1, fontFamily: BODY, fontSize: 13, background: '#0e0e0e', border: '1px solid #222', borderRadius: 6, color: '#fff', padding: '8px 11px', outline: 'none' }}
           />
           <button
             onClick={send}
             disabled={!input.trim() || loading}
             style={{
-              fontFamily:   DISP,
-              fontSize:     10,
-              letterSpacing:'0.1em',
-              textTransform:'uppercase',
-              background:   input.trim() && !loading ? GREEN : '#1a1a1a',
-              color:        input.trim() && !loading ? BLACK : '#333',
-              border:       'none',
-              borderRadius: 8,
-              padding:      '9px 14px',
-              cursor:       input.trim() && !loading ? 'pointer' : 'default',
-              flexShrink:   0,
-              transition:   'background 0.15s',
+              fontFamily: DISP, fontSize: 16,
+              background: input.trim() && !loading ? GREEN : '#181818',
+              color:      input.trim() && !loading ? BLACK : '#333',
+              border: 'none', borderRadius: 6, padding: '8px 13px',
+              cursor: input.trim() && !loading ? 'pointer' : 'default',
+              flexShrink: 0, transition: 'background 0.12s',
             }}
           >
             →
@@ -223,12 +194,12 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, onClose 
 
       <style>{`
         @keyframes chatPopIn {
-          from { transform: scale(0.85) translateY(20px); opacity: 0; transform-origin: bottom right; }
-          to   { transform: scale(1) translateY(0);       opacity: 1; transform-origin: bottom right; }
+          from { transform: scale(0.88) translateY(10px); opacity: 0; transform-origin: bottom left; }
+          to   { transform: scale(1)    translateY(0);    opacity: 1; transform-origin: bottom left; }
         }
         @keyframes dotBounce {
-          0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
-          40%            { transform: translateY(-5px); opacity: 1;   }
+          0%,80%,100% { transform: translateY(0);    opacity: 0.4; }
+          40%         { transform: translateY(-4px); opacity: 1;   }
         }
       `}</style>
     </>
