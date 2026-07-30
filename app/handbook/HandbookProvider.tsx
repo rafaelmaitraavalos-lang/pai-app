@@ -234,7 +234,7 @@ function HBButton({ onClick }: { onClick: () => void }) {
           touchAction: 'manipulation',
         }}
       >
-        <span style={{ fontFamily: BODY, fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, userSelect: 'none' }}>
+        <span style={{ fontFamily: BODY, fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
           {isPT ? 'CONTEÚDO BÔNUS' : 'BONUS CONTENT'}
         </span>
         <span style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: GREEN, userSelect: 'none', lineHeight: 1 }}>
