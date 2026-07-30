@@ -1,11 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchCorpus } from '../../../lib/chatCorpus'
+import { getSql } from '../../../lib/db'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
 const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
+const SESSION_COOKIE = 'pai_session'
 
-// ── Server-side rate limiter (in-memory, per IP) ──────────────────────────
-// Resets on redeploy — a soft guard against runaway usage, not security.
+// ── Per-account monthly cap (the real limit — one row per user per month) ──
+const MONTHLY_LIMIT = 50
+
+async function ensureChatUsageTable() {
+  await getSql()`
+    CREATE TABLE IF NOT EXISTS chat_usage (
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      month   TEXT NOT NULL,
+      count   INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (user_id, month)
+    )
+  `
+}
+
+function currentMonthKey(): string {
+  return new Date().toISOString().slice(0, 7) // "2026-07"
+}
+
+async function getUserIdFromSession(req: NextRequest): Promise<number | null> {
+  const token = req.cookies.get(SESSION_COOKIE)?.value
+  if (!token) return null
+  const rows = await getSql()`SELECT user_id FROM sessions WHERE token = ${token}`
+  return rows[0]?.user_id ?? null
+}
+
+async function getMonthlyCount(userId: number, month: string): Promise<number> {
+  const rows = await getSql()`SELECT count FROM chat_usage WHERE user_id = ${userId} AND month = ${month}`
+  return rows[0]?.count ?? 0
+}
+
+async function incrementMonthlyCount(userId: number, month: string): Promise<number> {
+  const rows = await getSql()`
+    INSERT INTO chat_usage (user_id, month, count) VALUES (${userId}, ${month}, 1)
+    ON CONFLICT (user_id, month) DO UPDATE SET count = chat_usage.count + 1
+    RETURNING count
+  `
+  return rows[0]?.count ?? 1
+}
+
+// ── Per-IP burst guard (in-memory, secondary — resets on redeploy) ─────────
 const ipBucket = new Map<string, { count: number; resetAt: number }>()
 const SERVER_LIMIT_PER_HOUR = 120   // per IP
 const SERVER_WINDOW_MS      = 60 * 60 * 1000
@@ -25,6 +65,7 @@ function checkServerRate(ip: string): boolean {
 const MSG = {
   en: {
     rateLimited: 'You\'ve sent a lot of questions today! Come back in an hour and keep exploring.',
+    monthlyLimitReached: `You've used all ${MONTHLY_LIMIT} of your questions for this month. More open up next month!`,
     notConfigured: 'Chat is not configured yet — GROQ_API_KEY is missing.',
     groqDown: 'PAI is taking a quick break. Try again in a moment!',
     unreachable: 'Could not reach PAI right now. Check your connection!',
@@ -32,6 +73,7 @@ const MSG = {
   },
   pt: {
     rateLimited: 'Você já fez muitas perguntas hoje! Volte em uma hora para continuar explorando.',
+    monthlyLimitReached: `Você já usou todas as suas ${MONTHLY_LIMIT} perguntas deste mês. Mais perguntas liberam no próximo mês!`,
     notConfigured: 'O chat ainda não está configurado — falta a GROQ_API_KEY.',
     groqDown: 'O PAI está fazendo uma pausa rápida. Tente de novo em instantes!',
     unreachable: 'Não foi possível falar com o PAI agora. Verifique sua conexão!',
@@ -43,10 +85,27 @@ export async function POST(req: NextRequest) {
   const { message, lessonTitle, currentStop, allStops, history, track, lang, lessonId } = await req.json()
   const L = lang === 'pt' ? MSG.pt : MSG.en
 
-  // Rate limit by IP
+  // Burst guard by IP (secondary — the real cap is per-account below)
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
   if (!checkServerRate(ip)) {
     return NextResponse.json({ reply: L.rateLimited }, { status: 429 })
+  }
+
+  // Per-account monthly cap — 50 questions/month per person, tracked server-side
+  let userId: number | null = null
+  let remaining = MONTHLY_LIMIT
+  try {
+    await ensureChatUsageTable()
+    userId = await getUserIdFromSession(req)
+    if (userId) {
+      const used = await getMonthlyCount(userId, currentMonthKey())
+      if (used >= MONTHLY_LIMIT) {
+        return NextResponse.json({ reply: L.monthlyLimitReached, remaining: 0 }, { status: 429 })
+      }
+      remaining = MONTHLY_LIMIT - used
+    }
+  } catch (e) {
+    console.error('Chat usage check failed:', e)
   }
 
   if (!GROQ_API_KEY) {
@@ -150,7 +209,17 @@ ${otherLessonsContext || '(none found for this question)'}
 
     const data  = await res.json()
     const reply = data?.choices?.[0]?.message?.content ?? L.noResponse
-    return NextResponse.json({ reply })
+
+    if (userId) {
+      try {
+        const used = await incrementMonthlyCount(userId, currentMonthKey())
+        remaining = Math.max(0, MONTHLY_LIMIT - used)
+      } catch (e) {
+        console.error('Chat usage increment failed:', e)
+      }
+    }
+
+    return NextResponse.json({ reply, remaining })
   } catch {
     return NextResponse.json({ reply: L.unreachable }, { status: 503 })
   }

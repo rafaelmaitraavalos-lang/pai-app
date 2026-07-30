@@ -2,23 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react'
 
-const DISP        = "var(--font-display, 'Arial Black', sans-serif)"
-const BODY        = "var(--font-body, system-ui, sans-serif)"
-const GREEN       = '#3DF542'
-const BLACK       = '#0a0a0a'
-const DAILY_LIMIT = 100
-
-function getDailyUsage(): number {
-  if (typeof window === 'undefined') return 0
-  const key = `pai_chat_${new Date().toISOString().slice(0, 10)}`
-  return parseInt(localStorage.getItem(key) ?? '0', 10)
-}
-function incrementDailyUsage() {
-  const key   = `pai_chat_${new Date().toISOString().slice(0, 10)}`
-  const count = getDailyUsage() + 1
-  localStorage.setItem(key, String(count))
-  return count
-}
+const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
+const BODY  = "var(--font-body, system-ui, sans-serif)"
+const GREEN = '#3DF542'
+const BLACK = '#0a0a0a'
 
 interface Stop { title: string; body: string }
 interface Props {
@@ -36,22 +23,22 @@ const T = {
   en: {
     greetingElem: 'Hi! Ask me anything about this slide.',
     greeting:     'Ask me anything about this lesson — I can also pull in other lessons if it helps.',
-    limitReached: 'You have used all your questions for today. Come back tomorrow!',
     unreachable:  'Cannot reach PAI right now. Try again in a moment.',
     placeholderElem: 'Ask PAI...',
     placeholder:     'Ask about this lesson...',
     close: 'close',
     noResponse: 'No response.',
+    leftThisMonth: (n: number) => `${n} left this month`,
   },
   pt: {
     greetingElem: 'Oi! Me pergunte qualquer coisa sobre este slide.',
     greeting:     'Me pergunte qualquer coisa sobre esta aula — também posso usar outras aulas se ajudar.',
-    limitReached: 'Você usou todas as suas perguntas de hoje. Volte amanhã!',
     unreachable:  'Não foi possível falar com o PAI agora. Tente de novo em instantes.',
     placeholderElem: 'Pergunte ao PAI...',
     placeholder:     'Pergunte sobre esta aula...',
     close: 'fechar',
     noResponse: 'Sem resposta.',
+    leftThisMonth: (n: number) => `${n} restantes este mês`,
   },
 } as const
 
@@ -62,28 +49,20 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
   ])
   const [input,     setInput]     = useState('')
   const [loading,   setLoading]   = useState(false)
-  const [usedToday, setUsedToday] = useState(0)
+  const [remaining, setRemaining] = useState<number | null>(null)  // null = unknown until server tells us
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { setUsedToday(getDailyUsage()) }, [])
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
   useEffect(() => { setTimeout(() => inputRef.current?.focus(), 120) }, [])
 
-  const remaining = Math.max(0, DAILY_LIMIT - usedToday)
-
   const send = async () => {
     const text = input.trim()
-    if (!text || loading) return
-    if (remaining <= 0) {
-      setMessages(m => [...m, { role: 'assistant', content: tx.limitReached }])
-      return
-    }
+    if (!text || loading || remaining === 0) return
     setInput('')
     const next: Message[] = [...messages, { role: 'user', content: text }]
     setMessages(next)
     setLoading(true)
-    setUsedToday(incrementDailyUsage())
 
     try {
       const res  = await fetch('/api/chat', {
@@ -92,6 +71,7 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         body: JSON.stringify({ message: text, lessonId, lessonTitle, currentStop, allStops: stops, history: next.slice(-6), track, lang }),
       })
       const data = await res.json()
+      if (typeof data.remaining === 'number') setRemaining(data.remaining)
       setMessages(m => [...m, { role: 'assistant', content: data.reply ?? tx.noResponse }])
     } catch {
       setMessages(m => [...m, { role: 'assistant', content: tx.unreachable }])
@@ -152,9 +132,16 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
             <span style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '-0.01em', color: GREEN }}>PAI</span>
             <span style={{ fontFamily: BODY, fontSize: 10, color: '#444' }}>{lessonTitle}</span>
           </div>
-          <button onClick={onClose} style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'none', border: '1px solid #222', color: '#444', padding: '3px 8px', cursor: 'pointer' }}>
-            {tx.close}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {remaining !== null && (
+              <span style={{ fontFamily: BODY, fontSize: 9, color: remaining === 0 ? '#e05' : '#444' }}>
+                {tx.leftThisMonth(remaining)}
+              </span>
+            )}
+            <button onClick={onClose} style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'none', border: '1px solid #222', color: '#444', padding: '3px 8px', cursor: 'pointer' }}>
+              {tx.close}
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
@@ -201,13 +188,13 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
           />
           <button
             onClick={send}
-            disabled={!input.trim() || loading}
+            disabled={!input.trim() || loading || remaining === 0}
             style={{
               fontFamily: DISP, fontSize: 16,
-              background: input.trim() && !loading ? GREEN : '#181818',
-              color:      input.trim() && !loading ? BLACK : '#333',
+              background: input.trim() && !loading && remaining !== 0 ? GREEN : '#181818',
+              color:      input.trim() && !loading && remaining !== 0 ? BLACK : '#333',
               border: 'none', borderRadius: 6, padding: '8px 13px',
-              cursor: input.trim() && !loading ? 'pointer' : 'default',
+              cursor: input.trim() && !loading && remaining !== 0 ? 'pointer' : 'default',
               flexShrink: 0, transition: 'background 0.12s',
             }}
           >
