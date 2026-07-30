@@ -213,71 +213,35 @@ function EntryView({ entry, onBack, isPT, tourIdx, totalStarters, onTourAdvance 
 
 // ── Handbook bar + spotlight ──────────────────────────────────────────────────
 
-function HBButton({ onClick, showWelcome, username, spotlight }: {
-  onClick:     () => void
-  showWelcome: boolean
-  username:    string
-  spotlight:   boolean
-}) {
+function HBButton({ onClick }: { onClick: () => void }) {
   const [isPT, setIsPT] = useState(false)
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
   return (
     <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 48 }}>
-      {/* Welcome / spotlight tooltip above the bar */}
-      {(showWelcome || spotlight) && (
-        <div style={{
-          position: 'absolute', bottom: '100%', left: '50%',
-          transform: 'translateX(-50%)',
-          background: BLACK, color: GREEN,
-          border: `1.5px solid ${GREEN}`,
-          boxShadow: `3px 3px 0 0 ${GREEN}`,
-          padding: '10px 16px',
-          marginBottom: 8,
-          whiteSpace: 'nowrap',
-          pointerEvents: 'none',
-        }}>
-          <div style={{
-            position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
-            width: 0, height: 0,
-            borderLeft: '7px solid transparent',
-            borderRight: '7px solid transparent',
-            borderTop: `8px solid ${GREEN}`,
-          }} />
-          <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 3, opacity: 0.6 }}>PAI</div>
-          <div style={{ fontFamily: DISP, fontSize: 13, lineHeight: 1.3 }}>
-            {isPT ? `Bem-vindo, ${username}!` : `Welcome, ${username}!`}
-          </div>
-          <div style={{ fontFamily: BODY, fontSize: 11, color: '#fff', marginTop: 5, lineHeight: 1.4, opacity: 0.85 }}>
-            {spotlight
-              ? (isPT ? 'Abra seu manual para começar →' : 'Open your handbook to get started →')
-              : (isPT ? 'Toque aqui para abrir seu manual →' : 'Tap here to open your handbook →')}
-          </div>
-        </div>
-      )}
-
-      {/* Full-width bottom bar */}
+      {/* Quiet, always-there bottom bar — no auto-popup, no forced spotlight */}
       <button
         onClick={onClick}
-        aria-label="Open handbook"
+        aria-label="Open bonus content"
         style={{
           width: '100%',
-          background: spotlight ? GREEN : BLACK,
+          background: BLACK,
           borderTop: `1.5px solid ${GREEN}`,
           borderBottom: 'none', borderLeft: 'none', borderRight: 'none',
           cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          paddingTop: 12,
-          paddingBottom: 'max(12px, calc(12px + env(safe-area-inset-bottom, 0px)))',
-          animation: (showWelcome || spotlight) ? 'handbookPulse 2s ease-in-out infinite' : undefined,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+          paddingTop: 8,
+          paddingBottom: 'max(8px, calc(8px + env(safe-area-inset-bottom, 0px)))',
           transition: 'all 0.3s',
           touchAction: 'manipulation',
         }}
       >
-        <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: spotlight ? BLACK : GREEN, userSelect: 'none' }}>
+        <span style={{ fontFamily: BODY, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, userSelect: 'none' }}>
           {isPT ? 'Manual de IA' : 'AI Handbook'}
         </span>
-        <span style={{ fontFamily: DISP, fontSize: 9, color: spotlight ? BLACK : GREEN, opacity: 0.6 }}>↑</span>
+        <span style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
+          {isPT ? 'CONTEÚDO BÔNUS' : 'BONUS CONTENT'}
+        </span>
       </button>
     </div>
   )
@@ -293,9 +257,6 @@ export default function HandbookProvider() {
   const [selectedEntry, setSelectedEntry] = useState<HandbookEntry | null>(null)
   const [selectedIdx, setSelectedIdx]     = useState(-1)
   const [unlockedIds, setUnlockedIds]     = useState<Set<string>>(new Set())
-  const [showWelcome, setShowWelcome]     = useState(false)
-  const [spotlight, setSpotlight]         = useState(false)
-  const [username, setUsername]           = useState('')
   const [isPT, setIsPT]                   = useState(false)
   const [tourIdx, setTourIdx]             = useState(-1)
 
@@ -315,25 +276,8 @@ export default function HandbookProvider() {
 
   useEffect(() => {
     setMounted(true)
-    const onboardingDone = localStorage.getItem('pai_onboarding_done')
-    const seen           = localStorage.getItem('pai_handbook_seen')
-    const storedName     = localStorage.getItem('pai_username') ?? ''
-    const lang           = localStorage.getItem('pai_lang') ?? 'en'
-    setUsername(storedName)
+    const lang = localStorage.getItem('pai_lang') ?? 'en'
     setIsPT(lang === 'pt')
-
-    const showWelcomeFlag = localStorage.getItem('pai_show_welcome')
-    if (showWelcomeFlag && onboardingDone && pathname !== '/') {
-      localStorage.removeItem('pai_show_welcome')
-      if (!seen) {
-        // First ever visit after onboarding: show spotlight to guide to handbook
-        setTimeout(() => setSpotlight(true), 600)
-      } else {
-        setTimeout(() => setShowWelcome(true), 800)
-      }
-    } else if (onboardingDone && !seen && pathname !== '/') {
-      setTimeout(() => setShowWelcome(true), 800)
-    }
 
     // Compute unlocked entries based on current level
     const currentLevel = getLevel(pathname)
@@ -352,21 +296,9 @@ export default function HandbookProvider() {
   if (!mounted || pathname === '/') return null
 
   const openPopup = () => {
-    setShowWelcome(false)
-    setSpotlight(false)
     setSelectedEntry(null)
     setSelectedIdx(-1)
     setOpen(true)
-    setTimeout(() => setVisible(true), 20)
-  }
-
-  const openPopupWithTour = () => {
-    setShowWelcome(false)
-    setSpotlight(false)
-    setSelectedEntry(null)
-    setSelectedIdx(-1)
-    setOpen(true)
-    setTourIdx(0)
     setTimeout(() => setVisible(true), 20)
   }
 
@@ -388,37 +320,15 @@ export default function HandbookProvider() {
   }
 
   const handleHBClick = () => {
-    if (open) {
-      closePopup()
-    } else if (spotlight) {
-      openPopupWithTour()
-    } else {
-      openPopup()
-    }
+    if (open) closePopup()
+    else openPopup()
   }
 
   const { starters } = getEntries(level, isPT)
 
   return (
     <>
-      {/* Spotlight overlay — dims everything except the HB button */}
-      {spotlight && !open && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 48,
-          background: 'rgba(0,0,0,0.82)',
-          zIndex: 46,
-          pointerEvents: 'all',
-        }} />
-      )}
-
-      {!focusedRoute && (
-        <HBButton
-          onClick={handleHBClick}
-          showWelcome={showWelcome}
-          username={username}
-          spotlight={spotlight}
-        />
-      )}
+      {!focusedRoute && <HBButton onClick={handleHBClick} />}
 
       {open && (
         <>

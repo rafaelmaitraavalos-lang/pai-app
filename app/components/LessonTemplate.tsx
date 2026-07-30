@@ -466,13 +466,50 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         </div>
       </div>
 
+      {/* Dedicated chat trigger — clearer than tapping the PAI video */}
+      <button
+        onClick={() => setChatOpen(v => !v)}
+        aria-label={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
+        title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
+        style={{
+          position: 'fixed',
+          bottom: 96,
+          right: 24,
+          zIndex: 40,
+          width: 56,
+          height: 56,
+          borderRadius: '50%',
+          background: BLACK,
+          border: `1.5px solid ${GREEN}`,
+          boxShadow: `3px 3px 0 0 ${GREEN}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'transform 0.15s',
+          touchAction: 'manipulation',
+        }}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M4 5.5C4 4.67 4.67 4 5.5 4h13c.83 0 1.5.67 1.5 1.5v10c0 .83-.67 1.5-1.5 1.5H9l-4.3 3.44A.5.5 0 0 1 4 20.05V5.5Z"
+            stroke={GREEN} strokeWidth="1.6" strokeLinejoin="round"
+          />
+          <circle cx="8.5" cy="10.5" r="1.1" fill={GREEN} />
+          <circle cx="12" cy="10.5" r="1.1" fill={GREEN} />
+          <circle cx="15.5" cy="10.5" r="1.1" fill={GREEN} />
+        </svg>
+      </button>
+
       {/* PAI Chat Panel */}
       {chatOpen && (
         <PaiChatPanel
+          lessonId={id}
           lessonTitle={title}
           stops={stops}
           currentStop={stop}
           track={isElem ? 'elementary' : isMidElem ? 'middle' : 'highschool'}
+          lang={lang}
           onClose={() => setChatOpen(false)}
         />
       )}

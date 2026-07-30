@@ -22,19 +22,43 @@ function incrementDailyUsage() {
 
 interface Stop { title: string; body: string }
 interface Props {
+  lessonId:    number
   lessonTitle: string
   stops:       Stop[]
   currentStop: Stop
   track:       'elementary' | 'middle' | 'highschool'
+  lang:        string
   onClose:     () => void
 }
 interface Message { role: 'user' | 'assistant'; content: string }
 
-export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, onClose }: Props) {
+const T = {
+  en: {
+    greetingElem: 'Hi! Ask me anything about this slide.',
+    greeting:     'Ask me anything about this lesson — I can also pull in other lessons if it helps.',
+    limitReached: 'You have used all your questions for today. Come back tomorrow!',
+    unreachable:  'Cannot reach PAI right now. Try again in a moment.',
+    placeholderElem: 'Ask PAI...',
+    placeholder:     'Ask about this lesson...',
+    close: 'close',
+    noResponse: 'No response.',
+  },
+  pt: {
+    greetingElem: 'Oi! Me pergunte qualquer coisa sobre este slide.',
+    greeting:     'Me pergunte qualquer coisa sobre esta aula — também posso usar outras aulas se ajudar.',
+    limitReached: 'Você usou todas as suas perguntas de hoje. Volte amanhã!',
+    unreachable:  'Não foi possível falar com o PAI agora. Tente de novo em instantes.',
+    placeholderElem: 'Pergunte ao PAI...',
+    placeholder:     'Pergunte sobre esta aula...',
+    close: 'fechar',
+    noResponse: 'Sem resposta.',
+  },
+} as const
+
+export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop, track, lang, onClose }: Props) {
+  const tx = lang === 'pt' ? T.pt : T.en
   const [messages,  setMessages]  = useState<Message[]>([
-    { role: 'assistant', content: track === 'elementary'
-        ? 'Hi! Ask me anything about this slide.'
-        : 'Ask me anything about this lesson — I only use what is on the slide.' },
+    { role: 'assistant', content: track === 'elementary' ? tx.greetingElem : tx.greeting },
   ])
   const [input,     setInput]     = useState('')
   const [loading,   setLoading]   = useState(false)
@@ -52,7 +76,7 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, o
     const text = input.trim()
     if (!text || loading) return
     if (remaining <= 0) {
-      setMessages(m => [...m, { role: 'assistant', content: 'You have used all your questions for today. Come back tomorrow!' }])
+      setMessages(m => [...m, { role: 'assistant', content: tx.limitReached }])
       return
     }
     setInput('')
@@ -65,12 +89,12 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, o
       const res  = await fetch('/api/chat', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, lessonTitle, currentStop, allStops: stops, history: next.slice(-6), track }),
+        body: JSON.stringify({ message: text, lessonId, lessonTitle, currentStop, allStops: stops, history: next.slice(-6), track, lang }),
       })
       const data = await res.json()
-      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? 'No response.' }])
+      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? tx.noResponse }])
     } catch {
-      setMessages(m => [...m, { role: 'assistant', content: 'Cannot reach PAI right now. Try again in a moment.' }])
+      setMessages(m => [...m, { role: 'assistant', content: tx.unreachable }])
     } finally {
       setLoading(false)
     }
@@ -129,7 +153,7 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, o
             <span style={{ fontFamily: BODY, fontSize: 10, color: '#444' }}>{lessonTitle}</span>
           </div>
           <button onClick={onClose} style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'none', border: '1px solid #222', color: '#444', padding: '3px 8px', cursor: 'pointer' }}>
-            close
+            {tx.close}
           </button>
         </div>
 
@@ -172,7 +196,7 @@ export default function PaiChatPanel({ lessonTitle, stops, currentStop, track, o
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && send()}
-            placeholder={track === 'elementary' ? 'Ask PAI...' : 'Ask about this slide...'}
+            placeholder={track === 'elementary' ? tx.placeholderElem : tx.placeholder}
             style={{ flex: 1, fontFamily: BODY, fontSize: 13, background: '#0e0e0e', border: '1px solid #222', borderRadius: 6, color: '#fff', padding: '8px 11px', outline: 'none' }}
           />
           <button
