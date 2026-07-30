@@ -474,7 +474,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         style={{
           position: 'fixed',
           bottom: 96,
-          right: 24,
+          left: 24,
           zIndex: 40,
           width: 56,
           height: 56,

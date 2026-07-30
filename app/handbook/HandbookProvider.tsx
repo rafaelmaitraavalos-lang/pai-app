@@ -237,10 +237,10 @@ function HBButton({ onClick }: { onClick: () => void }) {
         }}
       >
         <span style={{ fontFamily: BODY, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, userSelect: 'none' }}>
-          {isPT ? 'Manual de IA' : 'AI Handbook'}
-        </span>
-        <span style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
           {isPT ? 'CONTEÚDO BÔNUS' : 'BONUS CONTENT'}
+        </span>
+        <span style={{ fontFamily: DISP, fontSize: 14, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
+          {isPT ? 'MANUAL DE IA' : 'AI HANDBOOK'}
         </span>
       </button>
     </div>

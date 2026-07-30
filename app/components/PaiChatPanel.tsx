@@ -105,11 +105,11 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
       {/* Backdrop */}
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.25)' }} />
 
-      {/* Speech bubble — bottom-left, tail points down toward the pig */}
+      {/* Speech bubble — floats directly above the chat button, bottom-left */}
       <div style={{
         position:      'fixed',
-        bottom:        130,        // sits above where pig lives
-        left:          '7vw',
+        bottom:        164,        // clears the chat button (bottom:96, 56px tall)
+        left:          24,
         zIndex:        51,
         width:         340,
         maxWidth:      'calc(100vw - 32px)',
@@ -123,11 +123,11 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         animation:     'chatPopIn 0.2s cubic-bezier(0.34,1.3,0.64,1)',
       }}>
 
-        {/* Bubble tail — triangle pointing down-left toward the pig */}
+        {/* Bubble tail — triangle pointing down toward the chat button */}
         <div style={{
           position:    'absolute',
           bottom:      -14,
-          left:        40,
+          left:        28,
           width:       0,
           height:      0,
           borderLeft:  '10px solid transparent',
@@ -137,7 +137,7 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         <div style={{
           position:    'absolute',
           bottom:      -10,
-          left:        42,
+          left:        30,
           width:       0,
           height:      0,
           borderLeft:  '8px solid transparent',
