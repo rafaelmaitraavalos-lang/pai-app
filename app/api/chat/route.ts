@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchCorpus } from '../../../lib/chatCorpus'
 import { getSql } from '../../../lib/db'
+import { bumpAndCheck } from '../../../lib/chatLimits'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
 const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
@@ -46,8 +47,11 @@ async function incrementMonthlyCount(userId: number, month: string): Promise<num
 }
 
 // ── Per-IP burst guard (in-memory, secondary — resets on redeploy) ─────────
+// High on purpose: a whole classroom on shared wifi shows up as ONE IP, so this
+// only needs to stop scripted hammering — per-person fairness is the account
+// cap's job, and the sitewide breaker in lib/chatLimits.ts caps total cost.
 const ipBucket = new Map<string, { count: number; resetAt: number }>()
-const SERVER_LIMIT_PER_HOUR = 120   // per IP
+const SERVER_LIMIT_PER_HOUR = 600   // per IP
 const SERVER_WINDOW_MS      = 60 * 60 * 1000
 
 function checkServerRate(ip: string): boolean {
@@ -66,6 +70,8 @@ const MSG = {
   en: {
     rateLimited: 'You\'ve sent a lot of questions today! Come back in an hour and keep exploring.',
     monthlyLimitReached: `You've used all ${MONTHLY_LIMIT} of your questions for this month. More open up next month!`,
+    anonLimit: 'You\'ve asked a lot of questions today! Sign in to keep track of your own questions, or come back tomorrow.',
+    siteBusy: 'So many students are chatting with me today that I need to rest until tomorrow. The lessons, quizzes, and games are all still open!',
     notConfigured: 'Chat is not configured yet — GROQ_API_KEY is missing.',
     groqDown: 'PAI is taking a quick break. Try again in a moment!',
     unreachable: 'Could not reach PAI right now. Check your connection!',
@@ -74,6 +80,8 @@ const MSG = {
   pt: {
     rateLimited: 'Você já fez muitas perguntas hoje! Volte em uma hora para continuar explorando.',
     monthlyLimitReached: `Você já usou todas as suas ${MONTHLY_LIMIT} perguntas deste mês. Mais perguntas liberam no próximo mês!`,
+    anonLimit: 'Você já fez muitas perguntas hoje! Entre na sua conta para acompanhar suas próprias perguntas, ou volte amanhã.',
+    siteBusy: 'Tantos estudantes estão conversando comigo hoje que preciso descansar até amanhã. As aulas, os quizzes e os jogos continuam abertos!',
     notConfigured: 'O chat ainda não está configurado — falta a GROQ_API_KEY.',
     groqDown: 'O PAI está fazendo uma pausa rápida. Tente de novo em instantes!',
     unreachable: 'Não foi possível falar com o PAI agora. Verifique sua conexão!',
@@ -106,6 +114,24 @@ export async function POST(req: NextRequest) {
     }
   } catch (e) {
     console.error('Chat usage check failed:', e)
+  }
+
+  // Sitewide daily circuit breaker + anonymous per-IP cap (Postgres — survives
+  // redeploys; see lib/chatLimits.ts). If the counter is unreachable we let the
+  // message through: chat should not die when the database does, and the IP
+  // burst guard above still applies.
+  try {
+    const breaker = await bumpAndCheck(userId == null ? ip : null)
+    if (!breaker.ok) {
+      return NextResponse.json(
+        breaker.reason === 'global'
+          ? { reply: L.siteBusy }
+          : { reply: L.anonLimit, remaining: 0 },
+        { status: 429 },
+      )
+    }
+  } catch (e) {
+    console.error('Chat breaker check failed (allowing message):', e)
   }
 
   if (!GROQ_API_KEY) {

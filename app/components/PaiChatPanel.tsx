@@ -6,6 +6,17 @@ const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
 const GREEN = '#3DF542'
 const BLACK = '#0a0a0a'
+const LESSON_NUDGE_AT = 8   // questions in one lesson before PAI gently points back to the lesson
+
+// Local count of questions asked in this lesson today — only used to time the
+// nudge, so localStorage is fine (the real limits are enforced server-side).
+function incrementLessonUsage(lessonId: number): number {
+  if (typeof window === 'undefined') return 0
+  const key   = `pai_chat_lesson_${lessonId}_${new Date().toISOString().slice(0, 10)}`
+  const count = parseInt(localStorage.getItem(key) ?? '0', 10) + 1
+  localStorage.setItem(key, String(count))
+  return count
+}
 
 interface Stop { title: string; body: string }
 interface Props {
@@ -29,6 +40,7 @@ const T = {
     close: 'close',
     noResponse: 'No response.',
     leftThisMonth: (n: number) => `${n} left this month`,
+    lessonNudge: 'Great questions! Let\'s finish this lesson and see what comes next — I\'ll be right here if you need me.',
   },
   pt: {
     greetingElem: 'Oi! Me pergunte qualquer coisa sobre este slide.',
@@ -39,6 +51,7 @@ const T = {
     close: 'fechar',
     noResponse: 'Sem resposta.',
     leftThisMonth: (n: number) => `${n} restantes este mês`,
+    lessonNudge: 'Ótimas perguntas! Vamos terminar esta aula e ver o que vem a seguir — estarei bem aqui se você precisar de mim.',
   },
 } as const
 
@@ -73,6 +86,10 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
       const data = await res.json()
       if (typeof data.remaining === 'number') setRemaining(data.remaining)
       setMessages(m => [...m, { role: 'assistant', content: data.reply ?? tx.noResponse }])
+      // After a burst of questions in one lesson, gently point back to the lesson — once per lesson per day.
+      if (res.ok && incrementLessonUsage(lessonId) === LESSON_NUDGE_AT) {
+        setMessages(m => [...m, { role: 'assistant', content: tx.lessonNudge }])
+      }
     } catch {
       setMessages(m => [...m, { role: 'assistant', content: tx.unreachable }])
     } finally {
