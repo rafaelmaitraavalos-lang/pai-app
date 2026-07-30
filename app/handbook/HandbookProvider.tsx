@@ -220,23 +220,24 @@ function HBButton({ onClick }: { onClick: () => void }) {
   return (
     // Sits inside the existing black top bar every page already renders —
     // centered in the gap between the PAI logo and the "Home"/"World" link.
-    <div style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 48, height: 38, display: 'flex', alignItems: 'center' }}>
+    <div style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 48, pointerEvents: 'none' }}>
       <button
         onClick={onClick}
         aria-label="Open bonus content"
         style={{
+          pointerEvents: 'auto',
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          display: 'flex', alignItems: 'baseline', gap: 7,
-          padding: '6px 10px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
+          padding: '10px 10px 6px',
           touchAction: 'manipulation',
         }}
       >
-        <span style={{ fontFamily: BODY, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
+        <span style={{ fontFamily: BODY, fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, userSelect: 'none' }}>
           {isPT ? 'CONTEÚDO BÔNUS' : 'BONUS CONTENT'}
         </span>
-        <span style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
+        <span style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: GREEN, userSelect: 'none', lineHeight: 1 }}>
           {isPT ? 'MANUAL DE IA' : 'AI HANDBOOK'}
         </span>
       </button>
