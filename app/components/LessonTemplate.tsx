@@ -473,8 +473,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
         style={{
           position: 'fixed',
-          bottom: 96,
-          left: 24,
+          bottom: 130,
+          left: 32,
           zIndex: 40,
           width: 56,
           height: 56,

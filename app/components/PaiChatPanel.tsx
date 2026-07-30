@@ -108,8 +108,8 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
       {/* Speech bubble — floats directly above the chat button, bottom-left */}
       <div style={{
         position:      'fixed',
-        bottom:        164,        // clears the chat button (bottom:96, 56px tall)
-        left:          24,
+        bottom:        198,        // clears the chat button (bottom:130, 56px tall)
+        left:          12,
         zIndex:        51,
         width:         340,
         maxWidth:      'calc(100vw - 32px)',
@@ -127,7 +127,7 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         <div style={{
           position:    'absolute',
           bottom:      -14,
-          left:        28,
+          left:        48,
           width:       0,
           height:      0,
           borderLeft:  '10px solid transparent',
@@ -137,7 +137,7 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         <div style={{
           position:    'absolute',
           bottom:      -10,
-          left:        30,
+          left:        50,
           width:       0,
           height:      0,
           borderLeft:  '8px solid transparent',
