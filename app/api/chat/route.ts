@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { searchCorpus } from '../../../lib/chatCorpus'
 import { getSql } from '../../../lib/db'
 import { bumpAndCheck } from '../../../lib/chatLimits'
+import { checkSafety, safetyMessages } from '../../../lib/chatSafety'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
 const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
@@ -93,6 +94,16 @@ export async function POST(req: NextRequest) {
   const { message, lessonTitle, currentStop, allStops, history, track, lang, lessonId } = await req.json()
   const L = lang === 'pt' ? MSG.pt : MSG.en
 
+  // Safety first — before rate limits, before the model. A student in trouble
+  // gets a real answer even if they are out of questions, and the text is fixed
+  // so nothing can talk the tutor out of it.
+  const SAFE = safetyMessages(lang)
+  const verdict = checkSafety(message)
+  if (verdict.kind === 'distress' && verdict.confidence === 'high') {
+    console.warn(`[safety] high-confidence ${verdict.signal} — served fixed response`)
+    return NextResponse.json({ reply: SAFE.distress })
+  }
+
   // Burst guard by IP (secondary — the real cap is per-account below)
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
   if (!checkServerRate(ip)) {
@@ -177,9 +188,10 @@ export async function POST(req: NextRequest) {
     ? 'LANGUAGE: Respond ONLY in Brazilian Portuguese, regardless of what language the student writes in.'
     : 'LANGUAGE: Respond ONLY in English, regardless of what language the student writes in.'
 
-  const notInCurriculumLine = lang === 'pt'
-    ? 'Isso não está no curso — mas é uma ótima pergunta!'
-    : 'That is not in this course — but it is a great question!'
+  // The model is asked for a sentinel rather than a sentence: it kept paraphrasing
+  // the refusal, or skipping it and dumping unrelated lesson text at the student.
+  // The server swaps the sentinel for the real wording below.
+  const SENTINEL = 'OUT_OF_SCOPE'
 
   const systemPrompt = `You are PAI, an AI tutor inside a course called PAI for Kids.
 A student is reading a lesson called "${lessonTitle}".
@@ -190,7 +202,8 @@ ${languageRule}
 CONTENT RULES:
 - Answer ONLY using the curriculum content below (the current slide, the rest of this lesson, and — if relevant to the question — the other lesson excerpts provided). No outside knowledge.
 - The "OTHER RELEVANT LESSONS" section is only sometimes useful — ignore it if it doesn't actually help answer the question.
-- If the answer is not in any of the content below, say exactly: "${notInCurriculumLine}"
+- If the question is not about how AI works, or the answer is not in the content below, reply with exactly this and NOTHING else: ${SENTINEL}
+- Do not try to be helpful by answering a different question than the one asked. If you cannot answer the question that was actually asked using the content below, reply ${SENTINEL}.
 - Never make up facts, people, dates, or events beyond what is provided.
 - No emojis anywhere in your response.
 
@@ -233,8 +246,19 @@ ${otherLessonsContext || '(none found for this question)'}
       return NextResponse.json({ reply: L.groqDown }, { status: 502 })
     }
 
-    const data  = await res.json()
-    const reply = data?.choices?.[0]?.message?.content ?? L.noResponse
+    const data = await res.json()
+    let reply: string = data?.choices?.[0]?.message?.content ?? L.noResponse
+
+    // Any trace of the sentinel means out of scope — the model sometimes wraps it
+    // in a sentence. An empty reply is treated the same way.
+    if (!reply.trim() || reply.includes(SENTINEL)) {
+      reply = SAFE.outOfScope
+    }
+    // A soft distress signal gets the normal answer plus one warm line, so an
+    // ambiguous message ("I'm so sad") is never simply ignored.
+    if (verdict.kind === 'distress' && verdict.confidence === 'maybe') {
+      reply = `${reply}\n\n${SAFE.distressSoft}`
+    }
 
     if (userId) {
       try {
