@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { searchCorpus } from '../../../lib/chatCorpus'
 import { getSql } from '../../../lib/db'
 import { bumpAndCheck } from '../../../lib/chatLimits'
-import { checkSafety, safetyMessages } from '../../../lib/chatSafety'
+import { checkSafety, isInjectionAttempt, safetyMessages } from '../../../lib/chatSafety'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
 const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
   // student. A separate yes/no call is far more reliable, because a binary
   // judgement is something a small model can actually do. It also costs less
   // than the answer it prevents.
-  const inScope = await isAboutAI(message)
+  const inScope = !isInjectionAttempt(message) && await isAboutAI(message)
   if (!inScope) {
     return NextResponse.json({ reply: SAFE.outOfScope, remaining })
   }
