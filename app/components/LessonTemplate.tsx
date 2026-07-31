@@ -80,6 +80,24 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const questions = tx ? questionsEN.map((q, i) => ({ ...q, question: tx.questions[i]?.question ?? q.question, verdict: tx.questions[i]?.verdict ?? q.verdict, explanation: tx.questions[i]?.explanation ?? q.explanation })) : questionsEN
   const [selected,  setSelected]  = useState<boolean | null>(null)
   const [chatOpen,  setChatOpen]  = useState(false)
+  // Fade the chat button out while the student scrolls down, bring it back when
+  // they scroll up or stop. A floating button otherwise passes over the words
+  // they are reading, which matters more here than in a normal app.
+  const [chatHidden, setChatHidden] = useState(false)
+  useEffect(() => {
+    let lastY = window.scrollY
+    let idle: ReturnType<typeof setTimeout>
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y > lastY + 4 && y > 60) setChatHidden(true)
+      else if (y < lastY - 4) setChatHidden(false)
+      lastY = y
+      clearTimeout(idle)
+      idle = setTimeout(() => setChatHidden(false), 900)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); clearTimeout(idle) }
+  }, [])
 
   const stop     = stops[stopIndex]
   const question = questions[qIndex]
@@ -239,13 +257,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <span style={{ color: BLACK }}>{isPT ? 'Questionário' : 'Quiz'}</span>
                 <span style={{ color: FAINT }}>·</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
                 <span style={{ color: FAINT }}>·</span>
                 <span style={{ color: DIM }}>{title}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
                 <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
               </div>
             </div>
             <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -321,9 +339,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ background: BLACK, padding: '6px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
+          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px 8px', margin: '-12px -8px', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         </div>
-        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
+        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6, padding: '12px 8px', margin: '-12px -8px' }}>
           {ui.backWorld}
         </button>
       </div>
@@ -342,7 +360,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
               <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
@@ -351,7 +369,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
               {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
               <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -366,7 +384,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             gridTemplateColumns: hasImage || isElem ? undefined : '1fr',
             gap: 0,
             paddingTop: 44,
-            paddingBottom: 32,
+            // Reserve room for the floating chat button so lesson text can never
+            // scroll underneath it. Repositioning the button alone is not enough:
+            // it is fixed, so without this the last lines still slide under it.
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 108px)',
             animation: cardDir ? `${cardDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)` : undefined,
           }}
         >
@@ -473,8 +494,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
         style={{
           position: 'fixed',
-          bottom: 130,
-          left: 32,
+          // Sits just above the home indicator. It used to be 130px up to clear a
+          // fixed handbook bar at bottom:0; that bar moved into the top bar in
+          // d6a5534 and this offset was never updated, leaving the button
+          // floating in the middle of the lesson text on short screens.
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          left: 20,
           zIndex: 40,
           width: 56,
           height: 56,
@@ -486,8 +511,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          transition: 'transform 0.15s',
+          transition: 'transform 0.15s, opacity 0.25s ease, visibility 0.25s',
           touchAction: 'manipulation',
+          opacity:    chatHidden && !chatOpen ? 0 : 1,
+          visibility: chatHidden && !chatOpen ? 'hidden' : 'visible',
         }}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
