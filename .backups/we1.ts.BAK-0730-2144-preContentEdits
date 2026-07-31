@@ -20,7 +20,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Example',
         title: 'He Created a Game to Find Out!',
-        body: "Imagine exchanging messages with two mystery writers. One is a real human being. The other is a machine. You can only read their words—no pictures, no sounds, and no peeking! Can you tell if it's a machine? If you can't tell, the machine wins the game! Alan called this the Turing Test.",
+        body: "Imagine exchanging messages with two different people. One is a real human being. The other is a machine. You can only read their words—no pictures, no sounds, and no peeking! Can you tell if it's a machine? If you can't, the machine wins, and proved it can think! Alan called this the Turing Test.",
       },
       {
         tag: 'Fact',

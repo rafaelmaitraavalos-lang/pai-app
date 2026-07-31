@@ -59,15 +59,49 @@ IS_QUIZ_M = re.compile(r'Now the quizzes', re.IGNORECASE)
 
 SEP = '────────────────────────────────────────────────────────────'
 
-def split_title_body(text):
-    """For combined-format slides: split title words from body text."""
+# Words that can never end a title — if the scan stops here, the body started
+# with a capitalised word and the title greedily swallowed it.
+_TRAILING_JUNK = {'the', 'a', 'an', 'and', 'or', 'but', 'of', 'in', 'on', 'at',
+                  'to', 'for', 'with', 'from', 'by', 'as', 'that', 'this', 'these'}
+
+def split_title_body(text, warn=None):
+    """For combined-format slides: split title words from body text.
+
+    Heuristic: a title is a short run of capitalised words and the body starts at
+    the first lowercase word. That fails whenever the body itself opens with
+    capitalised words ("Early AI systems…", "GitHub Copilot and…", "The
+    combination of…") — the title then swallows them and the body starts
+    mid-sentence. This silently corrupted all 54 World 8 slides.
+
+    Two guards now: trailing function words are pushed back into the body, and
+    any split that stays ambiguous is reported rather than applied silently.
+    """
     words = text.split()
     if len(words) <= 2:
         return text, ''
-    for end in range(2, min(8, len(words))):
-        if words[end] and words[end][0].islower():
-            return ' '.join(words[:end]), ' '.join(words[end:])
-    return ' '.join(words[:4]), ' '.join(words[4:])
+
+    end = None
+    for k in range(2, min(8, len(words))):
+        if words[k] and words[k][0].islower():
+            end = k
+            break
+    if end is None:
+        end = min(4, len(words) - 1)
+        if warn:
+            warn(f'no lowercase word found; guessed a {end}-word title: {text[:70]!r}')
+
+    # "…Multimodal AI The | combination of vision" — a title cannot end on "The".
+    while end > 2 and words[end - 1].strip('.,;:').lower() in _TRAILING_JUNK:
+        end -= 1
+
+    # Every capitalised word the scan passed over is a word the title may have
+    # stolen from the body. Two or more is the World 8 signature.
+    passed = sum(1 for w in words[2:end] if w[:1].isupper())
+    if passed >= 2 and warn:
+        warn(f'ambiguous split — title may have absorbed the body\'s opening words: '
+             f'title={" ".join(words[:end])!r} body={" ".join(words[end:])[:50]!r}')
+
+    return ' '.join(words[:end]), ' '.join(words[end:])
 
 def slide_num(s):
     m = re.match(r'Slide\s+(\d+)', s)
@@ -151,7 +185,10 @@ def main():
                     title, body = rest, next_s
                     i += 2
                 else:
-                    title, body = split_title_body(rest)
+                    title, body = split_title_body(
+                        rest,
+                        warn=lambda m, w=cur_w, mo=cur_m: sys.stderr.write(
+                            f'WARN  world {w} mod {mo}: {m}\n'))
                     i += 1
                 worlds[cur_w]['mods'][cur_m]['slides'].append((tag, title, body))
                 continue
