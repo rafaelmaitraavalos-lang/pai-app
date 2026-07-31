@@ -3,13 +3,14 @@ import { searchCorpus } from '../../../lib/chatCorpus'
 import { getSql } from '../../../lib/db'
 import { bumpAndCheck } from '../../../lib/chatLimits'
 import { checkSafety, isInjectionAttempt, safetyMessages } from '../../../lib/chatSafety'
+import { cacheKey, getCached, isCacheable, putCached } from '../../../lib/chatCache'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
 const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
 const SESSION_COOKIE = 'pai_session'
 
 // ── Per-account monthly cap (the real limit — one row per user per month) ──
-const MONTHLY_LIMIT = 50
+const MONTHLY_LIMIT = 25
 
 async function ensureChatUsageTable() {
   await getSql()`
@@ -72,6 +73,7 @@ const MSG = {
     rateLimited: 'You\'ve sent a lot of questions today! Come back in an hour and keep exploring.',
     monthlyLimitReached: `You've used all ${MONTHLY_LIMIT} of your questions for this month. More open up next month!`,
     anonLimit: 'You\'ve asked a lot of questions today! Sign in to keep track of your own questions, or come back tomorrow.',
+    dailyLimit: 'That\'s all your questions for today! Come back tomorrow and ask me more.',
     siteBusy: 'So many students are chatting with me today that I need to rest until tomorrow. The lessons, quizzes, and games are all still open!',
     notConfigured: 'Chat is not configured yet — GROQ_API_KEY is missing.',
     groqDown: 'PAI is taking a quick break. Try again in a moment!',
@@ -82,6 +84,7 @@ const MSG = {
     rateLimited: 'Você já fez muitas perguntas hoje! Volte em uma hora para continuar explorando.',
     monthlyLimitReached: `Você já usou todas as suas ${MONTHLY_LIMIT} perguntas deste mês. Mais perguntas liberam no próximo mês!`,
     anonLimit: 'Você já fez muitas perguntas hoje! Entre na sua conta para acompanhar suas próprias perguntas, ou volte amanhã.',
+    dailyLimit: 'Essas foram todas as suas perguntas de hoje! Volte amanhã para me perguntar mais.',
     siteBusy: 'Tantos estudantes estão conversando comigo hoje que preciso descansar até amanhã. As aulas, os quizzes e os jogos continuam abertos!',
     notConfigured: 'O chat ainda não está configurado — falta a GROQ_API_KEY.',
     groqDown: 'O PAI está fazendo uma pausa rápida. Tente de novo em instantes!',
@@ -169,14 +172,12 @@ export async function POST(req: NextRequest) {
   // message through: chat should not die when the database does, and the IP
   // burst guard above still applies.
   try {
-    const breaker = await bumpAndCheck(userId == null ? ip : null)
+    const breaker = await bumpAndCheck(userId == null ? ip : null, userId)
     if (!breaker.ok) {
-      return NextResponse.json(
-        breaker.reason === 'global'
-          ? { reply: L.siteBusy }
-          : { reply: L.anonLimit, remaining: 0 },
-        { status: 429 },
-      )
+      const msg = breaker.reason === 'global'      ? L.siteBusy
+                : breaker.reason === 'student-daily' ? L.dailyLimit
+                : L.anonLimit
+      return NextResponse.json({ reply: msg, remaining }, { status: 429 })
     }
   } catch (e) {
     console.error('Chat breaker check failed (allowing message):', e)
@@ -191,6 +192,17 @@ export async function POST(req: NextRequest) {
   // student. A separate yes/no call is far more reliable, because a binary
   // judgement is something a small model can actually do. It also costs less
   // than the answer it prevents.
+  // Cache lookup — exact question, same slide, same language, same track, and only
+  // when this is the first question of a conversation. See lib/chatCache.ts.
+  const cacheable = isCacheable(history, message)
+  const ckey = cacheable
+    ? cacheKey(message, { lessonId, slideTitle: currentStop?.title ?? '', lang, track })
+    : null
+  if (ckey) {
+    const hit = await getCached(ckey)
+    if (hit) return NextResponse.json({ reply: hit, remaining, cached: true })
+  }
+
   const inScope = !isInjectionAttempt(message) && await isAboutAI(message)
   if (!inScope) {
     // A student who is upset and asking to talk about something else gets the
@@ -321,6 +333,11 @@ ${otherLessonsContext || '(none found for this question)'}
     // ambiguous message ("I'm so sad") is never simply ignored.
     if (verdict.kind === 'distress' && verdict.confidence === 'maybe') {
       reply = `${reply}\n\n${SAFE.distressSoft}`
+    }
+
+    // Store only genuine answers — never a refusal, a safety message, or an error.
+    if (ckey && reply && reply !== SAFE.outOfScope && verdict.kind === 'none') {
+      await putCached(ckey, reply)
     }
 
     if (userId) {
