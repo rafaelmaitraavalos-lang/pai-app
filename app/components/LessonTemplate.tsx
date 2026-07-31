@@ -366,7 +366,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             gridTemplateColumns: hasImage || isElem ? undefined : '1fr',
             gap: 0,
             paddingTop: 44,
-            paddingBottom: 32,
+            // Reserve room for the floating chat button so lesson text can never
+            // scroll underneath it. Repositioning the button alone is not enough:
+            // it is fixed, so without this the last lines still slide under it.
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 108px)',
             animation: cardDir ? `${cardDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)` : undefined,
           }}
         >
@@ -473,8 +476,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
         style={{
           position: 'fixed',
-          bottom: 130,
-          left: 32,
+          // Sits just above the home indicator. It used to be 130px up to clear a
+          // fixed handbook bar at bottom:0; that bar moved into the top bar in
+          // d6a5534 and this offset was never updated, leaving the button
+          // floating in the middle of the lesson text on short screens.
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          left: 20,
           zIndex: 40,
           width: 56,
           height: 56,

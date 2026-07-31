@@ -105,7 +105,8 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
       {/* Speech bubble — floats directly above the chat button, bottom-left */}
       <div style={{
         position:      'fixed',
-        bottom:        198,        // clears the chat button (bottom:130, 56px tall)
+        // clears the chat button: its 20px offset + 56px height + 12px gap
+        bottom:        'calc(env(safe-area-inset-bottom, 0px) + 88px)',
         left:          12,
         zIndex:        51,
         width:         340,
