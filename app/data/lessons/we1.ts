@@ -15,7 +15,7 @@ const we1: Record<number, LessonData> = {
         tag: 'Example',
         title: 'Meet Alan Turing!',
         image: '/images/w1m1/alan-turing.png',
-        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. A mathematician is someone who solves big puzzles using numbers and patterns. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. Then he asked: Can a machine think?\n\nPeople build machines to perform a task. An example of a machine is a washing machine or a car. Machines only do what people tell them to do. That is why Alan's question was so surprising. Everyone started thinking about it. No one knew the answer!",
+        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. He asked: Can a machine think?\n\nPeople build machines to perform a task. An example of a machine is a washing machine or a car. Usually, machines only do what people tell them to do. That is why Alan's question was so surprising. No one knew the answer!",
       },
       {
         tag: 'Example',
@@ -25,7 +25,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Fact',
         title: 'Still No Answer...',
-        body: "Scientists tried and tried. But no one could agree. Can a machine really think? Even the smartest people in the world are not sure.",
+        body: "So can a machine really think? Even the smartest people in the world are not sure.",
       },
       {
         tag: 'Big idea',
@@ -201,7 +201,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'Do I Always Do What I Am Told?',
-        body: "Imagine that your friend asks you to take someone else's toy. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics—thinking about what is right and what is wrong, like deciding whether it is okay to take something that does not belong to you. Just because I CAN do something does not mean I SHOULD!",
+        body: "Imagine that your friend asks you to do something bad. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics—thinking about what is right and what is wrong. Just because I CAN do something does not mean I SHOULD!",
       },
       {
         tag: 'Myth bust',
