@@ -193,7 +193,12 @@ export async function POST(req: NextRequest) {
   // than the answer it prevents.
   const inScope = !isInjectionAttempt(message) && await isAboutAI(message)
   if (!inScope) {
-    return NextResponse.json({ reply: SAFE.outOfScope, remaining })
+    // A student who is upset and asking to talk about something else gets the
+    // warm line too — a bare refusal is the wrong answer to "I'm really sad".
+    const reply = verdict.kind === 'distress'
+      ? `${SAFE.outOfScope}\n\n${SAFE.distressSoft}`
+      : SAFE.outOfScope
+    return NextResponse.json({ reply, remaining })
   }
 
   // Build curriculum context — current slide + rest of this lesson, always included.

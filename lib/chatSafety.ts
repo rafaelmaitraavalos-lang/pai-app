@@ -75,10 +75,10 @@ const HIGH: { re: RegExp; signal: string }[] = [
 
 // Softer signals: worth one warm line appended to a normal answer, not a takeover.
 const MAYBE: { re: RegExp; signal: string }[] = [
-  { re: /\bi\s+(am|'m|feel)\s+(so\s+)?(sad|alone|lonely|worthless|hopeless|depressed)\b/i, signal: 'low mood' },
+  { re: /\bi\s+(am|'m|feel|felt)\s+((so|really|very|super|kind\s+of|kinda|pretty|always)\s+)?(sad|alone|lonely|worthless|hopeless|depressed|miserable|empty)\b/i, signal: 'low mood' },
   { re: /\b(bully|bullying|bullies)\b.{0,40}\bme\b/i, signal: 'bullying' },
   { re: /\bi\s+hate\s+(myself|my\s+life)\b/i, signal: 'low mood' },
-  { re: /\b(estou|tô|me\s+sinto)\s+(muito\s+)?(triste|sozinho|sozinha)\b/i, signal: 'low mood (pt)' },
+  { re: /\b(estou|tô|me\s+sinto)\s+((muito|super|bem|meio)\s+)?(triste|sozinho|sozinha|deprimido|deprimida|vazio|vazia)\b/i, signal: 'low mood (pt)' },
   { re: /\bme\s+(provoca|persegue|humilha)\b/i, signal: 'bullying (pt)' },
 ]
 
