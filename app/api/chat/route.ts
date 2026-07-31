@@ -265,11 +265,22 @@ ${otherContext}
 ${otherLessonsContext || '(none found for this question)'}
 === END ===`
 
+  const prior = (history as { role: string; content: string }[] ?? [])
+    .filter((m: { role: string }) => m.role !== 'system')
+    .slice(-8)  // last 4 turns
+
+  // The panel already appends the new question to `history`, so only add it when
+  // it is genuinely absent. Without this the model receives a system prompt and
+  // no user turn at all, and answers by echoing the lesson title or asking the
+  // student what they wanted — which is exactly what it did for any caller that
+  // did not duplicate the message into history.
+  const last = prior[prior.length - 1]
   const messages = [
     { role: 'system', content: systemPrompt },
-    ...(history as { role: string; content: string }[])
-      .filter((m: { role: string }) => m.role !== 'system')
-      .slice(-8),  // last 4 turns
+    ...prior,
+    ...(last?.role === 'user' && last.content === message
+      ? []
+      : [{ role: 'user', content: message }]),
   ]
 
   try {
