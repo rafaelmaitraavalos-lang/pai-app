@@ -163,7 +163,11 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             {selected !== null && (
               <div style={{ marginTop: 18, animation: 'slideUpFade 0.3s ease-out' }}>
                 <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14 }}>
-                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>{question.verdict}</p>
+                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>
+                    {isCorrect
+                      ? (lang === 'pt' ? 'Correto!' : 'Correct!')
+                      : (lang === 'pt' ? 'Não exatamente!' : 'Not quite!')}
+                  </p>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65 }}>{question.explanation}</p>
                 </div>
               </div>

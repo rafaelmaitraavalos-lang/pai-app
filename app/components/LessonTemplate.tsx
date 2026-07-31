@@ -296,7 +296,11 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {selected !== null && (
               <div style={{ marginTop: 20, maxWidth: 560, animation: 'slideUpFade 0.3s ease-out' }}>
                 <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 16 }}>
-                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>{question.verdict}</p>
+                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>
+                    {isCorrect
+                      ? (isPT ? 'Correto!' : 'Correct!')
+                      : (isPT ? 'Não exatamente!' : 'Not quite!')}
+                  </p>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65, maxWidth: '60ch' }}>{question.explanation}</p>
                 </div>
               </div>
