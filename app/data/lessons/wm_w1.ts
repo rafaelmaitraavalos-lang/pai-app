@@ -54,7 +54,7 @@ const wm_w1: Record<number, LessonData> = {
     id: 214, worldId: 201,
     title: "What Ai Can And Cannot Do",
     stops: [
-      { tag: "Fact", title: "Powerful but Limited", body: "AI is not automatically smarter than a human. It has simply processed far more examples than a person could review in a lifetime. That makes it powerful in some areas and surprisingly fragile in others." },
+      { tag: "Fact", title: "Powerful but Limited", body: "AI can look astonishing one moment and hopeless the next. That is because it works from patterns it has seen before rather than from understanding, so it is strongest on the kinds of problems its training covered well and weakest just outside them. This lesson is about where that edge falls." },
       { tag: "Example", title: "Where AI Struggles", body: "AI systems can struggle with tasks that require genuine reasoning about novel situations, common-sense knowledge, or understanding context in the way humans do — even when they perform impressively on structured, well-defined tasks." },
       { tag: "Big idea", title: "Fluency Without Understanding", body: "A language model can write a convincing essay without understanding a word of it. It generates statistically likely continuations of text based on patterns in training data — not meaning, intent, or comprehension." },
       { tag: "Hot take", title: "No Goals of Its Own", body: "AI systems also do not have goals of their own. They do not want anything. The objectives they appear to pursue are objectives their designers gave them. That distinction matters when evaluating AI behavior." },
