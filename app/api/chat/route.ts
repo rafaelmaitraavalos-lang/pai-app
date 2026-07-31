@@ -6,7 +6,14 @@ import { checkSafety, isInjectionAttempt, safetyMessages } from '../../../lib/ch
 import { cacheKey, getCached, isCacheable, putCached } from '../../../lib/chatCache'
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY ?? ''
-const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant'
+// Answering model. llama-3.1-8b-instant answered "Who was Alan Turing?" with
+// "What is AI?" — too small to follow the curriculum reliably. 70b was verified
+// working on this project's existing Groq key via preview deploys.
+// Override per-environment with GROQ_MODEL.
+const MODEL        = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+// The yes/no scope check is a binary judgement the small model does fine, and it
+// runs on every message — keeping it cheap is what pays for the better answers.
+const CLASSIFIER_MODEL = process.env.GROQ_CLASSIFIER_MODEL ?? 'llama-3.1-8b-instant'
 const SESSION_COOKIE = 'pai_session'
 
 // ── Per-account monthly cap (the real limit — one row per user per month) ──
@@ -102,7 +109,7 @@ async function isAboutAI(message: string): Promise<boolean> {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROQ_API_KEY}` },
       body: JSON.stringify({
-        model: MODEL,
+        model: CLASSIFIER_MODEL,
         max_tokens: 3,
         temperature: 0,
         messages: [
