@@ -308,23 +308,39 @@ ${otherLessonsContext || '(none found for this question)'}
   ]
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method:  'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages,
-        max_tokens:  250,
-        temperature: 0.4,
-      }),
-    })
+    // Retry rate limits and transient upstream errors. A single blip otherwise
+    // tells the student "PAI is taking a quick break" — and at classroom scale
+    // those blips are the norm, not the exception. Groq sends Retry-After when
+    // it throttles; honour it, capped so nobody waits on a spinner.
+    let res: Response | null = null
+    for (let attempt = 0; attempt < 3; attempt++) {
+      res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          messages,
+          max_tokens:  250,
+          temperature: 0.4,
+        }),
+      })
+      // 429 = throttled, 5xx = transient. Anything else (including 4xx auth
+      // errors) will not improve by asking again.
+      if (res.ok || (res.status !== 429 && res.status < 500)) break
+      if (attempt === 2) break
+      const retryAfter = Number(res.headers.get('retry-after'))
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(retryAfter * 1000, 2500)
+        : 400 * Math.pow(2, attempt)      // 400ms, 800ms
+      await new Promise(r => setTimeout(r, waitMs))
+    }
 
-    if (!res.ok) {
-      const err = await res.text()
-      console.error('Groq error:', err)
+    if (!res || !res.ok) {
+      const err = res ? await res.text() : 'no response'
+      console.error(`Groq error (${res?.status}):`, err.slice(0, 300))
       return NextResponse.json({ reply: L.groqDown }, { status: 502 })
     }
 
