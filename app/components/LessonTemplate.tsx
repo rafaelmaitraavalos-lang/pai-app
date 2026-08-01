@@ -296,11 +296,20 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {selected !== null && (
               <div style={{ marginTop: 20, maxWidth: 560, animation: 'slideUpFade 0.3s ease-out' }}>
                 <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 16 }}>
-                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>
-                    {isCorrect
-                      ? (isPT ? 'Correto!' : 'Correct!')
-                      : (isPT ? 'Não exatamente!' : 'Not quite!')}
-                  </p>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    fontFamily: DISP, fontSize: 20, letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    background: isCorrect ? '#27AE60' : '#C0392B',
+                    padding: '10px 18px',
+                    boxShadow: `4px 4px 0 0 ${isCorrect ? '#1B7A43' : '#8C2A1F'}`,
+                    margin: '0 0 14px',
+                    animation: 'verdictPop 0.28s cubic-bezier(0.34,1.4,0.64,1)',
+                  }}>
+                    <span aria-hidden="true">{isCorrect ? '\u2713' : '\u2715'}</span>
+                    {isCorrect ? (isPT ? 'CERTO!' : 'RIGHT!') : (isPT ? 'ERRADO' : 'WRONG')}
+                  </div>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65, maxWidth: '60ch' }}>{question.explanation}</p>
                 </div>
               </div>
