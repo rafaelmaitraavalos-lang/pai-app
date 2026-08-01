@@ -105,9 +105,11 @@ build and against prod: 39/39.
 
 ## Still open
 
-1. Connections puzzle content is graduate-level and English-only —
-   suggested kid-level EN+PT replacement in
-   `PAI-suggested-connections-puzzle.md`, awaiting Sonali/Rafa approval.
+1. ~~Connections puzzle content~~ DONE (Sonali approved same day): kid-level
+   "Spot the AI" / "Encontre a IA" live in both languages; the engine's
+   isPT prop is now actually passed (PT students used to get English
+   controls); played to a clean win in PT on prod. First game verified
+   through an actual win — the other 27 still only load/exit-tested.
 2. Rafa before camp: confirm Groq spend cap + PAID tier (free tier =
    1K requests/day = dead chat on day one at 5,000 kids). See
    `RAFA-BEFORE-CAMP.md`.
