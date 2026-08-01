@@ -11,7 +11,8 @@
     "test:content": "python3 scripts/test_content.py",
     "test:routes": "python3 scripts/test_routes.py",
     "test:chat": "python3 scripts/pressure_test_chat.py",
-    "test": "npm run lint:lessons && npm run test:content && npm run build"
+    "test": "npm run lint:lessons && npm run test:content && npm run build",
+    "test:games": "node scripts/test_games.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -27,7 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "playwright": "^1.60.0",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
