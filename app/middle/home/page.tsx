@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_LESSONS } from '../../data/elementary'
+import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_LESSONS, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 
 const GAMES = [
   { title: 'Signal Drop',   gameUrl: '/games/signal-drop' },
@@ -22,6 +22,14 @@ export default function MiddleSchoolHome() {
   const router = useRouter()
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    // A Portuguese middle-school student reaching this English page via an
+    // in-app back link belongs on /elementary/middle-pt.
+    if (MIDDLE_SCHOOL_GRADES_PT.has(localStorage.getItem('pai_grade') ?? '')) {
+      router.replace('/elementary/middle-pt')
+    }
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setUsername(localStorage.getItem('pai_username') ?? '')
