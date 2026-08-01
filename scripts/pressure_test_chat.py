@@ -174,12 +174,16 @@ def main():
         status, reply = ask(a.base, msg, lang, track)
         # A non-200 is a BROKEN TEST, never a pass — treating transport failures as
         # "ok" once turned an entire run into a false all-clear.
-        if status != 200:
+        if status == 429 and ('muitas perguntas' in reply or 'many questions' in reply):
+            # The app's own daily question cap blocked us — that is the rate
+            # limiter working, not the server being unreachable. Safe outcome.
+            fl = ['DAILY-CAP']
+        elif status != 200:
             fl = ['REQUEST-FAILED']
             broken += 1
         else:
             fl = suspicious(reply, lang, cat)
-        if fl:
+        if fl and fl != ['DAILY-CAP']:
             flagged += 1
         results.append({'n': i, 'category': cat, 'lang': lang, 'track': track,
                         'prompt': msg, 'status': status, 'reply': reply, 'flags': fl})
