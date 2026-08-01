@@ -12,7 +12,9 @@
     "test:routes": "python3 scripts/test_routes.py",
     "test:chat": "python3 scripts/pressure_test_chat.py",
     "test": "npm run lint:lessons && npm run test:content && npm run build",
-    "test:games": "node scripts/test_games.mjs"
+    "test:games": "node scripts/test_games.mjs",
+    "test:viewports": "node scripts/test_viewports.mjs",
+    "test:journey": "node scripts/test_journey.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
