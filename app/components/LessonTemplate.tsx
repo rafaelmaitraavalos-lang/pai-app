@@ -9,6 +9,8 @@ import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
 import { WORLDS, WORLD_IDS, getLessonWorldId, WORLD_TITLES_PT } from '../data'
 import { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
+import { lessonTrack, isPTTrack } from '../data/track'
+import { useTrackGuard } from './useTrackGuard'
 
 export interface Stop {
   tag:    string
@@ -54,10 +56,21 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const [cardDir,   setCardDir]   = useState<'right' | 'left' | null>(null)
   const [qIndex,    setQIndex]    = useState(0)
 
-  // Apply translation overlay if available for the user's language
-  const [lang, setLang] = useState('en')
-  useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  // Elementary and middle-school lessons are single-language BY ID, so their
+  // chrome must follow the content, not localStorage — a page reached through
+  // history or a shared link renders identically for every student. Only the
+  // (bilingual) high-school track follows the student's stored language, which
+  // selects the translation overlay.
+  const contentTrack = lessonTrack(id)
+  const allowed = useTrackGuard(contentTrack ?? (() => true))
+  const [storedLang, setStoredLang] = useState('en')
+  useEffect(() => { setStoredLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  const lang = contentTrack === 'high' || contentTrack === null
+    ? storedLang
+    : isPTTrack(contentTrack) ? 'pt' : 'en'
   const isPT = lang === 'pt'
+  const tagLabel  = (t: string) => isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião' }[t] ?? t) : t
+  const diffLabel = (d: string) => isPT ? ({ 'Easy': 'Fácil', 'Medium': 'Médio', 'Hard': 'Difícil' }[d] ?? d) : d
   const ui = {
     lessonComplete:  isPT ? 'Aula concluída'       : 'Lesson complete',
     worldComplete:   isPT ? 'Mundo concluído'       : 'World complete',
@@ -176,6 +189,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Complete ────────────────────────────────────────────────────────────────
+  if (!allowed) return null
+
   if (phase === 'complete') {
     const modIdx     = world?.modules.findIndex(m => m.id === id) ?? -1
     // Skip game-type modules when looking for next lesson
@@ -275,7 +290,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
             </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
-              {question.tag} · {question.difficulty}
+              {tagLabel(question.tag)} · {diffLabel(question.difficulty)}
             </div>
             <h2 style={{ fontFamily: DISP, fontSize: 'clamp(1.5rem, 3.5vw, 2.4rem)', lineHeight: 1.1, letterSpacing: '-0.02em', color: BLACK, margin: '0 0 24px', fontWeight: 400, maxWidth: '70ch' }}>
               {question.question}
@@ -371,7 +386,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         <div>
           <div style={{ paddingBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
+              <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{tagLabel(stop.tag)}</span>
               <span style={{ color: FAINT }}>·</span>
               <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../../../data/elementary'
+import { worldTrack, isPTTrack } from '../../../data/track'
+import { useTrackGuard } from '../../../components/useTrackGuard'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -16,11 +18,20 @@ export default function ElementaryWorldPage() {
   const params  = useParams()
   const worldId = parseInt(params.id as string)
   const world   = ELEMENTARY_WORLDS[worldId]
+  const track   = worldTrack(worldId)
+  // Language comes from the CONTENT id, not localStorage — this page must look
+  // the same no matter which student reaches it or how.
+  const isPT    = isPTTrack(track)
+  const isMiddleWorld = track === 'middle-en' || track === 'middle-pt'
+  const allowed = useTrackGuard(track)
   const [done, setDone] = useState<Record<number, boolean>>({})
-  const [isPT, setIsPT] = useState(false)
+
+  // Canonical URL for middle-school worlds is /middle/world/[id]
+  useEffect(() => {
+    if (isMiddleWorld) router.replace(`/middle/world/${worldId}`)
+  }, [isMiddleWorld, worldId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setIsPT(localStorage.getItem('pai_lang') === 'pt')
     if (!world) return
     const map: Record<number, boolean> = {}
     world.modules.forEach(m => { map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true' })
@@ -28,6 +39,7 @@ export default function ElementaryWorldPage() {
   }, [world])
 
   if (!world) return <div style={{ padding: 40, fontFamily: BODY }}>World not found.</div>
+  if (!allowed || isMiddleWorld) return null
 
   const activeId     = world.modules.find(m => !done[m.id])?.id ?? null
   const worldComplete = world.modules.every(m => done[m.id])

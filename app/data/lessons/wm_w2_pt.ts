@@ -3,7 +3,7 @@ import { LessonData } from '../index'
 const wm_w2_pt: Record<number, LessonData> = {
   321: {
     id: 321, worldId: 262,
-    title: "O Que É Uma Rede Neural?",
+    title: "O que é uma Rede Neural?",
     stops: [
       { tag: "Fact", title: "Inspirada no Cérebro", body: "Muitos sistemas modernos de IA usam uma estrutura chamada rede neural. O nome é baseado no cérebro. O cérebro humano contém bilhões de neurônios conectados uns aos outros. Essas conexões mudam à medida que as pessoas aprendem. As redes neurais artificiais pegam emprestada uma versão muito simplificada dessa ideia. Elas não são cérebros em miniatura. São sistemas matemáticos compostos por unidades conectadas, frequentemente chamadas de nós." },
       { tag: "Example", title: "Três Camadas", body: "Uma rede neural básica tem três partes: • Camada de entrada: recebe informações, como pixels, palavras ou números • Camadas ocultas: processam e transformam essas informações • Camada de saída: produz um resultado, como uma previsão ou classificação" },
@@ -19,7 +19,7 @@ const wm_w2_pt: Record<number, LessonData> = {
   },
   322: {
     id: 322, worldId: 262,
-    title: "Como As Redes São Treinadas",
+    title: "Como as Redes São Treinadas",
     stops: [
       { tag: "Fact", title: "Começando do Zero", body: "No início do treinamento, uma rede neural não é muito útil. Suas previsões podem ser extremamente imprecisas. O treinamento ajuda a rede a melhorar por meio de um processo estruturado." },
       { tag: "Example", title: "O Ciclo de Treinamento", body: "O processo de treinamento: 1. A rede faz uma previsão. 2. A previsão é comparada com a resposta correta. 3. O sistema mede a diferença. Essa diferença é chamada de perda (loss) ou erro. 4. A rede ajusta levemente seus pesos para reduzir o erro. 5. O processo se repete várias e várias vezes." },
@@ -51,7 +51,7 @@ const wm_w2_pt: Record<number, LessonData> = {
   },
   324: {
     id: 324, worldId: 262,
-    title: "Como Os Modelos De Linguagem Funcionam",
+    title: "Como os Modelos de Linguagem Funcionam",
     stops: [
       { tag: "Fact", title: "Transformers e Atenção", body: "O ChatGPT é baseado em um tipo de rede neural chamado transformer. Os transformers ganharam importância depois que pesquisadores os apresentaram em um artigo de 2017 intitulado \"Attention Is All You Need\". Uma das ideias centrais é a atenção. A atenção ajuda o modelo a decidir quais partes de uma frase ou conversa são mais importantes em um dado momento." },
       { tag: "Example", title: "Contexto Entre Palavras", body: "Por exemplo, considere a frase: \"Maya deixou o copo cair no chão porque ele estava escorregadio.\" Para entender a que \"ele\" se refere, o sistema precisa usar as palavras ao redor e o contexto. Os mecanismos de atenção permitem que o modelo pondere diferentes partes da entrada entre si, em vez de processar as palavras em sequência estrita." },
@@ -67,7 +67,7 @@ const wm_w2_pt: Record<number, LessonData> = {
   },
   325: {
     id: 325, worldId: 262,
-    title: "Algoritmos De Recomendação",
+    title: "Algoritmos de Recomendação",
     stops: [
       { tag: "Fact", title: "Prevendo Sua Atenção", body: "Quando o YouTube sugere um vídeo, o Spotify cria uma playlist ou o Instagram organiza o seu feed, um sistema de recomendação está fazendo previsões sobre o que pode reter a sua atenção. Esses sistemas aprendem com o seu comportamento: a que você assiste, o que você pula, o que você repete, o que você pesquisa, do que você gosta, quanto tempo você pausa antes de rolar a tela." },
       { tag: "Example", title: "Filtragem Colaborativa", body: "Eles também comparam o seu comportamento com padrões de outros usuários. Um método comum é chamado de filtragem colaborativa. Suponha que duas pessoas tenham gostado de muitos filmes em comum. Se uma delas assiste a outro filme e gosta, o sistema pode recomendar esse filme para a outra pessoa também." },
@@ -99,7 +99,7 @@ const wm_w2_pt: Record<number, LessonData> = {
   },
   327: {
     id: 327, worldId: 262,
-    title: "O Problema Da Caixa Preta",
+    title: "O Problema da Caixa Preta",
     stops: [
       { tag: "Fact", title: "Decisões Opacas", body: "As redes neurais podem ser difíceis de interpretar. Um programa tradicional geralmente segue regras que uma pessoa consegue ler — se isso, então aquilo. Uma rede neural funciona de maneira diferente. Suas decisões são moldadas por um grande número de pesos espalhados por muitas camadas. Quando um sistema complexo produz uma resposta, muitas vezes é difícil explicar o porquê. Isso às vezes é chamado de problema da caixa preta." },
       { tag: "Example", title: "Quando Realmente Importa", body: "A questão é mais importante quando a IA afeta a vida das pessoas. Se um sistema recomenda uma música, um erro pode ser irritante, mas inofensivo. Se um sistema influencia uma decisão de empréstimo, sinaliza alguém como um risco de segurança ou ajuda a avaliar um exame médico, as pessoas podem, com razão, querer saber como a decisão foi tomada." },
@@ -115,7 +115,7 @@ const wm_w2_pt: Record<number, LessonData> = {
   },
   328: {
     id: 328, worldId: 262,
-    title: "Quando As Decisões Dão Errado",
+    title: "Quando as Decisões Dão Errado",
     stops: [
       { tag: "Fact", title: "Dados de Treinamento Enviesados", body: "Os sistemas de IA cometem erros. A pergunta importante é que tipo de erros eles cometem e quantas pessoas podem ser afetadas. Dados de treinamento enviesados: Os sistemas de IA aprendem com base em exemplos. Se os exemplos refletirem injustiças do passado, o sistema poderá repetir esses padrões. Um algoritmo de contratação treinado com base em decisões de contratação anteriores pode aprender a favorecer os mesmos grupos que foram favorecidos no passado. O modelo não tem preconceito no sentido humano. Ele está copiando padrões de dados enviesados." },
       { tag: "Example", title: "Desvio de Distribuição", body: "Desvio de distribuição (Distribution shift): Um modelo pode ter um bom desempenho em um cenário e ter dificuldades em outro. Um sistema treinado principalmente em estradas ensolaradas pode ter problemas sob neve forte. Uma ferramenta médica treinada em uma população pode funcionar de forma menos confiável para outra." },

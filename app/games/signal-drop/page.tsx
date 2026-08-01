@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import GameComplete from '../../components/GameComplete'
 import GameIntro from '../../components/GameIntro'
 import PongGame from '../../components/PongGame'
+import { studentTrack, homeRoute } from '../../data/track'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BLACK = '#0a0a0a'
@@ -19,15 +20,9 @@ export default function SignalDropPage() {
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
-    const grade = localStorage.getItem('pai_grade') ?? ''
-    const elemGrades = ['elem', 'fund1', 'K', '1st', '2nd', '3rd', '4th', '5th']
-    const midPTGrades = ['fund2']
-    const midGrades   = ['middle']
-    setIsSlow([...elemGrades, ...midPTGrades].includes(grade))
-    if (elemGrades.includes(grade))       setBackRoute('/elementary/home')
-    else if (midPTGrades.includes(grade)) setBackRoute('/elementary/middle-pt')
-    else if (midGrades.includes(grade))   setBackRoute('/middle/home')
-    else                                  setBackRoute('/home')
+    const track = studentTrack(localStorage.getItem('pai_grade'), localStorage.getItem('pai_lang'))
+    setIsSlow(track === 'elem-en' || track === 'elem-pt' || track === 'middle-pt')
+    setBackRoute(track ? homeRoute(track) : '/home')
   }, [])
 
   if (phase === 'done') return <GameComplete slug="signal-drop" />
@@ -47,9 +42,9 @@ export default function SignalDropPage() {
         'Cada rally representa dados de treinamento sendo coletados.',
         'Sua pontuação acompanha quantos dados limpos você coletou.',
       ] : [
-        'Items fall from the top.',
-        'CATCH labeled, verified training data.',
-        'DODGE unlabeled, biased, or compromised data.',
+        'Move the paddle to bounce the ball.',
+        "Combos raise your score — don't let the ball drop.",
+        'Each rally is training data being collected.',
         'Your score tracks how much clean data you collected.',
       ]}
       onStart={() => setPhase('game')}

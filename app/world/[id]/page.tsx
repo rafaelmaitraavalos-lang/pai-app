@@ -5,15 +5,18 @@ import { useEffect, useState } from 'react'
 import { notFound } from 'next/navigation'
 import { WORLDS } from '../../data'
 import WorldModuleView from '../../components/WorldModuleView'
+import { useTrackGuard } from '../../components/useTrackGuard'
 
 export default function WorldPage() {
   const params = useParams()
   const worldId = parseInt(params.id as string)
   const world = WORLDS[worldId]
+  const allowed = useTrackGuard('high')
   const [isPT, setIsPT] = useState(false)
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
 
   if (!world) return notFound()
+  if (!allowed) return null
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff' }}>

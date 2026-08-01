@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
 import { LANG_STRINGS } from '../data/onboardingStrings'
-import { loadProgress, applyProgress } from '@/lib/progress'
+import { studentTrack, homeRoute } from '../data/track'
+import { applyProgress } from '@/lib/progress'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -96,11 +96,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   useEffect(() => {
     if (localStorage.getItem('pai_onboarding_done') === 'true') {
       const g = localStorage.getItem('pai_grade')
-      const dest = isElementaryGrade(g)             ? `${basePath}/elementary/home`
-                 : MIDDLE_SCHOOL_GRADES_PT.has(g ?? '') ? `${basePath}/elementary/middle-pt`
-                 : isMiddleSchoolGrade(g)           ? `${basePath}/middle/home`
-                 : `${basePath}/home`
-      router.replace(dest)
+      const l = localStorage.getItem('pai_lang')
+      router.replace(basePath + homeRoute(studentTrack(g, l)))
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -123,17 +120,14 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   }, [country])
   useEffect(() => { if (grade) localStorage.setItem('pai_grade', grade) }, [grade])
 
-  const goHome = (grade: string | null) => {
+  const goHome = (grade: string | null, lang?: string | null) => {
     localStorage.setItem('pai_onboarding_done', 'true')
     localStorage.setItem('pai_show_welcome', 'true')  // triggers handbook tooltip
-    const dest = isElementaryGrade(grade)             ? `${basePath}/elementary/home`
-               : MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? `${basePath}/elementary/middle-pt`
-               : isMiddleSchoolGrade(grade)           ? `${basePath}/middle/home`
-               : `${basePath}/home`
-    router.push(dest)
+    router.push(basePath + homeRoute(studentTrack(grade, lang ?? country?.lang ?? localStorage.getItem('pai_lang'))))
   }
 
   const submitUsername = async () => {
+    if (usernameLoading) return  // double Enter / double click must not double-POST
     const clean = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
     if (!clean) { setUsernameError(country?.lang === 'pt' ? 'Por favor, insira um nome de usuário' : 'Please enter a username'); return }
     setUsernameLoading(true)
@@ -168,8 +162,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       // progress via applyProgress() right after this.
       Object.keys(localStorage).filter(k => k.startsWith('pai_')).forEach(k => localStorage.removeItem(k))
 
-      // Returning user (login) — restore full profile from DB and go straight home
-      if (!isNew || authMode === 'login') {
+      // Returning user (login) — restore full profile from DB and go straight
+      // home. A user with no saved grade (interrupted signup) is NOT done:
+      // fall through to the grade screen so they can never land on a track
+      // that was never chosen.
+      if ((!isNew || authMode === 'login') && user.grade) {
         localStorage.setItem('pai_username',        user.username)
         localStorage.setItem('pai_onboarding_done', 'true')
         if (user.lang)      localStorage.setItem('pai_lang',      user.lang)
@@ -181,7 +178,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         // Merge DB progress over local (DB wins, but locally-done lessons that
         // weren't synced yet are preserved because we didn't wipe them above)
         applyProgress(user.progress ?? {})
-        goHome(user.grade)
+        goHome(user.grade, user.lang)
         return
       }
 
@@ -200,7 +197,12 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   const advance = async () => {
     if (screen === TOTAL_STEPS) {
-      const g = localStorage.getItem('pai_grade')
+      if (saving) return  // double click must not double-submit
+      // Read the selection from state first: the localStorage write happens in
+      // an effect and must never race the final submit into a null grade.
+      const g = grade ?? localStorage.getItem('pai_grade')
+      if (!g) return      // no grade chosen — stay on the grade screen
+      localStorage.setItem('pai_grade', g)
       setSaving(true)
       try {
         await fetch('/api/auth', {
@@ -240,7 +242,12 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const card: React.CSSProperties = {
     width: '100%', maxWidth: 440, background: '#fff',
     border: `1.5px solid ${BLACK}`, boxShadow: `8px 8px 0 0 ${BLACK}`,
-    minHeight: 640, display: 'flex', flexDirection: 'column',
+    // Never taller than the viewport: the page clips overflow, so a card that
+    // outgrew a 768px-high school laptop put the language buttons off-screen
+    // with no way to scroll to them. The step content scrolls internally.
+    minHeight: 'min(640px, calc(100dvh - 48px))',
+    maxHeight: 'calc(100dvh - 48px)',
+    display: 'flex', flexDirection: 'column',
   }
   const page: React.CSSProperties = {
     minHeight: '100vh', background: '#F5F5F5', fontFamily: BODY,

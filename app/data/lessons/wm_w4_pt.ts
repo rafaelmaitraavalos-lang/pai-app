@@ -3,7 +3,7 @@ import { LessonData } from '../index'
 const wm_w4_pt: Record<number, LessonData> = {
   341: {
     id: 341, worldId: 264,
-    title: "O Que É Ética?",
+    title: "O que é Ética?",
     stops: [
       { tag: "Fact", title: "Filosofia da Ação", body: "A ética é o ramo da filosofia que questiona como as pessoas devem agir. O que devemos uns aos outros? O que é considerado dano? Como devemos tomar decisões quando há conflito de valores? Várias estruturas éticas importantes aparecem com frequência nas discussões sobre IA." },
       { tag: "Example", title: "Consequencialismo", body: "O consequencialismo julga as ações pelos seus resultados. Uma ação é considerada boa se produzir o melhor resultado geral. A dificuldade é que os resultados podem ser difíceis de prever. As pessoas também podem discordar sobre o que é considerado o \"melhor\" resultado e quem deveria se beneficiar mais." },
@@ -19,7 +19,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   342: {
     id: 342, worldId: 264,
-    title: "O Problema Do Viés",
+    title: "O Problema do Viés",
     stops: [
       { tag: "Fact", title: "Dados Refletem a História", body: "O viés na IA costuma ser descrito como se fosse um simples bug técnico. Geralmente, é mais complicado do que isso. Os sistemas de IA aprendem a partir de dados. Se os dados refletirem desigualdades do passado, o sistema poderá reproduzi-las. Uma ferramenta de contratação treinada com base em decisões de contratação históricas pode aprender padrões que prejudicam determinados candidatos. O modelo não tem preconceito no sentido humano. Ele está copiando padrões de dados enviesados." },
       { tag: "Example", title: "Definições Concorrentes de Justiça", body: "A pergunta mais difícil é o que \"justiça\" deveria significar. Existem várias definições possíveis: • Paridade demográfica: diferentes grupos devem receber resultados semelhantes • Igualdade de precisão: o sistema deve ter um desempenho igualmente bom para grupos diferentes • Justiça individual: indivíduos semelhantes devem ser tratados de maneira semelhante" },
@@ -35,7 +35,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   343: {
     id: 343, worldId: 264,
-    title: "O Problema Do Consentimento",
+    title: "O Problema do Consentimento",
     stops: [
       { tag: "Fact", title: "Mais do Que Clicar em Concordo", body: "Muitos sistemas de IA dependem de dados coletados de pessoas que não entendiam perfeitamente como eles seriam usados. Um consentimento significativo exige mais do que clicar em \"concordo\". Uma pessoa deve entender o que está aceitando. Ela também deve ter a escolha real de dizer não." },
       { tag: "Example", title: "O Problema de Optar por Não Participar", body: "Na prática, isso é difícil. Os acordos de termos de serviço podem ter dezenas de páginas. As políticas de privacidade podem estar escritas em jargão jurídico. Optar por não participar pode significar perder o acesso a um serviço do qual as pessoas dependem." },
@@ -51,7 +51,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   344: {
     id: 344, worldId: 264,
-    title: "A Lacuna De Responsabilidade",
+    title: "A Lacuna de Responsabilidade",
     stops: [
       { tag: "Fact", title: "Quem É Responsável?", body: "Quando um sistema de IA causa danos, quem é o responsável? A resposta nem sempre é óbvia. Vários grupos podem estar envolvidos: os pesquisadores que projetaram o modelo, as empresas que o treinaram, os engenheiros que o implementaram, as empresas que o utilizaram, as pessoas que confiaram nos seus resultados. A responsabilidade pode se espalhar por toda a cadeia. Cada grupo pode apontar o dedo para outro. Isso cria uma lacuna de responsabilidade (accountability gap)." },
       { tag: "Example", title: "Leis Estão Se Adaptando", body: "Fechar essa lacuna exige regras mais claras sobre quem é responsável quando sistemas automatizados causam danos. Alguns governos estão começando a criar leis para isso. A Lei de IA da União Europeia é uma das principais tentativas de regulamentar os sistemas de IA com base no risco." },
@@ -67,7 +67,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   345: {
     id: 345, worldId: 264,
-    title: "O Problema Da Transparência",
+    title: "O Problema da Transparência",
     stops: [
       { tag: "Fact", title: "Por Que Explicações Importam", body: "As pessoas muitas vezes querem que os sistemas de IA expliquem as suas decisões. Isso parece razoável. Se um sistema influencia a possibilidade de alguém receber um empréstimo, ser sinalizado como um risco ou receber uma recomendação médica, a pessoa pode querer saber o porquê." },
       { tag: "Example", title: "Difícil de Explicar", body: "A dificuldade é que alguns sistemas poderosos de IA são difíceis de explicar. Uma rede neural profunda nem sempre toma decisões por meio de uma lista curta de regras legíveis. Seu resultado pode emergir de muitos cálculos distribuídos por uma grande rede." },
@@ -83,7 +83,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   346: {
     id: 346, worldId: 264,
-    title: "Autonomia E Manipulação",
+    title: "Autonomia e Manipulação",
     stops: [
       { tag: "Fact", title: "Prevendo e Influenciando", body: "Os sistemas de IA costumam ser projetados para prever comportamentos. Isso pode ser útil. Um aplicativo de recomendação pode ajudar alguém a descobrir uma música que vai adorar. Um aplicativo de navegação pode sugerir uma rota mais rápida. Mas os sistemas que preveem comportamentos também podem influenciar esses comportamentos. Os feeds de redes sociais, os anúncios direcionados e os algoritmos de recomendação podem ser projetados para manter os usuários engajados pelo maior tempo possível." },
       { tag: "Example", title: "Persuasão vs. Manipulação", body: "A linha que separa a persuasão da manipulação é importante. A persuasão oferece a alguém informações e razões. A manipulação tira proveito das vulnerabilidades ou das emoções de uma pessoa de maneiras que ela talvez não perceba." },
@@ -99,7 +99,7 @@ const wm_w4_pt: Record<number, LessonData> = {
   },
   347: {
     id: 347, worldId: 264,
-    title: "O Problema Do Alinhamento",
+    title: "O Problema do Alinhamento",
     stops: [
       { tag: "Fact", title: "Fazendo o Que Queremos", body: "O problema do alinhamento faz uma pergunta simples: Como garantir que um sistema de IA faça o que as pessoas realmente querem? A dificuldade é que as pessoas nem sempre dizem exatamente o que querem dizer." },
       { tag: "Example", title: "Otimizando a Coisa Errada", body: "Imagine mandar um sistema maximizar o número de cliques em uma plataforma. Ele pode descobrir que a raiva e a ansiedade aumentam o engajamento. Tecnicamente, ele está sendo bem-sucedido. Mas não está produzindo o resultado que as pessoas realmente desejavam." },

@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
+import { studentTrack, homeRoute } from '../data/track'
 
 export default function GamesLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -22,18 +22,16 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
-    const grade = localStorage.getItem('pai_grade')
-    setHome(
-      MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '') ? '/elementary/middle-pt'
-      : isElementaryGrade(grade)               ? '/elementary/home'
-      : isMiddleSchoolGrade(grade)             ? '/middle/home'
-      : '/home',
-    )
+    const track = studentTrack(localStorage.getItem('pai_grade'), localStorage.getItem('pai_lang'))
+    setHome(track ? homeRoute(track) : '/home')
   }, [])
 
   return (
     <>
-      {children}
+      {/* overflow-x clip: any game content that overflows (e.g. a heading a
+          few px too wide at 280px) would widen the mobile layout viewport and
+          drag the fixed Exit button past the visible edge. */}
+      <div style={{ overflowX: 'clip' }}>{children}</div>
       <button
         onClick={() => router.push(home)}
         aria-label={isPT ? 'Sair do jogo' : 'Leave game'}

@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { WORLDS, WORLD_IDS, getWorldTitle } from '../data'
-import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT } from '../data/elementary'
 import { loadProgress } from '@/lib/progress'
+import { useTrackGuard } from '../components/useTrackGuard'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -20,16 +20,12 @@ export default function Home() {
   const [username, setUsername] = useState('')
   const [isPT,     setIsPT]     = useState(false)
 
-  useEffect(() => {
-    const grade = localStorage.getItem('pai_grade')
-    // Portuguese middle school (fund2) has its own home. Without this branch a
-    // returning Brazilian student fell through to the high-school track and saw
-    // seven of eight worlds locked. Checked first: fund2 must not be mistaken
-    // for either of the two English-track grades.
-    if (MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')) { router.replace('/elementary/middle-pt'); return }
-    if (isElementaryGrade(grade))   { router.replace('/elementary/home'); return }
-    if (isMiddleSchoolGrade(grade)) { router.replace('/middle/home');     return }
+  // Full track guard (supersedes the per-grade redirect branches that used to
+  // live here): non-high-school students are sent to their own home, students
+  // with wiped localStorage are healed from the server session.
+  const allowed = useTrackGuard('high')
 
+  useEffect(() => {
     loadProgress().then(() => {
       const map: Record<number, boolean> = {}
       Object.values(WORLDS).forEach(w =>
@@ -59,6 +55,8 @@ export default function Home() {
   })()
 
   const worldRoute = (id: number) => id === 1 ? '/lessons' : `/world/${id}`
+
+  if (!allowed) return null
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>

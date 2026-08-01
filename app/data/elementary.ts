@@ -5,10 +5,6 @@ import _we6 from './lessons/we6'
 import _we1_pt from './lessons/we1_pt'
 import _we5_pt from './lessons/we5_pt'
 import _we6_pt from './lessons/we6_pt'
-import _wms1_pt from './lessons/wms1_pt'
-import _wms2_pt from './lessons/wms2_pt'
-import _wms3_pt from './lessons/wms3_pt'
-import _wms4_pt from './lessons/wms4_pt'
 import _wm_w1 from './lessons/wm_w1'
 import _wm_w2 from './lessons/wm_w2'
 import _wm_w3 from './lessons/wm_w3'
@@ -48,12 +44,6 @@ const W105_LESSONS = remap(_we5_pt, 141, 105) // 141–148
 
 // World 106 — Como a PAI Pensa (Avançado) — PT (3–5 equivalent)
 const W106_LESSONS = remap(_we6_pt, 151, 106) // 151–158
-
-// Worlds 107-110 — Ensino Fundamental II (middle school PT)
-const W107_LESSONS = remap(_wms1_pt, 161, 107) // 161
-const W108_LESSONS = remap(_wms2_pt, 162, 108) // 162
-const W109_LESSONS = remap(_wms3_pt, 163, 109) // 163
-const W110_LESSONS = remap(_wms4_pt, 164, 110) // 164
 
 // Worlds 201-205 — Middle School English AI Curriculum (5 worlds × 8 modules)
 const W201_LESSONS = _wm_w1  // module IDs 211-218
@@ -122,10 +112,6 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     level: 'Elementary',
     modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
-  107: { id: 107, title: 'O que é a IA?',              level: 'Intermediate', modules: Object.values(W107_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  108: { id: 108, title: 'Como a IA toma decisões',    level: 'Intermediate', modules: Object.values(W108_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  109: { id: 109, title: 'IA e Sociedade',             level: 'Intermediate', modules: Object.values(W109_LESSONS).map(l => ({ id: l.id, title: l.title })) },
-  110: { id: 110, title: 'Ética na IA',               level: 'Intermediate', modules: Object.values(W110_LESSONS).map(l => ({ id: l.id, title: l.title })) },
   // Middle School English — 5 Worlds × 8 Modules
   201: { id: 201, title: 'What Is AI?',              level: 'Intermediate', modules: [...Object.values(W201_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
   202: { id: 202, title: 'How AI Makes Decisions',   level: 'Intermediate', modules: [...Object.values(W202_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },

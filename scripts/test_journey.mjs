@@ -74,11 +74,19 @@ async function journey(engineName, w, h) {
     return new URL(page.url()).pathname
   })
 
+  const lessonPath = LANG === 'pt' ? '/elementary/lesson/131' : '/elementary/lesson/101'
+
   await step('2 a lesson is reachable', async () => {
-    await page.goto(BASE + (LANG === 'pt' ? '/elementary/lesson/131' : '/elementary/lesson/101'),
-      { waitUntil: 'domcontentloaded', timeout: 45000 })
-    await page.waitForTimeout(PAUSE)
-    const body = await page.locator('body').innerText()
+    await page.goto(BASE + lessonPath, { waitUntil: 'domcontentloaded', timeout: 45000 })
+    // Retry instead of a fixed pause: a dev server compiling the route on
+    // demand can take several seconds on the first hit, which used to read
+    // as "lesson body nearly empty" on the slower engines.
+    let body = ''
+    for (let i = 0; i < 16; i++) {
+      body = await page.locator('body').innerText()
+      if (body.length >= 120) break
+      await page.waitForTimeout(500)
+    }
     if (body.length < 120) throw new Error('lesson body nearly empty')
     return body.replace(/\s+/g, ' ').slice(0, 45)
   })
@@ -137,15 +145,22 @@ async function journey(engineName, w, h) {
 
 
   await step('8 reach the quiz', async () => {
+    // The quiz is detected by its True/False buttons. (The old text check
+    // required a "?" in the page — but quiz questions are STATEMENTS, so the
+    // step reported failure on every run even though steps 9-10, which need
+    // the quiz, passed right after it.)
+    const onQuiz = async () =>
+      (await visible(page.getByRole('button', { name: /^(true|verdadeiro)$/i }).first())) &&
+      (await visible(page.getByRole('button', { name: /^(false|falso)$/i }).first()))
     for (let i = 0; i < 12; i++) {
+      if (await onQuiz()) return 'quiz reached'
       const q = page.getByRole('button', { name: T.quiz }).first()
       const b = (await visible(q)) ? q : page.getByRole('button', { name: T.next }).first()
       if (!(await visible(b))) break
       await b.click({ timeout: 6000 }).catch(() => {})
       await page.waitForTimeout(SLOW ? 900 : 350)
-      const t = await page.locator('body').innerText()
-      if (/true|false|verdadeiro|falso/i.test(t) && /\?/.test(t)) return 'quiz reached'
     }
+    if (await onQuiz()) return 'quiz reached'
     throw new Error('never reached a quiz after 12 advances')
   })
 
@@ -170,6 +185,11 @@ async function journey(engineName, w, h) {
   })
 
   await step('11 chat refuses an off-topic question', async () => {
+    // The chat trigger only renders on lesson slides — by this point the
+    // journey is on the quiz/complete screen, where it never exists. Go back
+    // to the lesson first. (This was the "wrong ordering" harness bug.)
+    await page.goto(BASE + lessonPath, { waitUntil: 'domcontentloaded', timeout: 45000 })
+    await page.waitForTimeout(PAUSE)
     const open = page.getByRole('button', { name: /chat with pai|conversar com o pai/i }).first()
     if (!(await visible(open))) throw new Error('no chat trigger')
     await open.click({ timeout: 6000 })

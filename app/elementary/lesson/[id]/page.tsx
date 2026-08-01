@@ -19,7 +19,7 @@ export default function ElementaryLessonPage() {
       title={lesson.title}
       stops={lesson.stops}
       questions={lesson.questions}
-      completionPage={`/elementary/world/${lesson.worldId}`}
+      completionPage={lesson.worldId >= 200 ? `/middle/world/${lesson.worldId}` : `/elementary/world/${lesson.worldId}`}
       theme={isElementary ? 'elementary' : undefined}
     />
   )

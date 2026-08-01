@@ -3,12 +3,13 @@ import { LessonData } from '../index'
 const wm_w1_pt: Record<number, LessonData> = {
   311: {
     id: 311, worldId: 261,
-    title: "Definindo A Ia",
+    title: "Definindo a IA",
     stops: [
       { tag: "Fact", title: "O Que É IA?", body: "A inteligência artificial é um software projetado para executar tarefas que normalmente exigem habilidades humanas, como entender a linguagem, reconhecer imagens, fazer previsões ou encontrar padrões em grandes volumes de informações." },
       { tag: "Example", title: "Não É Uma Só Tecnologia", body: "A IA não é uma tecnologia única. Um chatbot, um sistema de reconhecimento facial e um algoritmo de recomendação podem usar a IA, mas foram construídos para propósitos diferentes e não funcionam necessariamente da mesma maneira." },
       { tag: "Big idea", title: "Regras vs. Aprendizado", body: "A principal diferença entre o software tradicional e o machine learning é a forma como o sistema obtém suas regras. Um programa tradicional segue instruções escritas por um programador. Um sistema de machine learning aprende padrões a partir de exemplos. Em vez de escrever uma regra separada para cada situação possível, os desenvolvedores treinam o sistema com dados e permitem que ele melhore por meio da experiência." },
-      { tag: "Hot take", title: "Padrões, Não Pensamento", body: "Ele ainda não está pensando como uma pessoa. Apenas se tornou muito bom em identificar padrões. A IA não é automaticamente mais inteligente que um humano. Ela simplesmente processou muito mais exemplos do que uma pessoa conseguiria analisar durante toda a vida. Isso a torna poderosa em algumas áreas e surpreendentemente frágil em outras." },
+      { tag: "Hot take", title: "Padrões, Não Pensamento", body: "Isso não significa que o sistema pensa como uma pessoa. Significa que ele pode se tornar muito bom em reconhecer padrões." },
+      { tag: "Scenario", title: "Poderosa, mas Frágil", body: "A IA não é automaticamente mais inteligente que um humano. Ela simplesmente processou muito mais exemplos do que uma pessoa conseguiria analisar durante toda a vida. Isso a torna poderosa em algumas áreas e surpreendentemente frágil em outras." },
     ],
     questions: [
       { difficulty: "Easy", tag: "Fact", stopTitle: '', question: `Sistemas de machine learning aprendem padrões a partir de dados em vez de seguir regras fixas programadas.`, answer: true, verdict: "Correto.", explanation: "A resposta é VERDADEIRO. Qual é a principal diferença entre o software tradicional e o machine learning? — O machine learning aprende padrões a partir de dados em vez de seguir regras fixas programadas" },
@@ -19,7 +20,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   312: {
     id: 312, worldId: 261,
-    title: "Como A Ia Aprende",
+    title: "Como a IA Aprende",
     stops: [
       { tag: "Fact", title: "Aprendendo por Exemplos", body: "A maioria dos sistemas modernos de IA aprende por meio de um processo chamado machine learning. Imagine ensinar um computador a reconhecer gatos. Você poderia mostrar a ele milhares de imagens rotuladas como \"gato\" e \"não é gato\". No início, o sistema cometeria muitos erros. Com o tempo, ele ajustaria suas configurações internas e se tornaria melhor em prever a resposta correta." },
       { tag: "Example", title: "Muitas Aplicações", body: "A mesma ideia básica pode ser usada para muitas tarefas: • Identificar e-mails de spam • Traduzir idiomas • Recomendar músicas • Reconhecer objetos em fotos • Identificar padrões em exames médicos" },
@@ -35,7 +36,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   313: {
     id: 313, worldId: 261,
-    title: "Alan Turing E O Teste De Turing",
+    title: "Alan Turing e o Teste de Turing",
     stops: [
       { tag: "Fact", title: "As Máquinas Podem Pensar?", body: "Em 1950, o matemático britânico Alan Turing publicou um artigo intitulado \"Computing Machinery and Intelligence\". Ele começava com uma pergunta que ainda é relevante hoje: As máquinas podem pensar?" },
       { tag: "Example", title: "O Jogo da Imitação", body: "Turing não tentou resolver a questão diretamente. Em vez disso, ele propôs um teste. Imagine um juiz humano tendo duas conversas por texto ao mesmo tempo — uma com uma pessoa, outra com uma máquina. Se o juiz não conseguir distinguir de forma confiável quem é quem, a máquina passou no que mais tarde ficou conhecido como o Teste de Turing." },
@@ -51,7 +52,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   314: {
     id: 314, worldId: 261,
-    title: "O Que A Ia Consegue E Não Consegue Fazer",
+    title: "O que a IA Consegue e Não Consegue Fazer",
     stops: [
       { tag: "Fact", title: "Poderosa mas Limitada", body: "A IA não é automaticamente mais inteligente que um humano. Ela simplesmente processou muito mais exemplos do que uma pessoa conseguiria analisar durante toda a vida. Isso a torna poderosa em algumas áreas e surpreendentemente frágil em outras." },
       { tag: "Example", title: "Onde A IA Tem Dificuldades", body: "Os sistemas de IA podem ter dificuldades com tarefas que exigem raciocínio genuíno sobre situações novas, conhecimento de senso comum ou compreensão de contexto da maneira que os humanos fazem — mesmo quando têm um desempenho impressionante em tarefas estruturadas e bem definidas." },
@@ -67,7 +68,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   315: {
     id: 315, worldId: 261,
-    title: "A Ia No Dia A Dia",
+    title: "A IA no Dia a Dia",
     stops: [
       { tag: "Fact", title: "IA em Todo Lugar", body: "A maioria das pessoas não se depara com a IA por meio de laboratórios de pesquisa ou de debates sobre políticas. Elas a encontram de maneiras pequenas e rotineiras: • Aplicativos de navegação redirecionando o trânsito • Filtros de e-mail bloqueando spam • Celulares sendo desbloqueados com reconhecimento facial • Aplicativos de música recomendando canções • Bancos detectando compras incomuns • Mecanismos de busca classificando resultados • Chatbots de atendimento ao cliente respondendo a perguntas" },
       { tag: "Example", title: "Tomadas de Decisão Invisíveis", body: "A maior parte disso é útil. Mas vale a pena notar o quanto a tomada de decisões foi transferida para sistemas que as pessoas raramente veem ou entendem." },
@@ -83,7 +84,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   316: {
     id: 316, worldId: 261,
-    title: "Uma Breve História Da Ia",
+    title: "Uma Breve História da IA",
     stops: [
       { tag: "Fact", title: "De Dartmouth Até Hoje", body: "A IA moderna remonta a um artigo de Alan Turing de 1950. Em 1956, o termo \"Inteligência Artificial\" foi cunhado na Conferência de Dartmouth — amplamente considerada o nascimento da IA como campo formal de pesquisa." },
       { tag: "Example", title: "Ciclos de Alta e Baixa", body: "As primeiras décadas trouxeram entusiasmo seguido de colapso. Pesquisadores dos anos 1960 previam IA no nível humano em 20 anos. Quando esse progresso estagnou, o financiamento secou. Esses períodos de colapso são conhecidos como Invernos da IA." },
@@ -99,7 +100,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   317: {
     id: 317, worldId: 261,
-    title: "Quem Constrói A Ia E Por Quê",
+    title: "Quem Constrói a IA e por Quê",
     stops: [
       { tag: "Fact", title: "Desenvolvimento Concentrado", body: "A IA não se constrói sozinha. Um pequeno número de grandes empresas de tecnologia, laboratórios de pesquisa governamentais e universidades toma a maioria das decisões fundamentais sobre como os poderosos sistemas de IA funcionam. Essas decisões afetam todos." },
       { tag: "Example", title: "Incentivos Concorrentes", body: "As empresas constroem IA por diversas razões: produtos comerciais, vantagem competitiva, crença genuína no seu benefício para a sociedade e a capacidade de substituir mão de obra humana cara. Esses incentivos nem sempre estão alinhados com os interesses dos usuários ou do público em geral." },
@@ -115,7 +116,7 @@ const wm_w1_pt: Record<number, LessonData> = {
   },
   318: {
     id: 318, worldId: 261,
-    title: "Tipos De Ia",
+    title: "Tipos de IA",
     stops: [
       { tag: "Fact", title: "IA Estreita Hoje", body: "A IA Estreita — também chamada de IA Fraca — é projetada para uma tarefa específica. É toda a IA que existe atualmente. Exemplos: reconhecimento facial, filtros de spam, motores de xadrez, assistentes de voz. Uma IA de xadrez não consegue dirigir um carro; um modelo de linguagem não consegue realizar cirurgias." },
       { tag: "Example", title: "IAG: Ainda Hipotética", body: "A Inteligência Artificial Geral (IAG) se refere a uma IA hipotética capaz de realizar qualquer tarefa intelectual que um humano possa. Ela não existe ainda. Se e quando poderia surgir é assunto de discordância genuína entre pesquisadores sérios." },

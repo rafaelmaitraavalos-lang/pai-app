@@ -85,11 +85,6 @@ export default function ConnectionsPage() {
         )}
       </div>
 
-      {/* Footer hint */}
-      <p className="mt-12 text-xs text-[#aaa] text-center px-4">
-        Engine in <code className="font-mono">app/components/ConnectionsGame.tsx</code> ·
-        Data in <code className="font-mono">app/data/samplePuzzle.ts</code>
-      </p>
     </div>
   )
 }

@@ -3,18 +3,20 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-const KEYS = [
-  'pai_grade', 'pai_goal', 'pai_level',
-  'pai_frequency', 'pai_usage',
-  'pai_lesson_1_done', 'pai_onboarding_screen',
-]
-
+// Full reset: wipe every pai_* key AND the server session cookie. The old
+// version removed a fixed list of keys, so pai_onboarding_done and the session
+// survived and the app bounced straight back to a signed-in home instead of
+// the welcome screen.
 export default function Reset() {
   const router = useRouter()
 
   useEffect(() => {
-    KEYS.forEach(k => localStorage.removeItem(k))
-    router.replace('/')
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('pai_'))
+      .forEach(k => localStorage.removeItem(k))
+    fetch('/api/auth', { method: 'DELETE' })
+      .catch(() => {})
+      .finally(() => router.replace('/'))
   }, [router])
 
   return null

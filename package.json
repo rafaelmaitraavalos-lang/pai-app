@@ -14,9 +14,11 @@
     "test": "npm run lint:lessons && npm run test:content && npm run build",
     "test:games": "node scripts/test_games.mjs",
     "test:viewports": "node scripts/test_viewports.mjs",
-    "test:journey": "node scripts/test_journey.mjs"
+    "test:journey": "node scripts/test_journey.mjs",
+    "test:flows": "node scripts/test_flows.mjs"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.4",
     "@neondatabase/serverless": "^1.1.0",
     "minisearch": "^7.2.0",
     "next": "16.2.6",
