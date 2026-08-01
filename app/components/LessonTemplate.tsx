@@ -487,7 +487,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
       {/* Navigation — fixed at bottom, never clipped */}
       <div style={{ flexShrink: 0, background: slideBg, borderTop: `2px solid ${BLACK}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 7vw', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px min(7vw, 20px)', gap: 12, flexWrap: 'wrap' }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
             {ui.backSlide}
           </button>
@@ -518,8 +518,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           height: 56,
           borderRadius: '50%',
           background: BLACK,
-          border: `1.5px solid ${GREEN}`,
-          boxShadow: `3px 3px 0 0 ${GREEN}`,
+          border: `2.5px solid ${GREEN}`,
+          // Opaque ring in the page colour so no lesson text shows through or
+          // around the button; it sits on the page rather than in the sentence.
+          boxShadow: `0 0 0 6px ${slideBg}, 3px 3px 0 0 ${GREEN}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

@@ -40,7 +40,7 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
         style={{
           position: 'fixed',
           top: 'calc(env(safe-area-inset-top, 0px) + 12px)',
-          right: 12,
+          right: 'min(12px, 3vw)',
           zIndex: 60,
           fontFamily: "var(--font-display, 'Arial Black', sans-serif)",
           fontSize: 11,
@@ -50,7 +50,7 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
           background: '#3DF542',
           border: '2px solid #0a0a0a',
           boxShadow: '3px 3px 0 0 #0a0a0a',
-          padding: '10px 14px',
+          padding: '10px 12px',
           cursor: 'pointer',
           touchAction: 'manipulation',
         }}
