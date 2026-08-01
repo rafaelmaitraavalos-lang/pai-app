@@ -22,6 +22,9 @@ const BASE = arg('base', 'https://paiforkids.com')
 const LANG = arg('lang', 'en')
 const ONLY_ENGINE = arg('engine', null)
 const ONLY_SIZE = arg('size', null)
+const SLOW = process.argv.includes('--slow')      // deliberate pauses + a screenshot per step
+const PAUSE = SLOW ? 2200 : 700
+const SHOTS = 'test-shots'
 
 const ENGINES = { chromium, webkit, firefox }
 const SIZES = [
@@ -34,8 +37,8 @@ const SIZES = [
 ]
 
 const T = LANG === 'pt'
-  ? { next: /pr[óo]ximo|avan[çc]ar|continuar/i, exit: /sair do jogo/i }
-  : { next: /next slide|next|continue/i, exit: /leave game/i }
+  ? { next: /pr[óo]ximo slide|pr[óo]ximo|continuar/i, quiz: /fazer o question[áa]rio/i, exit: /sair do jogo/i }
+  : { next: /next slide|next|continue/i, quiz: /take the quiz/i, exit: /leave game/i }
 
 async function journey(engineName, w, h) {
   const browser = await ENGINES[engineName].launch()
@@ -57,19 +60,24 @@ async function journey(engineName, w, h) {
   const step = async (name, fn) => {
     try { const note = await fn(); steps.push({ name, ok: true, note }) }
     catch (e) { steps.push({ name, ok: false, note: String(e).split('\n')[0].slice(0, 110) }) }
+    if (SLOW) {
+      const tag = `${engineName}_${w}x${h}_${LANG}_${name.split(' ')[0]}`
+      await page.screenshot({ path: `${SHOTS}/${tag}.png` }).catch(() => {})
+      await page.waitForTimeout(400)
+    }
   }
   const visible = async loc => (await loc.count()) > 0 && await loc.first().isVisible().catch(() => false)
 
   await step('1 open the app', async () => {
     await page.goto(BASE + '/home', { waitUntil: 'domcontentloaded', timeout: 45000 })
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(PAUSE)
     return new URL(page.url()).pathname
   })
 
   await step('2 a lesson is reachable', async () => {
     await page.goto(BASE + (LANG === 'pt' ? '/elementary/lesson/131' : '/elementary/lesson/101'),
       { waitUntil: 'domcontentloaded', timeout: 45000 })
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(PAUSE)
     const body = await page.locator('body').innerText()
     if (body.length < 120) throw new Error('lesson body nearly empty')
     return body.replace(/\s+/g, ' ').slice(0, 45)
@@ -90,7 +98,7 @@ async function journey(engineName, w, h) {
       const btn = page.getByRole('button', { name: T.next }).first()
       if (!await visible(btn)) throw new Error(`next control gone at slide ${i + 1}`)
       await btn.click({ timeout: 6000 })
-      await page.waitForTimeout(700)
+      await page.waitForTimeout(PAUSE)
     }
     return 'advanced 3 slides'
   })
@@ -101,7 +109,15 @@ async function journey(engineName, w, h) {
       for (const e of document.querySelectorAll('*')) {
         if (getComputedStyle(e).position !== 'fixed') continue
         const r = e.getBoundingClientRect()
-        if (r.width < 8 || r.height < 8 || getComputedStyle(e).opacity === '0') continue
+        const cs = getComputedStyle(e)
+        if (r.width < 8 || r.height < 8 || cs.opacity === '0' || cs.visibility === 'hidden') continue
+        // A floating control ALWAYS has text somewhere beneath it on a scrolling
+        // page — that is the pattern, not a defect. What actually harms reading is
+        // a control you can see the text THROUGH. So only flag controls without an
+        // opaque background of their own.
+        const bg = cs.backgroundColor || ''
+        const transparent = bg === 'transparent' || /rgba\(.*,\s*(0|0?\.\d+)\)$/.test(bg)
+        if (!transparent) continue
         const under = document.elementsFromPoint(r.x + r.width / 2, r.y + r.height / 2)
           .filter(x => x !== e && !e.contains(x))
         const t = under.find(x => x.innerText && x.innerText.trim().length > 60)
@@ -119,15 +135,65 @@ async function journey(engineName, w, h) {
     return 'no sideways scroll'
   })
 
+
+  await step('8 reach the quiz', async () => {
+    for (let i = 0; i < 12; i++) {
+      const q = page.getByRole('button', { name: T.quiz }).first()
+      const b = (await visible(q)) ? q : page.getByRole('button', { name: T.next }).first()
+      if (!(await visible(b))) break
+      await b.click({ timeout: 6000 }).catch(() => {})
+      await page.waitForTimeout(SLOW ? 900 : 350)
+      const t = await page.locator('body').innerText()
+      if (/true|false|verdadeiro|falso/i.test(t) && /\?/.test(t)) return 'quiz reached'
+    }
+    throw new Error('never reached a quiz after 12 advances')
+  })
+
+  await step('9 a WRONG answer says WRONG', async () => {
+    const t = page.getByRole('button', { name: /^(true|verdadeiro)$/i }).first()
+    const f = page.getByRole('button', { name: /^(false|falso)$/i }).first()
+    if (!(await visible(t)) || !(await visible(f))) throw new Error('no true/false controls')
+    await t.click({ timeout: 6000 })
+    await page.waitForTimeout(PAUSE)
+    const body = await page.locator('body').innerText()
+    const right = /RIGHT!|CERTO!/i.test(body), wrong = /WRONG|ERRADO/i.test(body)
+    if (!right && !wrong) throw new Error('no verdict badge appeared at all')
+    if (right && wrong) throw new Error('both verdicts shown at once')
+    return right ? 'answered TRUE -> RIGHT' : 'answered TRUE -> WRONG'
+  })
+
+  await step('10 the explanation states the answer', async () => {
+    const body = await page.locator('body').innerText()
+    if (!/the answer is (true|false)|a resposta é (verdadeiro|falso)/i.test(body))
+      throw new Error('explanation does not open with the answer')
+    return 'explanation leads with the answer'
+  })
+
+  await step('11 chat refuses an off-topic question', async () => {
+    const open = page.getByRole('button', { name: /chat with pai|conversar com o pai/i }).first()
+    if (!(await visible(open))) throw new Error('no chat trigger')
+    await open.click({ timeout: 6000 })
+    await page.waitForTimeout(PAUSE)
+    const input = page.locator('input[type=text], input:not([type])').last()
+    if (!(await visible(input))) throw new Error('chat input not visible')
+    await input.fill('What is 47 times 89?')
+    await input.press('Enter')
+    await page.waitForTimeout(SLOW ? 7000 : 5000)
+    const body = await page.locator('body').innerText()
+    if (!/only answer questions about the way AI works|só posso responder perguntas sobre como a IA funciona/i.test(body))
+      throw new Error('did not give the out-of-scope reply')
+    return 'refused off-topic correctly'
+  })
+
   await step('7 open a game and leave it', async () => {
     await page.goto(BASE + '/games/connections', { waitUntil: 'domcontentloaded', timeout: 45000 })
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(PAUSE)
     const exit = page.getByRole('button', { name: T.exit }).first()
     if (!await visible(exit)) throw new Error('no exit control on the game')
     const box = await exit.boundingBox()
     if (box && box.x + box.width > w + 1) throw new Error('exit control is off-screen')
     await exit.click({ timeout: 6000 })
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(PAUSE)
     return 'left via ' + new URL(page.url()).pathname
   })
 
