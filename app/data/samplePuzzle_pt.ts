@@ -1,47 +1,50 @@
+// Versão em português do quebra-cabeça Connections — nível fundamental II,
+// aprovado por Sonali em 2026-08-01. Mesmos grupos da versão em inglês.
+
 import type { Puzzle } from '../components/ConnectionsGame'
 
 const samplePuzzlePT: Puzzle = {
-  id: 'ai-reality-check-pt',
-  title: 'Verificação da Realidade da IA',
+  id: 'encontre-a-ia',
+  title: 'Encontre a IA',
   groups: [
     {
-      name: 'O que um modelo de linguagem realmente faz',
+      name: 'Coisas que a IA faz bem',
       difficulty: 1,
       cards: [
-        'Prevê próximos tokens',
-        'Amostra de distribuições',
-        'Comprime dados de treino',
-        'Reconhece padrões aprendidos',
+        'Encontrar padrões',
+        'Traduzir idiomas',
+        'Recomendar vídeos',
+        'Filtrar spam',
       ],
     },
     {
-      name: 'Coisas que reduzem alucinações',
+      name: 'Coisas difíceis para a IA',
       difficulty: 2,
       cards: [
-        'Pipeline RAG',
-        'Temperatura mais baixa',
-        'Citar fontes',
-        'IA Constitucional',
+        'Saber o que é verdade',
+        'Bom senso',
+        'Sentimentos',
+        'Fatos muito recentes',
       ],
     },
     {
-      name: 'Partes de um transformador',
+      name: 'Onde a IA se esconde no seu dia',
       difficulty: 3,
       cards: [
-        'Cabeças de atenção',
-        'Camadas feed-forward',
-        'Codificações posicionais',
-        'Normalização de camada',
+        'Autocompletar',
+        'Desbloqueio facial',
+        'Música aleatória',
+        'Rotas no mapa',
       ],
     },
     {
-      name: 'Coisas que a IA fundamentalmente não tem',
+      name: 'Pessoas da história da IA',
       difficulty: 4,
       cards: [
-        'Compreensão real',
-        'Memória genuína',
-        'Sentidos físicos',
-        'Intenções verdadeiras',
+        'Alan Turing',
+        'Ada Lovelace',
+        'John McCarthy',
+        'Garry Kasparov',
       ],
     },
   ],
