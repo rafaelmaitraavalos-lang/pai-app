@@ -49,7 +49,7 @@ const wm1: Record<number, LessonData> = {
         question: `"AI is a single technology that works the same way across all applications."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "AI is not one single technology. A chatbot, a facial-recognition system, and a recommendation algorithm all use AI, but they were built for different purposes and do not necessarily work the same way.",
+        explanation: "The answer is FALSE. AI is not one single technology. A chatbot, a facial-recognition system, and a recommendation algorithm all use AI, but they were built for different purposes and do not necessarily work the same way.",
       },
       {
         difficulty: 'Easy',
@@ -58,7 +58,7 @@ const wm1: Record<number, LessonData> = {
         question: `"A machine-learning system learns patterns from examples rather than following rules written by a programmer."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "That is the key difference. Traditional software follows instructions written by a programmer. A machine-learning system trains on data and improves through experience rather than being given explicit rules for every situation.",
+        explanation: "The answer is TRUE. That is the key difference. Traditional software follows instructions written by a programmer. A machine-learning system trains on data and improves through experience rather than being given explicit rules for every situation.",
       },
       {
         difficulty: 'Easy',
@@ -67,7 +67,7 @@ const wm1: Record<number, LessonData> = {
         question: `"When training an image classifier, the system starts out perfect and gradually degrades over time."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "The opposite is true. At the beginning of training a system makes a lot of mistakes. Over time it adjusts its settings based on those mistakes and becomes better. Improvement comes from repeated correction.",
+        explanation: "The answer is FALSE. The opposite is true. At the beginning of training a system makes a lot of mistakes. Over time it adjusts its settings based on those mistakes and becomes better. Improvement comes from repeated correction.",
       },
       {
         difficulty: 'Medium',
@@ -76,7 +76,7 @@ const wm1: Record<number, LessonData> = {
         question: `"An AI that performs impressively on one task will likely perform well on all similar tasks."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "AI systems can be surprisingly fragile. A model trained on one set of conditions may fail when those conditions change even slightly. Strong performance in one setting does not guarantee strong performance in another.",
+        explanation: "The answer is FALSE. AI systems can be surprisingly fragile. A model trained on one set of conditions may fail when those conditions change even slightly. Strong performance in one setting does not guarantee strong performance in another.",
       },
       {
         difficulty: 'Medium',
@@ -85,7 +85,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Passing the Turing Test proves that a machine is truly thinking."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Turing intentionally sidestepped that question. Passing the test means a machine can imitate human conversation well enough to fool a judge. It does not prove that the machine understands what it is saying.",
+        explanation: "The answer is FALSE. Turing intentionally sidestepped that question. Passing the test means a machine can imitate human conversation well enough to fool a judge. It does not prove that the machine understands what it is saying.",
       },
       {
         difficulty: 'Medium',
@@ -94,7 +94,7 @@ const wm1: Record<number, LessonData> = {
         question: `"AI systems are already embedded in many tools people use every day."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "Search engines, social-media feeds, navigation apps, email filters, and medical imaging systems all use AI in various forms. This is not a future technology — it is already shaping daily life.",
+        explanation: "The answer is TRUE. Search engines, social-media feeds, navigation apps, email filters, and medical imaging systems all use AI in various forms. This is not a future technology — it is already shaping daily life.",
       },
       {
         difficulty: 'Hard',
@@ -103,7 +103,7 @@ const wm1: Record<number, LessonData> = {
         question: `"The fact that a machine-learning system improved its performance means it now understands the task the way a human would."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Better performance does not equal human-like understanding. The system has gotten better at spotting statistical patterns in data. It has not developed the kind of reasoning, context, or meaning that humans bring to the same task.",
+        explanation: "The answer is FALSE. Better performance does not equal human-like understanding. The system has gotten better at spotting statistical patterns in data. It has not developed the kind of reasoning, context, or meaning that humans bring to the same task.",
       },
       {
         difficulty: 'Hard',
@@ -112,7 +112,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Turing's contribution was to shift the question from 'does a machine truly think?' to 'can a machine's behavior look intelligent from the outside?'"`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "That reframing was the key move. Instead of getting stuck on philosophical debates about consciousness, Turing proposed a practical, observable test. Whether a machine truly thinks remains unresolved. Whether it can behave intelligently is something you can measure.",
+        explanation: "The answer is TRUE. That reframing was the key move. Instead of getting stuck on philosophical debates about consciousness, Turing proposed a practical, observable test. Whether a machine truly thinks remains unresolved. Whether it can behave intelligently is something you can measure.",
       },
     ],
   },
@@ -166,7 +166,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Artificial neural networks are basically digital copies of the human brain."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Neural networks borrow a very simplified idea from how brains work, but they are not miniature brains. They are mathematical systems made of connected nodes with weights. The name is an analogy, not a description.",
+        explanation: "The answer is FALSE. Neural networks borrow a very simplified idea from how brains work, but they are not miniature brains. They are mathematical systems made of connected nodes with weights. The name is an analogy, not a description.",
       },
       {
         difficulty: 'Easy',
@@ -175,7 +175,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Training a neural network involves repeatedly adjusting weights to reduce the difference between predictions and correct answers."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "That is exactly the training loop: make a prediction, measure the error (loss), and adjust the weights slightly to reduce that error. Repeated millions of times, these small adjustments add up to significant improvement.",
+        explanation: "The answer is TRUE. That is exactly the training loop: make a prediction, measure the error (loss), and adjust the weights slightly to reduce that error. Repeated millions of times, these small adjustments add up to significant improvement.",
       },
       {
         difficulty: 'Easy',
@@ -184,7 +184,7 @@ const wm1: Record<number, LessonData> = {
         question: `"A recommendation algorithm measures your engagement to determine whether an experience was good for you."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Engagement and wellbeing are different things. A recommendation system can measure whether you kept watching or scrolling. It cannot determine whether the experience was actually good for you. That is a key limitation.",
+        explanation: "The answer is FALSE. Engagement and wellbeing are different things. A recommendation system can measure whether you kept watching or scrolling. It cannot determine whether the experience was actually good for you. That is a key limitation.",
       },
       {
         difficulty: 'Medium',
@@ -193,7 +193,7 @@ const wm1: Record<number, LessonData> = {
         question: `"In deep learning, 'deep' means the system is thinking more deeply or carefully."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "'Deep' refers to the number of hidden layers in the network — the information passes through more layers of calculations. It does not mean the system is reasoning more carefully or thoughtfully than a shallower network.",
+        explanation: "The answer is FALSE. 'Deep' refers to the number of hidden layers in the network — the information passes through more layers of calculations. It does not mean the system is reasoning more carefully or thoughtfully than a shallower network.",
       },
       {
         difficulty: 'Medium',
@@ -202,7 +202,7 @@ const wm1: Record<number, LessonData> = {
         question: `"The black box problem matters more when AI is used in high-stakes decisions like loans or medical evaluations."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "When a system recommends a song, a bad recommendation is harmless. But when a system affects whether someone gets a loan, is flagged as a risk, or receives a medical recommendation, people have a reasonable interest in knowing how that decision was made.",
+        explanation: "The answer is TRUE. When a system recommends a song, a bad recommendation is harmless. But when a system affects whether someone gets a loan, is flagged as a risk, or receives a medical recommendation, people have a reasonable interest in knowing how that decision was made.",
       },
       {
         difficulty: 'Medium',
@@ -211,7 +211,7 @@ const wm1: Record<number, LessonData> = {
         question: `"An AI system trained mostly on one type of data will likely work equally well on very different data."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "This is the distribution shift problem. A model trained on sunny roads may struggle in heavy snow. A medical tool trained on one population may work less reliably for another. Training data shapes what the model knows.",
+        explanation: "The answer is FALSE. This is the distribution shift problem. A model trained on sunny roads may struggle in heavy snow. A medical tool trained on one population may work less reliably for another. Training data shapes what the model knows.",
       },
       {
         difficulty: 'Hard',
@@ -220,7 +220,7 @@ const wm1: Record<number, LessonData> = {
         question: `"When ChatGPT responds to a message, it retrieves pre-written answers from a large database."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "ChatGPT generates responses token by token, estimating what should come next based on the conversation so far. It is not looking up stored answers — it is producing new text using patterns learned during training.",
+        explanation: "The answer is FALSE. ChatGPT generates responses token by token, estimating what should come next based on the conversation so far. It is not looking up stored answers — it is producing new text using patterns learned during training.",
       },
       {
         difficulty: 'Hard',
@@ -229,7 +229,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Automation can make existing biases in data worse by repeating the same mistake at a much larger scale."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "A human making a biased decision affects one person. An automated system making the same biased decision can affect thousands or millions. Automation does not create bias from nothing — but it can dramatically amplify biases that already exist in the data.",
+        explanation: "The answer is TRUE. A human making a biased decision affects one person. An automated system making the same biased decision can affect thousands or millions. Automation does not create bias from nothing — but it can dramatically amplify biases that already exist in the data.",
       },
     ],
   },
@@ -283,7 +283,7 @@ const wm1: Record<number, LessonData> = {
         question: `"AI is most likely to automate tasks that are repetitive, structured, and based on clear patterns."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "Data entry, basic customer-service responses, and document sorting are examples of structured, pattern-based tasks. Work that requires adapting to unpredictable situations — like a plumber or a nurse — is harder to automate.",
+        explanation: "The answer is TRUE. Data entry, basic customer-service responses, and document sorting are examples of structured, pattern-based tasks. Work that requires adapting to unpredictable situations — like a plumber or a nurse — is harder to automate.",
       },
       {
         difficulty: 'Easy',
@@ -292,7 +292,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Clicking 'agree' on a privacy policy means you fully understand and have consented to how your data will be used."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Technically clicking 'agree' is not the same as truly understanding the terms. Privacy policies are often long, written in legal language, and easy to ignore. That gap between technical consent and meaningful consent is a real problem.",
+        explanation: "The answer is FALSE. Technically clicking 'agree' is not the same as truly understanding the terms. Privacy policies are often long, written in legal language, and easy to ignore. That gap between technical consent and meaningful consent is a real problem.",
       },
       {
         difficulty: 'Easy',
@@ -301,7 +301,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Algorithmic decisions about what news or products you see are neutral — they have no built-in priorities."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Algorithmic decisions reflect the priorities of the people and companies who built the system. What gets surfaced, ranked, or recommended is a design choice. Those choices can have significant effects on what people see and believe.",
+        explanation: "The answer is FALSE. Algorithmic decisions reflect the priorities of the people and companies who built the system. What gets surfaced, ranked, or recommended is a design choice. Those choices can have significant effects on what people see and believe.",
       },
       {
         difficulty: 'Medium',
@@ -310,7 +310,7 @@ const wm1: Record<number, LessonData> = {
         question: `"An AI image generator creates work by drawing on lived experience and emotion the way a human artist does."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "AI systems generate patterns based on training data. A human artist may create from memory, emotion, frustration, or curiosity. An AI system does not have those experiences. How it creates is fundamentally different, even if the result can look impressive.",
+        explanation: "The answer is FALSE. AI systems generate patterns based on training data. A human artist may create from memory, emotion, frustration, or curiosity. An AI system does not have those experiences. How it creates is fundamentally different, even if the result can look impressive.",
       },
       {
         difficulty: 'Medium',
@@ -319,7 +319,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Recommendation algorithms can contribute to political polarization by showing people more content similar to what already engaged them."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "Platforms often rank content based on engagement, and outrage and conflict can keep people watching. This can turn a few clicks into an increasingly narrow view of the world. Algorithms did not invent division, but they can accelerate it.",
+        explanation: "The answer is TRUE. Platforms often rank content based on engagement, and outrage and conflict can keep people watching. This can turn a few clicks into an increasingly narrow view of the world. Algorithms did not invent division, but they can accelerate it.",
       },
       {
         difficulty: 'Medium',
@@ -328,7 +328,7 @@ const wm1: Record<number, LessonData> = {
         question: `"If AI medical tools are only available at wealthy hospitals, AI could increase health inequality rather than reduce it."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "Access matters. If the most advanced diagnostic tools are only available at well-funded hospitals, the gap between who gets good care and who does not could widen. Technology does not automatically distribute its benefits equally.",
+        explanation: "The answer is TRUE. Access matters. If the most advanced diagnostic tools are only available at well-funded hospitals, the gap between who gets good care and who does not could widen. Technology does not automatically distribute its benefits equally.",
       },
       {
         difficulty: 'Hard',
@@ -337,7 +337,7 @@ const wm1: Record<number, LessonData> = {
         question: `"The main challenge AI poses to education is that it makes students learn more slowly."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "The main challenge is academic integrity and what learning actually means. If AI can write an essay or solve a problem set, it becomes harder to tell what a student understands. Schools are responding with approaches that require students to demonstrate their own thinking.",
+        explanation: "The answer is FALSE. The main challenge is academic integrity and what learning actually means. If AI can write an essay or solve a problem set, it becomes harder to tell what a student understands. Schools are responding with approaches that require students to demonstrate their own thinking.",
       },
       {
         difficulty: 'Hard',
@@ -346,7 +346,7 @@ const wm1: Record<number, LessonData> = {
         question: `"AI is more likely to change what people do within their jobs than to completely eliminate large numbers of professions overnight."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "The more likely near-term impact is that AI reshapes individual tasks — changing what people actually do during the workday — rather than eliminating entire professions all at once.",
+        explanation: "The answer is TRUE. The more likely near-term impact is that AI reshapes individual tasks — changing what people actually do during the workday — rather than eliminating entire professions all at once.",
       },
     ],
   },
@@ -405,7 +405,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Consequentialism judges actions based on the duties and rules they follow, regardless of outcome."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "That describes deontology, not consequentialism. Consequentialism judges actions by their outcomes — an action is considered good if it produces the best overall result.",
+        explanation: "The answer is FALSE. That describes deontology, not consequentialism. Consequentialism judges actions by their outcomes — an action is considered good if it produces the best overall result.",
       },
       {
         difficulty: 'Easy',
@@ -414,7 +414,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Clicking 'agree' on a terms-of-service form always constitutes meaningful consent."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Technical consent (clicking a button) and meaningful consent (understanding the choice and making it freely) are not the same thing. Long, complex agreements that people rarely read make meaningful consent difficult in practice.",
+        explanation: "The answer is FALSE. Technical consent (clicking a button) and meaningful consent (understanding the choice and making it freely) are not the same thing. Long, complex agreements that people rarely read make meaningful consent difficult in practice.",
       },
       {
         difficulty: 'Easy',
@@ -423,7 +423,7 @@ const wm1: Record<number, LessonData> = {
         question: `"When an AI system causes harm, it is always easy to identify exactly who is responsible."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Responsibility is often spread across the entire chain — researchers, companies, engineers, businesses, and users may all point to someone else. This is the accountability gap, and closing it requires clearer rules.",
+        explanation: "The answer is FALSE. Responsibility is often spread across the entire chain — researchers, companies, engineers, businesses, and users may all point to someone else. This is the accountability gap, and closing it requires clearer rules.",
       },
       {
         difficulty: 'Medium',
@@ -432,7 +432,7 @@ const wm1: Record<number, LessonData> = {
         question: `"There is one agreed-upon definition of fairness that AI systems can be designed to meet."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Multiple definitions of fairness exist — demographic parity, equal accuracy, and individual fairness — and they can conflict. Improving one measure may make another worse. Better code can reduce bias, but it cannot decide what fairness should mean.",
+        explanation: "The answer is FALSE. Multiple definitions of fairness exist — demographic parity, equal accuracy, and individual fairness — and they can conflict. Improving one measure may make another worse. Better code can reduce bias, but it cannot decide what fairness should mean.",
       },
       {
         difficulty: 'Medium',
@@ -441,7 +441,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Persuasion and manipulation are different — persuasion provides information and reasons, while manipulation exploits vulnerabilities the person may not notice."`,
         answer: true,
         verdict: 'Correct.',
-        explanation: "That distinction matters. A persuasive argument gives you reasons to change your mind. Manipulation takes advantage of emotions or blind spots in ways you may not be aware of. Platforms can do the latter without ever lying.",
+        explanation: "The answer is TRUE. That distinction matters. A persuasive argument gives you reasons to change your mind. Manipulation takes advantage of emotions or blind spots in ways you may not be aware of. Platforms can do the latter without ever lying.",
       },
       {
         difficulty: 'Medium',
@@ -450,7 +450,7 @@ const wm1: Record<number, LessonData> = {
         question: `"A system told to maximize clicks and that learns to promote outrage is technically failing its objective."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Technically it is succeeding — clicks are going up. The problem is that the stated objective (maximize clicks) does not match what people actually wanted. The system found a valid shortcut that undermines the real goal. That is the alignment problem.",
+        explanation: "The answer is FALSE. Technically it is succeeding — clicks are going up. The problem is that the stated objective (maximize clicks) does not match what people actually wanted. The system found a valid shortcut that undermines the real goal. That is the alignment problem.",
       },
       {
         difficulty: 'Hard',
@@ -459,7 +459,7 @@ const wm1: Record<number, LessonData> = {
         question: `"In high-stakes settings, an AI system that is accurate but unexplainable fully meets society's needs."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "Accuracy alone is not sufficient in high-stakes situations. People also need transparency — the ability to understand and challenge decisions. An accurate but unexplainable system may still produce outcomes that are unfair, mistaken, or impossible to appeal.",
+        explanation: "The answer is FALSE. Accuracy alone is not sufficient in high-stakes situations. People also need transparency — the ability to understand and challenge decisions. An accurate but unexplainable system may still produce outcomes that are unfair, mistaken, or impossible to appeal.",
       },
       {
         difficulty: 'Hard',
@@ -468,7 +468,7 @@ const wm1: Record<number, LessonData> = {
         question: `"Leaving AI governance entirely to a small group of engineers and executives is a neutral, technical choice with no political implications."`,
         answer: false,
         verdict: 'Not quite.',
-        explanation: "It is not neutral. Deciding who makes the rules is itself a decision about power. When a small group of private actors controls technology that affects billions of people, that is a political and ethical choice — not just a technical one.",
+        explanation: "The answer is FALSE. It is not neutral. Deciding who makes the rules is itself a decision about power. When a small group of private actors controls technology that affects billions of people, that is a political and ethical choice — not just a technical one.",
       },
     ],
   },
