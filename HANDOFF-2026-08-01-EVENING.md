@@ -121,3 +121,35 @@ build and against prod: 39/39.
 6. Full 3-engine journey matrix was run against LOCAL (clean except the two
    local-only chat caveats); prod matrix run was chromium-only to spare the
    chat cap. Nightly re-verification should alternate engines.
+
+---
+
+# Addendum — the "100% pass" session (later on 2026-08-01)
+
+Read `QA-DOCTRINE-2026-08-01.md` (why we kept finding bugs; the seven
+failure classes; the LLM-confirmation-bias controls) and
+`QA-RUN-2026-08-01.md` (predictions vs results for every phase).
+
+New standing infrastructure:
+- `npm run test:flows` — real-UI flows (48 checks incl. two-tab, refresh
+  mid-quiz, chat-down)
+- `node scripts/test_sweep.mjs` — absence sweep, every route × persona
+  (--full = 1,267 loads); mutation-validated
+- `node scripts/test_monkey.mjs` — seeded random walks with invariants;
+  mutation-validated
+- `scripts/fix_pt_explanations.py` — the 149 PT explanation translations
+  (idempotent); lint_lessons now hard-fails the broken signature and any
+  lesson tag with no PT label
+- Process rules that earned their keep today: mutation-validate every new
+  detector; full output to files (never tail a test run); treat handoff
+  claims as hypotheses; and run a fresh-context adversary against the claim
+  list before calling anything done — it broke 4 of 12 claims the same day
+  everything else was green.
+
+Games policy changed: /games and all games now require a signed-in student
+(any track). Cross-track game play remains allowed deliberately — flagged
+to Sonali as a taste call, recommendation: leave it.
+
+For Sonali's review (content I translated, not authored): the 149
+Portuguese quiz explanations (wm_w1_pt..wm_w5_pt) — faithful translations
+of the corrected English ones; and the C1a slide split from earlier today.
