@@ -274,6 +274,70 @@ async function S7(ctx) {
   await page.close()
 }
 
+async function S9(ctx, user) {
+  console.log('S9: two tabs open — sign-out in one, the other must not strand the student')
+  const tab1 = await ctx.newPage()
+  await login(tab1, { lang: 'pt', username: user })
+  const tab2 = await ctx.newPage()
+  await tab2.goto(BASE + '/elementary/middle-pt', { waitUntil: 'domcontentloaded' })
+  await settle(tab2, 1200)
+  record('S9', 'tab2 shows PT home', path(tab2) === '/elementary/middle-pt', `at ${path(tab2)}`)
+  await signOut(tab1, 'pt')
+  // tab2 now has wiped storage + dead cookie; interacting must not crash or
+  // leave the student on a track page as a ghost.
+  const errs = []
+  tab2.on('pageerror', e => errs.push(String(e)))
+  await tab2.reload({ waitUntil: 'domcontentloaded' })
+  await settle(tab2, 1800)
+  record('S9', 'tab2 lands on onboarding after remote sign-out', path(tab2) === '/', `at ${path(tab2)}`)
+  record('S9', 'tab2 no page errors', errs.length === 0, errs[0] ?? '')
+  await tab1.close(); await tab2.close()
+}
+
+async function S10(ctx, user) {
+  console.log('S10: refresh mid-quiz — no crash, still PT, quiz recoverable')
+  const page = await ctx.newPage()
+  const errs = []
+  page.on('pageerror', e => errs.push(String(e)))
+  await login(page, { lang: 'pt', username: user })
+  await page.goto(BASE + '/elementary/lesson/311', { waitUntil: 'domcontentloaded' })
+  await settle(page, 1200)
+  // Advance to the quiz (PULAR skips the timeline)
+  await clickText(page, /^Pular$/i, 'skip to quiz').catch(() => {})
+  await settle(page, 1000)
+  const onQuiz = await page.locator('button', { hasText: /^Verdadeiro$/i }).count()
+  record('S10', 'quiz reachable via skip', onQuiz > 0, `at ${path(page)}`)
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await settle(page, 1200)
+  const text = await page.evaluate(() => document.body.innerText)
+  record('S10', 'lesson recovers after mid-quiz refresh', text.length > 120, `${text.length} chars`)
+  record('S10', 'still Portuguese after refresh', !EN_CHROME.test(text.replace(/\s+/g, ' ')), '')
+  record('S10', 'no page errors', errs.length === 0, errs[0] ?? '')
+  await page.close()
+}
+
+async function S11(ctx, user) {
+  console.log('S11: chat backend down — child gets a polite message, not a crash')
+  const page = await ctx.newPage()
+  const errs = []
+  page.on('pageerror', e => errs.push(String(e)))
+  await page.route('**/api/chat', route => route.abort())
+  await login(page, { lang: 'pt', username: user })
+  await page.goto(BASE + '/elementary/lesson/311', { waitUntil: 'domcontentloaded' })
+  await settle(page, 1200)
+  const trigger = page.getByRole('button', { name: /conversar com o pai/i }).first()
+  await trigger.click({ timeout: 8000 })
+  await settle(page, 800)
+  const input = page.locator('input[type=text], input:not([type])').last()
+  await input.fill('O que é IA?')
+  await input.press('Enter')
+  await settle(page, 2500)
+  const text = await page.evaluate(() => document.body.innerText)
+  record('S11', 'graceful unreachable message shown', /Não foi possível falar com o PAI/i.test(text), text.slice(-120))
+  record('S11', 'no page errors with chat down', errs.length === 0, errs[0] ?? '')
+  await page.close()
+}
+
 async function S8(engine) {
   console.log('S8: onboarding usable on 1366x768 and 1280x720 laptops')
   for (const [w, h] of [[1366, 768], [1280, 720]]) {
@@ -323,6 +387,9 @@ try {
   await run('S5', async () => S5(ctx, s3User ?? s1User ?? (s1User = await S1(ctx))))
   await run('S6', () => S6(ctx))
   await run('S7', () => S7(ctx))
+  await run('S9', async () => S9(ctx, s3User ?? s1User ?? (s1User = await S1(ctx))))
+  await run('S10', async () => S10(ctx, s3User ?? s1User))
+  await run('S11', async () => S11(ctx, s3User ?? s1User))
 } finally {
   await browser.close()
 }

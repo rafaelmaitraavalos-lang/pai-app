@@ -28,7 +28,10 @@ export function getSql(): NeonQueryFunction<false, false> {
   if (!_sql) {
     if (isValidPostgresUrl(process.env.DATABASE_URL)) {
       _sql = neon(process.env.DATABASE_URL)
-    } else if (process.env.NODE_ENV !== 'production') {
+    } else if (process.env.NODE_ENV !== 'production' || process.env.PAI_DEV_DB === '1') {
+      // PAI_DEV_DB=1 lets a local `next start` (production build, NODE_ENV
+      // fixed to "production") use the PGlite fallback for test runs. Vercel
+      // never sets it, so deployed behavior is unchanged.
       _sql = makePgliteSql()
     } else {
       throw new Error('DATABASE_URL is not set — add Neon via Vercel Storage')
