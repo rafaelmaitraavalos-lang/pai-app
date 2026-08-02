@@ -16,11 +16,30 @@ SLIDE = re.compile(r'title:\s*"((?:[^"\\]|\\.)*)"\s*,\s*body:\s*"((?:[^"\\]|\\.)
 TRAILING_JUNK = {'the', 'a', 'an', 'and', 'or', 'but', 'of', 'in', 'on', 'at',
                  'to', 'for', 'with', 'from', 'by', 'as', 'that', 'this', 'these'}
 
+# Every tag value the UI knows how to render in Portuguese. A new tag that is
+# not in this set would show raw English on Portuguese lessons (a 2026-08-01
+# "SCENARIO" slipped through exactly this way — found by adversarial review).
+# Keep in sync with tagLabel in app/components/LessonTemplate.tsx.
+KNOWN_TAGS = {'Fact', 'Example', 'Big idea', 'Hot take', 'Scenario', 'Myth bust'}
+TAG = re.compile(r'tag:\s*"((?:[^"\\]|\\.)*)"')
+
+# The Portuguese middle-school explanation generator emitted the source
+# question ("Pergunta? — opção") instead of an explanation on 149 of 160
+# quizzes. That signature — a question mark followed by an em-dash option —
+# must never ship again.
+BROKEN_EXPLANATION = re.compile(r'explanation:\s*"[^"]*\?\s*—\s*[^"]*"')
+
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 
 def check(path):
     problems = []
+    src = open(path, encoding='utf-8').read()
+    for m in TAG.finditer(src):
+        if m.group(1) not in KNOWN_TAGS:
+            problems.append((m.group(1), '', 'tag has no Portuguese label in LessonTemplate'))
+    for m in BROKEN_EXPLANATION.finditer(src):
+        problems.append(('', m.group(0)[:70], 'explanation is a "question — option" stem, not an explanation'))
     for m in SLIDE.finditer(open(path, encoding='utf-8').read()):
         title, body = m.group(1), m.group(2)
         if not body:

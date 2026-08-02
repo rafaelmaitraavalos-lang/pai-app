@@ -103,11 +103,14 @@ for (const w of [201, 202, 203, 204, 205, 261, 262, 263, 264, 265]) routes.push(
 for (let l = 1; l <= 15; l++) routes.push({ path: `/lesson/${l}`, track: 'high' })
 for (const l of ELEM_LESSONS) routes.push({ path: `/elementary/lesson/${l}`, track: lessonTrack(l) })
 for (const l of MIDDLE_LESSONS) routes.push({ path: `/elementary/lesson/${l}`, track: lessonTrack(l) })
-for (const g of GAME_SLUGS) routes.push({ path: `/games/${g}`, track: 'shared', game: true })
+routes.push({ path: '/games', track: 'signed', game: false })
+for (const g of GAME_SLUGS) routes.push({ path: `/games/${g}`, track: 'signed', game: true })
 
-// 'elem' means the shared elementary home (both elem tracks belong)
+// 'elem' = the shared elementary home (both elem tracks belong).
+// 'signed' = any signed-in student, but NOT anonymous (games hub + games).
 const belongs = (routeTrack, personaTrack) =>
   routeTrack === 'shared' || routeTrack === 'onboarding' ? true :
+  routeTrack === 'signed' ? !!personaTrack :
   routeTrack === 'elem' ? personaTrack === 'elem-en' || personaTrack === 'elem-pt' :
   routeTrack === personaTrack
 
@@ -130,7 +133,7 @@ function expectedLang(route, persona) {
   if (route.track === 'elem-pt' || route.track === 'middle-pt') return 'pt'
   if (route.track === 'elem-en' || route.track === 'middle-en') return 'en'
   if (route.track === 'onboarding') return null            // bilingual by design
-  if (route.track === 'high' || route.track === 'shared' || route.track === 'elem')
+  if (route.track === 'high' || route.track === 'shared' || route.track === 'elem' || route.track === 'signed')
     return persona ? persona.lang : 'en'
   return null
 }
@@ -145,7 +148,7 @@ function personasFor(route, i) {
   const owners = Object.entries(PERSONAS).filter(([, p]) => p && belongs(route.track, p.track)).map(([k]) => k)
   const strangers = Object.entries(PERSONAS).filter(([, p]) => p && !belongs(route.track, p.track)).map(([k]) => k)
   const picks = new Set(['anon'])
-  if (route.track === 'shared' || route.track === 'onboarding' || route.track === 'high' || route.track === 'elem') {
+  if (route.track === 'shared' || route.track === 'onboarding' || route.track === 'high' || route.track === 'elem' || route.track === 'signed') {
     // bilingual surfaces: one EN and one PT persona
     picks.add(route.track === 'high' ? 'en-high' : 'en-elem')
     picks.add(route.track === 'high' ? 'pt-medio' : 'pt-fund1')
@@ -203,8 +206,8 @@ for (const [personaName, persona] of Object.entries(PERSONAS)) {
         // transient false alarms during mutation validation.
         const expected = persona ? HOME[persona.track] : '/'
         let fp = finalPath
-        if (fp === route.path) {
-          await page.waitForTimeout(2500)
+        for (let r = 0; r < 3 && fp === route.path; r++) {
+          await page.waitForTimeout(2500)   // serverless cold starts can make the heal round-trip slow
           fp = new URL(page.url()).pathname
         }
         if (fp === route.path) fail(`wrong-track persona was NOT redirected (stayed on ${fp})`)

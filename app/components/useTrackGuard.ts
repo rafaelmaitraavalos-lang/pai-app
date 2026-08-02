@@ -16,6 +16,7 @@ async function ensureProfile(): Promise<StudentProfile | null> {
   }
   try {
     const res = await fetch('/api/auth')
+    if (!res.ok) return null  // server hiccup — NEVER destroy the session on an indeterminate answer
     const { user } = await res.json()
     if (user && user.grade) {
       localStorage.setItem('pai_username', user.username)
@@ -25,8 +26,10 @@ async function ensureProfile(): Promise<StudentProfile | null> {
       applyProgress(user.progress ?? {})
       return { grade: user.grade, lang: user.lang }
     }
-    // Stray or profile-less session: clear the cookie so "/" can show
-    // onboarding instead of the middleware bouncing it back to /home forever.
+    // Definitive "no such session" (or a grade-less interrupted signup):
+    // clear the cookie so "/" can show onboarding instead of the middleware
+    // bouncing it back to /home forever. Signing in again resumes at the
+    // grade step, so nothing is lost.
     await fetch('/api/auth', { method: 'DELETE' })
   } catch {}
   return null

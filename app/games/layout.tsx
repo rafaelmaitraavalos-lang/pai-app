@@ -14,9 +14,14 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { studentTrack, homeRoute } from '../data/track'
+import { useTrackGuard } from '../components/useTrackGuard'
 
 export default function GamesLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  // Any signed-in student may play (games are shared bonus content), but an
+  // anonymous visitor belongs in onboarding — adversarial review found every
+  // game playable, in English, with no account at all.
+  const allowed = useTrackGuard(() => true)
   const [isPT, setIsPT] = useState(false)
   const [home, setHome] = useState('/home')
 
@@ -25,6 +30,8 @@ export default function GamesLayout({ children }: { children: React.ReactNode })
     const track = studentTrack(localStorage.getItem('pai_grade'), localStorage.getItem('pai_lang'))
     setHome(track ? homeRoute(track) : '/home')
   }, [])
+
+  if (!allowed) return null
 
   return (
     <>

@@ -145,9 +145,11 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       const data = await res.json()
       if (!res.ok) {
         const isPT = country?.lang === 'pt'
+        // Keys must be the EXACT strings /api/auth sends — adversarial review
+        // found the old keys had drifted, so Portuguese kids got English errors.
         const errMap: Record<string, string> = isPT ? {
-          'That username is taken': 'Este nome de usuário já está em uso',
-          'No account with that username': 'Nenhuma conta com esse nome de usuário',
+          'Someone already has that one — try another!': 'Alguém já escolheu esse — tente outro!',
+          "We don't recognize that username. Check the spelling?": 'Não reconhecemos esse nome de usuário. Confira a escrita?',
           'Username required': 'Nome de usuário obrigatório',
           'Invalid username': 'Nome de usuário inválido',
         } : {}
@@ -435,11 +437,20 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 {usernameError && (
                   <p style={{ fontFamily: BODY, fontSize: 12, color: '#e53e3e', margin: '8px 0 0' }}>{usernameError}</p>
                 )}
-                {!usernameError && authMode === 'signup' && (
-                  <p style={{ fontFamily: BODY, fontSize: 11, color: DIM, margin: '8px 0 0' }}>
-                    {L.usernameHint ?? 'Letters, numbers, and underscores only.'}
-                  </p>
-                )}
+                {!usernameError && authMode === 'signup' && (() => {
+                  // Accents, spaces and symbols are silently stripped by the
+                  // server — a child typing "João" must SEE they will become
+                  // "joo" before the account exists, not discover it after.
+                  const clean = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
+                  const changed = clean && clean !== username.trim()
+                  return (
+                    <p style={{ fontFamily: BODY, fontSize: 11, color: changed ? '#b45309' : DIM, margin: '8px 0 0' }}>
+                      {changed
+                        ? (country?.lang === 'pt' ? `Seu nome de usuário será: ${clean}` : `Your username will be: ${clean}`)
+                        : (L.usernameHint ?? 'Letters, numbers, and underscores only.')}
+                    </p>
+                  )
+                })()}
               </div>
             </div>
           )}

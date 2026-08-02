@@ -85,7 +85,10 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
       })
       const data = await res.json()
       if (typeof data.remaining === 'number') setRemaining(data.remaining)
-      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? tx.noResponse }])
+      // An error status with no reply text (5xx, malformed body) reads as the
+      // polite "can't reach PAI" message, not a bare "No response." — real
+      // 429s carry their own explanatory reply and still show it.
+      setMessages(m => [...m, { role: 'assistant', content: data.reply ?? (res.ok ? tx.noResponse : tx.unreachable) }])
       // After a burst of questions in one lesson, gently point back to the lesson — once per lesson per day.
       if (res.ok && incrementLessonUsage(lessonId) === LESSON_NUDGE_AT) {
         setMessages(m => [...m, { role: 'assistant', content: tx.lessonNudge }])

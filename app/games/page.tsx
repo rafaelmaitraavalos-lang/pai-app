@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { GAMES, TYPE_LABEL, TYPE_LABEL_PT, WORLD_NAMES, GAME_TITLES_PT, type GameType } from '../data/games'
+import { WORLD_TITLES_PT } from '../data'
+import { studentTrack, homeRoute } from '../data/track'
+import { useTrackGuard } from '../components/useTrackGuard'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -22,8 +25,19 @@ const worlds = Array.from(new Set(GAMES.map(g => g.world)))
 
 export default function GamesHub() {
   const router = useRouter()
+  // Games are shared bonus content for every SIGNED-IN track, but the hub was
+  // reachable anonymously and in full English for Portuguese students —
+  // adversarial review findings C11/9c.
+  const allowed = useTrackGuard(() => true)
   const [isPT, setIsPT] = useState(false)
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  const [home, setHome] = useState('/home')
+  useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    const track = studentTrack(localStorage.getItem('pai_grade'), localStorage.getItem('pai_lang'))
+    setHome(track ? homeRoute(track) : '/home')
+  }, [])
+
+  if (!allowed) return null
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY }}>
@@ -31,7 +45,7 @@ export default function GamesHub() {
       {/* Header */}
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontFamily: DISP, fontSize: 22, color: GREEN, letterSpacing: '-0.02em' }}>PAI</span>
-        <button onClick={() => router.push('/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
+        <button onClick={() => router.push(home)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.5 }}>
           {isPT ? '← Início' : '← Home'}
         </button>
       </div>
@@ -60,7 +74,7 @@ export default function GamesHub() {
               {/* World label */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                 <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>W{String(wid).padStart(2,'0')}</span>
-                <span style={{ fontFamily: DISP, fontSize: 12, color: BLACK }}>{WORLD_NAMES[wid]}</span>
+                <span style={{ fontFamily: DISP, fontSize: 12, color: BLACK }}>{isPT ? (WORLD_TITLES_PT[wid] ?? WORLD_NAMES[wid]) : WORLD_NAMES[wid]}</span>
                 <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
               </div>
 
