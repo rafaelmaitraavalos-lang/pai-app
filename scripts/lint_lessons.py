@@ -30,7 +30,9 @@ TAG = re.compile(r'tag:\s*"((?:[^"\\]|\\.)*)"')
 #   1. "Pergunta? — opção"            (question stem + option)
 #   2. "Verdadeiro ou falso: ... — Falso" / "... é melhor descrito como: —"
 BROKEN_EXPLANATION = re.compile(
-    r'explanation:\s*"[^"]*(\?\s*—\s*|Verdadeiro ou falso:|é melhor descrit[oa] como|—\s*(Falso|Verdadeiro)\s*")')
+    r'explanation:\s*"[^"]*(\?\s*—\s*|Verdadeiro ou falso:|é melhor descrit[oa] como'
+    r'|True or false:|is best (described|understood) as|: —'
+    r'|—\s*(Falso|Verdadeiro)\s*")')
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 

@@ -50,7 +50,7 @@ const we1: Record<number, LessonData> = {
         question: `"Alan Turing asked 'Can a machine think?' back in 1950."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "The answer is TRUE. Alan Turing was a mathematician from England. In 1950 he asked a question nobody had ever asked before — and that question started the whole story of AI!",
+        explanation: "The answer is TRUE. Alan Turing was a mathematician from England. In 1950 he asked a big question: Can a machine think? That question started the whole story of AI!",
       },
       {
         difficulty: 'Easy',
@@ -180,7 +180,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI helped scientists figure out the shapes of proteins — a problem humans had worked on for 50 years."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "The answer is TRUE. By reading millions of scientific articles super fast, PAI helped crack a 50-year-old mystery about protein shapes. When AI and scientists work together, they can solve problems that seemed impossible!",
+        explanation: "The answer is TRUE. By studying the shapes of thousands of proteins scientists had already mapped, PAI learned the patterns and predicted new shapes — cracking a 50-year-old mystery. When AI and scientists work together, they can solve problems that seemed impossible!",
       },
       {
         difficulty: 'Medium',
