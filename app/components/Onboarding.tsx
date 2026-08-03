@@ -264,10 +264,6 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
   return (
     <div style={page}>
-      {/* The animated pig videos were generated with the mascot cropped INSIDE
-          the frames — ears and feet flat-cut at motion extremes, unfixable by
-          padding. A CSS float on the clean static mascot can never clip. */}
-      <style>{`@keyframes paiFloat { 0%,100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-8px) rotate(1.2deg); } }`}</style>
       {/* PAI background pattern */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
@@ -304,8 +300,15 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {/* 0: Welcome */}
           {screen === 0 && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
-              <div style={{ background: '#fff', borderRadius: 16, width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <img src="/pai-mascot.png" alt="PAI" style={{ width: '72%', maxWidth: 290, display: 'block', animation: 'paiFloat 3.2s ease-in-out infinite' }} />
+              <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', width: '100%' }}>
+                <video
+                  src="/pig.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', display: 'block' }}
+                />
               </div>
               <div>
                 <div style={{ fontFamily: DISP, fontSize: 64, color: GREEN, lineHeight: 1, letterSpacing: '-0.03em' }}>PAI</div>
@@ -352,7 +355,14 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
               {/* PAI below the language buttons */}
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <img src="/pai-mascot.png" alt="PAI" style={{ width: 190, height: 190, objectFit: 'contain', animation: 'paiFloat 3.2s ease-in-out infinite' }} />
+                <video
+                  src="/pai-lang.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
+                />
               </div>
             </div>
           )}
@@ -361,7 +371,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <img src="/pai-mascot.png" alt="PAI" style={{ width: 100, height: 100, objectFit: 'contain', animation: 'paiFloat 3.2s ease-in-out infinite' }} />
+                <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
               </div>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>{L.authTitle ?? 'Welcome to PAI'}</h2>
@@ -451,7 +461,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <img src="/pai-mascot.png" alt="PAI" style={{ width: 100, height: 100, objectFit: 'contain', animation: 'paiFloat 3.2s ease-in-out infinite' }} />
+                  <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
                 </div>
                 <div>
                   <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step}</p>
