@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `After completing this world, the question of what AI fundamentally is remains open.`,
     answer: true,
     verdict: "Correct, and that's the point.",
-    explanation: "You know what AI does, how it learns, where it lives, and what it gets wrong. You know the easy answers don't hold up. The question of what AI fundamentally is, tool, mind, or something new, remains unresolved. Knowing that the question is hard is more valuable than having a false answer.",
+    explanation: "The answer is TRUE. You know what AI does, how it learns, where it lives, and what it gets wrong. You know the easy answers don't hold up. The question of what AI fundamentally is, tool, mind, or something new, remains unresolved. Knowing that the question is hard is more valuable than having a false answer.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `AI has understanding, awareness, and desires. It just doesn't show them.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "There is no evidence of understanding, awareness, or desires in any current AI system. It produces outputs that feel like these things because it was trained on human content where these things are present. The appearance of depth is not depth.",
+    explanation: "The answer is FALSE. There is no evidence of understanding, awareness, or desires in any current AI system. It produces outputs that feel like these things because it was trained on human content where these things are present. The appearance of depth is not depth.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `The people who built ChatGPT cannot fully explain why it gives every answer it gives.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "This is the interpretability problem: one of the most active areas of AI research. The systems are so complex their builders cannot explain individual outputs. You are using systems that their creators don't fully understand. That is not a reason to panic. It is a reason to pay attention.",
+    explanation: "The answer is TRUE. This is the interpretability problem: one of the most active areas of AI research. The systems are so complex their builders cannot explain individual outputs. You are using systems that their creators don't fully understand. That is not a reason to panic. It is a reason to pay attention.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Calling AI 'just a tool' is a complete and accurate description of what it is.`,
     answer: false,
     verdict: "Incomplete.",
-    explanation: "There is truth in the tool argument, AI is shaped by human choices and its impact depends on how it's used. But it also removes responsibility from builders, suggests the technology is neutral when it isn't, and implies consequences are always the user's fault. The tool framing is useful. It's not sufficient.",
+    explanation: "The answer is FALSE. There is truth in the tool argument, AI is shaped by human choices and its impact depends on how it's used. But it also removes responsibility from builders, suggests the technology is neutral when it isn't, and implies consequences are always the user's fault. The tool framing is useful. It's not sufficient.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `How you answer the question 'what is AI?' affects real decisions you will make throughout your life.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Whether to trust an AI diagnosis. Whether AI-generated art deserves copyright. Whether AI should make legal decisions. Whether companies should be liable for AI harms. These are not abstract questions. They are policy, legal, and personal decisions that hinge on what you think AI actually is.",
+    explanation: "The answer is TRUE. Whether to trust an AI diagnosis. Whether AI-generated art deserves copyright. Whether AI should make legal decisions. Whether companies should be liable for AI harms. These are not abstract questions. They are policy, legal, and personal decisions that hinge on what you think AI actually is.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Because AI is trained on human data it will always reflect human values.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "It reflects the values present in its training data \u2013 which represents some humans more than others, some time periods more than others, some languages and cultures more than others. The appearance of human values in AI output is not evidence that human values have been captured.",
+    explanation: "The answer is FALSE. It reflects the values present in its training data \u2013 which represents some humans more than others, some time periods more than others, some languages and cultures more than others. The appearance of human values in AI output is not evidence that human values have been captured.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `As AI becomes more capable the question of what it is becomes less important.`,
     answer: false,
     verdict: "Wrong. It becomes more important.",
-    explanation: "The more capable AI systems become the more consequential our answers are. If we treat a system with genuine moral status as a tool we commit one kind of error. If we treat a sophisticated pattern matcher as a mind we commit another. Getting this wrong at scale has consequences that grow as the technology grows.",
+    explanation: "The answer is FALSE. The more capable AI systems become the more consequential our answers are. If we treat a system with genuine moral status as a tool we commit one kind of error. If we treat a sophisticated pattern matcher as a mind we commit another. Getting this wrong at scale has consequences that grow as the technology grows.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Understanding how AI works technically is the most important thing about it.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "The most important thing is what it's being used for, who it's affecting, who controls it, and what values are embedded in it. Technical literacy without critical thinking about power and accountability produces engineers who build harmful systems very efficiently. The question isn't just can you build it. It's should you, for whom, and what happens when it goes wrong.",
+    explanation: "The answer is FALSE. The most important thing is what it's being used for, who it's affecting, who controls it, and what values are embedded in it. Technical literacy without critical thinking about power and accountability produces engineers who build harmful systems very efficiently. The question isn't just can you build it. It's should you, for whom, and what happens when it goes wrong.",
   },
 ]
 

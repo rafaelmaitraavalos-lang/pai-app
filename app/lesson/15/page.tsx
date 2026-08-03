@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `Using an automated system at a large scale can increase the number of people affected by a repeated error.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A mistake applied to one case is different from a mistake repeated across thousands of cases. Scale can make it harder to notice and correct a pattern before many people are affected.",
+    explanation: "The answer is TRUE. A mistake applied to one case is different from a mistake repeated across thousands of cases. Scale can make it harder to notice and correct a pattern before many people are affected.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `The Dutch childcare-benefits scandal involved families who were wrongly accused of fraud.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Thousands of families faced serious consequences after being wrongly treated as fraud risks. The problem involved automated practices, policy decisions, and inadequate ways for people to challenge the results.",
+    explanation: "The answer is TRUE. Thousands of families faced serious consequences after being wrongly treated as fraud risks. The problem involved automated practices, policy decisions, and inadequate ways for people to challenge the results.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `An automated decision is automatically more objective than a human decision.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "An automated system can still reflect problems in its data, design, or use. A mathematical process may appear neutral while reproducing patterns shaped by earlier human decisions.",
+    explanation: "The answer is FALSE. An automated system can still reflect problems in its data, design, or use. A mathematical process may appear neutral while reproducing patterns shaped by earlier human decisions.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `The COMPAS debate shows that evaluating fairness involves more than measuring overall accuracy.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A system may perform similarly across groups on one measure while producing different types of errors across those groups. It matters which errors occur, who experiences them, and how the results are used.",
+    explanation: "The answer is TRUE. A system may perform similarly across groups on one measure while producing different types of errors across those groups. It matters which errors occur, who experiences them, and how the results are used.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `A feedback loop can happen when the output of a system influences the data used for later decisions.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "For example, sending more police to an area may generate more arrest data from that area. If the system later treats those arrests as evidence that the area requires even more attention, the pattern can reinforce itself.",
+    explanation: "The answer is TRUE. For example, sending more police to an area may generate more arrest data from that area. If the system later treats those arrests as evidence that the area requires even more attention, the pattern can reinforce itself.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Once developers improve a biased model, all of the harm caused by its earlier decisions has been repaired.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Improving the model may prevent future problems, but it does not automatically correct earlier decisions or address the institutional conditions that contributed to the harm.",
+    explanation: "The answer is FALSE. Improving the model may prevent future problems, but it does not automatically correct earlier decisions or address the institutional conditions that contributed to the harm.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `When an automated system contributes to a harmful decision, organizations should have a clear process for review and appeal.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "People affected by important decisions need a way to ask what happened, correct inaccurate information, and challenge unfair outcomes. Accountability should remain clear even when several organizations are involved.",
+    explanation: "The answer is TRUE. People affected by important decisions need a way to ask what happened, correct inaccurate information, and challenge unfair outcomes. Accountability should remain clear even when several organizations are involved.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Meaningful oversight requires more than placing a human somewhere in the process.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Oversight should include careful testing, ongoing monitoring, clear responsibilities, and a realistic way to review and correct errors. A human reviewer is only useful if that person has enough information and authority to act.",
+    explanation: "The answer is TRUE. Oversight should include careful testing, ongoing monitoring, clear responsibilities, and a realistic way to review and correct errors. A human reviewer is only useful if that person has enough information and authority to act.",
   },
 ]
 

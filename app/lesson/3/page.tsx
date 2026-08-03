@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `TikTok’s recommendation system can use signals such as watch time, replays, likes, and skips.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A recommendation system learns from the way you interact with content. A like is one signal, but it is not the only one. Finishing a video, replaying it, or scrolling away quickly can also help the system predict what you may watch next.",
+    explanation: "The answer is TRUE. A recommendation system learns from the way you interact with content. A like is one signal, but it is not the only one. Finishing a video, replaying it, or scrolling away quickly can also help the system predict what you may watch next.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Every Netflix user sees the same homepage.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Netflix personalizes its homepage based on viewing history and other signals. The order of shows, the categories displayed, and some promotional images can vary from one user to another.",
+    explanation: "The answer is FALSE. Netflix personalizes its homepage based on viewing history and other signals. The order of shows, the categories displayed, and some promotional images can vary from one user to another.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `Spam filters are an example of technology that can use machine learning.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Spam filters can learn patterns associated with unwanted messages and use those patterns to identify suspicious emails. They are one of the most familiar examples of AI working quietly in the background.",
+    explanation: "The answer is TRUE. Spam filters can learn patterns associated with unwanted messages and use those patterns to identify suspicious emails. They are one of the most familiar examples of AI working quietly in the background.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Recommendation algorithms are designed only to make users happy.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Platforms often optimize for engagement: clicks, watch time, shares, and return visits. Content you enjoy may keep you engaged, but content that frustrates or worries you can also hold your attention.",
+    explanation: "The answer is FALSE. Platforms often optimize for engagement: clicks, watch time, shares, and return visits. Content you enjoy may keep you engaged, but content that frustrates or worries you can also hold your attention.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `Algorithms are the only reason echo chambers form online.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Recommendation systems can reinforce echo chambers by showing users more of the content they already engage with. However, human behavior also matters. People often choose to follow accounts, sources, and communities that reflect their existing views.",
+    explanation: "The answer is FALSE. Recommendation systems can reinforce echo chambers by showing users more of the content they already engage with. However, human behavior also matters. People often choose to follow accounts, sources, and communities that reflect their existing views.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `A personalized app can predict some of your behavior without fully understanding who you are.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A platform may become good at predicting what you will click, watch, or play next. That is not the same as understanding your beliefs, motivations, or values. A behavioral model can be useful while still being incomplete.",
+    explanation: "The answer is TRUE. A platform may become good at predicting what you will click, watch, or play next. That is not the same as understanding your beliefs, motivations, or values. A behavioral model can be useful while still being incomplete.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `A free app with personalized recommendations does not receive anything valuable from its users.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Attention and behavioral data can be valuable. A platform may use them to improve recommendations, sell advertising, or keep users active for longer periods. A service can be free to download while still benefiting financially from the way people use it.",
+    explanation: "The answer is FALSE. Attention and behavioral data can be valuable. A platform may use them to improve recommendations, sell advertising, or keep users active for longer periods. A service can be free to download while still benefiting financially from the way people use it.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Understanding how recommendation systems work can help you use them more deliberately.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Once you know that a platform is trying to hold your attention, you can pause and ask why a certain post or video appeared in your feed. You don\u2019t have to distrust every recommendation. Just make more conscious choices about what you watch, click, and share.",
+    explanation: "The answer is TRUE. Once you know that a platform is trying to hold your attention, you can pause and ask why a certain post or video appeared in your feed. You don\u2019t have to distrust every recommendation. Just make more conscious choices about what you watch, click, and share.",
   },
 ]
 

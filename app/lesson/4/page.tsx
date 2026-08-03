@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `All AI systems work in exactly the same way.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "AI is a broad category. A recommendation algorithm, a chatbot, and a system that analyzes medical images may use different methods and serve very different purposes. Knowing that a tool involves AI does not tell you everything about how it works.",
+    explanation: "The answer is FALSE. AI is a broad category. A recommendation algorithm, a chatbot, and a system that analyzes medical images may use different methods and serve very different purposes. Knowing that a tool involves AI does not tell you everything about how it works.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Many AI systems are designed for specific tasks or groups of related tasks.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A facial-recognition system identifies faces. A recommendation system predicts what content a user may want to see. A chess program evaluates chess moves. These systems can be highly capable without being equally useful in every situation.",
+    explanation: "The answer is TRUE. A facial-recognition system identifies faces. A recommendation system predicts what content a user may want to see. A chess program evaluates chess moves. These systems can be highly capable without being equally useful in every situation.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `A publicly demonstrated AI system has already been universally accepted as artificial general intelligence.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Researchers do not agree on a single definition of AGI, and no publicly demonstrated system is generally accepted as meeting that standard. Current AI tools can do impressive things, but they also have clear limitations.",
+    explanation: "The answer is FALSE. Researchers do not agree on a single definition of AGI, and no publicly demonstrated system is generally accepted as meeting that standard. Current AI tools can do impressive things, but they also have clear limitations.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Because ChatGPT can perform many different tasks, the distinction between narrow and general AI is simple to apply.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Chatbots complicate the distinction. They can work across many subjects and formats, which makes them broader than older single-purpose systems. But broad usefulness is not automatically the same thing as human-level general intelligence.",
+    explanation: "The answer is FALSE. Chatbots complicate the distinction. They can work across many subjects and formats, which makes them broader than older single-purpose systems. But broad usefulness is not automatically the same thing as human-level general intelligence.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `An AI system can cause serious harm even if it does not have general intelligence.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A system can influence hiring, lending, healthcare, or the content people see online. A limited tool can still affect large numbers of people when it is widely used or trusted without enough oversight.",
+    explanation: "The answer is TRUE. A system can influence hiring, lending, healthcare, or the content people see online. A limited tool can still affect large numbers of people when it is widely used or trusted without enough oversight.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Deep Blue’s victory over Garry Kasparov proved that computers had become more intelligent than humans overall.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Deep Blue was built to play chess, and it performed that task extremely well. Its victory demonstrated impressive specialized performance, not a general ability to reason about every kind of problem.",
+    explanation: "The answer is FALSE. Deep Blue was built to play chess, and it performed that task extremely well. Its victory demonstrated impressive specialized performance, not a general ability to reason about every kind of problem.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `As AI systems become capable of working with text, images, audio, and video, the boundary between narrow and general AI becomes harder to define.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Multimodal systems can perform a wider range of tasks than many earlier AI tools. However, researchers still debate how those abilities relate to broader concepts such as understanding, flexibility, and general intelligence.",
+    explanation: "The answer is TRUE. Multimodal systems can perform a wider range of tasks than many earlier AI tools. However, researchers still debate how those abilities relate to broader concepts such as understanding, flexibility, and general intelligence.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `The most useful question about an AI system is simply whether it is intelligent.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "It is often more useful to ask what the system was designed to do, what goal it is pursuing, how reliable it is, and who may be affected by its mistakes. A system does not need to resemble a human mind in order to have real consequences.",
+    explanation: "The answer is FALSE. It is often more useful to ask what the system was designed to do, what goal it is pursuing, how reliable it is, and who may be affected by its mistakes. A system does not need to resemble a human mind in order to have real consequences.",
   },
 ]
 

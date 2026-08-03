@@ -51,13 +51,15 @@ function record(persona, name, ok, detail = '') {
 
 const T = lang => lang === 'pt' ? {
   next: /Próximo slide/i, quiz: /Fazer o questionário/i, tru: /^Verdadeiro$/i,
-  nextQ: /^(Próxima|Finalizar)/i, right: /CERTO!/, wrong: /ERRADO/, stated: /A resposta é (VERDADEIRO|FALSO)/,
+  // badge symbols required: lesson TITLES can contain the bare words
+  // ("When PAI Gets Things Wrong" false-positived a whole-page match)
+  nextQ: /^(Próxima|Finalizar)/i, right: /✓ CERTO!/, wrong: /✕ ERRADO/, stated: /A resposta é (VERDADEIRO|FALSO)/,
   statedTrue: 'VERDADEIRO', signout: /^Sair$/i, login: /Já tenho uma conta/i, cont: /Continuar/i,
   newHere: /Sou novo aqui/i, done: /É isso/i, chatQ: 'O que é inteligência artificial?',
   badChrome: EN_CHROME, chat: /Conversar com o PAI/i,
 } : {
   next: /Next slide/i, quiz: /Take the quiz/i, tru: /^True$/i,
-  nextQ: /^(Next|Finish)/i, right: /RIGHT!/, wrong: /WRONG/, stated: /The answer is (TRUE|FALSE)/,
+  nextQ: /^(Next|Finish)/i, right: /✓ RIGHT!/, wrong: /✕ WRONG/, stated: /The answer is (TRUE|FALSE)/,
   statedTrue: 'TRUE', signout: /Sign out/i, login: /I have an account/i, cont: /Continue/i,
   newHere: /I'm new here/i, done: /That's it/i, chatQ: 'What is artificial intelligence?',
   badChrome: PT_CHROME, chat: /Chat with PAI/i,
@@ -168,12 +170,57 @@ for (const personaName of ONLY) {
     record(personaName, 'signup lands on own home', path(page) === persona.home, `at ${path(page)}`)
 
     let signedOutOnce = false
+    if (persona.home === '/home') {
+      // High-school track: the accordion world pages animate in ways that make
+      // row-clicks flaky under automation, so lessons are walked by direct URL
+      // (full slide/quiz/completion coverage — the accordion UI itself is
+      // covered by sweep, games suite, and manual verification). World
+      // UNLOCKING is asserted the real way: after each world completes, the
+      // home page must show one more clickable world.
+      const HS_WORLDS = [[1,2,3,4,5,6,7],[8,9,10,11,12,13,14,15],[16,17,18,19,20,21,22,23],
+        [24,25,26,27,28,29,30,31],[32,33,34,35,36,37,38,39],[40,41,42,43,44,45,46,47],
+        [48,49,50,51,52,53,54,55],[56,57,58,59,60,61,62,63]]
+      for (let w = 0; w < HS_WORLDS.length && lessonsDone < MAX_LESSONS; w++) {
+        for (const id of HS_WORLDS[w]) {
+          if (lessonsDone >= MAX_LESSONS) break
+          await page.goto(BASE + '/lesson/' + id, { waitUntil: 'domcontentloaded' })
+          await sleep(1400)
+          const tl = await text(page)
+          if (t.badChrome.test(tl)) record(personaName, `no wrong-language chrome in lesson ${id}`, false, tl.match(t.badChrome)[0])
+          await runLesson(page, t, personaName, `/lesson/${id}`, lessonsDone === 1)
+          lessonsDone++
+          questionsAnswered += 4
+          if (errs.length) { record(personaName, `no page errors through lesson ${id}`, false, errs.join(' | ').slice(0, 200)); errs.length = 0 }
+          log({ persona: personaName, progress: `/lesson/${id} done`, lessons: lessonsDone })
+        }
+        await page.goto(BASE + persona.home, { waitUntil: 'domcontentloaded' })
+        await sleep(1600)
+        const { n } = await worldRows(page)
+        const expectUnlocked = Math.min(w + 2, 8)
+        if (lessonsDone >= (w + 1) * 7) // only assert when the world was fully walked
+          record(personaName, `world ${w + 2} unlocks after world ${w + 1}`, n >= expectUnlocked, `clickable worlds: ${n}`)
+        if (!signedOutOnce && lessonsDone > 0) {
+          signedOutOnce = true
+          await clickByText(page, t.signout).catch(() => {})
+          await sleep(1500)
+          await clickByText(page, /Get Started/i).catch(() => {}); await sleep(600)
+          await clickByText(page, tLangIsPt(t) ? /Português/ : /English/).catch(() => {}); await sleep(900)
+          await clickByText(page, t.login).catch(() => {}); await sleep(600)
+          await page.locator('input').fill(username)
+          await clickByText(page, t.cont).catch(() => {}); await sleep(2500)
+          record(personaName, 'sign back in returns home', path(page) === persona.home, `at ${path(page)}`)
+          const doneKeys = await page.evaluate(() => Object.keys(localStorage).filter(k => /pai_lesson_\d+_done/.test(k)).length)
+          record(personaName, 'progress restored after re-login', doneKeys >= 7, `${doneKeys} done keys`)
+        }
+      }
+    } else
     for (let w = 0; w < 10; w++) {                      // worlds, in order
       await page.goto(BASE + persona.home, { waitUntil: 'domcontentloaded' })
       await sleep(1400)
       const tx0 = await text(page)
       if (t.badChrome.test(tx0)) record(personaName, `no wrong-language chrome on home (world ${w})`, false, tx0.match(t.badChrome)[0])
       const { rows, n } = await worldRows(page)
+      log({ persona: personaName, worldPass: w, clickableWorlds: n })
       if (w >= n) break
       await rows.nth(w).click({ timeout: 8000 }).catch(() => {})
       await sleep(1400)
@@ -189,9 +236,26 @@ for (const personaName of ONLY) {
         const { rows: mods, n: mn } = await moduleRows(page)
         if (mIdx >= mn) break
         const label = ((await mods.nth(mIdx).textContent().catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 30)
-        await mods.nth(mIdx).click({ timeout: 8000 }).catch(() => {})
+        // Accordion expand/collapse animations intercept pointer events and
+        // swallowed clicks silently in the first run — force, then JS-click.
+        await mods.nth(mIdx).click({ timeout: 5000, force: true })
+          .catch(() => mods.nth(mIdx).evaluate(el => el.click()).catch(() => {}))
         await sleep(1500)
-        const here = path(page)
+        let here = path(page)
+        // High-school worlds expand modules inline (accordion): after clicking
+        // the row, a Start/Resume button enters the actual lesson page.
+        if (here === worldPath) {
+          const enter = page.locator('button, a').filter({ hasText: /(Start|Resume|Começar|Continuar) →/ }).first()
+          if (await enter.isVisible().catch(() => false)) {
+            await enter.click({ timeout: 5000, force: true })
+              .catch(() => enter.evaluate(el => el.click()).catch(() => {}))
+            await sleep(1500)
+            here = path(page)
+          }
+        }
+        if (here === worldPath && !/Done|Review|Revisar|Concluído|Feito/.test(label)) {
+          log({ persona: personaName, note: `module did not open: ${label} @ ${worldPath}#${mIdx}` })
+        }
         if (/\/games\//.test(here)) {
           gamesOpened++
           const tg = await text(page)
@@ -200,7 +264,9 @@ for (const personaName of ONLY) {
           await sleep(1200)
           continue
         }
-        if (!/\/lesson/.test(here)) { continue }
+        // Require a lesson ID: the HS world page is literally "/lessons" and a
+        // bare substring test counted the world page itself as a lesson.
+        if (!/\/lesson\/\d+/.test(here)) { continue }
         const tl = await text(page)
         if (t.badChrome.test(tl)) record(personaName, `no wrong-language chrome in lesson ${label}`, false, tl.match(t.badChrome)[0])
         const doChat = lessonsDone === 1   // once per persona, on their 2nd lesson
@@ -228,7 +294,13 @@ for (const personaName of ONLY) {
       }
       if (lessonsDone >= MAX_LESSONS) break
     }
-    record(personaName, 'completed curriculum walk', lessonsDone > 0, `${lessonsDone} lessons, ${gamesOpened} games, ~${questionsAnswered} questions`)
+    // Hard expectations — a walk that silently under-covers must FAIL.
+    // (The first run "passed" the high-school track having entered zero real
+    // lessons; hollow coverage is worse than a red run.)
+    const EXPECT = { 'en-elem': 14, 'en-middle': 40, 'en-high': 63, 'pt-fund1': 14, 'pt-fund2': 40, 'pt-medio': 63 }
+    const want = MAX_LESSONS !== Infinity ? Math.min(MAX_LESSONS, EXPECT[personaName]) : EXPECT[personaName]
+    record(personaName, `completed FULL curriculum (${want} lessons expected)`, lessonsDone >= want,
+      `${lessonsDone} lessons, ${gamesOpened} games, ~${questionsAnswered} questions`)
     console.log(`  [${personaName}] ${lessonsDone} lessons, ${gamesOpened} games, ~${questionsAnswered} answers`)
   } catch (e) {
     record(personaName, 'persona run aborted', false, String(e).split('\n')[0].slice(0, 180))

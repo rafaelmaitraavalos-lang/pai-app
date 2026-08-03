@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `A neural network is a digital version of the human brain.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A neural network is a mathematical model loosely inspired by certain ideas about how the brain learns. Artificial neurons are much simpler than biological neurons, and the overall systems work very differently.",
+    explanation: "The answer is FALSE. A neural network is a mathematical model loosely inspired by certain ideas about how the brain learns. Artificial neurons are much simpler than biological neurons, and the overall systems work very differently.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `A neural network is made up of connected mathematical units organized into layers.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Artificial neurons receive numbers, combine them using weights, and produce outputs. By connecting many of these units in layers, a network can learn patterns from data.",
+    explanation: "The answer is TRUE. Artificial neurons receive numbers, combine them using weights, and produce outputs. By connecting many of these units in layers, a network can learn patterns from data.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `A single artificial neuron can recognize a face on its own.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "One artificial neuron performs a limited calculation. More complex tasks require many connected units working together across multiple layers.",
+    explanation: "The answer is FALSE. One artificial neuron performs a limited calculation. More complex tasks require many connected units working together across multiple layers.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `In some image-recognition networks, early layers respond to simpler visual features while later layers respond to more complex patterns.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Early layers may respond to features such as edges or textures. Later layers can combine those signals into more complex representations. These patterns develop during training.",
+    explanation: "The answer is TRUE. Early layers may respond to features such as edges or textures. Later layers can combine those signals into more complex representations. These patterns develop during training.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `Artificial neural networks work exactly like the human brain.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "The brain inspired the concept, but the comparison has limits. Human brains and artificial neural networks differ in their structure, efficiency, complexity, and ability to learn from experience.",
+    explanation: "The answer is FALSE. The brain inspired the concept, but the comparison has limits. Human brains and artificial neural networks differ in their structure, efficiency, complexity, and ability to learn from experience.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Training a neural network involves adjusting its weights.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Weights determine how strongly different signals affect the network's output. During training, the system adjusts those values to improve its predictions.",
+    explanation: "The answer is TRUE. Weights determine how strongly different signals affect the network's output. During training, the system adjusts those values to improve its predictions.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `When ChatGPT responds to a question, it generates the response one token at a time.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "The model calculates probabilities for possible next tokens based on the conversation so far. It selects a token, adds it to the sequence, and repeats the process.",
+    explanation: "The answer is TRUE. The model calculates probabilities for possible next tokens based on the conversation so far. It selects a token, adds it to the sequence, and repeats the process.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Because neural networks are made of mathematical operations, experts can always explain exactly why a specific output appeared.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Researchers can inspect parts of a network and test its behavior, but a network's learned patterns are often distributed across many weights and layers. This can make individual outputs difficult to explain fully.",
+    explanation: "The answer is FALSE. Researchers can inspect parts of a network and test its behavior, but a network's learned patterns are often distributed across many weights and layers. This can make individual outputs difficult to explain fully.",
   },
 ]
 

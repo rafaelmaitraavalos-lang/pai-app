@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `Deep learning refers to AI systems that think more deeply than humans.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "The word \"deep\" refers to the number of layers in a neural network. It describes the structure of the model, not the depth of its thoughts.",
+    explanation: "The answer is FALSE. The word \"deep\" refers to the number of layers in a neural network. It describes the structure of the model, not the depth of its thoughts.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `In some image-recognition networks, later layers combine simpler visual features into more complex patterns.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Early layers may respond to edges, lines, or textures. Later layers can combine those signals into patterns that are useful for recognizing more complicated features.",
+    explanation: "The answer is TRUE. Early layers may respond to edges, lines, or textures. Later layers can combine those signals into patterns that are useful for recognizing more complicated features.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `AlexNet helped draw much more attention to deep learning after its success in the 2012 ImageNet competition.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "AlexNet showed that deep neural networks could perform extremely well on a major image-recognition task. Its success encouraged much wider interest in deep-learning methods.",
+    explanation: "The answer is TRUE. AlexNet showed that deep neural networks could perform extremely well on a major image-recognition task. Its success encouraged much wider interest in deep-learning methods.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `GPUs became useful for deep learning because they can perform many similar calculations at the same time.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "GPUs were originally designed for graphics, but their ability to perform many calculations in parallel also makes them useful for training neural networks.",
+    explanation: "The answer is TRUE. GPUs were originally designed for graphics, but their ability to perform many calculations in parallel also makes them useful for training neural networks.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `Transfer learning means training a model entirely from scratch on a new dataset.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Transfer learning starts with a model that has already learned useful patterns from earlier training. Developers then adapt that model for a more specific task.",
+    explanation: "The answer is FALSE. Transfer learning starts with a model that has already learned useful patterns from earlier training. Developers then adapt that model for a more specific task.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Adding more layers always improves a neural network.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "More layers can help with complex tasks, but they can also make a model harder to train. The quality of a neural network depends on many choices, not just its depth.",
+    explanation: "The answer is FALSE. More layers can help with complex tasks, but they can also make a model harder to train. The quality of a neural network depends on many choices, not just its depth.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Residual connections can make very deep neural networks easier to train.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Residual connections allow information to skip over certain layers. This can help reduce some of the difficulties that appear when training deeper networks.",
+    explanation: "The answer is TRUE. Residual connections allow information to skip over certain layers. This can help reduce some of the difficulties that appear when training deeper networks.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `One important feature of deep learning is that a network can learn useful representations from data rather than relying only on features designed by hand.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Instead of giving the network a complete list of features to search for, developers can train it on data and allow useful internal patterns to develop during the training process.",
+    explanation: "The answer is TRUE. Instead of giving the network a complete list of features to search for, developers can train it on data and allow useful internal patterns to develop during the training process.",
   },
 ]
 

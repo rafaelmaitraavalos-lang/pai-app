@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `"When an AI gives a confident answer it's more likely to be correct."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "AI systems produce answers with the same apparent confidence regardless of whether they are right or completely fabricating. They have no internal sense of uncertainty. This is one of the most dangerous properties of deployed AI, the output looks identical whether it should be trusted or not.",
+    explanation: "The answer is FALSE. AI systems produce answers with the same apparent confidence regardless of whether they are right or completely fabricating. They have no internal sense of uncertainty. This is one of the most dangerous properties of deployed AI, the output looks identical whether it should be trusted or not.",
   },
   {
     difficulty: 'Easy',
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `"AI hallucinations happen because AI has no way to check whether what it produces is real."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "AI has no concept of truth or lying. When it invents citations or fabricates statistics it's doing exactly what it was trained to do, produce text that matches patterns. It doesn't know the difference between real and invented. That's not a moral failure. It's a structural one.",
+    explanation: "The answer is TRUE. AI has no concept of truth or lying. When it invents citations or fabricates statistics it's doing exactly what it was trained to do, produce text that matches patterns. It doesn't know the difference between real and invented. That's not a moral failure. It's a structural one.",
   },
   {
     difficulty: 'Easy',
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `"AI bias is always the result of someone deliberately programming discrimination into the system."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "Bias almost never comes from deliberate programming. It comes from biased training data. Amazon's hiring AI penalized women because most historical hires were men. The engineers didn't program that. The history did.",
+    explanation: "The answer is FALSE. Bias almost never comes from deliberate programming. It comes from biased training data. Amazon's hiring AI penalized women because most historical hires were men. The engineers didn't program that. The history did.",
   },
   {
     difficulty: 'Medium',
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `"Automation bias means people tend to trust AI decisions more than equivalent human decisions."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is well documented across medicine, law, and finance. AI decisions feel objective, scientific, unchallengeable. Judges give harsher sentences when an algorithm recommends it. Doctors defer to diagnostic AI against their own judgment. The appearance of objectivity is itself a form of influence.",
+    explanation: "The answer is TRUE. This is well documented across medicine, law, and finance. AI decisions feel objective, scientific, unchallengeable. Judges give harsher sentences when an algorithm recommends it. Doctors defer to diagnostic AI against their own judgment. The appearance of objectivity is itself a form of influence.",
   },
   {
     difficulty: 'Medium',
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `"Training AI on more diverse data completely eliminates bias."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "More diverse data reduces some biases. It doesn't eliminate bias. It just changes which biases remain. Deciding what counts as diverse, who gets to decide, and how to source it are unsolved problems. More diverse training is better. It is not a complete solution.",
+    explanation: "The answer is FALSE. More diverse data reduces some biases. It doesn't eliminate bias. It just changes which biases remain. Deciding what counts as diverse, who gets to decide, and how to source it are unsolved problems. More diverse training is better. It is not a complete solution.",
   },
   {
     difficulty: 'Medium',
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `"AI systems fail most dangerously when they are obviously wrong."`,
     answer: false,
     verdict: 'Wrong.',
-    explanation: "They fail most dangerously when they are subtly wrong in ways that are hard to detect at scale. An AI that is slightly wrong in a consistent direction, deployed to millions of people making consequential decisions. That is where serious harm accumulates. The Dutch welfare scandal, discriminatory lending, biased healthcare: none were obvious failures. They were systematic ones.",
+    explanation: "The answer is FALSE. They fail most dangerously when they are subtly wrong in ways that are hard to detect at scale. An AI that is slightly wrong in a consistent direction, deployed to millions of people making consequential decisions. That is where serious harm accumulates. The Dutch welfare scandal, discriminatory lending, biased healthcare: none were obvious failures. They were systematic ones.",
   },
   {
     difficulty: 'Hard',
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `"When an AI system causes harm it is often unclear who is legally responsible."`,
     answer: true,
     verdict: 'Correct.',
-    explanation: "This is the accountability gap. The company blames the data. The data collectors blame the model. The model builders blame the deployment. Nobody is clearly responsible and the person harmed has no clear legal path. Laws have not kept up with the technology.",
+    explanation: "The answer is TRUE. This is the accountability gap. The company blames the data. The data collectors blame the model. The model builders blame the deployment. Nobody is clearly responsible and the person harmed has no clear legal path. Laws have not kept up with the technology.",
   },
   {
     difficulty: 'Hard',
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `"The solution to AI getting things wrong is to slow down deployment until the technology is more reliable."`,
     answer: false,
     verdict: 'Genuinely complicated.',
-    explanation: "Slower deployment would reduce certain harms. It would also delay benefits: earlier cancer detection, more accessible education, better translation. The question of how to balance speed against reliability is one of the central unresolved debates in AI policy. There is no clean answer. Anyone who gives you one isn't taking the tradeoffs seriously.",
+    explanation: "The answer is FALSE. Slower deployment would reduce certain harms. It would also delay benefits: earlier cancer detection, more accessible education, better translation. The question of how to balance speed against reliability is one of the central unresolved debates in AI policy. There is no clean answer. Anyone who gives you one isn't taking the tradeoffs seriously.",
   },
 ]
 

@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `When an AI system labels an image as a cat, it necessarily understands what a cat is in the same way a person does.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A computer-vision system can identify patterns associated with cats without having human-like knowledge or experience. Recognition is not automatically the same as understanding.",
+    explanation: "The answer is FALSE. A computer-vision system can identify patterns associated with cats without having human-like knowledge or experience. Recognition is not automatically the same as understanding.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `A digital image can be represented as a grid of numerical pixel values.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "In a standard color image, pixels contain values for red, green, and blue. A computer-vision system processes those values to identify useful patterns.",
+    explanation: "The answer is TRUE. In a standard color image, pixels contain values for red, green, and blue. A computer-vision system processes those values to identify useful patterns.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `Computer-vision systems perform equally well in every situation.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Performance can change when lighting, image quality, camera angles, or backgrounds differ from the conditions represented in the training data.",
+    explanation: "The answer is FALSE. Performance can change when lighting, image quality, camera angles, or backgrounds differ from the conditions represented in the training data.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Some facial-recognition systems have shown differences in accuracy across demographic groups.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "The size of the differences varies by system and setting. This is especially important when facial recognition is used in high-stakes situations such as law enforcement or identity verification.",
+    explanation: "The answer is TRUE. The size of the differences varies by system and setting. This is especially important when facial recognition is used in high-stakes situations such as law enforcement or identity verification.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `Convolutional neural networks can apply the same filter across different parts of an image.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "This is called weight sharing. It allows a CNN to respond to a useful visual pattern in different locations rather than learning a completely separate detector for every part of an image.",
+    explanation: "The answer is TRUE. This is called weight sharing. It allows a CNN to respond to a useful visual pattern in different locations rather than learning a completely separate detector for every part of an image.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `Carefully designed changes to an image can sometimes cause a computer-vision system to make an incorrect prediction.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Researchers have created adversarial examples that confuse some models. These examples help researchers study the differences between the patterns a model uses and the features a person notices.",
+    explanation: "The answer is TRUE. Researchers have created adversarial examples that confuse some models. These examples help researchers study the differences between the patterns a model uses and the features a person notices.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Computer vision is limited to assigning one label to an entire image.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Computer vision can also locate objects, label different regions of an image, estimate depth, track movement, and analyze video.",
+    explanation: "The answer is FALSE. Computer vision can also locate objects, label different regions of an image, estimate depth, track movement, and analyze video.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `The spread of computer-vision technology creates both useful applications and privacy risks.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Computer vision can support medicine, accessibility, science, and safety. It can also make large-scale surveillance easier. The effects depend on how the technology is designed, regulated, and used.",
+    explanation: "The answer is TRUE. Computer vision can support medicine, accessibility, science, and safety. It can also make large-scale surveillance easier. The effects depend on how the technology is designed, regulated, and used.",
   },
 ]
 
