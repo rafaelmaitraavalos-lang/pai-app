@@ -23,11 +23,14 @@ TRAILING_JUNK = {'the', 'a', 'an', 'and', 'or', 'but', 'of', 'in', 'on', 'at',
 KNOWN_TAGS = {'Fact', 'Example', 'Big idea', 'Hot take', 'Scenario', 'Myth bust'}
 TAG = re.compile(r'tag:\s*"((?:[^"\\]|\\.)*)"')
 
-# The Portuguese middle-school explanation generator emitted the source
-# question ("Pergunta? — opção") instead of an explanation on 149 of 160
-# quizzes. That signature — a question mark followed by an em-dash option —
-# must never ship again.
-BROKEN_EXPLANATION = re.compile(r'explanation:\s*"[^"]*\?\s*—\s*[^"]*"')
+# The Portuguese middle-school explanation generator emitted quiz scaffolding
+# instead of explanations. TWO signatures are known (the second was found by
+# an editorial review AFTER the first was "fixed" — the fix script's pattern
+# was too narrow and preserved 11 differently-broken items as "good"):
+#   1. "Pergunta? — opção"            (question stem + option)
+#   2. "Verdadeiro ou falso: ... — Falso" / "... é melhor descrito como: —"
+BROKEN_EXPLANATION = re.compile(
+    r'explanation:\s*"[^"]*(\?\s*—\s*|Verdadeiro ou falso:|é melhor descrit[oa] como|—\s*(Falso|Verdadeiro)\s*")')
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 

@@ -149,7 +149,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
         // found the old keys had drifted, so Portuguese kids got English errors.
         const errMap: Record<string, string> = isPT ? {
           'Someone already has that one — try another!': 'Alguém já escolheu esse — tente outro!',
-          "We don't recognize that username. Check the spelling?": 'Não reconhecemos esse nome de usuário. Confira a escrita?',
+          "We don't recognize that username. Check the spelling?": 'Não reconhecemos esse nome de usuário. Será que digitou certo?',
           'Username required': 'Nome de usuário obrigatório',
           'Invalid username': 'Nome de usuário inválido',
         } : {}

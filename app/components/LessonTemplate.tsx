@@ -69,7 +69,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
     ? storedLang
     : isPTTrack(contentTrack) ? 'pt' : 'en'
   const isPT = lang === 'pt'
-  const tagLabel  = (t: string) => isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião', 'Scenario': 'Cenário', 'Myth bust': 'Mito desfeito' }[t] ?? t) : t
+  const tagLabel  = (t: string) => isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião polêmica', 'Scenario': 'Cenário', 'Myth bust': 'Mito desfeito' }[t] ?? t) : t
   const diffLabel = (d: string) => isPT ? ({ 'Easy': 'Fácil', 'Medium': 'Médio', 'Hard': 'Difícil' }[d] ?? d) : d
   const ui = {
     lessonComplete:  isPT ? 'Aula concluída'       : 'Lesson complete',
