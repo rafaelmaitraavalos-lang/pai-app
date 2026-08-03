@@ -163,7 +163,20 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
             {selected !== null && (
               <div style={{ marginTop: 18, animation: 'slideUpFade 0.3s ease-out' }}>
                 <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14 }}>
-                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>{question.verdict}</p>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    fontFamily: DISP, fontSize: 20, letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    background: isCorrect ? '#27AE60' : '#C0392B',
+                    padding: '10px 18px',
+                    boxShadow: `4px 4px 0 0 ${isCorrect ? '#1B7A43' : '#8C2A1F'}`,
+                    margin: '0 0 14px',
+                    animation: 'verdictPop 0.28s cubic-bezier(0.34,1.4,0.64,1)',
+                  }}>
+                    <span aria-hidden="true">{isCorrect ? '\u2713' : '\u2715'}</span>
+                    {isCorrect ? (lang === 'pt' ? 'CERTO!' : 'RIGHT!') : (lang === 'pt' ? 'ERRADO' : 'WRONG')}
+                  </div>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65 }}>{question.explanation}</p>
                 </div>
               </div>

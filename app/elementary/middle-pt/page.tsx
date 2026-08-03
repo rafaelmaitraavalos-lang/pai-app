@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../../data/elementary'
+import { useTrackGuard } from '../../components/useTrackGuard'
 
 const GAMES = [
   { title: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
@@ -20,6 +21,7 @@ const FAINT = '#d8d8d8'
 
 export default function MiddlePtHome() {
   const router = useRouter()
+  const allowed = useTrackGuard('middle-pt')
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [username, setUsername] = useState('')
 
@@ -41,6 +43,8 @@ export default function MiddlePtHome() {
 
   const firstUndoneIdx = MIDDLE_SCHOOL_WORLD_IDS_PT.findIndex(wid => !done[wid])
 
+  if (!allowed) return null
+
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
 
@@ -56,6 +60,17 @@ export default function MiddlePtHome() {
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
+
+        {/* PAI mascot greeting — every other localized home has one */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+          <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
+          <div>
+            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+              {username ? `Olá, ${username}!` : 'Olá!'}
+            </div>
+            <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>Pronto para aprender sobre IA?</div>
+          </div>
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Conteúdo</span>

@@ -4,6 +4,8 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ELEMENTARY_WORLDS } from '../../../data/elementary'
+import { worldTrack, isPTTrack, homeRoute } from '../../../data/track'
+import { useTrackGuard } from '../../../components/useTrackGuard'
 
 const DISP  = "var(--font-display,'Arial Black',sans-serif)"
 const BODY  = "var(--font-body,system-ui,sans-serif)"
@@ -17,7 +19,17 @@ export default function MiddleWorldPage() {
   const router  = useRouter()
   const worldId = parseInt(params.id as string)
   const world   = ELEMENTARY_WORLDS[worldId]
+  const track   = worldTrack(worldId)
+  const isPT    = isPTTrack(track)
+  const home    = homeRoute(track)
+  const allowed = useTrackGuard(track)
+  const isElemWorld = track === 'elem-en' || track === 'elem-pt'
   const [done, setDone] = useState<Record<number, boolean>>({})
+
+  // Canonical URL for elementary worlds is /elementary/world/[id]
+  useEffect(() => {
+    if (isElemWorld) router.replace(`/elementary/world/${worldId}`)
+  }, [isElemWorld, worldId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!world) return
@@ -28,7 +40,7 @@ export default function MiddleWorldPage() {
     setDone(map)
   }, [world])
 
-  if (!world) return null
+  if (!world || !allowed || isElemWorld) return null
 
   const activeId = world.modules.find(m => !done[m.id])?.id ?? null
 
@@ -36,9 +48,9 @@ export default function MiddleWorldPage() {
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
 
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-        <button onClick={() => router.push('/middle/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
-        <button onClick={() => router.push('/middle/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          ← Home
+        <button onClick={() => router.push(home)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
+        <button onClick={() => router.push(home)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          {isPT ? '← Início' : '← Home'}
         </button>
       </div>
 
@@ -48,7 +60,7 @@ export default function MiddleWorldPage() {
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 56, height: 56, objectFit: 'contain', flexShrink: 0 }} />
           <div>
             <p style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM, margin: '0 0 6px' }}>
-              W{String(worldId - 200).padStart(2, '0')} · Intermediate
+              W{String(worldId - (isPT ? 260 : 200)).padStart(2, '0')} · {isPT ? 'Intermediário' : 'Intermediate'}
             </p>
             <h1 style={{ fontFamily: DISP, fontSize: 28, letterSpacing: '-0.02em', color: BLACK, margin: 0, fontWeight: 400 }}>
               {world.title}
@@ -57,7 +69,7 @@ export default function MiddleWorldPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>Modules</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Módulos' : 'Modules'}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
 
@@ -92,13 +104,13 @@ export default function MiddleWorldPage() {
                 {!isGame && isActive && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: DISP, fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 12 }}>
                     <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                    Up next
+                    {isPT ? 'A seguir' : 'Up next'}
                   </span>
                 )}
                 {!isGame && isDone && (
-                  <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, border: `1px solid ${FAINT}`, padding: '2px 6px', marginRight: 12 }}>Done</span>
+                  <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, border: `1px solid ${FAINT}`, padding: '2px 6px', marginRight: 12 }}>{isPT ? 'Concluído' : 'Done'}</span>
                 )}
-                {isGame && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 12 }}>Play</span>}
+                {isGame && <span style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 12 }}>{isPT ? 'Jogar' : 'Play'}</span>}
                 <span style={{ fontFamily: DISP, fontSize: 13, color: isGame ? GREEN : DIM }}>→</span>
               </div>
             )

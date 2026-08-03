@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `Researchers can describe how a neural network is structured and trained, even when they cannot fully explain every individual output.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Researchers understand the architecture, training process, and performance of a network. The difficult part is often explaining exactly how many internal patterns contributed to one specific decision.",
+    explanation: "The answer is TRUE. Researchers understand the architecture, training process, and performance of a network. The difficult part is often explaining exactly how many internal patterns contributed to one specific decision.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Interpretability research tries to make the internal behavior of neural networks easier to understand.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Researchers study features, pathways, and interactions inside models. These tools can provide useful insights, although they do not usually explain every part of a large network.",
+    explanation: "The answer is TRUE. Researchers study features, pathways, and interactions inside models. These tools can provide useful insights, although they do not usually explain every part of a large network.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `Calling a neural network a black box means that researchers know absolutely nothing about how it works.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Researchers know how neural networks are designed and trained. The black-box problem refers to the difficulty of producing a complete, understandable explanation for particular outputs.",
+    explanation: "The answer is FALSE. Researchers know how neural networks are designed and trained. The black-box problem refers to the difficulty of producing a complete, understandable explanation for particular outputs.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `An explanation may be especially important when an automated system contributes to a high-stakes decision.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "When a system affects a loan application, a job opportunity, or a medical recommendation, people may need to understand the factors that influenced the result and whether the decision can be challenged.",
+    explanation: "The answer is TRUE. When a system affects a loan application, a job opportunity, or a medical recommendation, people may need to understand the factors that influenced the result and whether the decision can be challenged.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `The GDPR gives every person a universal right to receive a full technical explanation of every automated decision.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "The rules are more limited and more specific. In certain situations involving automated decisions, organizations may need to provide meaningful information about the logic involved and the possible consequences of the processing.",
+    explanation: "The answer is FALSE. The rules are more limited and more specific. In certain situations involving automated decisions, organizations may need to provide meaningful information about the logic involved and the possible consequences of the processing.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `A saliency map can highlight parts of an image that influenced a model's prediction.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A saliency map may show whether an image-classification system focused on the object itself or on another part of the image. It provides a clue, not a complete explanation.",
+    explanation: "The answer is TRUE. A saliency map may show whether an image-classification system focused on the object itself or on another part of the image. It provides a clue, not a complete explanation.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Explainable AI tools always produce complete and fully reliable explanations.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Interpretability tools can be useful, but their explanations may be partial, simplified, or difficult to verify. A readable explanation is not automatically a complete account of the model's internal process.",
+    explanation: "The answer is FALSE. Interpretability tools can be useful, but their explanations may be partial, simplified, or difficult to verify. A readable explanation is not automatically a complete account of the model's internal process.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `The black-box problem is one reason to require careful testing, review processes, and human oversight in high-stakes uses of AI.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "When an AI system affects people's lives, accuracy alone is not enough. People should have meaningful ways to review important decisions and challenge mistakes.",
+    explanation: "The answer is TRUE. When an AI system affects people's lives, accuracy alone is not enough. People should have meaningful ways to review important decisions and challenge mistakes.",
   },
 ]
 

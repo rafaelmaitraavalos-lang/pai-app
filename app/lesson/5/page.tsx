@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `AI systems are programmed with a separate rule for every decision they make.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Traditional software often follows explicit rules. Machine-learning systems usually learn patterns from examples instead. A programmer does not need to write a separate instruction for every image, sentence, or recommendation the system may encounter.",
+    explanation: "The answer is FALSE. Traditional software often follows explicit rules. Machine-learning systems usually learn patterns from examples instead. A programmer does not need to write a separate instruction for every image, sentence, or recommendation the system may encounter.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Supervised learning uses labeled examples.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "In supervised learning, the system trains on examples that already have correct answers. An image may be labeled \u201ccat\u201d or \u201cnot cat.\u201d An email may be labeled \u201cspam\u201d or \u201cnot spam.\u201d These labels help the system measure and improve its predictions.",
+    explanation: "The answer is TRUE. In supervised learning, the system trains on examples that already have correct answers. An image may be labeled \u201ccat\u201d or \u201cnot cat.\u201d An email may be labeled \u201cspam\u201d or \u201cnot spam.\u201d These labels help the system measure and improve its predictions.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `Unsupervised learning means a system does not use any data.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "An unsupervised-learning system still uses data. The difference is that the data does not come with labels explaining what each example means. The system looks for patterns or groups, and people then interpret what those patterns may represent.",
+    explanation: "The answer is FALSE. An unsupervised-learning system still uses data. The difference is that the data does not come with labels explaining what each example means. The system looks for patterns or groups, and people then interpret what those patterns may represent.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Adding more training data always makes an AI system more accurate.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "More data can help, but quantity is not the only factor. Outdated, biased, or low-quality data can create problems. A smaller, carefully chosen dataset may sometimes be more useful than a larger dataset filled with misleading examples.",
+    explanation: "The answer is FALSE. More data can help, but quantity is not the only factor. Outdated, biased, or low-quality data can create problems. A smaller, carefully chosen dataset may sometimes be more useful than a larger dataset filled with misleading examples.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `The training data influences what an AI system learns.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "AI systems learn from the examples they receive. If those examples leave out certain groups, contain old information, or reflect existing inequalities, the system may reproduce those limitations.",
+    explanation: "The answer is TRUE. AI systems learn from the examples they receive. If those examples leave out certain groups, contain old information, or reflect existing inequalities, the system may reproduce those limitations.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `The goal of AI training is always to create a perfectly accurate system.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Perfect accuracy is usually unrealistic. Developers decide whether a system is reliable enough for a specific purpose. The acceptable error rate should be much lower in high-stakes situations, such as healthcare, than in lower-stakes situations, such as music recommendations.",
+    explanation: "The answer is FALSE. Perfect accuracy is usually unrealistic. Developers decide whether a system is reliable enough for a specific purpose. The acceptable error rate should be much lower in high-stakes situations, such as healthcare, than in lower-stakes situations, such as music recommendations.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Reinforcement learning uses feedback to help a system improve its actions.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A reinforcement-learning system receives feedback based on the results of its actions. Over time, it becomes more likely to choose actions that help it reach its goal. This approach has been used in systems that play games and control robots.",
+    explanation: "The answer is TRUE. A reinforcement-learning system receives feedback based on the results of its actions. Over time, it becomes more likely to choose actions that help it reach its goal. This approach has been used in systems that play games and control robots.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `An AI system can perform a task successfully without understanding it in the same way a human does.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "An AI system may classify an image, generate an essay, or make a recommendation without experiencing the world or understanding the meaning of the task as a person would. This is one reason discussions about AI require careful definitions of words such as \u201clearning,\u201d \u201creasoning,\u201d and \u201cunderstanding.\u201d",
+    explanation: "The answer is TRUE. An AI system may classify an image, generate an essay, or make a recommendation without experiencing the world or understanding the meaning of the task as a person would. This is one reason discussions about AI require careful definitions of words such as \u201clearning,\u201d \u201creasoning,\u201d and \u201cunderstanding.\u201d",
   },
 ]
 

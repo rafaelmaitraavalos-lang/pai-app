@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `Recommendation systems can use signals such as watch time, skips, saves, and searches.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Platforms can learn from the way users interact with content. Different systems use different signals, but behavior often plays an important role in personalization.",
+    explanation: "The answer is TRUE. Platforms can learn from the way users interact with content. Different systems use different signals, but behavior often plays an important role in personalization.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Collaborative filtering recommends content partly by finding patterns among users with similar behavior.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "If people who watched the same three films often watched a fourth film, the system may recommend that fourth film to another user with a similar history.",
+    explanation: "The answer is TRUE. If people who watched the same three films often watched a fourth film, the system may recommend that fourth film to another user with a similar history.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `Collaborative filtering requires the system to understand what a film is about.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Collaborative filtering can make recommendations based on patterns in user behavior. It does not necessarily need to analyze the content of each film.",
+    explanation: "The answer is FALSE. Collaborative filtering can make recommendations based on patterns in user behavior. It does not necessarily need to analyze the content of each film.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `A content-based recommendation system can use characteristics of an item to recommend similar items.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A system might compare features of songs, films, articles, or videos and suggest content with similar characteristics.",
+    explanation: "The answer is TRUE. A system might compare features of songs, films, articles, or videos and suggest content with similar characteristics.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `A recommendation algorithm always has only one goal: maximizing the number of clicks.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Real systems can consider several signals and objectives, such as watch time, relevance, saves, satisfaction, or long-term usefulness. The exact design varies by platform.",
+    explanation: "The answer is FALSE. Real systems can consider several signals and objectives, such as watch time, relevance, saves, satisfaction, or long-term usefulness. The exact design varies by platform.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `The cold-start problem happens when a recommendation system has little information about a new user or a new item.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Without much data, the system has fewer clues about what to recommend. It may begin with popular content, ask about interests, or learn from early interactions.",
+    explanation: "The answer is TRUE. Without much data, the system has fewer clues about what to recommend. It may begin with popular content, ask about interests, or learn from early interactions.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Personalized recommendations can create a feedback loop by showing users more content similar to what they already engage with.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "When a user repeatedly interacts with one type of content, the platform may recommend more of it. Continued engagement can strengthen the pattern over time.",
+    explanation: "The answer is TRUE. When a user repeatedly interacts with one type of content, the platform may recommend more of it. Continued engagement can strengthen the pattern over time.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `A personalized feed is shaped only by the user's independent choices.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Users make choices about what to click and watch, but the platform also influences which options appear in front of them. A personalized feed develops through an interaction between user behavior and the system's design.",
+    explanation: "The answer is FALSE. Users make choices about what to click and watch, but the platform also influences which options appear in front of them. A personalized feed develops through an interaction between user behavior and the system's design.",
   },
 ]
 

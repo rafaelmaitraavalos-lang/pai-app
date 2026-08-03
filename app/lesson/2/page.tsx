@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `AI systems often identify patterns in data and use them to make predictions.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Many AI systems learn from examples rather than following a complete list of rules written by a programmer. A spam filter learns patterns associated with unwanted emails. An image classifier learns patterns associated with different objects. The details vary depending on the system, but pattern recognition is central to how many AI tools work.",
+    explanation: "The answer is TRUE. Many AI systems learn from examples rather than following a complete list of rules written by a programmer. A spam filter learns patterns associated with unwanted emails. An image classifier learns patterns associated with different objects. The details vary depending on the system, but pattern recognition is central to how many AI tools work.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `Face ID on your phone uses pattern matching.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Your phone compares information from your face to a stored representation and decides whether the match is close enough. This is not exactly the same as every other image-recognition system, but it is a useful everyday example of technology using visual patterns.",
+    explanation: "The answer is TRUE. Your phone compares information from your face to a stored representation and decides whether the match is close enough. This is not exactly the same as every other image-recognition system, but it is a useful everyday example of technology using visual patterns.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `An AI system trained on millions of cat photos will identify every cat perfectly.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "It may still make mistakes. A hairless cat, a cartoon cat, a blurry image, or an unusual camera angle could confuse the system. AI can perform extremely well without being perfect, especially when it encounters examples that differ from its training data.",
+    explanation: "The answer is FALSE. It may still make mistakes. A hairless cat, a cartoon cat, a blurry image, or an unusual camera angle could confuse the system. AI can perform extremely well without being perfect, especially when it encounters examples that differ from its training data.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `If an AI system produces biased results, someone must have deliberately programmed the bias into it.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Bias can enter a system through its training data. If historical data reflects unequal treatment, an AI system trained on that data may learn and repeat the same patterns. This can happen even when nobody writes an explicitly discriminatory rule.",
+    explanation: "The answer is FALSE. Bias can enter a system through its training data. If historical data reflects unequal treatment, an AI system trained on that data may learn and repeat the same patterns. This can happen even when nobody writes an explicitly discriminatory rule.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `When an AI system translates a sentence, it understands the sentence exactly as a person would.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "AI translation systems can be extremely useful, but their strengths come from patterns learned across large collections of text. They may still struggle with humor, idioms, cultural references, or phrases whose meaning depends heavily on context.",
+    explanation: "The answer is FALSE. AI translation systems can be extremely useful, but their strengths come from patterns learned across large collections of text. They may still struggle with humor, idioms, cultural references, or phrases whose meaning depends heavily on context.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `The scale of AI pattern recognition is one reason it can seem intelligent.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A system trained on a huge amount of data can produce results that feel surprisingly thoughtful or personal. It can recommend music, generate text, and translate languages. The scale of the training makes the output impressive, even though the system does not experience or understand the world in the way a human does.",
+    explanation: "The answer is TRUE. A system trained on a huge amount of data can produce results that feel surprisingly thoughtful or personal. It can recommend music, generate text, and translate languages. The scale of the training makes the output impressive, even though the system does not experience or understand the world in the way a human does.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `If an AI system produces a convincing answer, the answer is probably reliable.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A convincing answer can still be wrong. AI-generated errors are sometimes difficult to notice because the wording may sound polished and confident. For important questions, especially in areas such as medicine, law, and school research, the answer should be checked against reliable sources.",
+    explanation: "The answer is FALSE. A convincing answer can still be wrong. AI-generated errors are sometimes difficult to notice because the wording may sound polished and confident. For important questions, especially in areas such as medicine, law, and school research, the answer should be checked against reliable sources.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `AI is completely neutral because it is based on math.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Math is part of how AI works, but people still make decisions about what data to use, what goals to prioritize, and where to deploy the system. Those choices affect what the system learns, what it does well, and where its blind spots may be.",
+    explanation: "The answer is FALSE. Math is part of how AI works, but people still make decisions about what data to use, what goals to prioritize, and where to deploy the system. Those choices affect what the system learns, what it does well, and where its blind spots may be.",
   },
 ]
 

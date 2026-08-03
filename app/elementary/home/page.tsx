@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
+import { studentTrack } from '../../data/track'
+import { useTrackGuard } from '../../components/useTrackGuard'
 
 const GAMES = [
   { title: 'Signal Drop',   titlePT: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
@@ -20,6 +22,10 @@ const FAINT = '#d8d8d8'
 
 export default function ElementaryHome() {
   const router = useRouter()
+  const allowed = useTrackGuard(s => {
+    const t = studentTrack(s.grade, s.lang)
+    return t === 'elem-en' || t === 'elem-pt'
+  })
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [isPT, setIsPT]         = useState(false)
   const [username, setUsername] = useState('')
@@ -85,6 +91,8 @@ export default function ElementaryHome() {
     }
     router.push(nextRoute)
   }
+
+  if (!allowed) return null
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>

@@ -15,17 +15,17 @@ const we1: Record<number, LessonData> = {
         tag: 'Example',
         title: 'Meet Alan Turing!',
         image: '/images/w1m1/alan-turing.png',
-        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. A mathematician is someone who solves big puzzles using numbers and patterns. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. Then he asked: Can a machine think?\n\nPeople build machines to perform a task. An example of a machine is a washing machine or a car. Machines only do what people tell them to do. That is why Alan's question was so surprising. Everyone started thinking about it. No one knew the answer!",
+        body: "In 1950, a super-smart mathematician named Alan Turing asked something that no one had EVER asked before. Alan was from England, and he cracked secret codes during World War II, helping to save millions of lives. He asked: Can a machine think?\n\nPeople build machines to perform a task. An example of a machine is a washing machine or a car. Usually, machines only do what people tell them to do. That is why Alan's question was so surprising. No one knew the answer!",
       },
       {
         tag: 'Example',
         title: 'He Created a Game to Find Out!',
-        body: "Imagine exchanging messages with two different people. One is a real human being. The other is a machine. You can only read their words—no pictures, no sounds, and no peeking! Can you tell if it's a machine? If you can't, the machine wins, and proved it can think! Alan called this the Turing Test.",
+        body: "Imagine exchanging messages with two mystery writers. One is a real human being. The other is a machine. You can only read their words—no pictures, no sounds, and no peeking! Can you tell if it's a machine? If you can't tell, the machine wins the game! Alan called this the Turing Test.",
       },
       {
         tag: 'Fact',
         title: 'Still No Answer...',
-        body: "Scientists tried and tried. But no one could agree. Can a machine really think? Even the smartest people in the world are not sure.",
+        body: "So can a machine really think? Even the smartest people in the world are not sure.",
       },
       {
         tag: 'Big idea',
@@ -41,7 +41,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI lives inside computers, tablets, and cell phones."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "PAI and other AI helpers live inside the devices we use every day — computers, tablets, and phones. That is how you can talk to them!",
+        explanation: "The answer is TRUE. PAI and other AI helpers live inside the devices we use every day — computers, tablets, and phones. That is how you can talk to them!",
       },
       {
         difficulty: 'Easy',
@@ -50,7 +50,7 @@ const we1: Record<number, LessonData> = {
         question: `"Alan Turing asked 'Can a machine think?' back in 1950."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "Alan Turing was a mathematician from England. In 1950 he asked a question nobody had ever asked before — and that question started the whole story of AI!",
+        explanation: "The answer is TRUE. Alan Turing was a mathematician from England. In 1950 he asked a big question: Can a machine think? That question started the whole story of AI!",
       },
       {
         difficulty: 'Easy',
@@ -59,7 +59,7 @@ const we1: Record<number, LessonData> = {
         question: `"In the Turing Test, you can tell if something is a machine by looking at pictures of it."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "In the Turing Test you can only read words — no pictures, no sounds, no peeking! If you cannot tell the difference between a human and a machine just from their words, the machine wins.",
+        explanation: "The answer is FALSE. In the Turing Test you can only read words — no pictures, no sounds, no peeking! If you cannot tell the difference between a human and a machine just from their words, the machine wins.",
       },
       {
         difficulty: 'Medium',
@@ -68,7 +68,7 @@ const we1: Record<number, LessonData> = {
         question: `"Scientists all agree that machines can truly think."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "Scientists have been debating that question since 1950 and still cannot agree! Even the smartest people in the world are not sure whether machines can truly think.",
+        explanation: "The answer is FALSE. Scientists have been debating that question since 1950 and still cannot agree! Even the smartest people in the world are not sure whether machines can truly think.",
       },
       {
         difficulty: 'Medium',
@@ -77,7 +77,7 @@ const we1: Record<number, LessonData> = {
         question: `"AI can learn something in just a few minutes that takes a person many months to learn."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "AI reads and learns from huge amounts of information super fast. What takes you months to learn — like addition and subtraction — AI can figure out in just minutes. That is what makes it so powerful!",
+        explanation: "The answer is TRUE. AI reads and learns from huge amounts of information super fast. What takes you months to learn — like addition and subtraction — AI can figure out in just minutes. That is what makes it so powerful!",
       },
     ],
   },
@@ -135,7 +135,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI can give someone a hug when they are sad."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "PAI cannot hug anyone — it has no hands! That is why people and PAI work best as a team. PAI handles fast tasks; people handle the human moments.",
+        explanation: "The answer is FALSE. PAI cannot hug anyone — it has no hands! That is why people and PAI work best as a team. PAI handles fast tasks; people handle the human moments.",
       },
       {
         difficulty: 'Easy',
@@ -144,7 +144,7 @@ const we1: Record<number, LessonData> = {
         question: `"If PAI does your homework for you, you miss out on learning."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "When PAI does the work for you, your brain misses the practice it needs to grow. Use PAI to help you understand — not to skip the learning!",
+        explanation: "The answer is TRUE. When PAI does the work for you, your brain misses the practice it needs to grow. Use PAI to help you understand — not to skip the learning!",
       },
       {
         difficulty: 'Easy',
@@ -153,7 +153,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI can make fake photos and videos that look completely real."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "PAI can create very convincing fake images and videos. That is why it is so important to check where things come from and ask an adult if something online seems too crazy to be true!",
+        explanation: "The answer is TRUE. PAI can create very convincing fake images and videos. That is why it is so important to check where things come from and ask an adult if something online seems too crazy to be true!",
       },
       {
         difficulty: 'Medium',
@@ -162,7 +162,7 @@ const we1: Record<number, LessonData> = {
         question: `"Your personal information is safe to share freely online because apps keep it private."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "Apps and websites can learn a lot about you — the videos you watch, what you search for, where you go. Your personal information belongs to you, so be careful about what you share!",
+        explanation: "The answer is FALSE. Apps and websites can learn a lot about you — the videos you watch, what you search for, where you go. Your personal information belongs to you, so be careful about what you share!",
       },
       {
         difficulty: 'Medium',
@@ -171,7 +171,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI is meant to replace doctors and make all the health decisions."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "PAI is a helper, not a doctor. It can read millions of medical books fast and help spot things, but real doctors make all the final decisions. People are always in charge.",
+        explanation: "The answer is FALSE. PAI is a helper, not a doctor. It can read millions of medical books fast and help spot things, but real doctors make all the final decisions. People are always in charge.",
       },
       {
         difficulty: 'Medium',
@@ -180,7 +180,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI helped scientists figure out the shapes of proteins — a problem humans had worked on for 50 years."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "By reading millions of scientific articles super fast, PAI helped crack a 50-year-old mystery about protein shapes. When AI and scientists work together, they can solve problems that seemed impossible!",
+        explanation: "The answer is TRUE. By studying the shapes of thousands of proteins scientists had already mapped, PAI learned the patterns and predicted new shapes — cracking a 50-year-old mystery. When AI and scientists work together, they can solve problems that seemed impossible!",
       },
       {
         difficulty: 'Medium',
@@ -189,7 +189,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI is already part of your everyday life."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "Video recommendations, map apps, face unlock — PAI is already all around you every single day! Now you know how to spot it.",
+        explanation: "The answer is TRUE. Video recommendations, map apps, face unlock — PAI is already all around you every single day! Now you know how to spot it.",
       },
     ],
   },
@@ -201,7 +201,7 @@ const we1: Record<number, LessonData> = {
       {
         tag: 'Big idea',
         title: 'Do I Always Do What I Am Told?',
-        body: "Imagine that your friend asks you to take someone else's toy. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics—thinking about what is right and what is wrong, like deciding whether it is okay to take something that does not belong to you. Just because I CAN do something does not mean I SHOULD!",
+        body: "Imagine that your friend asks you to do something bad. Should you do it? No! Even if a friend asks, some things are simply not right. I also need to think about what is right and wrong. This is called ethics—thinking about what is right and what is wrong. Just because I CAN do something does not mean I SHOULD!",
       },
       {
         tag: 'Myth bust',
@@ -242,7 +242,7 @@ const we1: Record<number, LessonData> = {
         question: `"The word for thinking about what is right and what is wrong is 'ethics.'"`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "Ethics is thinking about right and wrong — like whether it is okay to take something that does not belong to you. PAI needs ethics too so it does not do things that hurt people!",
+        explanation: "The answer is TRUE. Ethics is thinking about right and wrong — like whether it is okay to take something that does not belong to you. PAI needs ethics too so it does not do things that hurt people!",
       },
       {
         difficulty: 'Easy',
@@ -251,7 +251,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI always treats every person exactly the same way."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "PAI can be biased by accident if the information it learned from was not fair to everyone. That is like a teacher only picking students with red shirts — not fair! People work hard to catch and fix these mistakes.",
+        explanation: "The answer is FALSE. PAI can be biased by accident if the information it learned from was not fair to everyone. That is like a teacher only picking students with red shirts — not fair! People work hard to catch and fix these mistakes.",
       },
       {
         difficulty: 'Easy',
@@ -260,7 +260,7 @@ const we1: Record<number, LessonData> = {
         question: `"It is important for humans to always stay in control of what PAI does."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "When PAI makes a mistake that harms someone, people need to figure out who is responsible. That is why humans staying in control of AI is so important!",
+        explanation: "The answer is TRUE. When PAI makes a mistake that harms someone, people need to figure out who is responsible. That is why humans staying in control of AI is so important!",
       },
       {
         difficulty: 'Medium',
@@ -269,7 +269,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI always does exactly what people mean, not just what they say."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "PAI follows instructions very literally — like a little brother who cleans a room by stuffing everything under the bed! That is why people work hard to write instructions that say exactly what they mean.",
+        explanation: "The answer is FALSE. PAI follows instructions very literally — like a little brother who cleans a room by stuffing everything under the bed! That is why people work hard to write instructions that say exactly what they mean.",
       },
       {
         difficulty: 'Medium',
@@ -278,7 +278,7 @@ const we1: Record<number, LessonData> = {
         question: `"Everyone should get a say in decisions about AI because AI affects everyone."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "AI affects every person in the world, so it makes sense that everyone — not just scientists and companies — should have a voice in how it works. Maybe one day YOU will help decide!",
+        explanation: "The answer is TRUE. AI affects every person in the world, so it makes sense that everyone — not just scientists and companies — should have a voice in how it works. Maybe one day YOU will help decide!",
       },
     ],
   },
@@ -336,7 +336,7 @@ const we1: Record<number, LessonData> = {
         question: `"AGI means an AI that could learn to do anything a human can do."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "AGI stands for Artificial General Intelligence. Right now AI is great at some things but not everything. AGI would be an AI that could learn to do anything — just like a person can. Nobody has built it yet!",
+        explanation: "The answer is TRUE. AGI stands for Artificial General Intelligence. Right now AI is great at some things but not everything. AGI would be an AI that could learn to do anything — just like a person can. Nobody has built it yet!",
       },
       {
         difficulty: 'Easy',
@@ -345,7 +345,7 @@ const we1: Record<number, LessonData> = {
         question: `"PAI has feelings just like you do."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "PAI can write about feelings and talk about them — but it has never actually felt happy, sad, or curious. Feelings, love, and wonder are part of what makes you human. PAI will never have those!",
+        explanation: "The answer is FALSE. PAI can write about feelings and talk about them — but it has never actually felt happy, sad, or curious. Feelings, love, and wonder are part of what makes you human. PAI will never have those!",
       },
       {
         difficulty: 'Easy',
@@ -354,7 +354,7 @@ const we1: Record<number, LessonData> = {
         question: `"People want rules about AI to help keep everyone safe."`,
         answer: true,
         verdict: 'Correct!',
-        explanation: "Just like speed limits and seat belts keep us safe in cars, rules about AI are meant to make sure it is used in ways that help people and do not cause harm.",
+        explanation: "The answer is TRUE. Just like speed limits and seat belts keep us safe in cars, rules about AI are meant to make sure it is used in ways that help people and do not cause harm.",
       },
       {
         difficulty: 'Medium',
@@ -363,7 +363,7 @@ const we1: Record<number, LessonData> = {
         question: `"The future of AI is already decided and kids today cannot change it."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "The biggest questions about AI — will it be fair, safe, and good for everyone — are NOT decided yet. Your generation will be the ones making those decisions. The future of AI is in your hands!",
+        explanation: "The answer is FALSE. The biggest questions about AI — will it be fair, safe, and good for everyone — are NOT decided yet. Your generation will be the ones making those decisions. The future of AI is in your hands!",
       },
       {
         difficulty: 'Medium',
@@ -372,7 +372,7 @@ const we1: Record<number, LessonData> = {
         question: `"AI can only do good things and never cause problems."`,
         answer: false,
         verdict: 'Not quite!',
-        explanation: "AI is like fire — it can keep you warm or burn things down. It can do incredible things to help people, but if not created carefully and used wisely, it can also cause big problems. That is why safety matters!",
+        explanation: "The answer is FALSE. AI is like fire — it can keep you warm or burn things down. It can do incredible things to help people, but if not created carefully and used wisely, it can also cause big problems. That is why safety matters!",
       },
     ],
   },

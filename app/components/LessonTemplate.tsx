@@ -9,6 +9,8 @@ import { SLIDE_IMAGES } from '../data/slideImages'
 import TRANSLATIONS from '../data/lessonTranslations'
 import { WORLDS, WORLD_IDS, getLessonWorldId, WORLD_TITLES_PT } from '../data'
 import { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
+import { lessonTrack, isPTTrack } from '../data/track'
+import { useTrackGuard } from './useTrackGuard'
 
 export interface Stop {
   tag:    string
@@ -54,10 +56,21 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const [cardDir,   setCardDir]   = useState<'right' | 'left' | null>(null)
   const [qIndex,    setQIndex]    = useState(0)
 
-  // Apply translation overlay if available for the user's language
-  const [lang, setLang] = useState('en')
-  useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  // Elementary and middle-school lessons are single-language BY ID, so their
+  // chrome must follow the content, not localStorage — a page reached through
+  // history or a shared link renders identically for every student. Only the
+  // (bilingual) high-school track follows the student's stored language, which
+  // selects the translation overlay.
+  const contentTrack = lessonTrack(id)
+  const allowed = useTrackGuard(contentTrack ?? (() => true))
+  const [storedLang, setStoredLang] = useState('en')
+  useEffect(() => { setStoredLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  const lang = contentTrack === 'high' || contentTrack === null
+    ? storedLang
+    : isPTTrack(contentTrack) ? 'pt' : 'en'
   const isPT = lang === 'pt'
+  const tagLabel  = (t: string) => isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião polêmica', 'Scenario': 'Cenário', 'Myth bust': 'Mito desfeito' }[t] ?? t) : t
+  const diffLabel = (d: string) => isPT ? ({ 'Easy': 'Fácil', 'Medium': 'Médio', 'Hard': 'Difícil' }[d] ?? d) : d
   const ui = {
     lessonComplete:  isPT ? 'Aula concluída'       : 'Lesson complete',
     worldComplete:   isPT ? 'Mundo concluído'       : 'World complete',
@@ -80,6 +93,24 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const questions = tx ? questionsEN.map((q, i) => ({ ...q, question: tx.questions[i]?.question ?? q.question, verdict: tx.questions[i]?.verdict ?? q.verdict, explanation: tx.questions[i]?.explanation ?? q.explanation })) : questionsEN
   const [selected,  setSelected]  = useState<boolean | null>(null)
   const [chatOpen,  setChatOpen]  = useState(false)
+  // Fade the chat button out while the student scrolls down, bring it back when
+  // they scroll up or stop. A floating button otherwise passes over the words
+  // they are reading, which matters more here than in a normal app.
+  const [chatHidden, setChatHidden] = useState(false)
+  useEffect(() => {
+    let lastY = window.scrollY
+    let idle: ReturnType<typeof setTimeout>
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y > lastY + 4 && y > 60) setChatHidden(true)
+      else if (y < lastY - 4) setChatHidden(false)
+      lastY = y
+      clearTimeout(idle)
+      idle = setTimeout(() => setChatHidden(false), 900)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); clearTimeout(idle) }
+  }, [])
 
   const stop     = stops[stopIndex]
   const question = questions[qIndex]
@@ -158,6 +189,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   }
 
   // ── Complete ────────────────────────────────────────────────────────────────
+  if (!allowed) return null
+
   if (phase === 'complete') {
     const modIdx     = world?.modules.findIndex(m => m.id === id) ?? -1
     // Skip game-type modules when looking for next lesson
@@ -239,13 +272,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <span style={{ color: BLACK }}>{isPT ? 'Questionário' : 'Quiz'}</span>
                 <span style={{ color: FAINT }}>·</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
                 <span style={{ color: FAINT }}>·</span>
                 <span style={{ color: DIM }}>{title}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
                 <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
               </div>
             </div>
             <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -257,7 +290,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
             </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
-              {question.tag} · {question.difficulty}
+              {tagLabel(question.tag)} · {diffLabel(question.difficulty)}
             </div>
             <h2 style={{ fontFamily: DISP, fontSize: 'clamp(1.5rem, 3.5vw, 2.4rem)', lineHeight: 1.1, letterSpacing: '-0.02em', color: BLACK, margin: '0 0 24px', fontWeight: 400, maxWidth: '70ch' }}>
               {question.question}
@@ -278,7 +311,20 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {selected !== null && (
               <div style={{ marginTop: 20, maxWidth: 560, animation: 'slideUpFade 0.3s ease-out' }}>
                 <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 16 }}>
-                  <p style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '0.04em', color: isCorrect ? '#27AE60' : '#C0392B', margin: '0 0 8px' }}>{question.verdict}</p>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    fontFamily: DISP, fontSize: 20, letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    background: isCorrect ? '#27AE60' : '#C0392B',
+                    padding: '10px 18px',
+                    boxShadow: `4px 4px 0 0 ${isCorrect ? '#1B7A43' : '#8C2A1F'}`,
+                    margin: '0 0 14px',
+                    animation: 'verdictPop 0.28s cubic-bezier(0.34,1.4,0.64,1)',
+                  }}>
+                    <span aria-hidden="true">{isCorrect ? '\u2713' : '\u2715'}</span>
+                    {isCorrect ? (isPT ? 'CERTO!' : 'RIGHT!') : (isPT ? 'ERRADO' : 'WRONG')}
+                  </div>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65, maxWidth: '60ch' }}>{question.explanation}</p>
                 </div>
               </div>
@@ -321,9 +367,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ background: BLACK, padding: '6px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
+          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px 8px', margin: '-12px -8px', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         </div>
-        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>
+        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6, padding: '12px 8px', margin: '-12px -8px' }}>
           {ui.backWorld}
         </button>
       </div>
@@ -340,9 +386,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         <div>
           <div style={{ paddingBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{stop.tag}</span>
+              <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{tagLabel(stop.tag)}</span>
               <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: 0 }}>
+              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
@@ -351,7 +397,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
               {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
               <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: 0 }}>{ui.skip}</button>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -366,7 +412,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             gridTemplateColumns: hasImage || isElem ? undefined : '1fr',
             gap: 0,
             paddingTop: 44,
-            paddingBottom: 32,
+            // Reserve room for the floating chat button so lesson text can never
+            // scroll underneath it. Repositioning the button alone is not enough:
+            // it is fixed, so without this the last lines still slide under it.
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 108px)',
             animation: cardDir ? `${cardDir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)` : undefined,
           }}
         >
@@ -453,7 +502,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
       {/* Navigation — fixed at bottom, never clipped */}
       <div style={{ flexShrink: 0, background: slideBg, borderTop: `2px solid ${BLACK}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 7vw', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px min(7vw, 20px)', gap: 12, flexWrap: 'wrap' }}>
           <button disabled={stopIndex === 0} onClick={stopIndex > 0 ? timelineBack : undefined} style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', border: `1.5px solid ${BLACK}`, color: BLACK, padding: '10px 22px', cursor: stopIndex > 0 ? 'pointer' : 'not-allowed', opacity: stopIndex === 0 ? 0.3 : 1 }}>
             {ui.backSlide}
           </button>
@@ -473,21 +522,29 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
         title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
         style={{
           position: 'fixed',
-          bottom: 130,
-          left: 32,
+          // Sits just above the home indicator. It used to be 130px up to clear a
+          // fixed handbook bar at bottom:0; that bar moved into the top bar in
+          // d6a5534 and this offset was never updated, leaving the button
+          // floating in the middle of the lesson text on short screens.
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+          left: 20,
           zIndex: 40,
           width: 56,
           height: 56,
           borderRadius: '50%',
           background: BLACK,
-          border: `1.5px solid ${GREEN}`,
-          boxShadow: `3px 3px 0 0 ${GREEN}`,
+          border: `2.5px solid ${GREEN}`,
+          // Opaque ring in the page colour so no lesson text shows through or
+          // around the button; it sits on the page rather than in the sentence.
+          boxShadow: `0 0 0 6px ${slideBg}, 3px 3px 0 0 ${GREEN}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          transition: 'transform 0.15s',
+          transition: 'transform 0.15s, opacity 0.25s ease, visibility 0.25s',
           touchAction: 'manipulation',
+          opacity:    chatHidden && !chatOpen ? 0 : 1,
+          visibility: chatHidden && !chatOpen ? 'hidden' : 'visible',
         }}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

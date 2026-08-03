@@ -61,7 +61,7 @@ export default function ConnectionsPage() {
     >
       {/* Header */}
       <div className="w-full border-b border-[#e0ddd8] bg-white flex items-center justify-center py-4 mb-8">
-        <h1 className="text-lg font-black text-[#1a1a1a] tracking-tight">Connections</h1>
+        <h1 className="text-lg font-black text-[#1a1a1a] tracking-tight">{isPT ? 'Conexões' : 'Connections'}</h1>
       </div>
 
       {/* Game */}
@@ -69,6 +69,7 @@ export default function ConnectionsPage() {
         <ConnectionsGame
           key={key}
           puzzle={isPT ? samplePuzzlePT : samplePuzzle}
+          isPT={isPT}
           onComplete={handleComplete}
         />
 
@@ -85,11 +86,6 @@ export default function ConnectionsPage() {
         )}
       </div>
 
-      {/* Footer hint */}
-      <p className="mt-12 text-xs text-[#aaa] text-center px-4">
-        Engine in <code className="font-mono">app/components/ConnectionsGame.tsx</code> ·
-        Data in <code className="font-mono">app/data/samplePuzzle.ts</code>
-      </p>
     </div>
   )
 }

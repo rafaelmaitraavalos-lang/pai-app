@@ -65,7 +65,7 @@ export const QUESTIONS: Question[] = [
     question: `The idea behind AI predates computers by thousands of years.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Aristotle was formalizing mechanical reasoning nearly 2,400 years ago. Ada Lovelace wrote the first algorithm in 1843. The computers are new. The obsession with making machines think is not.",
+    explanation: "The answer is TRUE. Aristotle was formalizing mechanical reasoning nearly 2,400 years ago. Ada Lovelace wrote the first algorithm in 1843. The computers are new. The obsession with making machines think is not.",
   },
   {
     difficulty: "Easy",
@@ -74,7 +74,7 @@ export const QUESTIONS: Question[] = [
     question: `Ada Lovelace was the first person to write an algorithm.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "She wrote it in 1843 for a machine that hadn't been built yet. She also predicted machines could compose music, produce graphics, and solve complex problems. She was right about all of it. A century early.",
+    explanation: "The answer is TRUE. She wrote it in 1843 for a machine that hadn't been built yet. She also predicted machines could compose music, produce graphics, and solve complex problems. She was right about all of it. A century early.",
   },
   {
     difficulty: "Easy",
@@ -83,7 +83,7 @@ export const QUESTIONS: Question[] = [
     question: `The Turing Test proves a machine is intelligent if it passes.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "Turing never said that. He asked whether the question even matters. Passing means a machine can imitate human conversation, not that it understands anything. ChatGPT passes versions of it today and has no idea what a word means.",
+    explanation: "The answer is FALSE. Turing never said that. He asked whether the question even matters. Passing means a machine can imitate human conversation, not that it understands anything. ChatGPT passes versions of it today and has no idea what a word means.",
   },
   {
     difficulty: "Medium",
@@ -92,7 +92,7 @@ export const QUESTIONS: Question[] = [
     question: `The researchers at Dartmouth in 1956 were naive to think they could solve AI quickly.`,
     answer: false,
     verdict: "Not really.",
-    explanation: "They weren't naive. They had no way of knowing how hard the problem was. Nobody did. The most brilliant researchers in the world were completely wrong about something they invented. That's not naivety. That's the nature of working at the edge of what anyone has ever tried.",
+    explanation: "The answer is FALSE. They weren't naive. They had no way of knowing how hard the problem was. Nobody did. The most brilliant researchers in the world were completely wrong about something they invented. That's not naivety. That's the nature of working at the edge of what anyone has ever tried.",
   },
   {
     difficulty: "Medium",
@@ -101,7 +101,7 @@ export const QUESTIONS: Question[] = [
     question: `AI research has been steadily progressing since the 1950s.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "It nearly died twice. The AI Winters of the 1970s and 1980s saw funding collapse, labs shut down, and researchers abandon the field entirely. Understanding this separates people who think clearly about AI from people who believe every headline.",
+    explanation: "The answer is FALSE. It nearly died twice. The AI Winters of the 1970s and 1980s saw funding collapse, labs shut down, and researchers abandon the field entirely. Understanding this separates people who think clearly about AI from people who believe every headline.",
   },
   {
     difficulty: "Medium",
@@ -110,7 +110,7 @@ export const QUESTIONS: Question[] = [
     question: `Deep Blue was a narrow AI. It could only play chess and nothing else.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Deep Blue was extraordinarily powerful at one specific task and completely useless at everything else. It couldn't play checkers, recognize a face, or understand a sentence. Beating Kasparov was not evidence of general intelligence. It was evidence of very fast, very specific calculation.",
+    explanation: "The answer is TRUE. Deep Blue was extraordinarily powerful at one specific task and completely useless at everything else. It couldn't play checkers, recognize a face, or understand a sentence. Beating Kasparov was not evidence of general intelligence. It was evidence of very fast, very specific calculation.",
   },
   {
     difficulty: "Hard",
@@ -119,7 +119,7 @@ export const QUESTIONS: Question[] = [
     question: `The most important moment in modern AI history was the launch of ChatGPT in 2022.`,
     answer: false,
     verdict: "Wrong.",
-    explanation: "It was 2012. When AlexNet won the image recognition competition by a shocking margin, deep learning took over the entire field overnight. ChatGPT is a product of that moment. Without 2012 there is no 2022. Most people get this backwards because ChatGPT is what they noticed.",
+    explanation: "The answer is FALSE. It was 2012. When AlexNet won the image recognition competition by a shocking margin, deep learning took over the entire field overnight. ChatGPT is a product of that moment. Without 2012 there is no 2022. Most people get this backwards because ChatGPT is what they noticed.",
   },
   {
     difficulty: "Hard",
@@ -128,7 +128,7 @@ export const QUESTIONS: Question[] = [
     question: `The question of what AI fundamentally is remains unresolved.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Nobody fully agrees on what AI is, whether it can think, what rights it might deserve, or what it will do to the economy and human identity. You just finished a lesson on 2,000 years of people trying to answer these questions. They're still open. That's not a failure: that's what makes this the most interesting field in the world right now.",
+    explanation: "The answer is TRUE. Nobody fully agrees on what AI is, whether it can think, what rights it might deserve, or what it will do to the economy and human identity. You just finished a lesson on 2,000 years of people trying to answer these questions. They're still open. That's not a failure: that's what makes this the most interesting field in the world right now.",
   },
 ]
 

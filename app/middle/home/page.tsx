@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_LESSONS } from '../../data/elementary'
+import { useTrackGuard } from '../../components/useTrackGuard'
 
 const GAMES = [
   { title: 'Signal Drop',   gameUrl: '/games/signal-drop' },
@@ -20,6 +21,9 @@ const FAINT = '#d8d8d8'
 
 export default function MiddleSchoolHome() {
   const router = useRouter()
+  // Full track guard (supersedes the older fund2-only redirect): any student
+  // who doesn't belong on the English middle-school home is sent to their own.
+  const allowed = useTrackGuard('middle-en')
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [username, setUsername] = useState('')
 
@@ -42,6 +46,8 @@ export default function MiddleSchoolHome() {
   }
 
   const activeId = MIDDLE_SCHOOL_WORLD_IDS.find(id => !done[id]) ?? null
+
+  if (!allowed) return null
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>

@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local pre-edit backups
+.backups/
+
+# local dev database (PGlite fallback)
+.dev-db/
+pressure_test_results.json

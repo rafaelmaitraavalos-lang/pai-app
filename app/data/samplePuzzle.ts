@@ -1,56 +1,61 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// SAMPLE PUZZLE — swap this object out for any 4-group, 16-card puzzle.
+// CONNECTIONS PUZZLE — middle-school level, approved by Sonali 2026-08-01.
+// (Replaced the original graduate-level puzzle: "RAG pipeline", "Attention
+// heads" etc. — see PAI-suggested-connections-puzzle.md for the review trail.)
 //
 // Contract:
 //   • Exactly 4 groups, each with exactly 4 cards (strings).
 //   • difficulty 1–4 controls the row colour: 1=yellow 2=green 3=blue 4=purple.
 //   • Cards should be short enough to read on a small tile (≤ 4–5 words).
+//
+// Every concept below already appears in the middle-school curriculum
+// (Worlds 201/261 and the glossary) — nothing here is new material.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { Puzzle } from '../components/ConnectionsGame'
 
 const samplePuzzle: Puzzle = {
-  id: 'ai-reality-check',
-  title: 'AI Reality Check',
+  id: 'spot-the-ai',
+  title: 'Spot the AI',
   groups: [
     {
-      name: 'What a language model actually does',
+      name: 'Things AI is great at',
       difficulty: 1,
       cards: [
-        'Predicts next tokens',
-        'Samples from distributions',
-        'Compresses training data',
-        'Matches learned patterns',
+        'Spotting patterns',
+        'Translating languages',
+        'Recommending videos',
+        'Finding spam',
       ],
     },
     {
-      name: 'Things that reduce hallucination',
+      name: 'Things AI struggles with',
       difficulty: 2,
       cards: [
-        'RAG pipeline',
-        'Lower temperature',
-        'Citing sources',
-        'Constitutional AI',
+        "Knowing what's true",
+        'Common sense',
+        'Feelings',
+        'Very new events',
       ],
     },
     {
-      name: 'Parts of a transformer',
+      name: 'Where AI hides in your day',
       difficulty: 3,
       cards: [
-        'Attention heads',
-        'Feed-forward layers',
-        'Positional encodings',
-        'Layer normalization',
+        'Autocomplete',
+        'Face unlock',
+        'Music shuffle',
+        'Map directions',
       ],
     },
     {
-      name: 'Things AI fundamentally lacks',
+      name: 'People from AI history',
       difficulty: 4,
       cards: [
-        'True understanding',
-        'Genuine memory',
-        'Physical senses',
-        'Real intentions',
+        'Alan Turing',
+        'Ada Lovelace',
+        'John McCarthy',
+        'Garry Kasparov',
       ],
     },
   ],

@@ -3,11 +3,14 @@
 import { useEffect, useState } from 'react'
 import { WORLDS } from '../data'
 import WorldModuleView from '../components/WorldModuleView'
+import { useTrackGuard } from '../components/useTrackGuard'
 
 export default function World1Page() {
   const world = WORLDS[1]
+  const allowed = useTrackGuard('high')
   const [isPT, setIsPT] = useState(false)
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  if (!allowed) return null
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
       {/* Black PAI header */}

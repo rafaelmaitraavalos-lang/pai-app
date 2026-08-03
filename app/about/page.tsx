@@ -78,8 +78,14 @@ const people = {
 }
 
 export default function AboutPage() {
-  const [isPT, setIsPT] = useState(false)
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  // null until the stored language is read — rendering the English default
+  // first meant Portuguese students saw a fully English page for as long as
+  // hydration took (10s on a throttled school machine). Blank beats wrong.
+  const [lang, setLang] = useState<string | null>(null)
+  useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  const isPT = lang === 'pt'
+
+  if (lang === null) return null
 
   const list = isPT ? people.pt : people.en
 

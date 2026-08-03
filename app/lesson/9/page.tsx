@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `Neural networks are programmed with a separate rule for every decision they make.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A programmer designs the structure and training process, but the network learns many of its internal patterns from data. It does not receive a complete list of rules for every possible input.",
+    explanation: "The answer is FALSE. A programmer designs the structure and training process, but the network learns many of its internal patterns from data. It does not receive a complete list of rules for every possible input.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `A forward pass is the process of moving input through the network to produce an output.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "During a forward pass, information travels through the network's layers. The network then produces a prediction, such as a set of probabilities for different labels.",
+    explanation: "The answer is TRUE. During a forward pass, information travels through the network's layers. The network then produces a prediction, such as a set of probabilities for different labels.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `A loss function measures how far a network's prediction is from the desired result.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "The loss function gives the network a way to measure error. A lower loss generally means the prediction is closer to the intended result.",
+    explanation: "The answer is TRUE. The loss function gives the network a way to measure error. A lower loss generally means the prediction is closer to the intended result.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Backpropagation helps calculate how changes to the weights could reduce the loss.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Backpropagation works backward through the network to determine how much different weights contributed to the result. An optimization algorithm then uses that information to update the weights.",
+    explanation: "The answer is TRUE. Backpropagation works backward through the network to determine how much different weights contributed to the result. An optimization algorithm then uses that information to update the weights.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `A network usually needs to train across many examples and many rounds of updates.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "One update changes the network only slightly. Training becomes effective through repetition across many examples, often organized into batches and repeated over multiple epochs.",
+    explanation: "The answer is TRUE. One update changes the network only slightly. Training becomes effective through repetition across many examples, often organized into batches and repeated over multiple epochs.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `If a network performs extremely well on its training data, it will automatically perform well on new data.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A network can memorize patterns that are too specific to its training set. This is called overfitting. Developers test models on separate data to see whether they generalize effectively.",
+    explanation: "The answer is FALSE. A network can memorize patterns that are too specific to its training set. This is called overfitting. Developers test models on separate data to see whether they generalize effectively.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `Experts can usually identify one individual weight responsible for a complex concept such as recognizing a cat.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "A network's learned patterns are often distributed across many weights and layers. This makes it difficult to trace a complex ability back to one specific value.",
+    explanation: "The answer is FALSE. A network's learned patterns are often distributed across many weights and layers. This makes it difficult to trace a complex ability back to one specific value.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Every neural network must be trained using data that humans labeled one example at a time.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Supervised learning uses labeled examples, and those labels can require human labor. However, networks can also learn from unlabeled data or from training tasks generated from the data itself.",
+    explanation: "The answer is FALSE. Supervised learning uses labeled examples, and those labels can require human labor. However, networks can also learn from unlabeled data or from training tasks generated from the data itself.",
   },
 ]
 

@@ -51,7 +51,7 @@ export const QUESTIONS: Question[] = [
     question: `ChatGPT generates text one token at a time.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "The model uses the conversation so far to calculate possible next tokens and generate a response. Tokens may be complete words, parts of words, punctuation marks, or individual characters.",
+    explanation: "The answer is TRUE. The model uses the conversation so far to calculate possible next tokens and generate a response. Tokens may be complete words, parts of words, punctuation marks, or individual characters.",
   },
   {
     difficulty: "Easy",
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
     question: `The full details of the training data used for current proprietary models are publicly available.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Language models are trained on large amounts of data, but the complete composition of the training data for current proprietary models is not publicly disclosed.",
+    explanation: "The answer is FALSE. Language models are trained on large amounts of data, but the complete composition of the training data for current proprietary models is not publicly disclosed.",
   },
   {
     difficulty: "Easy",
@@ -69,7 +69,7 @@ export const QUESTIONS: Question[] = [
     question: `ChatGPT processes text only as complete words.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "ChatGPT processes tokens. A token may be a word, part of a word, punctuation, or sometimes a single character.",
+    explanation: "The answer is FALSE. ChatGPT processes tokens. A token may be a word, part of a word, punctuation, or sometimes a single character.",
   },
   {
     difficulty: "Medium",
@@ -78,7 +78,7 @@ export const QUESTIONS: Question[] = [
     question: `Attention helps a transformer model use relationships between different parts of a sequence.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Attention allows the model to determine which parts of the input are especially relevant while processing the sequence.",
+    explanation: "The answer is TRUE. Attention allows the model to determine which parts of the input are especially relevant while processing the sequence.",
   },
   {
     difficulty: "Medium",
@@ -87,7 +87,7 @@ export const QUESTIONS: Question[] = [
     question: `ChatGPT always starts every conversation with no information from previous chats.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Within a conversation, ChatGPT can use earlier messages as context. Depending on the user's settings, memory features may also allow it to use helpful information from previous conversations. It does not automatically remember every detail.",
+    explanation: "The answer is FALSE. Within a conversation, ChatGPT can use earlier messages as context. Depending on the user's settings, memory features may also allow it to use helpful information from previous conversations. It does not automatically remember every detail.",
   },
   {
     difficulty: "Medium",
@@ -96,7 +96,7 @@ export const QUESTIONS: Question[] = [
     question: `A hallucination is an answer that sounds plausible but contains incorrect information.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "Language models can sometimes produce confident but false claims. This is why important information should be checked against reliable sources.",
+    explanation: "The answer is TRUE. Language models can sometimes produce confident but false claims. This is why important information should be checked against reliable sources.",
   },
   {
     difficulty: "Hard",
@@ -105,7 +105,7 @@ export const QUESTIONS: Question[] = [
     question: `The context window limits how much information a model can process at one time.`,
     answer: true,
     verdict: "Correct.",
-    explanation: "A larger context window allows a model to work with longer conversations or documents, but it does not guarantee that the model will interpret every detail perfectly.",
+    explanation: "The answer is TRUE. A larger context window allows a model to work with longer conversations or documents, but it does not guarantee that the model will interpret every detail perfectly.",
   },
   {
     difficulty: "Hard",
@@ -114,7 +114,7 @@ export const QUESTIONS: Question[] = [
     question: `Because ChatGPT can generate human-like writing, it must understand language in exactly the same way a person does.`,
     answer: false,
     verdict: "Correct.",
-    explanation: "Generating useful, natural-sounding language is not automatically the same as having human-like understanding. The relationship between AI performance and understanding remains an open question.",
+    explanation: "The answer is FALSE. Generating useful, natural-sounding language is not automatically the same as having human-like understanding. The relationship between AI performance and understanding remains an open question.",
   },
 ]
 
