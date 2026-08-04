@@ -36,10 +36,10 @@ roughly $20–25/month — comfortably inside the $50 cap.
 
 Have a great camp. — Sonali & Claude
 
-## 4. One more dashboard click (added 2026-08-03 late)
-Your Web Analytics commit is deployed and harmless, but it is not collecting
-yet: the tracking script never loads on the live site (the component queues
-events and nothing transmits). Fix is in the dashboard, not code:
-**vercel.com → pai-app → Analytics tab → Enable**. Until then you simply
-get no data — the app is unaffected either way (verified with the tracker
-both blocked and unblocked).
+## 4. Web Analytics — nothing to do (corrected 2026-08-03 late)
+Your analytics is enabled and collecting (verified via the API: enabled
+today, hasData true). An earlier note here said it wasn't collecting — that
+was wrong: the tracker deliberately ignores automated browsers, so our test
+harnesses couldn't see it (and, nicely, none of our thousands of test page
+loads pollute your numbers). Also verified: when school content filters
+block the tracker, the app is completely unaffected.
