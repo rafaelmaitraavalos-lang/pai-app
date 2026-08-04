@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../../../data/elementary'
+import AutoplayVideo from '../../../components/AutoplayVideo'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -38,7 +39,7 @@ export default function MobileElementaryHome() {
 
       <main style={{ width: '100%', padding: '20px 20px 80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
-          <video src="/pig.mp4" autoPlay loop muted playsInline style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }} />
+          <AutoplayVideo src="/pig.mp4" style={{ width: 72, height: 72, objectFit: 'contain', flexShrink: 0 }} />
           <div style={{ fontFamily: DISP, fontSize: 20, color: BLACK, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
             {isPT ? 'Olá! Vamos aprender?' : 'Hey! Ready to learn?'}
           </div>

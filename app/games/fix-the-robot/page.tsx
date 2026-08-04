@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import AutoplayVideo from '../../components/AutoplayVideo'
 
 const PINK   = '#ff2d78'
 const GREEN  = '#39ff14'
@@ -427,7 +428,7 @@ export default function FixTheRobot() {
     return (
       <div style={S.root}>
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
-          <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 90, height: 90, objectFit: 'contain', background: '#000', borderRadius: 8 }} />
+          <AutoplayVideo src="/pai3.mp4" style={{ width: 90, height: 90, objectFit: 'contain', background: '#000', borderRadius: 8 }} />
           <Robot mood="happy"/>
           <div style={{ ...S.neon(GREEN), fontSize: 26, letterSpacing: 3 }}>{isPT ? 'ROBÔ CONSERTADO!' : 'ROBOT FIXED!'}</div>
           <div style={{ ...S.neon(gc), fontSize: 80, letterSpacing: 8 }}>{grade}</div>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { LANG_STRINGS } from '../data/onboardingStrings'
 import { studentTrack, homeRoute } from '../data/track'
 import { applyProgress } from '@/lib/progress'
+import AutoplayVideo from './AutoplayVideo'
 
 const DISP  = "'Archivo Black', 'Arial Black', sans-serif"
 const BODY  = "'Inter', system-ui, sans-serif"
@@ -301,12 +302,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 0 && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20, textAlign: 'center' }}>
               <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', width: '100%' }}>
-                <video
+                <AutoplayVideo
                   src="/pig.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
                   style={{ width: '100%', display: 'block' }}
                 />
               </div>
@@ -355,12 +352,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
               {/* PAI below the language buttons */}
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <video
+                <AutoplayVideo
                   src="/pai-lang.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
                   style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
                 />
               </div>
@@ -371,7 +364,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           {screen === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <video src="/pai0.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                <AutoplayVideo src="/pai0.mp4" style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
               </div>
               <div>
                 <h2 style={{ fontFamily: DISP, fontSize: 22, color: BLACK, margin: '0 0 4px', lineHeight: 1.1 }}>{L.authTitle ?? 'Welcome to PAI'}</h2>
@@ -461,7 +454,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <video src="/pai3.mp4" autoPlay loop muted playsInline style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                  <AutoplayVideo src="/pai3.mp4" style={{ width: 110, height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
                 </div>
                 <div>
                   <p style={{ fontFamily: BODY, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, margin: '0 0 8px' }}>{L.step}</p>

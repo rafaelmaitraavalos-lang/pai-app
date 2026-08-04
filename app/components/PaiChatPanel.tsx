@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import AutoplayVideo from './AutoplayVideo'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -149,7 +150,7 @@ export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop
         {/* Header — PAI label + close */}
         <div style={{ padding: '10px 14px 8px', borderBottom: `1px solid #1a1a1a`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <video src="/pig.mp4" autoPlay loop muted playsInline style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <AutoplayVideo src="/pig.mp4" style={{ width: 28, height: 28, objectFit: 'contain' }} />
             <span style={{ fontFamily: DISP, fontSize: 13, letterSpacing: '-0.01em', color: GREEN }}>PAI</span>
             <span style={{ fontFamily: BODY, fontSize: 10, color: '#444' }}>{lessonTitle}</span>
           </div>

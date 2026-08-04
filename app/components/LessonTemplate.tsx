@@ -11,6 +11,7 @@ import { WORLDS, WORLD_IDS, getLessonWorldId, WORLD_TITLES_PT } from '../data'
 import { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS, MIDDLE_SCHOOL_LESSONS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_WORLD_IDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../data/elementary'
 import { lessonTrack, isPTTrack } from '../data/track'
 import { useTrackGuard } from './useTrackGuard'
+import AutoplayVideo from './AutoplayVideo'
 
 export interface Stop {
   tag:    string
@@ -287,7 +288,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           {/* Question */}
           <div key={qIndex} style={{ paddingTop: 36, paddingBottom: 20, animation: 'slideInFromRight 0.28s ease-out' }}>
             <div style={{ marginBottom: 16 }}>
-              <video src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} autoPlay loop muted playsInline style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+              <AutoplayVideo src={['/pig.mp4', '/pai0.mp4', '/pai3.mp4'][qIndex % 3]} style={{ width: isElem ? 90 : 60, height: isElem ? 90 : 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
             </div>
             <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 12 }}>
               {tagLabel(question.tag)} · {diffLabel(question.difficulty)}
@@ -452,10 +453,10 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             {/* PAI below body text — clickable to open chat */}
             {hasImage && (
               <div style={{ marginTop: 28 }}>
-                <video
+                <AutoplayVideo
                   onClick={() => setChatOpen(true)}
                   src={['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]}
-                  autoPlay loop muted playsInline
+                 
                   style={{ width: 72, height: 72, objectFit: 'contain', mixBlendMode: 'multiply', cursor: 'pointer' }}
                   title="Ask PAI a question"
                 />
@@ -478,12 +479,12 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             </div>
           ) : (
             <div className="lesson-slide-image" style={{ paddingLeft: 36, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <video
+              <AutoplayVideo
                 onClick={() => setChatOpen(true)}
                 src={isElem
                   ? ['/pai0.mp4', '/pai3.mp4', '/pig.mp4', '/pai-lang.mp4'][(stopIndex + 1) % 4]
                   : ['/pai3.mp4', '/pig.mp4', '/pai0.mp4', '/pai-lang.mp4'][(stopIndex + 2) % 4]}
-                autoPlay loop muted playsInline
+               
                 style={{ width: isElem ? 200 : 120, height: isElem ? 200 : 120, objectFit: 'contain', mixBlendMode: 'multiply', cursor: 'pointer' }}
                 title="Ask PAI a question"
               />
