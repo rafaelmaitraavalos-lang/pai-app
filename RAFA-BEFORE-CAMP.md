@@ -35,3 +35,11 @@ roughly $20–25/month — comfortably inside the $50 cap.
   graduate-level Connections puzzle, EN + PT.
 
 Have a great camp. — Sonali & Claude
+
+## 4. One more dashboard click (added 2026-08-03 late)
+Your Web Analytics commit is deployed and harmless, but it is not collecting
+yet: the tracking script never loads on the live site (the component queues
+events and nothing transmits). Fix is in the dashboard, not code:
+**vercel.com → pai-app → Analytics tab → Enable**. Until then you simply
+get no data — the app is unaffected either way (verified with the tracker
+both blocked and unblocked).
