@@ -1,3 +1,5 @@
+# ✅ ALL CONFIRMED before camp (2026-08-03) — kept for the record
+
 # Rafa — please do these before you leave Monday (15 minutes, no code)
 
 Everything is in your Groq account (console.groq.com) — nobody else can see

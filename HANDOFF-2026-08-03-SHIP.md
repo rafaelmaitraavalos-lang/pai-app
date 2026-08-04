@@ -31,10 +31,10 @@ Final verification on the shipping deploy (last commits: a571825):
   stylistic rewrites of the professional's conversational prose.
 - `PT-REVIEW-PACK.md` — 30-min native-speaker spot-read pack + the standing
   machine layers guarding Portuguese without a translator.
-- `RAFA-BEFORE-CAMP.md` — his list. STILL OPEN: (1) confirm Groq PAID tier
-  (free tier = 1K requests/day = chat dies day one) and (2) the ~$50 spend
-  cap screenshot. Analytics needs NOTHING (enabled, collecting; earlier
-  note retracted). Connections puzzle suggestion can wait until after camp.
+- `RAFA-BEFORE-CAMP.md` — ALL CLOSED: Groq paid tier CONFIRMED by Rafa
+  before camp (2026-08-03, via Sonali), spend cap ~$50/month set, analytics
+  enabled and collecting. Only the Connections puzzle style suggestions
+  remain, post-camp, no urgency.
 
 ## Test infrastructure (all in scripts/, mutation-validated)
 
@@ -112,7 +112,7 @@ Final verification on the shipping deploy (last commits: a571825):
 
 ## Open items (post-ship)
 
-1. Rafa: Groq paid tier + spend cap (CRITICAL, see RAFA-BEFORE-CAMP.md).
+1. ~~Groq paid tier + spend cap~~ CONFIRMED by Rafa before camp 2026-08-03.
 2. Prod DB cleanup: zz_qa_*, zz_adv_*, zz_ship_*, zz_sweep_bot,
    zz_monkey_bot + three unprefixed (`scriptalert1`, `zzadvsp3126`,
    `bzz_adv_bold3126b`). Needs DB access (Neon console via Rafa, or an
@@ -130,8 +130,8 @@ Final verification on the shipping deploy (last commits: a571825):
 
 ## First hours of launch — what to watch
 
-- Groq rate limits are THE capacity risk (2 model calls per chat question).
-  Symptoms: chat "unreachable" messages spike. Mitigations already live:
+- Groq: paid tier + spend cap confirmed. Residual capacity watch only —
+  if chat "unreachable" messages ever spike, the live mitigations are
   per-user caps 5/day 25/month, answer cache, sitewide breaker, retry.
 - Vercel Analytics tab now shows real student traffic (Rafa's login, or
   Sonali's own account can view).
