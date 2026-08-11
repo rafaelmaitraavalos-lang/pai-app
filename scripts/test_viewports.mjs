@@ -54,25 +54,38 @@ const AUDIT = () => {
     const t = under.find(x => x.innerText && x.innerText.trim().length > 40 &&
       ['P', 'DIV', 'SPAN', 'LI', 'H1', 'H2'].includes(x.tagName))
     if (t) out.issues.push({ type: 'fixed control covers text', covers: t.innerText.trim().slice(0, 45) })
-
-    // Header-internal collisions: two text-bearing chrome elements printing
-    // over each other in the top bar. This exact class shipped unseen — the
-    // fixed-center handbook label printed OVER usernames on mobile
-    // (2026-08-04, found by Sonali, missed by every suite because nothing
-    // modeled chrome-vs-chrome geometry).
-    const topEls = [...document.querySelectorAll('span, a, button')].filter(e => {
-      const r = e.getBoundingClientRect()
-      return r.top < 56 && r.height > 0 && r.width > 0 && r.width < 400 &&
-             (e.innerText || '').trim() && ![...e.children].some(c => (c.innerText || '').trim())
-    })
-    for (let i = 0; i < topEls.length; i++) for (let j = i + 1; j < topEls.length; j++) {
-      const a = topEls[i].getBoundingClientRect(), b = topEls[j].getBoundingClientRect()
-      if (topEls[i].contains(topEls[j]) || topEls[j].contains(topEls[i])) continue
-      const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left)
-      const oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)
-      if (ox > 4 && oy > 4)
-        out.issues.push({ type: 'header elements overlap', a: topEls[i].innerText.trim().slice(0, 20), b: topEls[j].innerText.trim().slice(0, 20) })
-    }
+  }
+  // Header-internal collisions: two text-bearing chrome elements printing
+  // over each other in the top bar. This exact class shipped unseen — the
+  // fixed-center handbook label printed OVER usernames on mobile
+  // (2026-08-04, found by Sonali, missed by every suite because nothing
+  // modeled chrome-vs-chrome geometry). NOTE: this check must run
+  // unconditionally — it originally lived inside the fixed-element loop
+  // above, so removing the last fixed element would have silently killed it.
+  const topEls = [...document.querySelectorAll('span, a, button')].filter(e => {
+    const r = e.getBoundingClientRect()
+    return r.top < 56 && r.height > 0 && r.width > 0 && r.width < 400 &&
+           (e.innerText || '').trim() && ![...e.children].some(c => (c.innerText || '').trim())
+  })
+  for (let i = 0; i < topEls.length; i++) for (let j = i + 1; j < topEls.length; j++) {
+    const a = topEls[i].getBoundingClientRect(), b = topEls[j].getBoundingClientRect()
+    if (topEls[i].contains(topEls[j]) || topEls[j].contains(topEls[i])) continue
+    const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left)
+    const oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)
+    if (ox > 4 && oy > 4)
+      out.issues.push({ type: 'header elements overlap', a: topEls[i].innerText.trim().slice(0, 20), b: topEls[j].innerText.trim().slice(0, 20) })
+  }
+  // Greeting row must stay ONE row: the mascot and the handbook sticker side
+  // by side. (2026-08-04: the 116px sticker wrapped under the pig on phones —
+  // three stacked rows before CONTENTS. Found by Sonali on her iPhone.)
+  const mascot  = document.querySelector('main img[alt="PAI"], main video')
+  const sticker = [...document.querySelectorAll('button')]
+    .find(b => /handbook|manual/i.test(b.getAttribute('aria-label') || ''))
+  if (mascot && sticker) {
+    const m = mascot.getBoundingClientRect(), s = sticker.getBoundingClientRect()
+    if (m.height > 0 && s.height > 0 && s.top >= m.bottom - 8)
+      out.issues.push({ type: 'sticker wrapped below greeting',
+        stickerTop: Math.round(s.top), mascotBottom: Math.round(m.bottom) })
   }
   // content wider than the screen
   for (const e of document.querySelectorAll('body *')) {

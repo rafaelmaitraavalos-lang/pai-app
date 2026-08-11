@@ -69,10 +69,10 @@ export default function MiddleSchoolHome() {
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
 
         {/* PAI mascot greeting */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28, padding: '0 4px' }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
-          <div>
-            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em', overflowWrap: 'anywhere' }}>
               {username ? `Hey, ${username}!` : 'Hey there!'}
             </div>
             <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>Ready to learn about AI?</div>

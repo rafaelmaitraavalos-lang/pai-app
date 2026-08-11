@@ -148,10 +148,10 @@ export default function ElementaryHome() {
         )}
 
         {/* PAI mascot greeting */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28, padding: '0 4px' }}>
           <AutoplayVideo src="/pig.mp4" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
-          <div>
-            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em', overflowWrap: 'anywhere' }}>
               {username ? (isPT ? `Olá, ${username}!` : `Hey, ${username}!`) : (isPT ? 'Olá!' : 'Hey there!')}
             </div>
             <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>

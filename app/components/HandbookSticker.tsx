@@ -19,9 +19,13 @@ const POINTS = Array.from({ length: SPIKES * 2 }, (_, i) => {
   return `${(64 + r * Math.cos(a)).toFixed(2)},${(64 + r * Math.sin(a)).toFixed(2)}`
 }).join(' ')
 
-export default function HandbookSticker({ size = 116 }: { size?: number }) {
+export default function HandbookSticker({ size }: { size?: number }) {
   const [isPT, setIsPT] = useState(false)
   useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+
+  // No fixed size → responsive: small enough on phones to share a row with
+  // the mascot greeting (Sonali: the 116px version stacked into a third row).
+  const dim = size ? `${size}px` : 'clamp(68px, 18vw, 96px)'
 
   const lines: [string, number, number][] = isPT
     ? [['BÔNUS', 46, 15], ['MANUAL', 76, 24], ['DE IA', 98, 14]]
@@ -40,7 +44,7 @@ export default function HandbookSticker({ size = 116 }: { size?: number }) {
       onMouseEnter={e => (e.currentTarget.style.transform = 'rotate(-4deg) scale(1.06)')}
       onMouseLeave={e => (e.currentTarget.style.transform = 'rotate(-8deg)')}
     >
-      <svg width={size} height={size} viewBox="0 0 128 128" role="img" aria-hidden="true">
+      <svg style={{ width: dim, height: dim }} viewBox="0 0 128 128" role="img" aria-hidden="true">
         <polygon points={POINTS} fill={BLACK} />
         {lines.map(([txt, y, fs]) => (
           <text key={txt} x="64" y={y} textAnchor="middle" fill={GREEN}

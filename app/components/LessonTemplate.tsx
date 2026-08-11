@@ -277,13 +277,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                 <span style={{ color: BLACK }}>{isPT ? 'Questionário' : 'Quiz'}</span>
                 <span style={{ color: FAINT }}>·</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
                 <span style={{ color: FAINT }}>·</span>
                 <span style={{ color: DIM }}>{title}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
                 <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{qIndex + 1} / {questions.length}</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>{ui.skip}</button>
               </div>
             </div>
             <div style={{ borderTop: `1px solid ${BLACK}` }} />
@@ -372,9 +372,13 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <div style={{ background: BLACK, padding: '6px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 32, height: 32, objectFit: 'contain' }} />
-          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px 8px', margin: '-12px -8px', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
+          {/* Tap areas inflate 12px outward but only 6px toward the content
+              below — the scaled slide kicker can sit right under this bar,
+              and symmetric 12px inflation made the two rows' invisible hit
+              boxes overlap (ambiguous taps at 280/412px, found 2026-08-04). */}
+          <button onClick={() => router.push(homeRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px 8px 6px', margin: '-12px -8px -6px', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         </div>
-        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6, padding: '12px 8px', margin: '-12px -8px' }}>
+        <button onClick={() => router.push(currentWorldRoute)} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6, padding: '12px 8px 6px', margin: '-12px -8px -6px' }}>
           {ui.backWorld}
         </button>
       </div>
@@ -393,7 +397,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{tagLabel(stop.tag)}</span>
               <span style={{ color: FAINT }}>·</span>
-              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '12px 8px', margin: '-12px -8px' }}>
+              <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>
                 {isPT ? 'Aula' : 'Lesson'} {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
@@ -402,7 +406,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
               {stop.year && <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{stop.year}</span>}
               <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>{stopIndex + 1} / {stops.length}</span>
-              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '12px 8px', margin: '-12px -8px' }}>{ui.skip}</button>
+              <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: FAINT, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>{ui.skip}</button>
             </div>
           </div>
           <div style={{ borderTop: `1px solid ${BLACK}` }} />
