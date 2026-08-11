@@ -12,6 +12,7 @@ import { ELEMENTARY_WORLDS, ELEMENTARY_LESSONS, MIDDLE_SCHOOL_LESSONS, ELEMENTAR
 import { lessonTrack, isPTTrack } from '../data/track'
 import { useTrackGuard } from './useTrackGuard'
 import AutoplayVideo from './AutoplayVideo'
+import HandbookSticker from './HandbookSticker'
 
 export interface Stop {
   tag:    string
@@ -210,6 +211,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
         <div style={{ width: '100%', maxWidth: 480, padding: '0 7vw', textAlign: 'center' }}>
           <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>{ui.lessonComplete}</div>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 18px' }}>
+            <HandbookSticker size={96} />
+          </div>
           <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
             <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
             <p style={{ fontFamily: DISP, fontSize: 20, color: DIM, margin: '4px 0 0', letterSpacing: '0.06em' }}>XP</p>

@@ -213,38 +213,6 @@ function EntryView({ entry, onBack, isPT, tourIdx, totalStarters, onTourAdvance 
 
 // ── Handbook bar + spotlight ──────────────────────────────────────────────────
 
-function HBButton({ onClick }: { onClick: () => void }) {
-  const [isPT, setIsPT] = useState(false)
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
-
-  return (
-    // Sits inside the existing black top bar every page already renders —
-    // centered in the gap between the PAI logo and the "Home"/"World" link.
-    <div style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 48, pointerEvents: 'none' }}>
-      <button
-        onClick={onClick}
-        aria-label="Open bonus content"
-        style={{
-          pointerEvents: 'auto',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          padding: '10px 10px 6px',
-          touchAction: 'manipulation',
-        }}
-      >
-        <span style={{ fontFamily: BODY, fontSize: 7, letterSpacing: '0.14em', textTransform: 'uppercase', color: GREEN, userSelect: 'none' }}>
-          {isPT ? 'CONTEÚDO BÔNUS' : 'BONUS CONTENT'}
-        </span>
-        <span style={{ fontFamily: DISP, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: GREEN, userSelect: 'none', lineHeight: 1 }}>
-          {isPT ? 'MANUAL DE IA' : 'AI HANDBOOK'}
-        </span>
-      </button>
-    </div>
-  )
-}
-
 // ── Provider ──────────────────────────────────────────────────────────────────
 
 export default function HandbookProvider() {
@@ -289,6 +257,20 @@ export default function HandbookProvider() {
     setUnlockedIds(ids)
   }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // HandbookSticker (any page) dispatches this instead of prop-drilling.
+  // Declared HERE with the other hooks — before any early return — or React's
+  // hook order breaks (Rules of Hooks).
+  useEffect(() => {
+    const onOpen = () => {
+      setSelectedEntry(null)
+      setSelectedIdx(-1)
+      setOpen(true)
+      setTimeout(() => setVisible(true), 20)
+    }
+    window.addEventListener('pai:open-handbook', onOpen)
+    return () => window.removeEventListener('pai:open-handbook', onOpen)
+  }, [])
+
   // Don't hide on /home, /elementary/home, or /games — only hide on actual lesson/game pages
   const focusedRoute = /^\/(lesson\/|games\/[^/]+|complete|elementary\/lesson|elementary\/world)/.test(pathname)
   if (!mounted || pathname === '/') return null
@@ -322,11 +304,12 @@ export default function HandbookProvider() {
     else openPopup()
   }
 
+
   const { starters } = getEntries(level, isPT)
 
   return (
     <>
-      {!focusedRoute && <HBButton onClick={handleHBClick} />}
+      {/* header trigger removed 2026-08-04: it was position:fixed at 50% and printed over usernames on mobile — the HandbookSticker (in page flow) opens the handbook now */}
 
       {open && (
         <>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ELEMENTARY_WORLDS, MIDDLE_SCHOOL_WORLD_IDS_PT } from '../../data/elementary'
 import { useTrackGuard } from '../../components/useTrackGuard'
+import HandbookSticker from '../../components/HandbookSticker'
 
 const GAMES = [
   { title: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
@@ -51,7 +52,7 @@ export default function MiddlePtHome() {
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <button onClick={() => router.push('/elementary/middle-pt')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          {username && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{username}</span>}
+          {username && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7, maxWidth: '34vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{username}</span>}
           <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>Sobre</Link>
           <button onClick={signOut} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
             Sair
@@ -62,7 +63,7 @@ export default function MiddlePtHome() {
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
 
         {/* PAI mascot greeting — every other localized home has one */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 28, padding: '0 4px' }}>
           <img src="/pai-mascot.png" alt="PAI" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
           <div>
             <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
@@ -70,6 +71,7 @@ export default function MiddlePtHome() {
             </div>
             <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>Pronto para aprender sobre IA?</div>
           </div>
+          <HandbookSticker />
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>

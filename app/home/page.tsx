@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { WORLDS, WORLD_IDS, getWorldTitle } from '../data'
 import { loadProgress } from '@/lib/progress'
 import { useTrackGuard } from '../components/useTrackGuard'
+import HandbookSticker from '../components/HandbookSticker'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
 const BODY  = "var(--font-body, system-ui, sans-serif)"
@@ -66,7 +67,7 @@ export default function Home() {
         <button onClick={() => router.push('/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {username && (
-            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>
+            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7, maxWidth: '34vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {username}
             </span>
           )}
@@ -83,6 +84,10 @@ export default function Home() {
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+          <HandbookSticker />
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Conteúdo' : 'Contents'}</span>

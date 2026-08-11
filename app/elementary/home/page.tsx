@@ -7,6 +7,7 @@ import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDL
 import { studentTrack } from '../../data/track'
 import { useTrackGuard } from '../../components/useTrackGuard'
 import AutoplayVideo from '../../components/AutoplayVideo'
+import HandbookSticker from '../../components/HandbookSticker'
 
 const GAMES = [
   { title: 'Signal Drop',   titlePT: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
@@ -102,7 +103,7 @@ export default function ElementaryHome() {
         <button onClick={() => router.push('/elementary/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {username && (
-            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7 }}>{username}</span>
+            <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7, maxWidth: '34vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{username}</span>
           )}
           <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>
             {isPT ? 'Sobre' : 'About'}
@@ -147,7 +148,7 @@ export default function ElementaryHome() {
         )}
 
         {/* PAI mascot greeting */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, padding: '0 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 28, padding: '0 4px' }}>
           <AutoplayVideo src="/pig.mp4" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
           <div>
             <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
@@ -157,6 +158,7 @@ export default function ElementaryHome() {
               {isPT ? 'Pronto para aprender sobre IA?' : 'Ready to learn about AI?'}
             </div>
           </div>
+          <HandbookSticker />
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
