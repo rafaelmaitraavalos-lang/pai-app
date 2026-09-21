@@ -19,8 +19,11 @@ const COUNTRIES = [
   { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
+const SPANISH = { flag: '🇪🇸', name: 'Español', lang: 'es' }
+
 const GRADES    = ['elem', 'middle', 'high']     // English stages
 const GRADES_PT = ['fund1', 'fund2', 'medio']   // Brazilian stages
+const GRADES_ES = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'] // Spanish per-grade
 const USAGE_TILES = [
   'ChatGPT','YouTube','Siri / Alexa','Netflix / Spotify',
   'Google Search','TikTok / Instagram','Midjourney / DALL-E','Google Maps',
@@ -357,6 +360,32 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
                 />
               </div>
+
+              {/* Spanish — new option, below PAI */}
+              <div style={{ position: 'relative' }}>
+                <div style={{
+                  position: 'absolute', top: -10, right: 14, zIndex: 1,
+                  background: GREEN, color: BLACK,
+                  fontFamily: DISP, fontSize: 9, letterSpacing: '0.08em',
+                  padding: '3px 8px', border: `1.5px solid ${BLACK}`,
+                  transform: 'rotate(-4deg)',
+                }}>
+                  NEW!
+                </div>
+                <button onClick={() => selectCountry(SPANISH)} style={{
+                  display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                  width: '100%', padding: '18px 8px', gap: 12,
+                  background: country?.name === SPANISH.name ? BLACK : GREY,
+                  color: country?.name === SPANISH.name ? '#fff' : BLACK,
+                  border: `1.5px solid ${BLACK}`,
+                  boxShadow: country?.name === SPANISH.name ? 'none' : `3px 3px 0 0 ${BLACK}`,
+                  transform: country?.name === SPANISH.name ? 'translate(3px,3px)' : 'none',
+                  cursor: 'pointer', transition: 'all 0.12s',
+                }}>
+                  <span style={{ fontSize: 32, lineHeight: 1 }}>{SPANISH.flag}</span>
+                  <span style={{ fontFamily: DISP, fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>{SPANISH.name}</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -450,7 +479,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
 
           {/* 4: Grade */}
           {screen === 4 && (() => {
-            const keys = country?.lang === 'pt' ? GRADES_PT : GRADES
+            const keys = country?.lang === 'pt' ? GRADES_PT : country?.lang === 'es' ? GRADES_ES : GRADES
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>

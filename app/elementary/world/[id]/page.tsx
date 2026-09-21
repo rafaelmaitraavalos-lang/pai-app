@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../../../data/elementary'
+import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, ELEMENTARY_WORLD_IDS_ES } from '../../../data/elementary'
 import { worldTrack, isPTTrack } from '../../../data/track'
 import { useTrackGuard } from '../../../components/useTrackGuard'
 
@@ -22,6 +22,7 @@ export default function ElementaryWorldPage() {
   // Language comes from the CONTENT id, not localStorage — this page must look
   // the same no matter which student reaches it or how.
   const isPT    = isPTTrack(track)
+  const isES    = track === 'elem-es'
   const isMiddleWorld = track === 'middle-en' || track === 'middle-pt'
   const allowed = useTrackGuard(track)
   const [done, setDone] = useState<Record<number, boolean>>({})
@@ -43,7 +44,7 @@ export default function ElementaryWorldPage() {
 
   const activeId     = world.modules.find(m => !done[m.id])?.id ?? null
   const worldComplete = world.modules.every(m => done[m.id])
-  const worldIds      = isPT ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
+  const worldIds      = isPT ? ELEMENTARY_WORLD_IDS_PT : isES ? ELEMENTARY_WORLD_IDS_ES : ELEMENTARY_WORLD_IDS
   const worldIdx      = worldIds.indexOf(worldId)
   const nextWorldId   = worldIdx >= 0 && worldIdx < worldIds.length - 1 ? worldIds[worldIdx + 1] : null
 
@@ -51,7 +52,7 @@ export default function ElementaryWorldPage() {
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY, display: 'flex', flexDirection: 'column' }}>
       <div style={{ background: BLACK, padding: '8px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <button onClick={() => router.push('/elementary/home')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</button>
-        <button onClick={() => router.push('/elementary/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>{isPT ? '← Início' : '← Home'}</button>
+        <button onClick={() => router.push('/elementary/home')} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.6 }}>{isPT ? '← Início' : isES ? '← Inicio' : '← Home'}</button>
       </div>
 
       <main style={{ maxWidth: 860, width: '100%', margin: '0 auto', padding: '24px 7vw 80px', paddingRight: 'calc(7vw + 12px)' }}>
@@ -65,21 +66,21 @@ export default function ElementaryWorldPage() {
           <div style={{ background: BLACK, border: `1.5px solid ${GREEN}`, boxShadow: `6px 6px 0 0 ${GREEN}`, padding: '20px 24px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <div>
               <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: GREEN, marginBottom: 4 }}>
-                {isPT ? 'Mundo Concluído ✓' : 'World Complete ✓'}
+                {isPT ? 'Mundo Concluído ✓' : isES ? 'Mundo Completo ✓' : 'World Complete ✓'}
               </div>
               <div style={{ fontFamily: DISP, fontSize: 16, color: '#fff', letterSpacing: '-0.01em' }}>
-                {isPT ? 'Você completou todos os módulos!' : 'You finished every module!'}
+                {isPT ? 'Você completou todos os módulos!' : isES ? '¡Completaste todos los módulos!' : 'You finished every module!'}
               </div>
             </div>
             {nextWorldId ? (
               <button onClick={() => router.push(`/elementary/world/${nextWorldId}`)}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '12px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, flexShrink: 0 }}>
-                {isPT ? 'Próximo Mundo →' : 'Next World →'}
+                {isPT ? 'Próximo Mundo →' : isES ? 'Próximo Mundo →' : 'Next World →'}
               </button>
             ) : (
               <button onClick={() => router.push('/elementary/home')}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '12px 22px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, flexShrink: 0 }}>
-                {isPT ? '← Início' : '← Home'}
+                {isPT ? '← Início' : isES ? '← Inicio' : '← Home'}
               </button>
             )}
           </div>
@@ -103,14 +104,14 @@ export default function ElementaryWorldPage() {
                   {isGame ? '🎮' : String(i + 1).padStart(2, '0')}
                 </span>
                 <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: isGame ? GREEN : BLACK }}>{m.title}</span>
-                {!isGame && isDone && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Feito' : 'Done'}</span>}
+                {!isGame && isDone && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, marginRight: 14 }}>{isPT ? 'Feito' : isES ? 'Hecho' : 'Done'}</span>}
                 {!isGame && isCurrent && !isDone && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', marginRight: 14 }}>
                     <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: GREEN, boxShadow: `0 0 0 3px ${GREEN}44` }} />
-                    {isPT ? 'Atual' : 'Current'}
+                    {isPT ? 'Atual' : isES ? 'Actual' : 'Current'}
                   </span>
                 )}
-                {isGame && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : 'Play'}</span>}
+                {isGame && <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : isES ? 'Jugar' : 'Play'}</span>}
                 <span style={{ fontFamily: DISP, fontSize: 14, color: isGame ? GREEN : DIM }}>→</span>
               </div>
             )

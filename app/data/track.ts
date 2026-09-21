@@ -7,12 +7,12 @@
 
 import { ELEMENTARY_GRADES, MIDDLE_SCHOOL_GRADES, MIDDLE_SCHOOL_GRADES_PT } from './elementary'
 
-export type Track = 'elem-en' | 'elem-pt' | 'middle-en' | 'middle-pt' | 'high'
+export type Track = 'elem-en' | 'elem-pt' | 'elem-es' | 'middle-en' | 'middle-pt' | 'high'
 
 export function studentTrack(grade: string | null, lang: string | null): Track | null {
   if (!grade) return null
   if (MIDDLE_SCHOOL_GRADES_PT.has(grade)) return 'middle-pt'
-  if (ELEMENTARY_GRADES.has(grade)) return grade === 'fund1' || lang === 'pt' ? 'elem-pt' : 'elem-en'
+  if (ELEMENTARY_GRADES.has(grade)) return grade === 'fund1' || lang === 'pt' ? 'elem-pt' : lang === 'es' ? 'elem-es' : 'elem-en'
   if (MIDDLE_SCHOOL_GRADES.has(grade)) return 'middle-en'
   return 'high' // 'high', 'medio'
 }
@@ -20,7 +20,8 @@ export function studentTrack(grade: string | null, lang: string | null): Track |
 export function homeRoute(track: Track | null): string {
   switch (track) {
     case 'elem-en':
-    case 'elem-pt':  return '/elementary/home'
+    case 'elem-pt':
+    case 'elem-es':  return '/elementary/home'
     case 'middle-pt': return '/elementary/middle-pt'
     case 'middle-en': return '/middle/home'
     case 'high':      return '/home'
@@ -30,9 +31,11 @@ export function homeRoute(track: Track | null): string {
 
 // Lesson-id ranges, from app/data/elementary.ts remap() calls:
 //   101–128 elementary EN · 131–158 elementary PT · 161–164 abandoned PT draft
-//   211–258 middle EN · 311–358 middle PT · 9001+ shared games · rest = high school
+//   211–258 middle EN · 311–358 middle PT · 401–404 elementary ES ·
+//   9001+ shared games · rest = high school
 export function lessonTrack(id: number): Track | null {
   if (id >= 9001) return null // shared games
+  if (id >= 401 && id <= 404) return 'elem-es'
   if (id >= 311 && id <= 358) return 'middle-pt'
   if (id >= 211 && id <= 258) return 'middle-en'
   if (id >= 161 && id <= 164) return 'middle-pt'
@@ -42,6 +45,7 @@ export function lessonTrack(id: number): Track | null {
 }
 
 export function worldTrack(id: number): Track {
+  if (id === 401) return 'elem-es'
   if (id >= 261 && id <= 265) return 'middle-pt'
   if (id >= 201 && id <= 205) return 'middle-en'
   if (id >= 107 && id <= 110) return 'middle-pt'

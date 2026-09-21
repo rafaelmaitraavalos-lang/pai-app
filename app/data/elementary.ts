@@ -5,6 +5,7 @@ import _we6 from './lessons/we6'
 import _we1_pt from './lessons/we1_pt'
 import _we5_pt from './lessons/we5_pt'
 import _we6_pt from './lessons/we6_pt'
+import _we1_es from './lessons/we1_es'
 import _wm_w1 from './lessons/wm_w1'
 import _wm_w2 from './lessons/wm_w2'
 import _wm_w3 from './lessons/wm_w3'
@@ -45,6 +46,9 @@ const W105_LESSONS = remap(_we5_pt, 141, 105) // 141–148
 // World 106 — Como a PAI Pensa (Avançado) — PT (3–5 equivalent)
 const W106_LESSONS = remap(_we6_pt, 151, 106) // 151–158
 
+// World 401 — Conoce la IA (Spanish, elementary)
+const W401_LESSONS = remap(_we1_es, 401, 401) // 401–404
+
 // Worlds 201-205 — Middle School English AI Curriculum (5 worlds × 8 modules)
 const W201_LESSONS = _wm_w1  // module IDs 211-218
 const W202_LESSONS = _wm_w2  // module IDs 221-228
@@ -71,6 +75,12 @@ const GAMES_PT = [
   { id: 9001, title: 'Queda de Sinal',  type: 'game' as const, gameUrl: '/games/signal-drop' },
   { id: 9002, title: 'Conserte o Robô', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
   { id: 9003, title: 'Monte um Robô',   type: 'game' as const, gameUrl: '/games/build-a-robot' },
+]
+
+const GAMES_ES = [
+  { id: 9001, title: 'Caída de Señal',   type: 'game' as const, gameUrl: '/games/signal-drop' },
+  { id: 9002, title: 'Arregla al Robot', type: 'game' as const, gameUrl: '/games/fix-the-robot' },
+  { id: 9003, title: 'Arma un Robot',    type: 'game' as const, gameUrl: '/games/build-a-robot' },
 ]
 
 // ── Elementary world definitions ──────────────────────────────────────────────
@@ -112,6 +122,12 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
     level: 'Elementary',
     modules: [...Object.values(W106_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_PT],
   },
+  401: {
+    id: 401,
+    title: 'Conoce la IA',
+    level: 'Elementary',
+    modules: [...Object.values(W401_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES_ES],
+  },
   // Middle School English — 5 Worlds × 8 Modules
   201: { id: 201, title: 'What Is AI?',              level: 'Intermediate', modules: [...Object.values(W201_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
   202: { id: 202, title: 'How AI Makes Decisions',   level: 'Intermediate', modules: [...Object.values(W202_LESSONS).map(l => ({ id: l.id, title: l.title })), ...GAMES] },
@@ -128,6 +144,7 @@ export const ELEMENTARY_WORLDS: Record<number, WorldData> = {
 
 export const ELEMENTARY_WORLD_IDS       = [101, 102, 103]
 export const ELEMENTARY_WORLD_IDS_PT    = [104, 105, 106]
+export const ELEMENTARY_WORLD_IDS_ES    = [401]
 export const MIDDLE_SCHOOL_WORLD_IDS_PT = [261, 262, 263, 264, 265]
 export const MIDDLE_SCHOOL_WORLD_IDS    = [201, 202, 203, 204, 205]
 
@@ -140,6 +157,7 @@ export const ELEMENTARY_LESSONS: Record<number, LessonData> = {
   ...W104_LESSONS,
   ...W105_LESSONS,
   ...W106_LESSONS,
+  ...W401_LESSONS,
 }
 
 export const MIDDLE_SCHOOL_LESSONS: Record<number, LessonData> = {
@@ -159,7 +177,7 @@ export const MIDDLE_SCHOOL_LESSONS: Record<number, LessonData> = {
 
 export const ELEMENTARY_GRADES       = new Set(['K', '1st', '2nd', '3rd', '4th', '5th', 'fund1', 'elem'])
 export const MIDDLE_SCHOOL_GRADES_PT = new Set(['fund2'])
-export const MIDDLE_SCHOOL_GRADES    = new Set(['middle'])
+export const MIDDLE_SCHOOL_GRADES    = new Set(['middle', '6th', '7th', '8th'])
 
 export function isElementaryGrade(grade: string | null): boolean {
   return ELEMENTARY_GRADES.has(grade ?? '')

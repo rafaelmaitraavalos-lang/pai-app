@@ -3,16 +3,16 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
+import { ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, ELEMENTARY_WORLD_IDS_ES, MIDDLE_SCHOOL_GRADES_PT } from '../../data/elementary'
 import { studentTrack } from '../../data/track'
 import { useTrackGuard } from '../../components/useTrackGuard'
 import AutoplayVideo from '../../components/AutoplayVideo'
 import HandbookSticker from '../../components/HandbookSticker'
 
 const GAMES = [
-  { title: 'Signal Drop',   titlePT: 'Queda de Sinal',  gameUrl: '/games/signal-drop' },
-  { title: 'Fix the Robot', titlePT: 'Conserte o Robô', gameUrl: '/games/fix-the-robot' },
-  { title: 'Build-a-Robot', titlePT: 'Monte um Robô',   gameUrl: '/games/build-a-robot' },
+  { title: 'Signal Drop',   titlePT: 'Queda de Sinal',  titleES: 'Caída de Señal',   gameUrl: '/games/signal-drop' },
+  { title: 'Fix the Robot', titlePT: 'Conserte o Robô', titleES: 'Arregla al Robot', gameUrl: '/games/fix-the-robot' },
+  { title: 'Build-a-Robot', titlePT: 'Monte um Robô',   titleES: 'Arma un Robot',    gameUrl: '/games/build-a-robot' },
 ]
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -26,16 +26,18 @@ export default function ElementaryHome() {
   const router = useRouter()
   const allowed = useTrackGuard(s => {
     const t = studentTrack(s.grade, s.lang)
-    return t === 'elem-en' || t === 'elem-pt'
+    return t === 'elem-en' || t === 'elem-pt' || t === 'elem-es'
   })
   const [done, setDone]         = useState<Record<number, boolean>>({})
   const [isPT, setIsPT]         = useState(false)
+  const [isES, setIsES]         = useState(false)
   const [username, setUsername] = useState('')
   const [grade, setGrade]       = useState<string | null>(null)
   const [levelingUp, setLevelingUp] = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    setIsES(localStorage.getItem('pai_lang') === 'es')
     setUsername(localStorage.getItem('pai_username') ?? '')
     setGrade(localStorage.getItem('pai_grade'))
     const map: Record<number, boolean> = {}
@@ -51,9 +53,9 @@ export default function ElementaryHome() {
     router.replace('/')
   }
 
-  const worldIds = isPT ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
-  const label     = isPT ? 'Seus Mundos' : 'Your Worlds'
-  const startHere = isPT ? 'Começar aqui' : 'Start here'
+  const worldIds = isPT ? ELEMENTARY_WORLD_IDS_PT : isES ? ELEMENTARY_WORLD_IDS_ES : ELEMENTARY_WORLD_IDS
+  const label     = isPT ? 'Seus Mundos' : isES ? 'Tus Mundos' : 'Your Worlds'
+  const startHere = isPT ? 'Começar aqui' : isES ? 'Empezar aquí' : 'Start here'
 
   // Compute which worlds are fully complete
   const worldDone: Record<number, boolean> = {}
@@ -106,10 +108,10 @@ export default function ElementaryHome() {
             <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, opacity: 0.7, maxWidth: '34vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{username}</span>
           )}
           <Link href="/about" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, textDecoration: 'none' }}>
-            {isPT ? 'Sobre' : 'About'}
+            {isPT ? 'Sobre' : isES ? 'Acerca de' : 'About'}
           </Link>
           <button onClick={signOut} style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff', opacity: 0.4, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            {isPT ? 'Sair' : 'Sign out'}
+            {isPT ? 'Sair' : isES ? 'Cerrar sesión' : 'Sign out'}
           </button>
         </div>
       </div>
@@ -120,14 +122,16 @@ export default function ElementaryHome() {
           <div style={{ background: BLACK, border: `1.5px solid ${GREEN}`, boxShadow: `8px 8px 0 0 ${GREEN}`, padding: '24px 28px', marginBottom: 32, display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
               <div style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: GREEN, marginBottom: 8 }}>
-                {isPT ? '🎉 Você terminou tudo!' : '🎉 You finished everything!'}
+                {isPT ? '🎉 Você terminou tudo!' : isES ? '🎉 ¡Terminaste todo!' : '🎉 You finished everything!'}
               </div>
               <div style={{ fontFamily: DISP, fontSize: 22, color: '#fff', lineHeight: 1.2, letterSpacing: '-0.01em', marginBottom: 8 }}>
-                {isPT ? `Pronto para o próximo nível?` : `Ready to level up?`}
+                {isPT ? `Pronto para o próximo nível?` : isES ? '¿Listo para subir de nivel?' : `Ready to level up?`}
               </div>
               <div style={{ fontFamily: BODY, fontSize: 14, color: '#aaa', lineHeight: 1.55 }}>
                 {isPT
                   ? `Você completou todos os mundos deste nível. Quer passar para o ${nextLevelName}?`
+                  : isES
+                  ? `Completaste todos los mundos de este nivel. ¿Quieres pasar a ${nextLevelName}?`
                   : `You've completed every world at this level. Want to move up to ${nextLevelName}?`}
               </div>
             </div>
@@ -136,12 +140,12 @@ export default function ElementaryHome() {
                 onClick={levelUp}
                 disabled={levelingUp}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: GREEN, color: BLACK, padding: '13px 28px', border: 'none', cursor: 'pointer', boxShadow: `4px 4px 0 0 ${GREEN}66`, opacity: levelingUp ? 0.6 : 1 }}>
-                {levelingUp ? '...' : (isPT ? `Ir para ${nextLevelName} →` : `Move to ${nextLevelName} →`)}
+                {levelingUp ? '...' : (isPT ? `Ir para ${nextLevelName} →` : isES ? `Ir a ${nextLevelName} →` : `Move to ${nextLevelName} →`)}
               </button>
               <button
                 onClick={() => router.push('/elementary/home')}
                 style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'none', color: '#666', padding: '13px 20px', border: `1px solid #333`, cursor: 'pointer' }}>
-                {isPT ? 'Ficar aqui' : 'Stay here'}
+                {isPT ? 'Ficar aqui' : isES ? 'Quedarme aquí' : 'Stay here'}
               </button>
             </div>
           </div>
@@ -152,10 +156,12 @@ export default function ElementaryHome() {
           <AutoplayVideo src="/pig.mp4" style={{ width: 80, height: 80, objectFit: 'contain', flexShrink: 0 }} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontFamily: DISP, fontSize: 22, color: BLACK, lineHeight: 1.1, letterSpacing: '-0.01em', overflowWrap: 'anywhere' }}>
-              {username ? (isPT ? `Olá, ${username}!` : `Hey, ${username}!`) : (isPT ? 'Olá!' : 'Hey there!')}
+              {username
+                ? (isPT ? `Olá, ${username}!` : isES ? `¡Hola, ${username}!` : `Hey, ${username}!`)
+                : (isPT ? 'Olá!' : isES ? '¡Hola!' : 'Hey there!')}
             </div>
             <div style={{ fontFamily: BODY, fontSize: 13, color: DIM, marginTop: 4 }}>
-              {isPT ? 'Pronto para aprender sobre IA?' : 'Ready to learn about AI?'}
+              {isPT ? 'Pronto para aprender sobre IA?' : isES ? '¿Listo para aprender sobre IA?' : 'Ready to learn about AI?'}
             </div>
           </div>
           <HandbookSticker />
@@ -182,7 +188,7 @@ export default function ElementaryHome() {
                 <span style={{ fontFamily: DISP, fontSize: 17, letterSpacing: '-0.01em', flex: 1, color: isComplete ? GREEN : BLACK }}>{world.title}</span>
                 {isComplete && (
                   <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>
-                    {isPT ? 'Concluído ✓' : 'Done ✓'}
+                    {isPT ? 'Concluído ✓' : isES ? 'Hecho ✓' : 'Done ✓'}
                   </span>
                 )}
                 {isActive && !isComplete && (
@@ -199,7 +205,7 @@ export default function ElementaryHome() {
 
         {/* Games section */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, margin: '32px 0 16px' }}>
-          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Jogos' : 'Games'}</span>
+          <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: DIM }}>{isPT ? 'Jogos' : isES ? 'Juegos' : 'Games'}</span>
           <div style={{ flex: 1, borderTop: `1px solid ${FAINT}` }} />
         </div>
         <div style={{ paddingLeft: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -209,8 +215,8 @@ export default function ElementaryHome() {
                 background: BLACK, border: `1.5px solid ${BLACK}`, boxShadow: `6px 6px 0 0 ${BLACK}`,
                 cursor: 'pointer', userSelect: 'none' }}>
               <span style={{ fontFamily: BODY, fontSize: 12, color: GREEN, width: 36, flexShrink: 0 }}>🎮</span>
-              <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: GREEN }}>{isPT ? g.titlePT : g.title}</span>
-              <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : 'Play'}</span>
+              <span style={{ fontFamily: DISP, fontSize: 16, letterSpacing: '-0.01em', flex: 1, color: GREEN }}>{isPT ? g.titlePT : isES ? g.titleES : g.title}</span>
+              <span style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: GREEN, marginRight: 14 }}>{isPT ? 'Jogar' : isES ? 'Jugar' : 'Play'}</span>
               <span style={{ fontFamily: DISP, fontSize: 14, color: GREEN }}>→</span>
             </div>
           ))}
