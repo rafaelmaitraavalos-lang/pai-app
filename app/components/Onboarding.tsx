@@ -133,7 +133,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
   const submitUsername = async () => {
     if (usernameLoading) return  // double Enter / double click must not double-POST
     const clean = username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
-    if (!clean) { setUsernameError(country?.lang === 'pt' ? 'Por favor, insira um nome de usuário' : 'Please enter a username'); return }
+    if (!clean) { setUsernameError(country?.lang === 'pt' ? 'Por favor, insira um nome de usuário' : country?.lang === 'es' ? 'Por favor, ingresa un nombre de usuario' : 'Please enter a username'); return }
     setUsernameLoading(true)
     setUsernameError('')
     try {
@@ -149,6 +149,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       const data = await res.json()
       if (!res.ok) {
         const isPT = country?.lang === 'pt'
+        const isES = country?.lang === 'es'
         // Keys must be the EXACT strings /api/auth sends — adversarial review
         // found the old keys had drifted, so Portuguese kids got English errors.
         const errMap: Record<string, string> = isPT ? {
@@ -156,8 +157,13 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
           "We don't recognize that username. Check the spelling?": 'Não reconhecemos esse nome de usuário. Será que digitou certo?',
           'Username required': 'Nome de usuário obrigatório',
           'Invalid username': 'Nome de usuário inválido',
+        } : isES ? {
+          'Someone already has that one — try another!': '¡Alguien ya tiene ese — prueba con otro!',
+          "We don't recognize that username. Check the spelling?": 'No reconocemos ese nombre de usuario. ¿Revisaste la ortografía?',
+          'Username required': 'Nombre de usuario obligatorio',
+          'Invalid username': 'Nombre de usuario inválido',
         } : {}
-        setUsernameError(errMap[data.error] ?? data.error ?? (isPT ? 'Algo deu errado' : 'Something went wrong'))
+        setUsernameError(errMap[data.error] ?? data.error ?? (isPT ? 'Algo deu errado' : isES ? 'Algo salió mal' : 'Something went wrong'))
         return
       }
 
@@ -195,7 +201,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
       setVisible(false)
       setTimeout(() => setScreen(s => s + 1), 220)
     } catch {
-      setUsernameError(country?.lang === 'pt' ? 'Algo deu errado. Verifique sua conexão.' : 'Something went wrong. Check your connection.')
+      setUsernameError(country?.lang === 'pt' ? 'Algo deu errado. Verifique sua conexão.' : country?.lang === 'es' ? 'Algo salió mal. Revisa tu conexión.' : 'Something went wrong. Check your connection.')
     } finally {
       setUsernameLoading(false)
     }
@@ -468,7 +474,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   return (
                     <p style={{ fontFamily: BODY, fontSize: 11, color: changed ? '#b45309' : DIM, margin: '8px 0 0' }}>
                       {changed
-                        ? (country?.lang === 'pt' ? `Seu nome de usuário será: ${clean}` : `Your username will be: ${clean}`)
+                        ? (country?.lang === 'pt' ? `Seu nome de usuário será: ${clean}` : country?.lang === 'es' ? `Tu nombre de usuario será: ${clean}` : `Your username will be: ${clean}`)
                         : (L.usernameHint ?? 'Letters, numbers, and underscores only.')}
                     </p>
                   )
