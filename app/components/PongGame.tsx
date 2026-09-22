@@ -335,6 +335,19 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
       if (g.by - BALL_R < 0)   { g.by = BALL_R;     g.vy =  Math.abs(g.vy); sfx.ballWall() }
       if (g.by + BALL_R > H)   { g.by = H - BALL_R; g.vy = -Math.abs(g.vy); sfx.ballWall() }
 
+      // Ball vs red dot — deflects the ball back toward whoever it came from,
+      // instead of the dot only being a hazard for the player's paddle.
+      const hitDot = g.redDots.find(d => {
+        const dx = g.bx - d.x, dy = g.by - d.y
+        return dx * dx + dy * dy < (BALL_R + DOT_R) ** 2
+      })
+      if (hitDot) {
+        g.vx = -g.vx
+        sfx.ballWall()
+        addPop('↩', g.bx / W, g.by / H)
+        g.redDots = g.redDots.filter(d => d.id !== hitDot.id)
+      }
+
       // AI paddle — always hits
       if (g.bx - BALL_R <= AI_X + PADDLE_W && g.vx < 0) {
         if (Math.abs(g.by - g.aiY) < PADDLE_H / 2 + BALL_R) {
