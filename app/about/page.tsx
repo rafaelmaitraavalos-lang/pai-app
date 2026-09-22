@@ -75,6 +75,38 @@ const people = {
       ],
     },
   ],
+  es: [
+    {
+      name:     'Rafa Avalos',
+      age:      '14 años',
+      portrait: '/images/rafa-portrait-v2.png',
+      bio: [
+        'Rafa Avalos es un estudiante de catorce años del condado de Marin, en el norte de California. Es guatemalteco e indio, y ha vivido en varios países y comunidades, incluidos dos años en Madrid. Sus intereses abarcan el desarrollo de software, la música y el diseño de herramientas que hacen accesibles las ideas complejas.',
+        'Es estudiante de Stanford Online High School y ha estado creando software, aplicaciones y herramientas desde pequeño.',
+        'Fuera de su trabajo académico y de proyectos, a Rafa le gusta correr, navegar a vela y hacer música.',
+      ],
+    },
+    {
+      name:     'Ryan Avalos',
+      age:      '16 años',
+      portrait: '/images/ryan-portrait.png',
+      bio: [
+        'Ryan Avalos es una estudiante de dieciséis años del Área de la Bahía, en el norte de California. Es guatemalteca e india. Sus intereses abarcan las ciencias y las artes, en especial la medicina, la cirugía, la literatura, la escritura creativa y la programación.',
+        'Es fundadora y editora de Lost & Found, una revista literaria estacional que crea un espacio para la autoexpresión honesta a través del lenguaje. Ryan también es integrante de Search and Rescue y le apasiona el trabajo enfocado en la comunidad.',
+        'Fuera de sus actividades académicas y extracurriculares, disfruta correr, pasar tiempo al aire libre y explorar las conexiones entre la ciencia, la narrativa, la tecnología y la comunidad.',
+      ],
+    },
+    {
+      name:     'Taj Maitra Avalos',
+      age:      '10 años',
+      portrait: '/images/taj-portrait.png',
+      bio: [
+        'Taj Maitra Avalos es una niña curiosa y creativa de diez años, apasionada tanto por los números como por la música. Su materia favorita son las matemáticas, y le gusta correr, navegar a vela, jugar fútbol y escuchar audiolibros siempre que puede.',
+        'Pianista y compositora consumada, Taj ha recibido reconocimiento estatal por sus composiciones musicales originales.',
+        'Ya sea resolviendo un problema de matemáticas, escribiendo música o saliendo al agua, ella aporta enfoque, imaginación y entusiasmo a todo lo que hace.',
+      ],
+    },
+  ],
 }
 
 export default function AboutPage() {
@@ -84,10 +116,11 @@ export default function AboutPage() {
   const [lang, setLang] = useState<string | null>(null)
   useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
   const isPT = lang === 'pt'
+  const isES = lang === 'es'
 
   if (lang === null) return null
 
-  const list = isPT ? people.pt : people.en
+  const list = isPT ? people.pt : isES ? people.es : people.en
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: BODY }}>
@@ -96,7 +129,7 @@ export default function AboutPage() {
       <div style={{ background: BLACK, padding: '10px 7vw', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/home" style={{ textDecoration: 'none', fontFamily: DISP, fontSize: 22, letterSpacing: '-0.02em', color: GREEN, lineHeight: 1 }}>PAI</Link>
         <Link href="/" style={{ fontFamily: DISP, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', opacity: 0.5, textDecoration: 'none' }}>
-          {isPT ? '← Início' : '← Home'}
+          {isES ? '← Inicio' : isPT ? '← Início' : '← Home'}
         </Link>
       </div>
 
@@ -105,16 +138,31 @@ export default function AboutPage() {
         {/* Title */}
         <div style={{ marginBottom: 48 }}>
           <h1 style={{ fontFamily: DISP, fontSize: 'clamp(2.4rem, 7vw, 4rem)', letterSpacing: '-0.03em', color: BLACK, margin: '0 0 14px', fontWeight: 400, lineHeight: 1.1 }}>
-            {isPT ? <>Feito por estudantes,<br />para estudantes.</> : <>Built by students,<br />for students.</>}
+            {isES ? <>Hecho por estudiantes,<br />para estudiantes.</> : isPT ? <>Feito por estudantes,<br />para estudantes.</> : <>Built by students,<br />for students.</>}
           </h1>
           <p style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: DIM, margin: 0 }}>
-            {isPT ? 'Sobre nós' : 'About us'}
+            {isES ? 'Sobre nosotros' : isPT ? 'Sobre nós' : 'About us'}
           </p>
         </div>
 
         {/* Mission statement */}
         <div style={{ borderLeft: `4px solid ${GREEN}`, paddingLeft: 28, marginBottom: 64 }}>
-          {isPT ? (
+          {isES ? (
+            <>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
+                ¡Hola! Somos tres hermanos —Ryan, Taj y Rafa— y creamos PAI. Como estudiantes educados en casa, compartimos la curiosidad de cómo la tecnología está cambiando la forma en que los jóvenes aprenden, crean y entienden el mundo que los rodea.
+              </p>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
+                A medida que la IA se volvió una parte más grande de la vida diaria, notamos que muchos niños la estaban usando sin haber recibido una explicación clara de cómo funciona realmente, dónde puede fallar o cómo usarla de forma responsable. Creamos PAI para hacer que esas ideas sean más fáciles de entender a través de una experiencia atractiva.
+              </p>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
+                Nuestro objetivo es ayudar a los jóvenes a entender la tecnología detrás de la IA, reconocer sus limitaciones, proteger su privacidad y usarla como una herramienta de aprendizaje en lugar de un atajo para evitarlo.
+              </p>
+              <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: 0 }}>
+                Creemos que los niños no deben ser simplemente usuarios pasivos de la nueva tecnología. Deben sentirse seguros para hacer preguntas, pensar de forma crítica y tomar decisiones conscientes sobre cómo la IA encaja en sus vidas.
+              </p>
+            </>
+          ) : isPT ? (
             <>
               <p style={{ fontFamily: BODY, fontSize: 17, lineHeight: 1.8, color: BLACK, margin: '0 0 16px' }}>
                 Olá! Somos três irmãos — Ryan, Taj e Rafa — e criamos o PAI. Como estudantes com ensino domiciliar, compartilhamos uma curiosidade sobre como a tecnologia está transformando a forma como os jovens aprendem, criam e entendem o mundo ao redor.
