@@ -90,6 +90,10 @@ export const GAME_TITLES_PT: Record<string, string> = {
   'dispatch':      'Despacho',
 }
 
+export const GAME_TITLES_ES: Record<string, string> = {
+  'signal-drop': 'Caída de Señal',
+}
+
 export const WORLD_NAMES: Record<number, string> = {
   1: 'Meet AI',
   2: 'How AI Thinks',

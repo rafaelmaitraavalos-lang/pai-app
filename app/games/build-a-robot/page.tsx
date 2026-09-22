@@ -147,7 +147,7 @@ function Robot({ b, size=220 }: { b:Build; size?:number }) {
 }
 
 // ─── BUILD PHASE ─────────────────────────────────────────────────────────────
-function BuildPhase({ b, setB, next, isPT }: { b:Build; setB:(x:Build)=>void; next:()=>void; isPT:boolean }) {
+function BuildPhase({ b, setB, next, isPT, isES }: { b:Build; setB:(x:Build)=>void; next:()=>void; isPT:boolean; isES:boolean }) {
   const C = b.bodyColor
   const upd = (k:keyof Build,v:string|number) => setB({...b,[k]:v})
   const cyc = <T extends string>(arr:T[],cur:T):T => arr[(arr.indexOf(cur)+1)%arr.length]
@@ -158,6 +158,12 @@ function BuildPhase({ b, setB, next, isPT }: { b:Build; setB:(x:Build)=>void; ne
   const HLP = {round:'Redonda',square:'Quadrada',dome:'Cúpula', helmet:'Capacete'}
   const MLP = {smile:'Sorriso',grill:'Grade',   speaker:'Falante', beak:'Bico'}
   const ALP = {basic:'Mãos',   claw:'Garras',   laser:'Laser'}
+  const HLE = {round:'Redonda',square:'Cuadrada',dome:'Cúpula', helmet:'Casco'}
+  const MLE = {smile:'Sonrisa',grill:'Rejilla', speaker:'Altavoz', beak:'Pico'}
+  const ALE = {basic:'Manos',  claw:'Garras',   laser:'Láser'}
+  const headLabel  = isES ? HLE[b.head]  : isPT ? HLP[b.head]  : HL[b.head]
+  const mouthLabel = isES ? MLE[b.mouth] : isPT ? MLP[b.mouth] : ML[b.mouth]
+  const armsLabel  = isES ? ALE[b.arms]  : isPT ? ALP[b.arms]  : AL[b.arms]
 
   const Cycler = ({emoji,label,val,onCyc}:{emoji:string;label:string;val:string;onCyc:()=>void}) => (
     <button onClick={onCyc} style={{display:'flex',alignItems:'center',justifyContent:'space-between',background:'#0e0e0e',border:`2px solid #222`,borderRadius:10,padding:'11px 14px',cursor:'pointer',width:'100%',transition:'border-color .12s'}}
@@ -184,46 +190,48 @@ function BuildPhase({ b, setB, next, isPT }: { b:Build; setB:(x:Build)=>void; ne
   return (
     <div style={S.page}>
       <div style={{fontFamily:'monospace',fontWeight:900,fontSize:22,color:C,letterSpacing:2,marginBottom:4,textShadow:`0 0 18px ${C}`}}>
-        {isPT?'MONTE SEU ROBÔ':'BUILD YOUR ROBOT'}
+        {isES?'ARMA TU ROBOT':isPT?'MONTE SEU ROBÔ':'BUILD YOUR ROBOT'}
       </div>
-      <div style={{fontFamily:'monospace',fontSize:10,color:'#333',letterSpacing:2,marginBottom:18}}>{isPT?'TOQUE + PARA ADICIONAR PEÇAS':'TAP + TO ADD PARTS'}</div>
+      <div style={{fontFamily:'monospace',fontSize:10,color:'#333',letterSpacing:2,marginBottom:18}}>{isES?'TOCA + PARA AGREGAR PIEZAS':isPT?'TOQUE + PARA ADICIONAR PEÇAS':'TAP + TO ADD PARTS'}</div>
 
       <div style={{filter:`drop-shadow(0 0 28px ${C}55)`,marginBottom:22}}>
         <Robot b={b} size={250}/>
       </div>
 
       <div style={{width:'100%',maxWidth:360,display:'flex',flexDirection:'column',gap:7}}>
-        <div style={{fontFamily:'monospace',fontSize:9,color:'#333',letterSpacing:2,textTransform:'uppercase' as const,marginBottom:1}}>{isPT?'FORMA':'SHAPE'}</div>
-        <Cycler emoji="🧢" label={isPT?'Cabeça':'Head'}  val={isPT?HLP[b.head]:HL[b.head]}   onCyc={()=>upd('head',  cyc(HEADS,b.head))}/>
-        <Cycler emoji="👄" label={isPT?'Boca':'Mouth'}   val={isPT?MLP[b.mouth]:ML[b.mouth]} onCyc={()=>upd('mouth', cyc(MOUTHS,b.mouth))}/>
-        <Cycler emoji="💪" label={isPT?'Braços':'Arms'}  val={isPT?ALP[b.arms]:AL[b.arms]}   onCyc={()=>upd('arms',  cyc(ARMS,b.arms))}/>
+        <div style={{fontFamily:'monospace',fontSize:9,color:'#333',letterSpacing:2,textTransform:'uppercase' as const,marginBottom:1}}>{isES?'FORMA':isPT?'FORMA':'SHAPE'}</div>
+        <Cycler emoji="🧢" label={isES?'Cabeza':isPT?'Cabeça':'Head'}  val={headLabel}   onCyc={()=>upd('head',  cyc(HEADS,b.head))}/>
+        <Cycler emoji="👄" label={isES?'Boca':isPT?'Boca':'Mouth'}   val={mouthLabel} onCyc={()=>upd('mouth', cyc(MOUTHS,b.mouth))}/>
+        <Cycler emoji="💪" label={isES?'Brazos':isPT?'Braços':'Arms'}  val={armsLabel}   onCyc={()=>upd('arms',  cyc(ARMS,b.arms))}/>
 
-        <div style={{fontFamily:'monospace',fontSize:9,color:'#333',letterSpacing:2,textTransform:'uppercase' as const,margin:'10px 0 1px'}}>{isPT?'PEÇAS':'PARTS'}</div>
-        <Stepper emoji="👁️" label={isPT?'Olhos':'Eyes'}        val={b.eyes}     max={3} onChg={v=>upd('eyes',v)}/>
-        <Stepper emoji="📡" label={isPT?'Antenas':'Antennae'}  val={b.antennae} max={2} onChg={v=>upd('antennae',v)}/>
-        <Stepper emoji="🚀" label={isPT?'Foguetes':'Rockets'}  val={b.rockets}  max={4} onChg={v=>upd('rockets',v)}/>
-        <Stepper emoji="🛞" label={isPT?'Rodas':'Wheels'}      val={b.wheels}   max={4} onChg={v=>upd('wheels',v)}/>
-        <Stepper emoji="🪽" label={isPT?'Asas':'Wings'}        val={b.wings}    max={2} onChg={v=>upd('wings',v)}/>
+        <div style={{fontFamily:'monospace',fontSize:9,color:'#333',letterSpacing:2,textTransform:'uppercase' as const,margin:'10px 0 1px'}}>{isES?'PIEZAS':isPT?'PEÇAS':'PARTS'}</div>
+        <Stepper emoji="👁️" label={isES?'Ojos':isPT?'Olhos':'Eyes'}        val={b.eyes}     max={3} onChg={v=>upd('eyes',v)}/>
+        <Stepper emoji="📡" label={isES?'Antenas':isPT?'Antenas':'Antennae'}  val={b.antennae} max={2} onChg={v=>upd('antennae',v)}/>
+        <Stepper emoji="🚀" label={isES?'Cohetes':isPT?'Foguetes':'Rockets'}  val={b.rockets}  max={4} onChg={v=>upd('rockets',v)}/>
+        <Stepper emoji="🛞" label={isES?'Ruedas':isPT?'Rodas':'Wheels'}      val={b.wheels}   max={4} onChg={v=>upd('wheels',v)}/>
+        <Stepper emoji="🪽" label={isES?'Alas':isPT?'Asas':'Wings'}        val={b.wings}    max={2} onChg={v=>upd('wings',v)}/>
 
         <div style={{height:12}}/>
-        <button style={S.btn(C)} onClick={next}>{isPT?'PINTAR →':'PAINT IT →'}</button>
+        <button style={S.btn(C)} onClick={next}>{isES?'PINTAR →':isPT?'PINTAR →':'PAINT IT →'}</button>
       </div>
     </div>
   )
 }
 
 // ─── PAINT PHASE ─────────────────────────────────────────────────────────────
-function PaintPhase({ b, setB, next, back, isPT }: { b:Build; setB:(x:Build)=>void; next:()=>void; back:()=>void; isPT:boolean }) {
+function PaintPhase({ b, setB, next, back, isPT, isES }: { b:Build; setB:(x:Build)=>void; next:()=>void; back:()=>void; isPT:boolean; isES:boolean }) {
   return (
     <div style={S.page}>
-      <div style={{fontFamily:'monospace',fontWeight:900,fontSize:22,color:b.bodyColor,letterSpacing:2,marginBottom:4,textShadow:`0 0 18px ${b.bodyColor}`}}>{isPT?'PINTE SEU ROBÔ':'PAINT YOUR ROBOT'}</div>
-      <div style={{fontFamily:'monospace',fontSize:10,color:'#333',letterSpacing:2,marginBottom:18}}>{isPT?'ESCOLHA SUAS CORES!':'CHOOSE YOUR COLORS!'}</div>
+      <div style={{fontFamily:'monospace',fontWeight:900,fontSize:22,color:b.bodyColor,letterSpacing:2,marginBottom:4,textShadow:`0 0 18px ${b.bodyColor}`}}>{isES?'PINTA TU ROBOT':isPT?'PINTE SEU ROBÔ':'PAINT YOUR ROBOT'}</div>
+      <div style={{fontFamily:'monospace',fontSize:10,color:'#333',letterSpacing:2,marginBottom:18}}>{isES?'¡ELIGE TUS COLORES!':isPT?'ESCOLHA SUAS CORES!':'CHOOSE YOUR COLORS!'}</div>
       <div style={{filter:`drop-shadow(0 0 28px ${b.bodyColor}55)`,marginBottom:22}}><Robot b={b} size={200}/></div>
       <div style={{width:'100%',maxWidth:360,display:'flex',flexDirection:'column',gap:18}}>
         {(['bodyColor','detailColor'] as const).map(key=>(
           <div key={key}>
             <div style={{fontFamily:'monospace',fontSize:9,color:'#444',letterSpacing:2,marginBottom:9,textTransform:'uppercase' as const}}>
-              {key==='bodyColor'?(isPT?'Cor do Corpo':'Body Color'):(isPT?'Cor dos Detalhes':'Detail Color')}
+              {key==='bodyColor'
+                ?(isES?'Color del Cuerpo':isPT?'Cor do Corpo':'Body Color')
+                :(isES?'Color de Detalles':isPT?'Cor dos Detalhes':'Detail Color')}
             </div>
             <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:7}}>
               {(key==='bodyColor'?BODY_COLORS:DETAIL_COLORS).map(c=>(
@@ -234,8 +242,8 @@ function PaintPhase({ b, setB, next, back, isPT }: { b:Build; setB:(x:Build)=>vo
           </div>
         ))}
         <div style={{display:'flex',gap:10}}>
-          <button style={S.out} onClick={back}>{isPT?'← voltar':'← back'}</button>
-          <button style={S.btn(b.bodyColor)} onClick={next}>{isPT?'PRONTO! →':'DONE! →'}</button>
+          <button style={S.out} onClick={back}>{isES?'← volver':isPT?'← voltar':'← back'}</button>
+          <button style={S.btn(b.bodyColor)} onClick={next}>{isES?'¡LISTO! →':isPT?'PRONTO! →':'DONE! →'}</button>
         </div>
       </div>
     </div>
@@ -243,7 +251,7 @@ function PaintPhase({ b, setB, next, back, isPT }: { b:Build; setB:(x:Build)=>vo
 }
 
 // ─── DONE PHASE ──────────────────────────────────────────────────────────────
-function DonePhase({ b, rebuild, isPT, botName }: { b:Build; rebuild:()=>void; isPT:boolean; botName:string }) {
+function DonePhase({ b, rebuild, isPT, isES, botName }: { b:Build; rebuild:()=>void; isPT:boolean; isES:boolean; botName:string }) {
   const router = useRouter()
   const C = b.bodyColor
   const power = Math.min(99, b.rockets*16 + (b.arms==='claw'?22:b.arms==='laser'?30:8) + b.wings*7  + (b.head==='helmet'?12:4))
@@ -261,32 +269,38 @@ function DonePhase({ b, rebuild, isPT, botName }: { b:Build; rebuild:()=>void; i
     </div>
   )
 
-  const parts = isPT
+  const parts = isES
+    ? [`👁️ ${b.eyes} ojo${b.eyes!==1?'s':''}`,`📡 ${b.antennae} antena${b.antennae!==1?'s':''}`,`🚀 ${b.rockets} cohete${b.rockets!==1?'s':''}`,`🛞 ${b.wheels} rueda${b.wheels!==1?'s':''}`,`🪽 ${b.wings} ala${b.wings!==1?'s':''}`]
+    : isPT
     ? [`👁️ ${b.eyes} ${b.eyes===1?'olho':'olhos'}`,`📡 ${b.antennae} antena${b.antennae!==1?'s':''}`,`🚀 ${b.rockets} foguete${b.rockets!==1?'s':''}`,`🛞 ${b.wheels} roda${b.wheels!==1?'s':''}`,`🪽 ${b.wings} asa${b.wings!==1?'s':''}`]
     : [`👁️ ${b.eyes} eye${b.eyes!==1?'s':''}`,`📡 ${b.antennae} antenn${b.antennae!==1?'ae':'a'}`,`🚀 ${b.rockets} rocket${b.rockets!==1?'s':''}`,`🛞 ${b.wheels} wheel${b.wheels!==1?'s':''}`,`🪽 ${b.wings} wing${b.wings!==1?'s':''}`]
 
   return (
     <div style={S.page}>
-      <div style={{fontFamily:'monospace',fontSize:10,color:C,letterSpacing:3,marginBottom:4}}>{isPT?'✨ ROBÔ COMPLETO!':'✨ ROBOT COMPLETE!'}</div>
+      <div style={{fontFamily:'monospace',fontSize:10,color:C,letterSpacing:3,marginBottom:4}}>{isES?'✨ ¡ROBOT COMPLETO!':isPT?'✨ ROBÔ COMPLETO!':'✨ ROBOT COMPLETE!'}</div>
       <div style={{fontFamily:'monospace',fontWeight:900,fontSize:28,color:'#fff',letterSpacing:2,marginBottom:2,textShadow:`0 0 20px ${C}`}}>{botName}</div>
-      <div style={{fontFamily:'monospace',fontSize:10,color:'#444',letterSpacing:2,marginBottom:18}}>{isPT?'UNIDADE DE IA PERSONALIZADA':'CUSTOM AI UNIT'}</div>
+      <div style={{fontFamily:'monospace',fontSize:10,color:'#444',letterSpacing:2,marginBottom:18}}>{isES?'UNIDAD DE IA PERSONALIZADA':isPT?'UNIDADE DE IA PERSONALIZADA':'CUSTOM AI UNIT'}</div>
       <div style={{display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center',alignItems:'flex-start',width:'100%',maxWidth:560}}>
         <div style={{filter:`drop-shadow(0 0 28px ${C}55)`}}><Robot b={b} size={190}/></div>
         <div style={{flex:1,minWidth:200}}>
-          <Bar label={isPT?'⚡ PODER':'⚡ POWER'}           val={power} color="#ff4466"/>
-          <Bar label={isPT?'💨 VELOCIDADE':'💨 SPEED'}       val={speed} color="#44ff88"/>
-          <Bar label={isPT?'🧠 INTELIGÊNCIA':'🧠 BRAINS'}   val={brain} color="#00ccff"/>
+          <Bar label={isES?'⚡ PODER':isPT?'⚡ PODER':'⚡ POWER'}           val={power} color="#ff4466"/>
+          <Bar label={isES?'💨 VELOCIDAD':isPT?'💨 VELOCIDADE':'💨 SPEED'}       val={speed} color="#44ff88"/>
+          <Bar label={isES?'🧠 INTELIGENCIA':isPT?'🧠 INTELIGÊNCIA':'🧠 BRAINS'}   val={brain} color="#00ccff"/>
           <div style={{fontFamily:'monospace',fontSize:10,color:'#333',lineHeight:2,marginTop:12}}>
             {parts.map((p,i)=><div key={i}>{p}</div>)}
           </div>
         </div>
       </div>
       <div style={{fontFamily:'monospace',fontSize:11,color:'#444',textAlign:'center',maxWidth:300,lineHeight:1.75,margin:'20px 0 22px'}}>
-        {isPT?`Assim como ${botName}, todo robô de IA tem peças únicas que mudam como ele aprende!`:`Just like ${botName}, every AI robot has unique parts that change how it learns!`}
+        {isES
+          ?`¡Igual que ${botName}, cada robot de IA tiene piezas únicas que cambian cómo aprende!`
+          :isPT
+          ?`Assim como ${botName}, todo robô de IA tem peças únicas que mudam como ele aprende!`
+          :`Just like ${botName}, every AI robot has unique parts that change how it learns!`}
       </div>
       <div style={{display:'flex',flexDirection:'column',gap:10,width:'100%',maxWidth:280}}>
-        <button style={S.btn(C)} onClick={rebuild}>{isPT?'← REMONTAR':'← REBUILD'}</button>
-        <button style={S.out} onClick={()=>router.back()}>{isPT?'VOLTAR':'BACK TO HOME'}</button>
+        <button style={S.btn(C)} onClick={rebuild}>{isES?'← RECONSTRUIR':isPT?'← REMONTAR':'← REBUILD'}</button>
+        <button style={S.out} onClick={()=>router.back()}>{isES?'VOLVER AL INICIO':isPT?'VOLTAR':'BACK TO HOME'}</button>
       </div>
     </div>
   )
@@ -297,16 +311,18 @@ export default function BuildARobot() {
   const [phase,   setPhase]   = useState<Phase>('build')
   const [b,       setB]       = useState<Build>(DEF)
   const [isPT,    setIsPT]    = useState(false)
+  const [isES,    setIsES]    = useState(false)
   const [botName, setBotName] = useState('')
 
   useEffect(()=>{
     setIsPT(localStorage.getItem('pai_lang')==='pt')
+    setIsES(localStorage.getItem('pai_lang')==='es')
     setBotName(genName())
   },[])
 
   const rebuild = () => { setPhase('build'); setBotName(genName()) }
 
-  if (phase==='build') return <BuildPhase b={b} setB={setB} next={()=>setPhase('paint')} isPT={isPT}/>
-  if (phase==='paint') return <PaintPhase b={b} setB={setB} next={()=>setPhase('done')} back={()=>setPhase('build')} isPT={isPT}/>
-  return <DonePhase b={b} rebuild={rebuild} isPT={isPT} botName={botName||'ROBO-MAX'}/>
+  if (phase==='build') return <BuildPhase b={b} setB={setB} next={()=>setPhase('paint')} isPT={isPT} isES={isES}/>
+  if (phase==='paint') return <PaintPhase b={b} setB={setB} next={()=>setPhase('done')} back={()=>setPhase('build')} isPT={isPT} isES={isES}/>
+  return <DonePhase b={b} rebuild={rebuild} isPT={isPT} isES={isES} botName={botName||'ROBO-MAX'}/>
 }

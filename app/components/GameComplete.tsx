@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { GAMES, GAME_TITLES_PT } from '../data/games'
+import { GAMES, GAME_TITLES_PT, GAME_TITLES_ES } from '../data/games'
 import { WORLDS, WORLD_IDS, WORLD_TITLES_PT } from '../data'
 import { isElementaryGrade, isMiddleSchoolGrade, MIDDLE_SCHOOL_GRADES_PT,
-         ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT } from '../data/elementary'
+         ELEMENTARY_WORLDS, ELEMENTARY_WORLD_IDS, ELEMENTARY_WORLD_IDS_PT, ELEMENTARY_WORLD_IDS_ES } from '../data/elementary'
 import TRANSLATIONS from '../data/lessonTranslations'
 
 const DISP  = "var(--font-display, 'Arial Black', sans-serif)"
@@ -19,9 +19,11 @@ interface Props { slug: string }
 export default function GameComplete({ slug }: Props) {
   const router = useRouter()
   const [isPT,   setIsPT]   = useState(false)
+  const [lang,   setLang]   = useState<string | null>(null)
   const [grade,  setGrade]  = useState<string | null>(null)
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    setLang(localStorage.getItem('pai_lang'))
     setGrade(localStorage.getItem('pai_grade'))
   }, [])
 
@@ -31,6 +33,8 @@ export default function GameComplete({ slug }: Props) {
   const isElem = isElementaryGrade(grade)
   const isMid  = isMiddleSchoolGrade(grade) || MIDDLE_SCHOOL_GRADES_PT.has(grade ?? '')
   const isPT_elem = ELEMENTARY_WORLD_IDS_PT.length > 0 && grade === 'fund1'
+  const isES_elem = isElem && !isPT_elem && lang === 'es'
+  const isES = isES_elem
 
   // For HS: find game in WORLDS modules, get next lesson
   const hsWorld    = WORLDS[game.world]
@@ -38,7 +42,7 @@ export default function GameComplete({ slug }: Props) {
   const hsNextMod  = hsGameIdx >= 0 ? hsWorld?.modules.slice(hsGameIdx + 1).find(m => m.type !== 'game') : undefined
 
   // For elementary: find which elementary world has this game, get next lesson or next world
-  const elemWorldIds = isPT_elem ? ELEMENTARY_WORLD_IDS_PT : ELEMENTARY_WORLD_IDS
+  const elemWorldIds = isPT_elem ? ELEMENTARY_WORLD_IDS_PT : isES_elem ? ELEMENTARY_WORLD_IDS_ES : ELEMENTARY_WORLD_IDS
   const elemWorld    = isElem ? Object.values(ELEMENTARY_WORLDS).find(w =>
     elemWorldIds.includes(w.id) && w.modules.some(m => m.type === 'game' && m.gameUrl?.includes(game.slug))
   ) : undefined
@@ -60,8 +64,8 @@ export default function GameComplete({ slug }: Props) {
   const nextWorldId    = !nextMod && !isElem && !isMid && hsNextWorldIdx < WORLD_IDS.length
     ? WORLD_IDS[hsNextWorldIdx] : null
 
-  const gameTitle      = (isPT && GAME_TITLES_PT[game.slug]) || game.title
-  const backLabel      = isElem ? (elemWorld?.title ?? (isPT ? 'Mundo' : 'World')) : isMid ? (isPT ? 'Início' : 'Home') : ((isPT && WORLD_TITLES_PT[game.world]) || hsWorld?.title || (isPT ? 'Mundo' : 'World'))
+  const gameTitle      = (isES && GAME_TITLES_ES[game.slug]) || (isPT && GAME_TITLES_PT[game.slug]) || game.title
+  const backLabel      = isElem ? (elemWorld?.title ?? (isES ? 'Mundo' : isPT ? 'Mundo' : 'World')) : isMid ? (isPT ? 'Início' : 'Home') : ((isPT && WORLD_TITLES_PT[game.world]) || hsWorld?.title || (isPT ? 'Mundo' : 'World'))
   const nextModTitle   = nextMod ? ((isPT && TRANSLATIONS['pt']?.[nextMod.id]?.title) || nextMod.title) : ''
   const nextWorldTitle = nextWorldId ? ((isPT && WORLD_TITLES_PT[nextWorldId]) || WORLDS[nextWorldId]?.title)
     : nextElemWorldId  ? (ELEMENTARY_WORLDS[nextElemWorldId]?.title ?? '')
@@ -71,7 +75,7 @@ export default function GameComplete({ slug }: Props) {
     <main style={{ height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
       <div style={{ width: '100%', maxWidth: 480, padding: '0 7vw', textAlign: 'center' }}>
         <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: DIM, marginBottom: 16 }}>
-          {isPT ? 'Jogo concluído' : 'Game complete'}
+          {isES ? 'Juego completado' : isPT ? 'Jogo concluído' : 'Game complete'}
         </div>
         <div style={{ animation: 'xpPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.2s both' }}>
           <p style={{ fontFamily: DISP, fontSize: 80, lineHeight: 1, color: BLACK, margin: 0, letterSpacing: '-0.03em' }}>+100</p>
@@ -85,7 +89,7 @@ export default function GameComplete({ slug }: Props) {
               onClick={() => router.push(isElem ? `/elementary/lesson/${nextMod.id}` : `/lesson/${nextMod.id}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
-              {isPT ? 'Próximo:' : 'Next:'} {nextModTitle} →
+              {isES ? 'Próximo:' : isPT ? 'Próximo:' : 'Next:'} {nextModTitle} →
             </button>
           )}
           {!nextMod && (nextWorldId || nextElemWorldId) && (
@@ -93,14 +97,14 @@ export default function GameComplete({ slug }: Props) {
               onClick={() => router.push(nextElemWorldId ? `/elementary/world/${nextElemWorldId}` : `/world/${nextWorldId}`)}
               style={{ fontFamily: DISP, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: BLACK, color: '#fff', padding: '14px 28px', border: `1.5px solid ${BLACK}`, cursor: 'pointer', boxShadow: '4px 4px 0 0 #555' }}
             >
-              {isPT ? 'Próximo Mundo:' : 'Next World:'} {nextWorldTitle} →
+              {isES ? 'Próximo Mundo:' : isPT ? 'Próximo Mundo:' : 'Next World:'} {nextWorldTitle} →
             </button>
           )}
           <button
             onClick={() => router.push(worldRoute)}
             style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
           >
-            {isPT ? 'Voltar para' : 'Back to'} {backLabel}
+            {isES ? 'Volver a' : isPT ? 'Voltar para' : 'Back to'} {backLabel}
           </button>
         </div>
       </div>

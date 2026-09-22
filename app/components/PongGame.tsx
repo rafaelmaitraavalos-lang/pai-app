@@ -18,6 +18,18 @@ const ITEMS_EN = [
   'Half misread the question', 'Domain expert annotations', 'Certified biologist labels',
 ]
 
+const ITEMS_ES = [
+  'Diagnósticos verificados por expertos', '3 radiólogos por escaneo',
+  'Transcripciones de hablantes nativos', 'Casos de fraude confirmados en tribunal',
+  'Verificadores de hechos independientes', 'Verdad de referencia revisada por pares',
+  'Imágenes de cámaras de vigilancia', 'Sin etiquetas — datos crudos',
+  'Traducido automáticamente por máquina', 'Historial de contratación con sesgo',
+  'Etiquetas a $0.01 — 20 segundos cada una', 'Un hospital, modelo global',
+  'Datos de barrio con vigilancia excesiva', 'Sin consentimiento del usuario',
+  'Solo reseñas de 1 y 5 estrellas', 'La mitad malinterpretó la pregunta',
+  'Anotaciones de expertos del área', 'Etiquetas de biólogos certificados',
+]
+
 const ITEMS_PT = [
   'Diagnósticos verificados por especialistas', '3 radiologistas por exame',
   'Transcrições por falantes nativos', 'Casos de fraude confirmados em juízo',
@@ -36,6 +48,14 @@ const VERDICTS_EN = [
   { min: 800,  h: 'SOLID TRAINING SET.', s: 'Your model will work. Right most of the time. Mostly.' },
   { min: 300,  h: 'NOISY DATA.', s: 'Your AI has absorbed significant bias. It will make very confident mistakes.' },
   { min: 0,    h: 'YOU HAVE A HORRIBLY BIASED AI.', s: 'This should concern everyone involved. Especially your users.' },
+]
+
+const VERDICTS_ES = [
+  { min: 3000, h: 'TU IA HA SUPERADO TODOS LOS ESTÁNDARES DE COMPRENSIÓN HUMANA.', s: 'Ese peloteo fue algo especial. El conjunto de entrenamiento fue impecable.' },
+  { min: 1500, h: 'CONJUNTO DE DATOS EXCEPCIONAL.', s: 'Tu IA está brillantemente entrenada. Los científicos de datos lloran de alegría.' },
+  { min: 800,  h: 'CONJUNTO DE ENTRENAMIENTO SÓLIDO.', s: 'Tu modelo funcionará. Acertará la mayoría de las veces. En su mayoría.' },
+  { min: 300,  h: 'DATOS RUIDOSOS.', s: 'Tu IA absorbió un sesgo significativo. Cometerá errores con mucha confianza.' },
+  { min: 0,    h: 'TIENES UNA IA HORRIBLEMENTE SESGADA.', s: 'Esto debería preocupar a todos los involucrados. Especialmente a tus usuarios.' },
 ]
 
 const VERDICTS_PT = [
@@ -58,6 +78,14 @@ const FACTS_EN = [
 const FACTS_PT: string[] = typeof _pt?.facts === 'string'
   ? (_pt.facts as string).split('. ').filter((s: string) => s.trim().length > 20).map((s: string) => s.trim())
   : Array.isArray(_pt?.facts) ? (_pt.facts as string[]) : FACTS_EN
+const FACTS_ES = [
+  'La IA no etiqueta sus propios datos de entrenamiento — lo hacen los humanos. Las etiquetas cargan los sesgos de quien las hizo.',
+  'Más datos no arreglan datos malos. Un modelo entrenado con un millón de ejemplos malos es peor que uno entrenado con mil buenos.',
+  'La IA de contratación de Amazon fue entrenada con decisiones reales de contratación. El sesgo en esas decisiones era real. El modelo aprendió ambas cosas.',
+  'Un modelo entrenado con datos de un hospital puede fallar con pacientes de otro.',
+  'Trabajadores a quienes se les paga $0.01 por etiqueta con 20 segundos cada una no pueden dar anotaciones cuidadosas. El etiquetado barato crea modelos baratos.',
+  'Cuando los datos se recopilan sin consentimiento, la violación de privacidad ocurre incluso antes de que el modelo exista.',
+]
 
 const PADDLE_H  = 80
 const PADDLE_W  = 12
@@ -148,16 +176,20 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
   const [pops,      setPops]      = useState<Pop[]>([])
   const [board,     setBoard]     = useState<Board[]>([])
   const [isPT,      setIsPT]      = useState(false)
+  const [isES,      setIsES]      = useState(false)
 
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    setIsES(localStorage.getItem('pai_lang') === 'es')
+  }, [])
 
   // When skipIntro is true the phase starts at 'countdown' but startGame()
   // (which initialises gs.current) is never called — fix that here.
   useEffect(() => { if (skipIntro) startGame() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const ITEMS    = isPT ? ITEMS_PT    : ITEMS_EN
-  const VERDICTS = isPT ? VERDICTS_PT : VERDICTS_EN
-  const FACTS    = isPT ? FACTS_PT    : FACTS_EN
+  const ITEMS    = isES ? ITEMS_ES    : isPT ? ITEMS_PT    : ITEMS_EN
+  const VERDICTS = isES ? VERDICTS_ES : isPT ? VERDICTS_PT : VERDICTS_EN
+  const FACTS    = isES ? FACTS_ES    : isPT ? FACTS_PT    : FACTS_EN
 
   function addPop(text: string, x: number, y: number) {
     const id = ++popIdRef.current

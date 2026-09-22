@@ -190,6 +190,69 @@ const ROUNDS_PT: Round[] = [
   },
 ]
 
+const ROUNDS_ES: Round[] = [
+  {
+    difficulty: 'easy', time: 25,
+    segs: [t('IA significa '), c('Inteligencia'), t(' '), w('Pizza', 'Artificial')],
+    options: ['Artificial', 'Memoria', 'Procesamiento', 'Visión'],
+    explanation: '🤖 IA significa Inteligencia ARTIFICIAL — la capacidad de las computadoras de pensar y aprender.',
+  },
+  {
+    difficulty: 'easy', time: 25,
+    segs: [t('Siri y Alexa son '), w('perros robot', 'asistentes de voz'), t(' que usan IA')],
+    options: ['asistentes de voz', 'motores de búsqueda', 'controles de videojuegos', 'cámaras inteligentes'],
+    explanation: '🔊 Siri y Alexa son ASISTENTES DE VOZ — IA que escucha y responde a lo que dices.',
+  },
+  {
+    difficulty: 'easy', time: 25,
+    segs: [t('La IA '), c('aprende'), t(' estudiando '), w('millones de pizzas', 'muchos datos')],
+    options: ['muchos datos', 'cerebros reales', 'películas y canciones', 'problemas de matemáticas'],
+    explanation: '📊 La IA aprende de DATOS — miles de millones de ejemplos como fotos, oraciones y números.',
+  },
+  {
+    difficulty: 'medium', time: 20,
+    segs: [t('La IA encuentra '), w('rimas', 'patrones'), t(' en los '), c('datos'), t(' para volverse más inteligente')],
+    options: ['patrones', 'canciones', 'imágenes', 'sonidos'],
+    explanation: '🔍 La IA encuentra PATRONES en los datos — como notar que "peludo + cuatro patas + maúlla = gato".',
+  },
+  {
+    difficulty: 'medium', time: 20,
+    segs: [t('ChatGPT es un gran modelo de '), w('pintura', 'lenguaje'), t(' que '), c('genera texto')],
+    options: ['lenguaje', 'imagen', 'video', 'sonido'],
+    explanation: '💬 ChatGPT es un modelo de LENGUAJE — entrenado con texto para leer, escribir y responder preguntas.',
+  },
+  {
+    difficulty: 'medium', time: 20,
+    segs: [t('La IA que solo hace una tarea, como jugar ajedrez, se llama IA '), w('general', 'estrecha')],
+    options: ['estrecha', 'básica', 'principiante', 'limitada'],
+    explanation: '♟️ Eso es IA ESTRECHA — experta en un solo trabajo. La IA GENERAL podría hacer cualquier cosa, y todavía no existe.',
+  },
+  {
+    difficulty: 'medium', time: 20,
+    segs: [t('Cuando la IA aprende '), c('ideas injustas'), t(' de datos malos, se llama '), w('una falla', 'sesgo')],
+    options: ['sesgo', 'un error', 'una falla técnica', 'un bug'],
+    explanation: '⚖️ Eso es SESGO — cuando los datos malos hacen que la IA actúe injustamente hacia ciertos grupos de personas.',
+  },
+  {
+    difficulty: 'hard', time: 14,
+    segs: [t('Los '), c('videos'), t(' falsos de IA de personas reales diciendo cosas que nunca dijeron se llaman '), w('caricaturas', 'deepfakes')],
+    options: ['deepfakes', 'memes', 'filtros', 'animaciones'],
+    explanation: '🎭 Esos son DEEPFAKES — videos falsos hechos con IA que parecen muy reales y pueden difundir información falsa.',
+  },
+  {
+    difficulty: 'hard', time: 14,
+    segs: [t('El desafío de hacer que la IA haga lo que los '), c('humanos'), t(' realmente quieren se llama el problema de '), w('depuración', 'alineación')],
+    options: ['alineación', 'entrenamiento', 'programación', 'prueba'],
+    explanation: '🎯 El problema de ALINEACIÓN — asegurarse de que los objetivos de la IA coincidan perfectamente con lo que a los humanos realmente les importa.',
+  },
+  {
+    difficulty: 'hard', time: 14,
+    segs: [t('Una IA que pudiera hacer cualquier tarea intelectual que un '), c('humano'), t(' pueda hacer se llamaría IA '), w('estrecha', 'general')],
+    options: ['general', 'universal', 'de nivel humano', 'súper'],
+    explanation: '🌐 Eso es IA GENERAL (AGI) — todavía no existe. Toda la IA actual es estrecha, no general.',
+  },
+]
+
 // ── shuffle helper ─────────────────────────────────────────────────────────
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -219,11 +282,15 @@ export default function FixTheRobot() {
   const [fixedCorrect, setFixedCorrect] = useState<boolean | null>(null)   // picked right option
   const [shuffled,     setShuffled]     = useState<string[]>([])
   const [isPT,         setIsPT]         = useState(false)
+  const [isES,         setIsES]         = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  useEffect(() => { setIsPT(localStorage.getItem('pai_lang') === 'pt') }, [])
+  useEffect(() => {
+    setIsPT(localStorage.getItem('pai_lang') === 'pt')
+    setIsES(localStorage.getItem('pai_lang') === 'es')
+  }, [])
 
-  const rounds = isPT ? ROUNDS_PT : ROUNDS
+  const rounds = isES ? ROUNDS_ES : isPT ? ROUNDS_PT : ROUNDS
   const round  = rounds[idx]
 
   // shuffle options whenever round changes
@@ -302,16 +369,21 @@ export default function FixTheRobot() {
   // ── title ────────────────────────────────────────────────────────────────
   if (screen === 'title') return (
     <div style={S.root}>
-      <button onClick={() => router.back()} style={S.backBtn}>{isPT ? '← voltar' : '← back'}</button>
+      <button onClick={() => router.back()} style={S.backBtn}>{isES ? '← volver' : isPT ? '← voltar' : '← back'}</button>
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 18 }}>
         <img src="/pai-mascot.png" alt="PAI" style={{ width: 70, height: 70, objectFit: 'contain', background: '#000', borderRadius: 8 }} />
         <Robot mood="idle"/>
         <h1 style={{ ...S.neon(PINK), fontSize: 36, letterSpacing: 4, textAlign:'center', lineHeight: 1.2 }}>
-          {isPT ? 'CONSERTE O ROBÔ' : 'FIX THE ROBOT'}
+          {isES ? 'ARREGLA AL ROBOT' : isPT ? 'CONSERTE O ROBÔ' : 'FIX THE ROBOT'}
         </h1>
         <div style={{ background:'#0d0d0d', border:'1px solid #222', borderRadius:10, padding:'14px 18px', maxWidth:300 }}>
           <p style={{ color:'#aaa', fontFamily:'monospace', fontSize: 13, textAlign:'center', lineHeight: 1.8, margin:0 }}>
-            {isPT ? <>
+            {isES ? <>
+              <span style={{color:YELLOW,fontWeight:900}}>Paso 1:</span> El robot dice algo incorrecto.<br/>
+              <span style={{color:GREEN,fontWeight:900}}>Encuentra</span> la palabra incorrecta y tócala.<br/><br/>
+              <span style={{color:YELLOW,fontWeight:900}}>Paso 2:</span> Toca el <span style={{color:GREEN,fontWeight:900}}>reemplazo correcto</span><br/>
+              entre las opciones mostradas.
+            </> : isPT ? <>
               <span style={{color:YELLOW,fontWeight:900}}>Etapa 1:</span> O robô diz algo errado.<br/>
               <span style={{color:GREEN,fontWeight:900}}>Encontre</span> a palavra errada e toque nela.<br/><br/>
               <span style={{color:YELLOW,fontWeight:900}}>Etapa 2:</span> Toque na <span style={{color:GREEN,fontWeight:900}}>substituição correta</span><br/>
@@ -325,7 +397,18 @@ export default function FixTheRobot() {
           </p>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap: 8, width: 280 }}>
-          {isPT ? ([
+          {isES ? ([
+            [GREEN,  'Fácil',  '3 rondas · errores obvios · 25s'],
+            [YELLOW, 'Medio',  '4 rondas · errores sutiles · 20s'],
+            [PINK,   'Difícil','3 rondas · errores difíciles · 14s'],
+          ] as const).map(([c,label,desc]) => (
+            <div key={label} style={{ display:'flex', gap: 10 }}>
+              <span style={{ color: c, fontFamily:'monospace', fontSize: 11, flexShrink: 0, marginTop: 1 }}>■</span>
+              <span style={{ color:'#777', fontFamily:'monospace', fontSize: 12 }}>
+                <b style={{ color: c }}>{label}:</b> {desc}
+              </span>
+            </div>
+          )) : isPT ? ([
             [GREEN,  'Fácil',  '3 rodadas · erros óbvios · 25s'],
             [YELLOW, 'Médio',  '4 rodadas · erros sutis  · 20s'],
             [PINK,   'Difícil','3 rodadas · erros difíceis · 14s'],
@@ -349,7 +432,7 @@ export default function FixTheRobot() {
             </div>
           ))}
         </div>
-        <button style={S.bigBtn(GREEN)} onClick={() => setScreen('play')}>{isPT ? 'COMEÇAR →' : 'START →'}</button>
+        <button style={S.bigBtn(GREEN)} onClick={() => setScreen('play')}>{isES ? 'EMPEZAR →' : isPT ? 'COMEÇAR →' : 'START →'}</button>
       </div>
     </div>
   )
@@ -358,9 +441,9 @@ export default function FixTheRobot() {
   if (screen === 'result') {
     const pts = fixedCorrect ? 100 + timeLeft * 10 : fixedCorrect === false && foundCorrect ? 40 : 0
     const headline =
-      !foundCorrect   ? (timeLeft <= 0 ? (isPT ? '⏱ TEMPO ESGOTADO' : '⏱ TIME UP') : (isPT ? '✗ PALAVRA ERRADA' : '✗ WRONG WORD')) :
-      fixedCorrect    ? (isPT ? '✓ CONSERTADO!' : '✓ FIXED!') :
-                        (isPT ? '✗ SUBSTITUIÇÃO ERRADA' : '✗ WRONG REPLACEMENT')
+      !foundCorrect   ? (timeLeft <= 0 ? (isES ? '⏱ SE ACABÓ EL TIEMPO' : isPT ? '⏱ TEMPO ESGOTADO' : '⏱ TIME UP') : (isES ? '✗ PALABRA INCORRECTA' : isPT ? '✗ PALAVRA ERRADA' : '✗ WRONG WORD')) :
+      fixedCorrect    ? (isES ? '✓ ¡ARREGLADO!' : isPT ? '✓ CONSERTADO!' : '✓ FIXED!') :
+                        (isES ? '✗ REEMPLAZO INCORRECTO' : isPT ? '✗ SUBSTITUIÇÃO ERRADA' : '✗ WRONG REPLACEMENT')
     const headlineColor = fixedCorrect ? GREEN : PINK
 
     return (
@@ -376,7 +459,7 @@ export default function FixTheRobot() {
           <div style={{ background:'#0d0d0d', border:`1px solid ${fixedCorrect ? GREEN : PINK}33`,
             borderRadius: 10, padding:'14px 16px', width:'100%',
             boxShadow:`0 0 18px ${fixedCorrect ? GREEN : PINK}22` }}>
-            <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 8, letterSpacing:1 }}>{isPT ? 'FRASE CORRIGIDA:' : 'CORRECTED SENTENCE:'}</div>
+            <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 8, letterSpacing:1 }}>{isES ? 'ORACIÓN CORREGIDA:' : isPT ? 'FRASE CORRIGIDA:' : 'CORRECTED SENTENCE:'}</div>
             <div style={{ fontFamily:'monospace', fontSize: 14, color:'#ccc', lineHeight: 1.8 }}>
               {round.segs.map((seg, i) => {
                 if (seg.wrong) return (
@@ -402,17 +485,17 @@ export default function FixTheRobot() {
 
           {streak > 1 && (
             <div style={{ color: YELLOW, fontFamily:'monospace', fontSize: 13, letterSpacing: 1 }}>
-              🔥 {streak} {isPT ? 'seguidos!' : 'in a row!'}
+              🔥 {streak} {isES ? 'seguidas!' : isPT ? 'seguidos!' : 'in a row!'}
             </div>
           )}
 
           <div style={{ color: pts > 0 ? GREEN : '#333', fontFamily:'monospace', fontSize: 20, letterSpacing: 2 }}>
             {pts > 0 ? `+${pts} pts` : '+0 pts'}
           </div>
-          <div style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>{isPT ? 'Total:' : 'Total:'} {score} pts</div>
+          <div style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>Total: {score} pts</div>
 
           <button style={S.bigBtn(fixedCorrect ? GREEN : PINK)} onClick={next}>
-            {idx + 1 >= rounds.length ? (isPT ? 'VER RESULTADOS →' : 'SEE RESULTS →') : (isPT ? 'PRÓXIMO →' : 'NEXT →')}
+            {idx + 1 >= rounds.length ? (isES ? 'VER RESULTADOS →' : isPT ? 'VER RESULTADOS →' : 'SEE RESULTS →') : (isES ? 'SIGUIENTE →' : isPT ? 'PRÓXIMO →' : 'NEXT →')}
           </button>
         </div>
       </div>
@@ -430,18 +513,20 @@ export default function FixTheRobot() {
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
           <AutoplayVideo src="/pai3.mp4" style={{ width: 90, height: 90, objectFit: 'contain', background: '#000', borderRadius: 8 }} />
           <Robot mood="happy"/>
-          <div style={{ ...S.neon(GREEN), fontSize: 26, letterSpacing: 3 }}>{isPT ? 'ROBÔ CONSERTADO!' : 'ROBOT FIXED!'}</div>
+          <div style={{ ...S.neon(GREEN), fontSize: 26, letterSpacing: 3 }}>{isES ? '¡ROBOT ARREGLADO!' : isPT ? 'ROBÔ CONSERTADO!' : 'ROBOT FIXED!'}</div>
           <div style={{ ...S.neon(gc), fontSize: 80, letterSpacing: 8 }}>{grade}</div>
           <div style={{ color: GREEN, fontFamily:'monospace', fontSize: 22, letterSpacing: 2 }}>{score} pts</div>
-          <div style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>{rounds.length} {isPT ? 'rodadas · máx' : 'rounds · max'} {maxScore} pts</div>
+          <div style={{ color:'#333', fontFamily:'monospace', fontSize: 11 }}>{rounds.length} {isES ? 'rondas · máx' : isPT ? 'rodadas · máx' : 'rounds · max'} {maxScore} pts</div>
           <div style={{ color:'#555', fontFamily:'monospace', fontSize: 12, textAlign:'center', maxWidth: 280, lineHeight: 1.7, marginTop: 4 }}>
-            {isPT
+            {isES
+              ? (pct >= 75 ? '¡Excelente trabajo! De verdad conoces el vocabulario de IA.' : pct >= 50 ? 'Buen trabajo — ¡sigue aprendiendo esos términos de IA!' : '¡Sigue practicando — pronto arreglarás ese robot!')
+              : isPT
               ? (pct >= 75 ? 'Ótimo trabalho! Você realmente conhece o vocabulário de IA.' : pct >= 50 ? 'Bom trabalho — continue aprendendo os termos de IA!' : 'Continue praticando — você vai consertar esse robô em breve!')
               : (pct >= 75 ? 'Great job! You really know your AI vocab.' : pct >= 50 ? 'Nice work — keep learning those AI terms!' : 'Keep practicing — you\'ll fix that robot soon!')}
           </div>
-          <button style={S.bigBtn(PINK)} onClick={restart}>{isPT ? 'JOGAR DE NOVO →' : 'PLAY AGAIN →'}</button>
+          <button style={S.bigBtn(PINK)} onClick={restart}>{isES ? 'JUGAR DE NUEVO →' : isPT ? 'JOGAR DE NOVO →' : 'PLAY AGAIN →'}</button>
           <button onClick={() => router.back()} style={{ background:'none', border:'none', color:'#333',
-            fontFamily:'monospace', fontSize: 11, cursor:'pointer', marginTop: 4 }}>{isPT ? '← voltar' : '← back'}</button>
+            fontFamily:'monospace', fontSize: 11, cursor:'pointer', marginTop: 4 }}>{isES ? '← volver' : isPT ? '← voltar' : '← back'}</button>
         </div>
       </div>
     )
@@ -457,7 +542,7 @@ export default function FixTheRobot() {
           &nbsp;&nbsp;
           <span style={{ color: diffColor }}>{'■'.repeat(round.difficulty === 'easy' ? 1 : round.difficulty === 'medium' ? 2 : 3)}</span>
           <span style={{ color:'#1a1a1a' }}>{'■'.repeat(3 - (round.difficulty === 'easy' ? 1 : round.difficulty === 'medium' ? 2 : 3))}</span>
-          &nbsp;{isPT ? (round.difficulty === 'easy' ? 'fácil' : round.difficulty === 'medium' ? 'médio' : 'difícil') : round.difficulty}
+          &nbsp;{isES ? (round.difficulty === 'easy' ? 'fácil' : round.difficulty === 'medium' ? 'medio' : 'difícil') : isPT ? (round.difficulty === 'easy' ? 'fácil' : round.difficulty === 'medium' ? 'médio' : 'difícil') : round.difficulty}
         </span>
         <span style={{ color: GREEN, fontFamily:'monospace', fontSize: 12 }}>{score} pts</span>
       </div>
@@ -473,10 +558,10 @@ export default function FixTheRobot() {
 
       {/* Step label */}
       <div style={{ marginTop:10, marginBottom:4, fontFamily:'monospace', fontSize:11, color:'#555', letterSpacing:2 }}>
-        {isPT ? 'ETAPA 1 DE 2' : 'STEP 1 OF 2'}
+        {isES ? 'PASO 1 DE 2' : isPT ? 'ETAPA 1 DE 2' : 'STEP 1 OF 2'}
       </div>
       <div style={{ ...S.neon(PINK), fontSize:22, letterSpacing:3, marginBottom:10 }}>
-        {isPT ? 'ENCONTRE A PALAVRA ERRADA' : 'FIND THE WRONG WORD'}
+        {isES ? 'ENCUENTRA LA PALABRA INCORRECTA' : isPT ? 'ENCONTRE A PALAVRA ERRADA' : 'FIND THE WRONG WORD'}
       </div>
 
       {/* Speech bubble */}
@@ -489,7 +574,7 @@ export default function FixTheRobot() {
           padding:'16px 18px', boxShadow:'0 4px 24px rgba(0,0,0,0.8)' }}>
 
           <div style={{ fontFamily:'monospace', fontSize: 11, color:'#444', marginBottom: 10, letterSpacing: 1 }}>
-            {isPT ? 'O ROBÔ DIZ...' : 'THE ROBOT SAYS...'}
+            {isES ? 'EL ROBOT DICE...' : isPT ? 'O ROBÔ DIZ...' : 'THE ROBOT SAYS...'}
           </div>
 
           {/* Sentence — chips are clickable */}
@@ -524,7 +609,7 @@ export default function FixTheRobot() {
 
           <div style={{ marginTop: 14, fontFamily:'monospace', fontSize: 12, color: PINK,
             letterSpacing:1, display:'flex', alignItems:'center', gap:6 }}>
-            <span style={{fontSize:16}}>☝️</span> {isPT ? 'TOQUE NA PALAVRA ERRADA ACIMA' : 'TAP THE WRONG WORD ABOVE'}
+            <span style={{fontSize:16}}>☝️</span> {isES ? 'TOCA LA PALABRA INCORRECTA ARRIBA' : isPT ? 'TOQUE NA PALAVRA ERRADA ACIMA' : 'TAP THE WRONG WORD ABOVE'}
           </div>
         </div>
       </div>
@@ -551,17 +636,17 @@ export default function FixTheRobot() {
 
       {/* Step label */}
       <div style={{ marginTop:10, marginBottom:4, fontFamily:'monospace', fontSize:11, color:'#555', letterSpacing:2 }}>
-        {isPT ? 'ETAPA 2 DE 2' : 'STEP 2 OF 2'}
+        {isES ? 'PASO 2 DE 2' : isPT ? 'ETAPA 2 DE 2' : 'STEP 2 OF 2'}
       </div>
       <div style={{ ...S.neon(GREEN), fontSize:20, letterSpacing:2, marginBottom:10, textAlign:'center' }}>
-        {isPT ? '✓ ACHOU! AGORA CONSERTE.' : '✓ FOUND IT! NOW FIX IT.'}
+        {isES ? '✓ ¡LA ENCONTRASTE! AHORA ARRÉGLALA.' : isPT ? '✓ ACHOU! AGORA CONSERTE.' : '✓ FOUND IT! NOW FIX IT.'}
       </div>
 
       {/* Sentence with wrong word shown crossed out */}
       <div style={{ width:'100%', maxWidth: 420, background:'#0d0d0d', border:`1px solid ${PINK}44`,
         borderRadius:12, padding:'14px 18px', marginBottom:18 }}>
         <div style={{ fontFamily:'monospace', fontSize:11, color:'#444', marginBottom:8, letterSpacing:1 }}>
-          {isPT ? 'A PALAVRA ERRADA ERA:' : 'THE WRONG WORD WAS:'}
+          {isES ? 'LA PALABRA INCORRECTA ERA:' : isPT ? 'A PALAVRA ERRADA ERA:' : 'THE WRONG WORD WAS:'}
         </div>
         <div style={{ fontSize: 15, lineHeight: 2, color:'#ccc', fontFamily:'monospace' }}>
           {round.segs.map((seg, i) => {
@@ -585,7 +670,7 @@ export default function FixTheRobot() {
       {/* Replacement options */}
       <div style={{ width:'100%', maxWidth: 420 }}>
         <div style={{ fontFamily:'monospace', fontSize:12, color:'#555', letterSpacing:2, marginBottom:12, textAlign:'center' }}>
-          {isPT ? 'TOQUE NA SUBSTITUIÇÃO CORRETA ↓' : 'TAP THE CORRECT REPLACEMENT ↓'}
+          {isES ? 'TOCA EL REEMPLAZO CORRECTO ↓' : isPT ? 'TOQUE NA SUBSTITUIÇÃO CORRETA ↓' : 'TAP THE CORRECT REPLACEMENT ↓'}
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
           {shuffled.map((opt, i) => (

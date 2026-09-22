@@ -14,15 +14,16 @@ interface Props {
   onStart:     () => void
   onBack?:     () => void
   isPT?:       boolean
+  isES?:       boolean
 }
 
-const TYPE_LABEL: Record<Props['type'], { en: string; pt: string; color: string }> = {
-  decide: { en: 'DECIDE GAME',  pt: 'JOGO DE DECISÃO', color: '#3DF542' },
-  catch:  { en: 'CATCH GAME',   pt: 'JOGO DE CAPTURA', color: '#FFE14D' },
-  group:  { en: 'GROUP GAME',   pt: 'JOGO DE GRUPOS',  color: '#A8D8FF' },
+const TYPE_LABEL: Record<Props['type'], { en: string; pt: string; es: string; color: string }> = {
+  decide: { en: 'DECIDE GAME',  pt: 'JOGO DE DECISÃO', es: 'JUEGO DE DECISIÓN', color: '#3DF542' },
+  catch:  { en: 'CATCH GAME',   pt: 'JOGO DE CAPTURA', es: 'JUEGO DE ATRAPAR',  color: '#FFE14D' },
+  group:  { en: 'GROUP GAME',   pt: 'JOGO DE GRUPOS',  es: 'JUEGO DE GRUPOS',   color: '#A8D8FF' },
 }
 
-export default function GameIntro({ title, type, description, howToPlay, onStart, onBack, isPT }: Props) {
+export default function GameIntro({ title, type, description, howToPlay, onStart, onBack, isPT, isES }: Props) {
   const badge = TYPE_LABEL[type]
 
   return (
@@ -38,7 +39,7 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
         fontFamily: DISP, fontSize: 9, letterSpacing: '0.22em', color: badge.color,
         border: `1px solid ${badge.color}`, padding: '4px 12px', marginBottom: 28, opacity: 0.8,
       }}>
-        {isPT ? badge.pt : badge.en}
+        {isES ? badge.es : isPT ? badge.pt : badge.en}
       </div>
 
       {/* Title */}
@@ -68,7 +69,7 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
         padding: '18px 24px', maxWidth: 400, width: '100%', marginBottom: 40, textAlign: 'left',
       }}>
         <div style={{ fontFamily: DISP, fontSize: 8, letterSpacing: '0.18em', color: DIM, marginBottom: 12 }}>
-          {isPT ? 'COMO JOGAR' : 'HOW TO PLAY'}
+          {isES ? 'CÓMO JUGAR' : isPT ? 'COMO JOGAR' : 'HOW TO PLAY'}
         </div>
         {howToPlay.map((line, i) => (
           <div key={i} style={{ display: 'flex', gap: 10, marginBottom: i < howToPlay.length - 1 ? 8 : 0 }}>
@@ -90,7 +91,7 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
           animation: 'popIn 0.4s ease-out 0.3s both',
         }}
       >
-        {isPT ? 'Jogar →' : "Let's Go →"}
+        {isES ? 'Vamos →' : isPT ? 'Jogar →' : "Let's Go →"}
       </button>
 
       <button
@@ -101,7 +102,7 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
           textDecoration: 'underline', textUnderlineOffset: 3,
         }}
       >
-        {isPT ? 'Pular introdução' : 'Skip intro'}
+        {isES ? 'Omitir introducción' : isPT ? 'Pular introdução' : 'Skip intro'}
       </button>
 
       {onBack && (
@@ -113,7 +114,7 @@ export default function GameIntro({ title, type, description, howToPlay, onStart
             cursor: 'pointer', padding: '8px 0',
           }}
         >
-          {isPT ? '← Voltar' : '← Back'}
+          {isES ? '← Volver' : isPT ? '← Voltar' : '← Back'}
         </button>
       )}
     </div>
