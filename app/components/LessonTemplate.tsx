@@ -69,25 +69,30 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   useEffect(() => { setStoredLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
   const lang = contentTrack === 'high' || contentTrack === null
     ? storedLang
-    : isPTTrack(contentTrack) ? 'pt' : 'en'
+    : isPTTrack(contentTrack) ? 'pt' : contentTrack === 'elem-es' ? 'es' : 'en'
   const isPT = lang === 'pt'
-  const tagLabel  = (t: string) => isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião polêmica', 'Scenario': 'Cenário', 'Myth bust': 'Mito desfeito' }[t] ?? t) : t
-  const diffLabel = (d: string) => isPT ? ({ 'Easy': 'Fácil', 'Medium': 'Médio', 'Hard': 'Difícil' }[d] ?? d) : d
+  const isES = lang === 'es'
+  const tagLabel  = (t: string) => isES
+    ? ({ 'Fact': 'Dato', 'Example': 'Ejemplo', 'Big idea': 'Gran idea', 'Hot take': 'Opinión polémica', 'Scenario': 'Escenario', 'Myth bust': 'Mito desmentido' }[t] ?? t)
+    : isPT ? ({ 'Fact': 'Fato', 'Example': 'Exemplo', 'Big idea': 'Grande ideia', 'Hot take': 'Opinião polêmica', 'Scenario': 'Cenário', 'Myth bust': 'Mito desfeito' }[t] ?? t) : t
+  const diffLabel = (d: string) => isES
+    ? ({ 'Easy': 'Fácil', 'Medium': 'Medio', 'Hard': 'Difícil' }[d] ?? d)
+    : isPT ? ({ 'Easy': 'Fácil', 'Medium': 'Médio', 'Hard': 'Difícil' }[d] ?? d) : d
   const ui = {
-    lessonComplete:  isPT ? 'Aula concluída'       : 'Lesson complete',
-    worldComplete:   isPT ? 'Mundo concluído'       : 'World complete',
-    next:            isPT ? 'Próxima →'              : 'Next →',
-    finish:          isPT ? 'Finalizar →'            : 'Finish →',
-    nextLesson:      isPT ? 'Próximo:'               : 'Next:',
-    nextWorld:       isPT ? 'Próximo Mundo:'         : 'Next World:',
-    backTo:          isPT ? 'Voltar para'            : 'Back to',
-    trueBtn:         isPT ? 'Verdadeiro'             : 'True',
-    falseBtn:        isPT ? 'Falso'                  : 'False',
-    backWorld:       isPT ? '← Mundo'               : '← World',
-    backSlide:       isPT ? '← Voltar'              : '← Back',
-    nextSlide:       isPT ? 'Próximo slide →'        : 'Next slide →',
-    takeQuiz:        isPT ? 'Fazer o questionário →' : 'Take the quiz →',
-    skip:            isPT ? 'Pular'                  : 'Skip',
+    lessonComplete:  isES ? 'Lección completada'    : isPT ? 'Aula concluída'       : 'Lesson complete',
+    worldComplete:   isES ? 'Mundo completado'       : isPT ? 'Mundo concluído'       : 'World complete',
+    next:            isES ? 'Siguiente →'            : isPT ? 'Próxima →'              : 'Next →',
+    finish:          isES ? 'Finalizar →'            : isPT ? 'Finalizar →'            : 'Finish →',
+    nextLesson:      isES ? 'Siguiente:'             : isPT ? 'Próximo:'               : 'Next:',
+    nextWorld:       isES ? 'Próximo Mundo:'         : isPT ? 'Próximo Mundo:'         : 'Next World:',
+    backTo:          isES ? 'Volver a'               : isPT ? 'Voltar para'            : 'Back to',
+    trueBtn:         isES ? 'Verdadero'              : isPT ? 'Verdadeiro'             : 'True',
+    falseBtn:        isES ? 'Falso'                  : isPT ? 'Falso'                  : 'False',
+    backWorld:       isES ? '← Mundo'               : isPT ? '← Mundo'               : '← World',
+    backSlide:       isES ? '← Volver'              : isPT ? '← Voltar'              : '← Back',
+    nextSlide:       isES ? 'Siguiente slide →'      : isPT ? 'Próximo slide →'        : 'Next slide →',
+    takeQuiz:        isES ? 'Hacer el cuestionario →' : isPT ? 'Fazer o questionário →' : 'Take the quiz →',
+    skip:            isES ? 'Omitir'                 : isPT ? 'Pular'                  : 'Skip',
   }
   const tx      = TRANSLATIONS[lang]?.[id]
   const title     = tx?.title     ?? titleEN
@@ -250,7 +255,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               onClick={() => router.push(backDest)}
               style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'transparent', color: DIM, padding: '10px 28px', border: `1.5px solid ${FAINT}`, cursor: 'pointer' }}
             >
-              {ui.backTo} {(isPT ? WORLD_TITLES_PT[rawWorldId] : null) ?? world?.title ?? (isPT ? 'Mundo' : 'World')}
+              {ui.backTo} {(isPT ? WORLD_TITLES_PT[rawWorldId] : null) ?? world?.title ?? (isPT || isES ? 'Mundo' : 'World')}
             </button>
           </div>
         </div>
@@ -275,9 +280,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
           <div>
             <div style={{ paddingBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
               <div style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                <span style={{ color: BLACK }}>{isPT ? 'Questionário' : 'Quiz'}</span>
+                <span style={{ color: BLACK }}>{isES ? 'Cuestionario' : isPT ? 'Questionário' : 'Quiz'}</span>
                 <span style={{ color: FAINT }}>·</span>
-                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>{isPT ? 'Aula' : 'Lesson'} {id}</button>
+                <button onClick={skip} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>{isES ? 'Lección' : isPT ? 'Aula' : 'Lesson'} {id}</button>
                 <span style={{ color: FAINT }}>·</span>
                 <span style={{ color: DIM }}>{title}</span>
               </div>
@@ -328,7 +333,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
                     animation: 'verdictPop 0.28s cubic-bezier(0.34,1.4,0.64,1)',
                   }}>
                     <span aria-hidden="true">{isCorrect ? '\u2713' : '\u2715'}</span>
-                    {isCorrect ? (isPT ? 'CERTO!' : 'RIGHT!') : (isPT ? 'ERRADO' : 'WRONG')}
+                    {isCorrect ? (isES ? '¡CORRECTO!' : isPT ? 'CERTO!' : 'RIGHT!') : (isES ? 'INCORRECTO' : isPT ? 'ERRADO' : 'WRONG')}
                   </div>
                   <p style={{ fontFamily: BODY, fontSize: 15, color: BLACK, margin: 0, lineHeight: 1.65, maxWidth: '60ch' }}>{question.explanation}</p>
                 </div>
@@ -349,8 +354,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
             )}
           </div>
           <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 0, display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · {isPT ? 'Questionário' : 'Quiz'}</span>
-            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Q{qIndex + 1} {isPT ? 'de' : 'of'} {questions.length}</span>
+            <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isES ? 'Lección' : isPT ? 'Aula' : 'Lesson'} {id} · {title} · {isES ? 'Cuestionario' : isPT ? 'Questionário' : 'Quiz'}</span>
+            <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Q{qIndex + 1} {isES ? 'de' : isPT ? 'de' : 'of'} {questions.length}</span>
           </div>
 
         </div>
@@ -398,7 +403,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
               <span style={{ color: BLACK, background: highlightBg, padding: '1px 5px' }}>{tagLabel(stop.tag)}</span>
               <span style={{ color: FAINT }}>·</span>
               <button onClick={() => router.push(currentWorldRoute)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM, padding: '6px 8px 12px', margin: '-6px -8px -12px' }}>
-                {isPT ? 'Aula' : 'Lesson'} {id}
+                {isES ? 'Lección' : isPT ? 'Aula' : 'Lesson'} {id}
               </button>
               <span style={{ color: FAINT }}>·</span>
               <span style={{ color: DIM }}>{title}</span>
@@ -502,7 +507,7 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
 
         {/* Footer inside scroller */}
         <div style={{ borderTop: `1px solid ${FAINT}`, paddingTop: 14, paddingBottom: 14, display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isPT ? 'de' : 'of'} {stops.length}</span>
+          <span style={{ fontFamily: BODY, fontSize: 13, color: DIM }}>{isES ? 'Lección' : isPT ? 'Aula' : 'Lesson'} {id} · {title} · Slide {stopIndex + 1} {isES ? 'de' : isPT ? 'de' : 'of'} {stops.length}</span>
           <span style={{ fontFamily: DISP, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: DIM }}>Slide</span>
         </div>
 
@@ -527,8 +532,8 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
       {/* Dedicated chat trigger — clearer than tapping the PAI video */}
       <button
         onClick={() => setChatOpen(v => !v)}
-        aria-label={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
-        title={isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
+        aria-label={isES ? 'Hablar con PAI' : isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
+        title={isES ? 'Hablar con PAI' : isPT ? 'Conversar com o PAI' : 'Chat with PAI'}
         style={{
           position: 'fixed',
           // Sits just above the home indicator. It used to be 130px up to clear a

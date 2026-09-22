@@ -54,10 +54,21 @@ const T = {
     leftThisMonth: (n: number) => `${n} restantes este mês`,
     lessonNudge: 'Ótimas perguntas! Vamos terminar esta aula e ver o que vem a seguir — estarei bem aqui se você precisar de mim.',
   },
+  es: {
+    greetingElem: '¡Hola! Pregúntame lo que quieras sobre esta diapositiva.',
+    greeting:     'Pregúntame lo que quieras sobre esta lección — también puedo usar otras lecciones si ayuda.',
+    unreachable:  'No se puede contactar a PAI en este momento. Intenta de nuevo en un momento.',
+    placeholderElem: 'Pregúntale a PAI...',
+    placeholder:     'Pregunta sobre esta lección...',
+    close: 'cerrar',
+    noResponse: 'Sin respuesta.',
+    leftThisMonth: (n: number) => `${n} restantes este mes`,
+    lessonNudge: '¡Excelentes preguntas! Terminemos esta lección y veamos qué sigue — estaré aquí si me necesitas.',
+  },
 } as const
 
 export default function PaiChatPanel({ lessonId, lessonTitle, stops, currentStop, track, lang, onClose }: Props) {
-  const tx = lang === 'pt' ? T.pt : T.en
+  const tx = lang === 'pt' ? T.pt : lang === 'es' ? T.es : T.en
   const [messages,  setMessages]  = useState<Message[]>([
     { role: 'assistant', content: track === 'elementary' ? tx.greetingElem : tx.greeting },
   ])
