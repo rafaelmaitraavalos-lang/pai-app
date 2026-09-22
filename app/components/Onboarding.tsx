@@ -19,7 +19,7 @@ const COUNTRIES = [
   { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
-const SPANISH = { flag: '🇪🇸', name: 'Español', lang: 'es' }
+const SPANISH = { flag: '🇬🇹', name: 'Español', lang: 'es' }
 
 const GRADES    = ['elem', 'middle', 'high']     // English stages
 const GRADES_PT = ['fund1', 'fund2', 'medio']   // Brazilian stages
