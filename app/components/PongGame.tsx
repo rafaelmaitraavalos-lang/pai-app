@@ -178,14 +178,19 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
   const [isPT,      setIsPT]      = useState(false)
   const [isES,      setIsES]      = useState(false)
 
+  // Read language and (if skipIntro) start the game in the SAME effect —
+  // splitting these into two effects raced startGame() against the setIsPT/
+  // setIsES commits, so it always shuffled the English ITEMS into gs.current
+  // regardless of language (isPT/isES were still false from initial state
+  // when startGame's closure ran).
   useEffect(() => {
-    setIsPT(localStorage.getItem('pai_lang') === 'pt')
-    setIsES(localStorage.getItem('pai_lang') === 'es')
-  }, [])
-
-  // When skipIntro is true the phase starts at 'countdown' but startGame()
-  // (which initialises gs.current) is never called — fix that here.
-  useEffect(() => { if (skipIntro) startGame() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const storedLang = localStorage.getItem('pai_lang')
+    const pt = storedLang === 'pt'
+    const es = storedLang === 'es'
+    setIsPT(pt)
+    setIsES(es)
+    if (skipIntro) startGame(es ? ITEMS_ES : pt ? ITEMS_PT : ITEMS_EN)
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const ITEMS    = isES ? ITEMS_ES    : isPT ? ITEMS_PT    : ITEMS_EN
   const VERDICTS = isES ? VERDICTS_ES : isPT ? VERDICTS_PT : VERDICTS_EN
@@ -229,8 +234,8 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
     } catch {}
   }
 
-  function startGame() {
-    const shuffled = shuffle([...ITEMS])
+  function startGame(itemsOverride?: string[]) {
+    const shuffled = shuffle([...(itemsOverride ?? ITEMS)])
     gs.current = {
       bx: 0, by: 0, vx: 0, vy: 0,
       aiY: 0, playerY: 0,
@@ -484,7 +489,7 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
           <div style={{ fontFamily:BODY, fontSize:13, color:'#888' }}>Hit: <span style={{ color:GREEN, fontWeight:700 }}>+10 × combo</span></div>
           <div style={{ fontFamily:BODY, fontSize:13, color:'#888' }}>Miss: combo resets — arrow keys or pointer</div>
         </div>
-        <button onClick={startGame} style={{ fontFamily:DISP, fontSize:12, letterSpacing:'0.14em', textTransform:'uppercase', background:GREEN, color:BLACK, padding:'16px 0', border:'none', cursor:'pointer', touchAction:'manipulation', boxShadow:`0 0 28px ${GREEN}55` }}>
+        <button onClick={() => startGame()} style={{ fontFamily:DISP, fontSize:12, letterSpacing:'0.14em', textTransform:'uppercase', background:GREEN, color:BLACK, padding:'16px 0', border:'none', cursor:'pointer', touchAction:'manipulation', boxShadow:`0 0 28px ${GREEN}55` }}>
           Start
         </button>
         {board.length > 0 && (
@@ -575,7 +580,7 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
         )}
 
         <div style={{ display:'flex', gap:10 }}>
-          <button onClick={startGame} style={{ flex:1, fontFamily:DISP, fontSize:12, letterSpacing:'0.14em', textTransform:'uppercase', background:GREEN, color:BLACK, padding:'14px 0', border:'none', cursor:'pointer', touchAction:'manipulation', boxShadow:`0 0 22px ${GREEN}66` }}>
+          <button onClick={() => startGame()} style={{ flex:1, fontFamily:DISP, fontSize:12, letterSpacing:'0.14em', textTransform:'uppercase', background:GREEN, color:BLACK, padding:'14px 0', border:'none', cursor:'pointer', touchAction:'manipulation', boxShadow:`0 0 22px ${GREEN}66` }}>
             Retry
           </button>
           <button onClick={() => { loadBoard(); setPhase('intro') }} style={{ fontFamily:DISP, fontSize:11, letterSpacing:'0.1em', textTransform:'uppercase', background:'transparent', color:DIM, padding:'14px 16px', border:'1px solid #222', cursor:'pointer', touchAction:'manipulation' }}>
