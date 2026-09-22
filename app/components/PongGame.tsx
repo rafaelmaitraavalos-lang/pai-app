@@ -331,15 +331,25 @@ export default function PongGame({ onComplete, slow = false, skipIntro = false }
       g.aiY += Math.sign(aiDiff) * Math.min(speed * 1.1, Math.abs(aiDiff))
 
       // Physics
+      const prevBx = g.bx, prevBy = g.by
       g.bx += g.vx; g.by += g.vy
       if (g.by - BALL_R < 0)   { g.by = BALL_R;     g.vy =  Math.abs(g.vy); sfx.ballWall() }
       if (g.by + BALL_R > H)   { g.by = H - BALL_R; g.vy = -Math.abs(g.vy); sfx.ballWall() }
 
       // Ball vs red dot — deflects the ball back toward whoever it came from,
-      // instead of the dot only being a hazard for the player's paddle.
+      // instead of the dot only being a hazard for the player's paddle. Uses
+      // the swept path from last frame's position (not just this frame's
+      // endpoint) because at high rally speeds the ball can move farther per
+      // frame than the collision radius, tunneling clean through a dot.
+      const hitR2 = (BALL_R + DOT_R) ** 2
+      const ex = g.bx - prevBx, ey = g.by - prevBy
+      const segLen2 = ex * ex + ey * ey || 1
       const hitDot = g.redDots.find(d => {
-        const dx = g.bx - d.x, dy = g.by - d.y
-        return dx * dx + dy * dy < (BALL_R + DOT_R) ** 2
+        let t = ((d.x - prevBx) * ex + (d.y - prevBy) * ey) / segLen2
+        t = Math.max(0, Math.min(1, t))
+        const cx = prevBx + ex * t, cy = prevBy + ey * t
+        const dx = cx - d.x, dy = cy - d.y
+        return dx * dx + dy * dy < hitR2
       })
       if (hitDot) {
         g.vx = -g.vx
