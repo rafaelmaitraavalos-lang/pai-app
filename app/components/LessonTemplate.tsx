@@ -67,6 +67,9 @@ export default function LessonTemplate({ id, title: titleEN, stops: stopsEN, que
   const allowed = useTrackGuard(contentTrack ?? (() => true))
   const [storedLang, setStoredLang] = useState('en')
   useEffect(() => { setStoredLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  // Marks this lesson as opened so the world map shows "Resume" only after a
+  // real visit, instead of on the first untouched module in a new world.
+  useEffect(() => { localStorage.setItem(`pai_lesson_${id}_started`, 'true') }, [id])
   const lang = contentTrack === 'high' || contentTrack === null
     ? storedLang
     : isPTTrack(contentTrack) ? 'pt' : contentTrack === 'elem-es' ? 'es' : 'en'

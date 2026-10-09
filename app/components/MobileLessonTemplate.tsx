@@ -37,6 +37,9 @@ export default function MobileLessonTemplate({ id, title: titleEN, stops: stopsE
   const [lang,      setLang]      = useState('en')
 
   useEffect(() => { setLang(localStorage.getItem('pai_lang') ?? 'en') }, [])
+  // Marks this lesson as opened so the world map shows "Resume" only after a
+  // real visit, instead of on the first untouched module in a new world.
+  useEffect(() => { localStorage.setItem(`pai_lesson_${id}_started`, 'true') }, [id])
 
   // Scroll to top after every slide/question change
   useEffect(() => {

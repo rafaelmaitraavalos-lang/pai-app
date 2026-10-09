@@ -16,16 +16,20 @@ const FAINT = '#d8d8d8'
 export default function WorldModuleView({ world, basePath = '', mobile = false }: { world: WorldData; basePath?: string; mobile?: boolean }) {
   const router = useRouter()
   const [done,     setDone]     = useState<Record<number, boolean>>({})
+  const [started,  setStarted]  = useState<Record<number, boolean>>({})
   const [expanded, setExpanded] = useState<number | null>(null)
   const [isPT,     setIsPT]     = useState(false)
 
   useEffect(() => {
     setIsPT(localStorage.getItem('pai_lang') === 'pt')
     const map: Record<number, boolean> = {}
+    const startedMap: Record<number, boolean> = {}
     world.modules.forEach(m => {
       map[m.id] = localStorage.getItem(`pai_lesson_${m.id}_done`) === 'true'
+      startedMap[m.id] = localStorage.getItem(`pai_lesson_${m.id}_started`) === 'true'
     })
     setDone(map)
+    setStarted(startedMap)
 
     // Auto-open the first incomplete module
     const first = world.modules.find(m => !map[m.id])
@@ -77,7 +81,10 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
               }
 
               const isDone    = done[m.id]
-              const isCurrent = m.id === activeId
+              // "Current" (Resume/Continue + the in-progress dot) only applies once the
+              // student has actually opened this lesson — otherwise the first untouched
+              // module in a brand-new world reads as "Resume" before it was ever started.
+              const isCurrent = m.id === activeId && !!started[m.id]
               const isOpen    = expanded === m.id
 
               return (
@@ -196,7 +203,7 @@ export default function WorldModuleView({ world, basePath = '', mobile = false }
             )
 
             const isDone    = done[m.id]
-            const isCurrent = m.id === activeId
+            const isCurrent = m.id === activeId && !!started[m.id]
             const isOpen    = expanded === m.id
 
             return (
