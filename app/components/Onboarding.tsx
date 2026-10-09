@@ -360,16 +360,7 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
               </div>
 
               {/* Spanish — same size as Brazil/English, centered between them and PAI */}
-              <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
-                <div style={{
-                  position: 'absolute', top: -10, right: 'calc(25% - 24px)', zIndex: 1,
-                  background: GREEN, color: BLACK,
-                  fontFamily: DISP, fontSize: 9, letterSpacing: '0.08em',
-                  padding: '3px 8px', border: `1.5px solid ${BLACK}`,
-                  transform: 'rotate(-4deg)',
-                }}>
-                  NEW!
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <button onClick={() => selectCountry(SPANISH)} style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center',
                   width: 'calc(50% - 5px)', padding: '32px 8px 28px', gap: 12,
