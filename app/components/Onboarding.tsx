@@ -19,7 +19,7 @@ const COUNTRIES = [
   { flag: '🇧🇷', name: 'Português',  lang: 'pt' },
 ]
 
-const SPANISH = { flag: '🇬🇹', name: 'Español', lang: 'es' }
+const SPANISH = { flag: '🇲🇽', name: 'Español', lang: 'es' }
 
 const GRADES    = ['elem', 'middle', 'high']     // English stages
 const GRADES_PT = ['fund1', 'fund2', 'medio']   // Brazilian stages
@@ -359,18 +359,10 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                 ))}
               </div>
 
-              {/* PAI below the language buttons */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <AutoplayVideo
-                  src="/pai-lang.mp4"
-                  style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
-                />
-              </div>
-
-              {/* Spanish — new option, below PAI */}
-              <div style={{ position: 'relative' }}>
+              {/* Spanish — same size as Brazil/English, centered between them and PAI */}
+              <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
                 <div style={{
-                  position: 'absolute', top: -10, right: 14, zIndex: 1,
+                  position: 'absolute', top: -10, right: 'calc(25% - 24px)', zIndex: 1,
                   background: GREEN, color: BLACK,
                   fontFamily: DISP, fontSize: 9, letterSpacing: '0.08em',
                   padding: '3px 8px', border: `1.5px solid ${BLACK}`,
@@ -379,8 +371,8 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   NEW!
                 </div>
                 <button onClick={() => selectCountry(SPANISH)} style={{
-                  display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                  width: '100%', padding: '18px 8px', gap: 12,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  width: 'calc(50% - 5px)', padding: '32px 8px 28px', gap: 12,
                   background: country?.name === SPANISH.name ? BLACK : GREY,
                   color: country?.name === SPANISH.name ? '#fff' : BLACK,
                   border: `1.5px solid ${BLACK}`,
@@ -388,9 +380,17 @@ export default function Onboarding({ basePath = '' }: { basePath?: string }) {
                   transform: country?.name === SPANISH.name ? 'translate(3px,3px)' : 'none',
                   cursor: 'pointer', transition: 'all 0.12s',
                 }}>
-                  <span style={{ fontSize: 32, lineHeight: 1 }}>{SPANISH.flag}</span>
-                  <span style={{ fontFamily: DISP, fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>{SPANISH.name}</span>
+                  <span style={{ fontSize: 48, lineHeight: 1 }}>{SPANISH.flag}</span>
+                  <span style={{ fontFamily: DISP, fontSize: 15, fontWeight: 700, lineHeight: 1.3, textAlign: 'center' }}>{SPANISH.name}</span>
                 </button>
+              </div>
+
+              {/* PAI below the language buttons */}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <AutoplayVideo
+                  src="/pai-lang.mp4"
+                  style={{ width: 220, height: 220, objectFit: 'contain', mixBlendMode: 'multiply' }}
+                />
               </div>
             </div>
           )}
